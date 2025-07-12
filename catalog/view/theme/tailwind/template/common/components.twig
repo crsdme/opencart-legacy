@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>
+            Tailwind UI Components
+        </title>
+        <link rel="stylesheet" href="/catalog/view/theme/tailwind/stylesheet/tailwind.css" />
+    </head>
+    <body class="p-8 bg-white text-black space-y-12">
+        <h1 class="text-4xl font-bold">📦 UI Components Showcase</h1>
+
+        {% for component in components %}
+            <section class="border-t border-gray-300 pt-6">
+                <h2 class="text-2xl font-semibold mb-4">{{ component }}</h2>
+                <div class="flex flex-wrap gap-4">
+                    {% include 'tailwind/components/' ~ component ~ '.twig' %}
+                </div>
+            </section>
+        {% endfor %}
+    </body>
+</html>
