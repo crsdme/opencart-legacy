@@ -24,6 +24,7 @@ class ControllerCommonMaintenance extends Controller {
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['footer'] = $this->load->controller('common/footer');
+		$data['head'] = $this->load->controller('common/head');
 
 		$this->response->setOutput($this->load->view('common/maintenance', $data));
 	}

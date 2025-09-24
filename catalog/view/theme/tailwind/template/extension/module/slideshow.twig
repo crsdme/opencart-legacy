@@ -1,38 +1,42 @@
-<div class="slideshow swiper-viewport">
-    <div id="slideshow{{ module }}" class="swiper-container">
-        <div class="swiper-wrapper">
-            {% for banner in banners %}
-                <div class="swiper-slide text-center">
-                    {% if banner.link %}
-                        <a href="{{ banner.link }}">
-                            <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
-                        </a>
-                    {% else %}
-                        <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="swiper-pagination slideshow{{ module }}"></div>
-    <div class="swiper-pager">
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+<div id="slider-{{ module }}" class="slider">
+    <div class="slider-track">
+        {% for banner in banners %}
+            <div class="slider-slide">
+                {% if banner.link %}
+                    <a href="{{ banner.link }}">
+                        <img src="{{ banner.image }}" alt="{{ banner.title|e }}" class="img-responsive" />
+                    </a>
+                {% else %}
+                    <img src="{{ banner.image }}" alt="{{ banner.title|e }}" class="img-responsive" />
+                {% endif %}
+            </div>
+        {% endfor %}
     </div>
 </div>
-<script type="text/javascript">
-    <!-- 
-$('#slideshow{{ module }}').swiper({
-	mode: 'horizontal',
-	slidesPerView: 1,
-	pagination: '.slideshow{{ module }}',
-	paginationClickable: true,
-	nextButton: '.slideshow .swiper-button-next',
-    prevButton: '.slideshow .swiper-button-prev',
-    spaceBetween: 30,
-	autoplay: 2500,
-    autoplayDisableOnInteraction: true,
-	loop: true
-});
-// -->
+
+<div class="slider-controls mt-4 flex gap-2 justify-end">
+    <button id="slider-prev-{{ module }}" class="button-secondary icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+            <use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+        </svg>
+    </button>
+    <button id="slider-next-{{ module }}" class="button-secondary icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+            <use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+        </svg>
+    </button>
+</div>
+
+{# prettier-ignore-start #}
+<script type="module">
+    import EmblaCarousel from 'https://cdn.skypack.dev/embla-carousel';
+
+    const slider = document.getElementById('slider-{{ module }}');
+    if (slider) {
+        const embla = EmblaCarousel(slider, { loop: true });
+
+        document.getElementById('slider-prev-{{ module }}')?.addEventListener('click', () => embla.scrollPrev());
+        document.getElementById('slider-next-{{ module }}')?.addEventListener('click', () => embla.scrollNext());
+    }
 </script>
+{# prettier-ignore-end #}

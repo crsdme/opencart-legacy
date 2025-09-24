@@ -1,36 +1,42 @@
-<div class="carousel swiper-viewport">
-    <div id="carousel{{ module }}" class="swiper-container">
-        <div class="swiper-wrapper">
-            {% for banner in banners %}
-                <div class="swiper-slide text-center">
-                    {% if banner.link %}
-                        <a href="{{ banner.link }}">
-                            <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
-                        </a>
-                    {% else %}
+<div id="carousel-{{ module }}" class="slider">
+    <div class="slider-track">
+        {% for banner in banners %}
+            <div class="slider-slide flex justify-center shrink-0 w-1/5 px-1">
+                {% if banner.link %}
+                    <a href="{{ banner.link }}">
                         <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="swiper-pagination carousel{{ module }}"></div>
-    <div class="swiper-pager">
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+                    </a>
+                {% else %}
+                    <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
+                {% endif %}
+            </div>
+        {% endfor %}
     </div>
 </div>
-<script type="text/javascript">
-    <!-- 
-$('#carousel{{ module }}').swiper({
-	mode: 'horizontal',
-	slidesPerView: 5,
-	pagination: '.carousel{{ module }}',
-	paginationClickable: true,
-	nextButton: '.carousel .swiper-button-next',
-    prevButton: '.carousel .swiper-button-prev',
-	autoplay: 2500,
-	loop: true
-});
- -->
+
+<div class="slider-controls mt-4 flex gap-2 justify-end">
+    <button id="carousel-prev-{{ module }}" class="button-secondary icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+            <use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+        </svg>
+    </button>
+    <button id="carousel-next-{{ module }}" class="button-secondary icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+            <use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+        </svg>
+    </button>
+</div>
+
+{# prettier-ignore-start #}
+<script type="module">
+    import EmblaCarousel from 'https://cdn.skypack.dev/embla-carousel';
+
+    const emblaNode = document.getElementById('carousel-{{ module }}');
+    if (emblaNode) {
+        const embla = EmblaCarousel(emblaNode, { loop: true });
+
+        document.getElementById('carousel-prev-{{ module }}')?.addEventListener('click', () => embla.scrollPrev());
+        document.getElementById('carousel-next-{{ module }}')?.addEventListener('click', () => embla.scrollNext());
+    }
 </script>
+{# prettier-ignore-end #}

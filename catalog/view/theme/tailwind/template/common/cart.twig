@@ -1,12 +1,17 @@
-<div id="cart" class="btn-group btn-block">
-    <button
-        type="button"
-        data-toggle="dropdown"
-        data-loading-text="{{ text_loading }}"
-        class="btn btn-inverse btn-block btn-lg dropdown-toggle"
-    >
-        <i class="fa fa-shopping-cart"></i> <span id="cart-total">{{ text_items }}</span>
-    </button>
+<button class="button-primary icon relative" id="cart" onclick="openCart()">
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+        <use href="/assets/icons/sprite.svg#icon-cart"></use>
+    </svg>
+    <span id="cart-badge" class="badge button-badge">{{ productCount }}</span>
+    <div class="cart-toast" id="cart-toast"></div>
+</button>
+
+<div class="modal flex flex-col max-h-md h-full hidden p-4 md:p-6 max-md:rounded-none lg:max-h-[80vh]" id="cart-modal">
+    <div class="skeleton h-full w-full"></div>
+</div>
+<div class="modal-overlay hidden" id="cart-overlay" onClick="closeCart()"></div>
+
+{# <div id="cart" class="btn-group btn-block">
     <ul class="dropdown-menu pull-right">
         {% if products or vouchers %}
             <li>
@@ -98,4 +103,4 @@
             </li>
         {% endif %}
     </ul>
-</div>
+</div> #}

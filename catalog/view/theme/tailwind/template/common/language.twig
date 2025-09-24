@@ -1,40 +1,16 @@
-{% if (languages|length) > 1 %}
-    <div class="pull-left">
-        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-language">
-            <div class="btn-group">
-                <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                    {% for language in languages %}
-                        {% if language.code == code %}
-                            <img
-                                src="catalog/language/{{ language.code }}/{{ language.code }}.png"
-                                alt="{{ language.name }}"
-                                title="{{ language.name }}"
-                            />
-                        {% endif %}
-                    {% endfor %}
-                    <span class="hidden-xs hidden-sm hidden-md">{{ text_language }}</span>&nbsp;<i class="fa fa-caret-down"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    {% for language in languages %}
-                        <li>
-                            <button
-                                class="btn btn-link btn-block language-select"
-                                type="button"
-                                name="{{ language.code }}"
-                            >
-                                <img
-                                    src="catalog/language/{{ language.code }}/{{ language.code }}.png"
-                                    alt="{{ language.name }}"
-                                    title="{{ language.name }}"
-                                />
-                                {{ language.name }}
-                            </button>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <input type="hidden" name="code" value="" />
-            <input type="hidden" name="redirect" value="{{ redirect }}" />
-        </form>
-    </div>
+{% if languages|length > 1 %}
+<div class="dropdown w-full flex-1" data-align="center">
+  <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-language">
+      <p id="dropdownButton" class="dropdown-button">
+        {{ text_language }}
+      </p>
+        <div id="dropdownMenu" class="dropdown-menu">
+            {% for language in languages %}
+            <button class="dropdown-item" {% if language.code == code %}selected{% endif %} onclick="location = '{{ language.href }}'">{{ language.name }}</button>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="code" value="" />
+        <input type="hidden" name="redirect" value="{{ redirect }}" />
+  </form>
+</div>
 {% endif %}

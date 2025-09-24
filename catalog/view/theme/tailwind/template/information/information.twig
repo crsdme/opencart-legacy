@@ -1,25 +1,27 @@
-{{ header }}
-<div id="information-information" class="container">
-    <ul class="breadcrumb">
-        {% for breadcrumb in breadcrumbs %}
-            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-        {% endfor %}
-    </ul>
-    <div class="row">
-        {{ column_left }}
-        {% if column_left and column_right %}
-            {% set class = 'col-sm-6' %}
-        {% elseif column_left or column_right %}
-            {% set class = 'col-sm-9' %}
-        {% else %}
-            {% set class = 'col-sm-12' %}
-        {% endif %}
-        <div id="content" class="{{ class }}">
-            {{ content_top }}
-            <h1>{{ heading_title }}</h1>
-            {{ description }}{{ content_bottom }}
-        </div>
-        {{ column_right }}
-    </div>
+{% set class = 'col-span-12 ' %}
+{% if column_left and column_right %}
+    {% set class = class ~ 'lg:col-span-6' %}
+{% elseif column_left or column_right %}
+    {% set class = class ~ 'lg:col-span-9' %}
+{% else %}
+    {% set class = class ~ 'lg:col-span-12' %}
+{% endif %}
+
+<div class="container mx-auto px-2">
+    {% include 'tailwind/components/breadcrumbs.twig' %}
+
+    <h1 class="heading">{{ heading_title }}</h1>
 </div>
-{{ footer }}
+<div class="container mx-auto px-2 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    {{ column_left }}
+    <main class="{{ class }}">
+        {{ content_top }}
+
+        <div class="text-block">
+            {{ description }}
+        </div>
+
+        {{ content_bottom }}
+    </main>
+    {{ column_right }}
+</div>

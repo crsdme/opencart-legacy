@@ -14,15 +14,15 @@
 {% if keywords %}
     <meta name="keywords" content="{{ keywords }}" />
 {% endif %}
-<meta property="og:title" content="{{ title }}" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="{{ og_url }}" />
-{% if og_image %}
-    <meta property="og:image" content="{{ og_image }}" />
-{% else %}
-    <meta property="og:image" content="{{ logo }}" />
-{% endif %}
-<meta property="og:site_name" content="{{ name }}" />
+{# {{ microdata.head }} #}
+
+<link rel="icon" type="image/png" href="/catalog/view/theme/tailwind/image/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/catalog/view/theme/tailwind/image/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/catalog/view/theme/tailwind/image/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/catalog/view/theme/tailwind/image/favicon/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="octailwind" />
+<link rel="manifest" href="/catalog/view/theme/tailwind/image/favicon/site.webmanifest" />
+
 <link href="catalog/view/theme/tailwind/stylesheet/tailwind.css" rel="stylesheet" />
 {% for style in styles %}
     <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
@@ -30,7 +30,6 @@
 {% for script in scripts %}
     <script src="{{ script }}" type="text/javascript"></script>
 {% endfor %}
-<script src="catalog/view/theme/tailwind/javascript/script.js" type="text/javascript"></script>
 {% for link in links %}
     <link href="{{ link.href }}" rel="{{ link.rel }}" />
 {% endfor %}

@@ -1,0 +1,40 @@
+{% if product.quantity < 1 %}
+  {% set class = 'out-of-stock' %}
+  {% set outofstock = true %}
+{% endif %}
+
+<div class="product-card">
+  <a href="{{ product.href }}" class="product-card-image">
+    {% if product.specs %}
+      <div class="product-card-badges">
+        {% for spec in product.specs %}
+          <p class="product-card-badge">
+            {{ spec }}
+          </p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <img src="{{ product.thumb }}" alt="{{ product.name }}" width="370" height="370" />
+  </a>
+  <div class="product-card-content">
+    <a href="{{ product.href }}" class="product-card-title">
+      {{ product.name }}
+    </a>
+    <p class="product-card-price">
+      {{ product.price }}
+      {% if product.special %}
+        <span class="product-card-special">
+          {{ product.special }}
+        </span>
+      {% endif %}
+    </p>
+    <button
+      data-added-text="Added to cart"
+      class="button-primary mt-auto"
+      onclick="addToCart({{ product.product_id }}, 1, this)"
+      {% if outofstock %}disabled{% endif %}
+    >
+        {% if outofstock %}Out of stock{% else %}Add to cart{% endif %}
+    </button>
+  </div>
+</div>

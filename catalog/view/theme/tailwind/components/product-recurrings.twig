@@ -1,0 +1,39 @@
+{% if recurrings %}
+    <hr />
+    <h3>{{ text_payment_recurring }}</h3>
+    <div class="form-group required">
+        <select name="recurring_id" class="form-control">
+            <option value="">
+                {{ text_select }}
+            </option>
+            {% for recurring in recurrings %}
+                <option value="{{ recurring.recurring_id }}">
+                    {{ recurring.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <div class="help-block" id="recurring-description"></div>
+    </div>
+{% endif %}
+{# <script type="text/javascript">
+    <!-- 
+$('select[name=\'recurring_id\'], input[name="quantity"]').change(function(){
+	$.ajax({
+		url: 'index.php?route=product/product/getRecurringDescription',
+		type: 'post',
+		data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#recurring-description').html('');
+		},
+		success: function(json) {
+			$('.alert-dismissible, .text-danger').remove();
+
+			if (json['success']) {
+				$('#recurring-description').html(json['success']);
+			}
+		}
+	});
+});
+// -->
+</script> #}

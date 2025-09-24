@@ -1,0 +1,25 @@
+Options +FollowSymlinks
+
+Options -Indexes
+
+<FilesMatch "(?i)((\.tpl|\.twig|\.ini|\.log|(?<!robots)\.txt))">
+ Require all denied
+</FilesMatch>
+
+RewriteEngine On
+
+# TAILWIND THEME
+RewriteRule ^assets(?:/(.+))?$ catalog/view/theme/tailwind/image/$1 [L,NC,END]
+
+# SITEMAP
+RewriteCond %{REQUEST_URI} ^/(?:([a-z]{2}(?:-[a-z]{2})?)/)?(sitemap(?:-[A-Za-z0-9_-]+)?)\.xml$ [NC]
+RewriteRule ^(?:([a-z]{2}(?:-[a-z]{2})?)/)?(sitemap(?:-[A-Za-z0-9_-]+)?)\.xml$ index.php?route=extension/feed/sitemap&language=$1&type=$2 [L,QSA]
+
+RewriteBase /
+RewriteCond %{QUERY_STRING} ^(.*)&?page=1$ 
+RewriteRule ^(.*)/?$ /$1?%1%2 [R=301,L]
+RewriteRule ^system/storage/(.*) index.php?route=error/not_found [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
+RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]

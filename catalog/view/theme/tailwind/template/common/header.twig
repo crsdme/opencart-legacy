@@ -1,80 +1,49 @@
-<nav id="top">
-    <div class="container">
+<header class="header">
+    <div class="flex flex-wrap items-center gap-2">
+        <button class="button-secondary icon" onclick="openMenu()">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+                <use href="/assets/icons/sprite.svg#icon-menu"></use>
+            </svg>
+        </button>
+    </div>
+    {% if 'common/home' == route %}
+        <img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" />
+    {% else %}
+        <a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" /></a>
+    {% endif %}
+    <div class="flex flex-wrap items-center gap-2">
         {{ currency }}
         {{ language }}
-        {{ blog_menu }}
-        <div id="top-links" class="nav pull-right">
-            <ul class="list-inline">
-                <li>
-                    <a href="{{ contact }}"><i class="fa fa-phone"></i></a>
-                    <span class="hidden-xs hidden-sm hidden-md">{{ telephone }}</span>
-                </li>
-                <li class="dropdown">
-                    <a href="{{ account }}" title="{{ text_account }}" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-user"></i>
-                        <span class="hidden-xs hidden-sm hidden-md">{{ text_account }}</span>
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        {% if logged %}
-                            <li><a href="{{ account }}">{{ text_account }}</a></li>
-                            <li><a href="{{ order }}">{{ text_order }}</a></li>
-                            <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
-                            <li><a href="{{ download }}">{{ text_download }}</a></li>
-                            <li><a href="{{ logout }}">{{ text_logout }}</a></li>
-                        {% else %}
-                            <li><a href="{{ register }}">{{ text_register }}</a></li>
-                            <li><a href="{{ login }}">{{ text_login }}</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}">
-                        <i class="fa fa-heart"></i>
-                        <span class="hidden-xs hidden-sm hidden-md">{{ text_wishlist }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="hidden-xs hidden-sm hidden-md">{{ text_shopping_cart }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ checkout }}" title="{{ text_checkout }}">
-                        <i class="fa fa-share"></i>
-                        <span class="hidden-xs hidden-sm hidden-md">{{ text_checkout }}</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <div id="logo">
-                    {% if logo %}
-                        {% if home == og_url %}
-                            <img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" />
-                        {% else %}
-                            <a href="{{ home }}">
-                                <img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" />
-                            </a>
-                        {% endif %}
-                    {% else %}
-                        <h1><a href="{{ home }}">{{ name }}</a></h1>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-sm-5">
-                {{ search }}
-            </div>
-            <div class="col-sm-3">
-                {{ cart }}
+        {{ search }}
+        <button class="button-secondary icon" onclick="toggleTheme()">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+                <use id="theme-icon" href="{{ icons }}#icon-sun"></use>
+            </svg>
+        </button>
+        <a href="{{ wishlist }}" class="button-secondary icon">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+                <use href="/assets/icons/sprite.svg#icon-heart"></use>
+            </svg>
+        </a>
+        <a href="{{ account }}" class="button-secondary icon">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+                <use href="/assets/icons/sprite.svg#icon-user"></use>
+            </svg>
+        </a>
+        <div class="dropdown w-full flex-1" data-align="right">
+            <button id="dropdownButton" class="button-secondary icon">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <use href="/assets/icons/sprite.svg#icon-phone"></use>
+                </svg>
+            </button>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+                <a class="dropdown-item" href="tel:+380668875507">+38 (123) 456 7890</a>
+                <a class="dropdown-item" href="mailto:info@example.com">info@example.com</a>
+                <a class="dropdown-item" href="https://wa.me/905314918688">+90 531 491 8688</a>
             </div>
         </div>
+        {{ cart }}
     </div>
 </header>
 {{ menu }}

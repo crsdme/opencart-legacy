@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html dir="{{ direction }}" lang="{{ lang }}">
+<html dir="{{ direction }}" lang="{{ lang }}" class="{{ theme }}">
     <head>
         {{ head }}
+        {{ microdata.head }}
     </head>
     <body>
         {{ header }}
 
-        {% block content %}
-
-        {% endblock %}
+        {{ content }}
 
         {{ footer }}
+
+        {{ microdata.body }}
     </body>
 </html>
