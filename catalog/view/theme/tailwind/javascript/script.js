@@ -1,10 +1,22 @@
+// Language
+
+$('#form-language .dropdown-item').on('click', function(e) {
+  e.preventDefault();
+
+  $('#form-language input[name="code"]').val($(this).attr('name'));
+
+  $('#form-language').submit();
+});
+
+// Language
+
 // Theme
 
 const icon = $('#theme-icon');
 
 function toggleTheme() {
     const isDark = $('html').toggleClass('dark').hasClass('dark');
-    icon.attr('href', isDark ? '#icon-moon' : '#icon-sun');
+    icon.attr('href', isDark ? '/assets/icons/sprite.svg#icon-moon' : '/assets/icons/sprite.svg#icon-sun');
     document.cookie = 'theme=' + (isDark ? 'dark' : '') + '; path=/; max-age=31536000; samesite=Lax';
 }
 

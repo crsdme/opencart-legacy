@@ -28,15 +28,13 @@
 </div>
 
 {# prettier-ignore-start #}
-<script type="module">
-    import EmblaCarousel from 'https://cdn.skypack.dev/embla-carousel';
+<script>
+  const emblaNode_slider_{{ module }} = document.getElementById('slider-{{ module }}');
+  if (emblaNode_slider_{{ module }}) {
+    const embla = EmblaCarousel(emblaNode_slider_{{ module }}, { loop: true });
 
-    const slider = document.getElementById('slider-{{ module }}');
-    if (slider) {
-        const embla = EmblaCarousel(slider, { loop: true });
-
-        document.getElementById('slider-prev-{{ module }}')?.addEventListener('click', () => embla.scrollPrev());
-        document.getElementById('slider-next-{{ module }}')?.addEventListener('click', () => embla.scrollNext());
-    }
+    document.getElementById('slider-prev-{{ module }}')?.addEventListener('click', () => embla.scrollPrev());
+    document.getElementById('slider-next-{{ module }}')?.addEventListener('click', () => embla.scrollNext());
+  }
 </script>
 {# prettier-ignore-end #}

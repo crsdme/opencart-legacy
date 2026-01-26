@@ -17,7 +17,7 @@
         {{ search }}
         <button class="button-secondary icon" onclick="toggleTheme()">
             <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use id="theme-icon" href="{{ icons }}#icon-sun"></use>
+                <use id="theme-icon" href="{{ theme == 'dark' ? '/assets/icons/sprite.svg#icon-moon' : '/assets/icons/sprite.svg#icon-sun' }}"></use>
             </svg>
         </button>
         <a href="{{ wishlist }}" class="button-secondary icon">

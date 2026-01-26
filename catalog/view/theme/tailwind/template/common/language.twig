@@ -6,7 +6,8 @@
       </p>
         <div id="dropdownMenu" class="dropdown-menu">
             {% for language in languages %}
-            <button class="dropdown-item" {% if language.code == code %}selected{% endif %} onclick="location = '{{ language.href }}'">{{ language.name }}</button>
+            {# <button class="dropdown-item" {% if language.code == code %}selected{% endif %} onclick="location = '{{ language.href }}'">{{ language.name }}</button> #}
+            <button class="dropdown-item" {% if language.code == code %}selected{% endif %} name="{{ language.code }}" type="button">{{ language.name }}</button>
             {% endfor %}
         </div>
         <input type="hidden" name="code" value="" />
