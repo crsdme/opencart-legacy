@@ -63,9 +63,9 @@ function usage() {
 	echo "======\n";
 	echo "\n";
 	$options = implode(" ", array(
-		'--db_hostname', 'localhost',
-		'--db_username', 'root',
-		'--db_password', 'pass',
+		'--db_hostname', 'mysql-db',
+		'--db_username', 'opencart',
+		'--db_password', 'opencart',
 		'--db_database', 'opencart',
 		'--db_driver', 'mysqli',
 		'--db_port', '3306',

@@ -1,10 +1,10 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://localhost:8080/secureadmin/');
+define('HTTP_SERVER', 'http://localhost:8080/admin/');
 define('HTTP_CATALOG', 'http://localhost:8080/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://localhost:8080/secureadmin/');
+define('HTTPS_SERVER', 'http://localhost:8080/admin/');
 define('HTTPS_CATALOG', 'http://localhost:8080/');
 
 // DIR

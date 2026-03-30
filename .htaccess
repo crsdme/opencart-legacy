@@ -37,10 +37,10 @@ RewriteCond %{REQUEST_URI} ^/(?:([a-z]{2}(?:-[a-z]{2})?)/)?(sitemap(?:-[A-Za-z0-
 RewriteRule ^(?:([a-z]{2}(?:-[a-z]{2})?)/)?(sitemap(?:-[A-Za-z0-9_-]+)?)\.xml$ index.php?route=extension/feed/sitemap&language=$1&type=$2 [L,QSA]
 
 # ADMIN PANEL ROUTE
-RewriteRule ^secureadmin/?$ admin/index.php [L]
-RewriteRule ^secureadmin/(.*)$ admin/$1 [L]
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /admin
-RewriteRule ^admin(?:/.*)?$ index.php?route=error/not_found [L,QSA]
+# RewriteRule ^secureadmin/?$ admin/index.php [L]
+# RewriteRule ^secureadmin/(.*)$ admin/$1 [L]
+# RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /admin
+# RewriteRule ^admin(?:/.*)?$ index.php?route=error/not_found [L,QSA]
 
 RewriteBase /
 RewriteCond %{QUERY_STRING} ^(.*)&?page=1$ 

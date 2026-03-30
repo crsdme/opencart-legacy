@@ -1850,8 +1850,8 @@ CREATE TABLE `oc_language` (
 --
 
 INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `image`, `directory`, `sort_order`, `status`) VALUES
-(1, 'Українська', 'uk-ua', 'uk_UA.UTF-8,uk_UA,uk-ua,uk,ukrainian', 'uk-ua.png', 'uk-ua', 1, 1),
-(2, 'English', 'en-gb', 'en-US,en_US.UTF-8,en_US,en-gb,english', '', '', 2, 1);
+(1, 'Українська', 'ua', 'uk_UA.UTF-8,uk_UA,uk-ua,uk,ukrainian', 'uk-ua.png', 'uk-ua', 1, 1),
+(2, 'English', 'en', 'en-US,en_US.UTF-8,en_US,en-gb,english', '', '', 2, 1);
 
 -- ---------------------------------------------------------
 
@@ -3606,8 +3606,8 @@ INSERT INTO `oc_setting` (`store_id`, `code`, `key`, `value`, `serialized`) VALU
 (0, 'config', 'config_country_id', '220', 0),
 (0, 'config', 'config_zone_id', '3491', 0),
 (0, 'config', 'config_timezone', 'Europe/Kyiv', 0),
-(0, 'config', 'config_language', 'uk-ua', 0),
-(0, 'config', 'config_admin_language', 'uk-ua', 0),
+(0, 'config', 'config_language', 'ua', 0),
+(0, 'config', 'config_admin_language', 'ua', 0),
 (0, 'config', 'config_currency', 'UAH', 0),
 (0, 'config', 'config_currency_auto', '1', 0),
 (0, 'config', 'config_length_class_id', '1', 0),

@@ -209,25 +209,25 @@ class ControllerInstallStep3 extends Controller {
 		if (isset($this->request->post['db_hostname'])) {
 			$data['db_hostname'] = $this->request->post['db_hostname'];
 		} else {
-			$data['db_hostname'] = 'localhost';
+			$data['db_hostname'] = 'mysql-db';
 		}
 
 		if (isset($this->request->post['db_username'])) {
 			$data['db_username'] = $this->request->post['db_username'];
 		} else {
-			$data['db_username'] = 'root';
+			$data['db_username'] = 'opencart';
 		}
 
 		if (isset($this->request->post['db_password'])) {
 			$data['db_password'] = $this->request->post['db_password'];
 		} else {
-			$data['db_password'] = '';
+			$data['db_password'] = 'opencart';
 		}
 
 		if (isset($this->request->post['db_database'])) {
 			$data['db_database'] = $this->request->post['db_database'];
 		} else {
-			$data['db_database'] = '';
+			$data['db_database'] = 'opencart';
 		}
 
 		if (isset($this->request->post['db_port'])) {
@@ -251,13 +251,13 @@ class ControllerInstallStep3 extends Controller {
 		if (isset($this->request->post['password'])) {
 			$data['password'] = $this->request->post['password'];
 		} else {
-			$data['password'] = '';
+			$data['password'] = 'admin';
 		}
 
 		if (isset($this->request->post['email'])) {
 			$data['email'] = $this->request->post['email'];
 		} else {
-			$data['email'] = '';
+			$data['email'] = 'admin@example.com';
 		}
 
 		$data['back'] = $this->url->link('install/step_2');
