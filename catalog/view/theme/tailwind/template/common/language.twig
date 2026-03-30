@@ -1,12 +1,27 @@
 {% if languages|length > 1 %}
 <div class="dropdown w-full flex-1" data-align="center">
+	<p id="dropdownButton" class="dropdown-button">{{ text_language }}</p>
+	<ul id="dropdownMenu" class="dropdown-menu">
+		{% for language in languages %}
+		<li>
+			{% if language.active %}
+				<span class="dropdown-item" data-code="{{ language.code }}">{{ language.name }}</span>
+			{% else %}
+				<a class="dropdown-item" href="{{ language.url }}" hreflang="{{ language.code }}">{{ language.name }}</a>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endif %}
+{# {% if languages|length > 1 %}
+<div class="dropdown w-full flex-1" data-align="center">
   <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-language">
       <p id="dropdownButton" class="dropdown-button">
         {{ text_language }}
       </p>
         <div id="dropdownMenu" class="dropdown-menu">
             {% for language in languages %}
-            {# <button class="dropdown-item" {% if language.code == code %}selected{% endif %} onclick="location = '{{ language.href }}'">{{ language.name }}</button> #}
             <button class="dropdown-item" {% if language.code == code %}selected{% endif %} name="{{ language.code }}" type="button">{{ language.name }}</button>
             {% endfor %}
         </div>
@@ -14,4 +29,4 @@
         <input type="hidden" name="redirect" value="{{ redirect }}" />
   </form>
 </div>
-{% endif %}
+{% endif %} #}

@@ -8,12 +8,39 @@ Options -Indexes
 
 RewriteEngine On
 
+#Redirect index files to homepage
+# RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.(php|html|htm)
+# RewriteRule ^index\.(php|html|htm)$ / [R=301,L]
+
+# Remove multiple slashes in URL
+# RewriteCond %{THE_REQUEST} //
+# RewriteRule .* /$0 [R=301,L]
+
+# Language prefixes without slash -> with slash
+# RewriteCond %{REQUEST_URI} ^/(ru|uk|pl|it|de|fr|es)$
+# RewriteRule ^(ru|uk|pl|it|de|fr|es)$ /$1/ [R=301,L,NC]
+
+# www -> without www
+# RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+# RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# http -> https
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+
 # TAILWIND THEME
 RewriteRule ^assets(?:/(.+))?$ catalog/view/theme/tailwind/image/$1 [L,NC,END]
 
 # SITEMAP
 RewriteCond %{REQUEST_URI} ^/(?:([a-z]{2}(?:-[a-z]{2})?)/)?(sitemap(?:-[A-Za-z0-9_-]+)?)\.xml$ [NC]
 RewriteRule ^(?:([a-z]{2}(?:-[a-z]{2})?)/)?(sitemap(?:-[A-Za-z0-9_-]+)?)\.xml$ index.php?route=extension/feed/sitemap&language=$1&type=$2 [L,QSA]
+
+# ADMIN PANEL ROUTE
+RewriteRule ^secureadmin/?$ admin/index.php [L]
+RewriteRule ^secureadmin/(.*)$ admin/$1 [L]
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /admin
+RewriteRule ^admin(?:/.*)?$ index.php?route=error/not_found [L,QSA]
 
 RewriteBase /
 RewriteCond %{QUERY_STRING} ^(.*)&?page=1$ 
@@ -23,3 +50,66 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
 RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
+
+
+# CACHE
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType font/eot "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
+
+  ExpiresByType text/html "access plus 1 day"
+</IfModule>
+
+<IfModule mod_headers.c>
+
+  <FilesMatch "\.(jpg|jpeg|png|gif|webp|ico|ttf|otf|eot|woff|woff2|css|js)$">
+    Header set Cache-Control "max-age=31536000, public"
+  </FilesMatch>
+
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "max-age=86400, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "\.(mp4|webm|ogg|mp3)$">
+    Header set Cache-Control "max-age=31536000, public, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(cgi|pl|htaccess)$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+  </FilesMatch>
+
+  # HSTS
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+  # Content Security Policy (CSP)
+  ; Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://api.example.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; sandbox allow-scripts allow-same-origin allow-forms allow-popups; report-uri https://example.com/csp-report"
+
+  # X-Frame-Options (Clickjacking Protection)
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # X-Content-Type-Options (MIME Type Sniffing Prevention)
+  Header always set X-Content-Type-Options "nosniff"
+
+  # Referrer Policy
+  Header always set Referrer-Policy "no-referrer-when-downgrade"
+
+  # Permissions Policy
+  Header always set Permissions-Policy "geolocation=(), microphone=()"
+</IfModule>

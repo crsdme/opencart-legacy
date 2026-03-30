@@ -30,33 +30,36 @@ $_['library_autoload']   = array();
 
 // Actions
 $_['action_pre_action']  = array(
-	'startup/session',
-	'startup/startup',
-	'startup/error',
-	'startup/event',
-	'startup/maintenance',
-	'startup/seo_url'
+  'startup/session',
+  'startup/startup',
+  'startup/error',
+  'startup/event',
+  'startup/maintenance',
+  'startup/multilang',
+  'startup/seo_url',
+  'startup/multilang_rewrite',
 );
 
 // Action Events
 $_['action_event'] = array(
-	'controller/*/before' => array(
-		'event/language/before'
-	),
-	'controller/*/after' => array(
-		'event/language/after'
-	),	
-	'view/*/before' => array(
-		500  => 'event/theme',
-		998  => 'event/language',
-	),
-	'language/*/after' => array(
-		'event/translation'
-	),
-	//'view/*/before' => array(
-	//	1000  => 'event/debug/before'
-	//),
-	//'controller/*/after'  => array(
-	//	'event/debug/after'
-//	)
+  'controller/*/before' => array(
+    'event/language/before'
+  ),
+  'controller/*/after' => array(
+    'event/language/after'
+  ),
+  'view/*/before' => array(
+    500  => 'event/theme',
+    600  => 'event/hreflang',
+    998  => 'event/language',
+  ),
+  'language/*/after' => array(
+    'event/translation'
+  ),
+  //'view/*/before' => array(
+  //	1000  => 'event/debug/before'
+  //),
+  //'controller/*/after'  => array(
+  //	'event/debug/after'
+  //	)
 );

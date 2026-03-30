@@ -930,8 +930,8 @@
   }
   .button-destructive.icon {
     display: flex;
-    height: calc(var(--spacing) * 10);
-    width: calc(var(--spacing) * 10);
+    min-height: calc(var(--spacing) * 10);
+    min-width: calc(var(--spacing) * 10);
     cursor: pointer;
     align-items: center;
     justify-content: center;
@@ -960,11 +960,11 @@
       }
     }
   }
-  .button-secondary svg, .button-primary svg {
+  .button-secondary svg, .button-primary svg, .button-destructive svg {
     height: calc(var(--spacing) * 5);
     width: calc(var(--spacing) * 5);
   }
-  .button-primary[disabled], .button-secondary[disabled] {
+  .button-primary[disabled], .button-secondary[disabled], .button-destructive[disabled] {
     pointer-events: none;
     opacity: 50%;
   }

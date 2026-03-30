@@ -1,106 +1,33 @@
-<button class="button-primary icon relative" id="cart" onclick="openCart()">
-    <svg aria-hidden="true" viewBox="0 0 24 24">
-        <use href="/assets/icons/sprite.svg#icon-cart"></use>
-    </svg>
-    <span id="cart-badge" class="badge button-badge">{{ productCount }}</span>
-    <div class="cart-toast" id="cart-toast"></div>
+<button class="button-primary icon relative" id="cart-button" onclick="openCart()">
+	<svg aria-hidden="true" viewbox="0 0 24 24">
+		<use href="/assets/icons/sprite.svg#icon-cart"></use>
+	</svg>
+	<span id="cart-badge" class="badge button-badge">{{ productCount }}</span>
+	<div class="cart-toast" id="cart-toast"></div>
 </button>
 
-<div class="modal flex flex-col max-h-md h-full hidden p-4 md:p-6 max-md:rounded-none lg:max-h-[80vh]" id="cart-modal">
-    <div class="skeleton h-full w-full"></div>
-</div>
-<div class="modal-overlay hidden" id="cart-overlay" onClick="closeCart()"></div>
+<div class="modal flex flex-col max-h-md h-full hidden p-4 md:p-6 max-md:rounded-none lg:max-h-[80vh] gap-4 justify-between" id="cart-modal">
+	<div class="modal-header">
+		<p class="heading">{{ text_cart }}</p>
+		<button class="button-secondary icon" onclick="closeCart()">
+			<svg aria-hidden="true" viewbox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-close"></use>
+			</svg>
+		</button>
+	</div>
 
-{# <div id="cart" class="btn-group btn-block">
-    <ul class="dropdown-menu pull-right">
-        {% if products or vouchers %}
-            <li>
-                <table class="table table-striped">
-                    {% for product in products %}
-                        <tr>
-                            <td class="text-center">
-                                {% if product.thumb %}
-                                    <a href="{{ product.href }}">
-                                        <img
-                                            src="{{ product.thumb }}"
-                                            alt="{{ product.name }}"
-                                            title="{{ product.name }}"
-                                            class="img-thumbnail"
-                                        />
-                                    </a>
-                                {% endif %}
-                            </td>
-                            <td class="text-left">
-                                <a href="{{ product.href }}">{{ product.name }}</a> {% if product.option %}
-                                    {% for option in product.option %}
-                                        <br />
-                                        - <small>{{ option.name }} {{ option.value }}</small>
-                                    {% endfor %}
-                                {% endif %}
-                                {% if product.recurring %}
-                                    <br />
-                                    - <small>{{ text_recurring }} {{ product.recurring }}</small>
-                                {% endif %}
-                            </td>
-                            <td class="text-right">x {{ product.quantity }}</td>
-                            <td class="text-right">{{ product.total }}</td>
-                            <td class="text-center">
-                                <button
-                                    type="button"
-                                    onclick="cart.remove('{{ product.cart_id }}');"
-                                    title="{{ button_remove }}"
-                                    class="btn btn-danger btn-xs"
-                                >
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    {% for voucher in vouchers %}
-                        <tr>
-                            <td class="text-center"></td>
-                            <td class="text-left">{{ voucher.description }}</td>
-                            <td class="text-right">x&nbsp;1</td>
-                            <td class="text-right">{{ voucher.amount }}</td>
-                            <td class="text-center text-danger">
-                                <button
-                                    type="button"
-                                    onclick="voucher.remove('{{ voucher.key }}');"
-                                    title="{{ button_remove }}"
-                                    class="btn btn-danger btn-xs"
-                                >
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </li>
-            <li>
-                <div>
-                    <table class="table table-bordered">
-                        {% for total in totals %}
-                            <tr>
-                                <td class="text-right"><strong>{{ total.title }}</strong></td>
-                                <td class="text-right">{{ total.text }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                    <p class="text-right">
-                        <a href="{{ cart }}"><strong><i class="fa fa-shopping-cart"></i> {{ text_cart }}</strong></a>&nbsp;&nbsp;&nbsp;<a
-                            href="{{ checkout }}"
-                        >
-                            <strong><i class="fa fa-share"></i> {{ text_checkout }}</strong>
-                        </a>
-                    </p>
-                </div>
-            </li>
-        {% else %}
-            <li>
-                <p class="text-center">
-                    {{ text_empty }}
-                </p>
-            </li>
-        {% endif %}
-    </ul>
-</div> #}
+	<div class="flex-1" id="cart-modal-products">
+		<div class="skeleton h-full w-full"></div>
+	</div>
+
+	<div id="cart-modal-totals">
+		<div class="skeleton h-25 w-full rounded-md"></div>
+	</div>
+
+	<div class="flex justify-end gap-2" class="modal-footer">
+		<button class="button-primary">
+			{{ text_checkout }}
+		</button>
+	</div>
+</div>
+<div class="modal-overlay hidden" id="cart-overlay" onclick="closeCart()"></div>

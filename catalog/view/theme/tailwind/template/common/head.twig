@@ -14,7 +14,10 @@
 {% if keywords %}
     <meta name="keywords" content="{{ keywords }}" />
 {% endif %}
-{# {{ microdata.head }} #}
+
+{% for link in hreflang %}
+  <link rel="alternate" hreflang="{{ link.hreflang }}" href="{{ link.href }}">
+{% endfor %}
 
 <link rel="icon" type="image/png" href="/catalog/view/theme/tailwind/image/favicon/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="/catalog/view/theme/tailwind/image/favicon/favicon.svg" />

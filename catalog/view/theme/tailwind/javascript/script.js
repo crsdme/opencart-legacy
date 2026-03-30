@@ -44,104 +44,125 @@ $('.dropdown-menu').on('click', function (e) {
 
 // Dropdown
 
+// Utils
+
+function debounce(func, wait) {
+  let timeout;
+  return function () {
+      const context = this,
+          args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
+// Utils
+
 // Cart
 
-const cart = $('#cart-modal');
+const cartButton = $('#cart-button');
+const cartBadge = $('#cart-badge');
+const cartModal = $('#cart-modal');
+const cartProducts = $('#cart-modal-products');
+const cartTotals = $('#cart-modal-totals');
 const cartOverlay = $('#cart-overlay');
 let cartToastTimeout = null;
 
+function openCart() {
+  cartModal.removeClass('hidden');
+  cartOverlay.removeClass('hidden');
+  $('body').addClass('overflow-hidden');
+
+  $.ajax({
+      url: 'index.php?route=common/cart/info',
+      cache: false,
+      beforeSend: function () {
+        cartProducts.html(`
+          <div class="space-y-2">
+              <div class="skeleton h-25 w-full rounded-md"></div>
+              <div class="skeleton h-25 w-full rounded-md"></div>
+              <div class="skeleton h-25 w-full rounded-md"></div>
+              <div class="skeleton h-25 w-full rounded-md"></div>
+          </div>
+        `);
+        cartTotals.html(`
+            <div class="space-y-2">
+                <div class="skeleton h-25 w-full rounded-md"></div>
+            </div>
+        `);
+      },
+      success: function (html) {
+        const response = $(html);
+        cartTotals.html(response.filter('#cart-modal-totals').html());
+        cartProducts.html(response.filter('#cart-modal-products').html());
+      },
+  });
+}
+
+function closeCart() {
+  cartModal.addClass('hidden');
+  cartOverlay.addClass('hidden');
+  $('body').removeClass('overflow-hidden');
+}
+
 function addToCart(product_id, quantity = 1, button) {
     $.ajax({
-        url: 'index.php?route=checkout/cart/add',
+        url: 'index.php?route=common/cart/add',
         type: 'post',
         data: 'product_id=' + product_id + '&quantity=' + quantity,
         dataType: 'json',
         cache: false,
-        success: function (json) {
+        beforeSend: function () {
             // button.setAttribute('disabled', true);
+        },
+        success: function (json) {
+            cartBadge.text(json['total']);
             // button.innerHTML = button.getAttribute('data-added-text');
 
             if (json['error']) {
-                sendToast({ message: json['error'], type: 'error', align: 'right-bottom', timeout: 4000 });
+                button.setAttribute('disabled', false);
                 return;
             }
 
-            $('#cart-count').html(json['total']);
-            $('#cart-toast').html(json['totalPrice']);
-            $('#cart-toast').addClass('show');
+            // $('#cart-toast').html(json['totalPrice']);
+            // $('#cart-toast').addClass('show');
 
-            if (cartToastTimeout) clearTimeout(cartToastTimeout);
-            cartToastTimeout = setTimeout(function () {
-                $('#cart-toast').removeClass('show');
-                cartToastTimeout = null;
-            }, 2500);
-            sendToast({ message: json['success'], type: 'success', align: 'right-bottom', timeout: 4000 });
+            // if (cartToastTimeout) clearTimeout(cartToastTimeout);
+            // cartToastTimeout = setTimeout(function () {
+            //     $('#cart-toast').removeClass('show');
+            //     cartToastTimeout = null;
+            // }, 2500);
+            // sendToast({ message: json['success'], type: 'success', align: 'right-bottom', timeout: 4000 });
         },
     });
 }
 
-function openCart() {
-    cart.toggleClass('hidden');
-    cartOverlay.toggleClass('hidden');
-    $('body').toggleClass('overflow-hidden');
-
+function removeCartProduct(productKey) {
     $.ajax({
-        url: 'index.php?route=common/cart/info',
+        url: `index.php?route=common/cart/remove`,
+        type: 'post',
+        data: `key=${productKey}`,
         cache: false,
         beforeSend: function () {
-            $('#cart-products').html(`
-                <div class="space-y-2">
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                </div>
-            `);
+          cartProducts.html(`
+            <div class="space-y-2">
+                <div class="skeleton h-25 w-full rounded-md"></div>
+                <div class="skeleton h-25 w-full rounded-md"></div>
+                <div class="skeleton h-25 w-full rounded-md"></div>
+                <div class="skeleton h-25 w-full rounded-md"></div>
+            </div>
+          `);
+          cartTotals.html(`
+              <div class="space-y-2">
+                  <div class="skeleton h-25 w-full rounded-md"></div>
+              </div>
+          `);
         },
-        success: function (html) {
-            cart.html(html);
-        },
-    });
-}
-
-function closeCart() {
-    cart.toggleClass('hidden');
-    cartOverlay.toggleClass('hidden');
-    $('body').toggleClass('overflow-hidden');
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function () {
-        const context = this,
-            args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(context, args), wait);
-    };
-}
-
-function removeCartProduct(target) {
-    const productKey = $(target).next().val();
-    $.ajax({
-        url: `index.php?route=common/cart&remove=${productKey}`,
-        type: 'get',
-        dataType: 'html',
-        cache: false,
-        beforeSend: function () {
-            $('#cart-products').html(`
-      <div class="space-y-2">
-        <div class="skeleton h-25 w-full rounded-md"></div>
-        <div class="skeleton h-25 w-full rounded-md"></div>
-        <div class="skeleton h-25 w-full rounded-md"></div>
-        <div class="skeleton h-25 w-full rounded-md"></div>
-      </div>
-    `);
-        },
-        success: function (data) {
-            data = `<div>${data}</div>`;
-            $('#cart-products').children().remove();
-            $('#cart-products').append($(data).find('#cart-products').html());
-            $('#cart-total').html($(data).find('#cart-total').children());
+        success: function (json) {
+          const response = $(json['html']);
+          cartBadge.text(json['total']);
+          cartTotals.html(response.filter('#cart-modal-totals').html());
+          cartProducts.html(response.filter('#cart-modal-products').html());
         },
     });
 }

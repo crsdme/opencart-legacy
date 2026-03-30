@@ -1,0 +1,69 @@
+{% if products %}
+
+	<div class="flex flex-col gap-2 h-full" id="cart-modal-products">
+		{% for product in products %}
+			<div class="flex items-center justify-between">
+				{% if product.thumb %}
+					<a href="{{ product.href }}">
+						<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail"/>
+
+						<div>
+							<a href="{{ product.href }}">{{ product.name }}</a>
+							{% if product.option %}
+								{% for option in product.option %}
+									<br/>
+									-
+									<small>{{ option.name }}
+										{{ option.value }}</small>
+								{% endfor %}
+							{% endif %}
+							{% if product.recurring %}
+								<br/>
+								-
+								<small>{{ text_recurring }}
+									{{ product.recurring }}</small>
+							{% endif %}
+						</div>
+
+						<div>
+							<p>x{{ product.quantity }}</p>
+						</div>
+
+						<div>
+							<p>{{ product.total }}</p>
+						</div>
+
+						<div>
+							<button class="button-destructive icon relative" onclick="removeCartProduct('{{ product.cart_id }}');" title="{{ button_remove }}">
+								<svg aria-hidden="true" viewbox="0 0 24 24">
+									<use href="/assets/icons/sprite.svg#icon-trash"></use>
+								</svg>
+							</button>
+						</div>
+
+
+					</a>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
+
+	<div class="flex items-center justify-center" id="cart-modal-totals">
+		{% for total in totals %}
+			<p>
+				<strong>{{ total.title }}</strong>
+			</p>
+			<p>{{ total.text }}</p>
+		{% endfor %}
+	</div>
+
+{% else %}
+
+	<div class="flex items-center justify-center h-full" id="cart-modal-products">
+		<p class="text-center">
+			{{ text_empty }}
+		</p>
+	</div>
+	<div class="flex items-center justify-center" id="cart-modal-totals"></div>
+
+{% endif %}

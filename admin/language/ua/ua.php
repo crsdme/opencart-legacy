@@ -1,7 +1,7 @@
 <?php
 
 // Locale
-$_['code']                          = 'uk';
+$_['code']                          = 'ua';
 $_['direction']                     = 'ltr';
 $_['date_format_short']             = 'd.m.Y';
 $_['date_format_long']              = 'l, d F Y';
@@ -100,8 +100,8 @@ $_['button_link']                   = 'Посилання';
 $_['button_currency']               = 'Оновити курси валют';
 $_['button_apply']                  = 'Застосувати';
 $_['button_category_add']           = 'Додати категорію';
-$_['button_enable']           		= 'Включити';
-$_['button_disable']          		= 'Відключити';
+$_['button_enable']               = 'Включити';
+$_['button_disable']              = 'Відключити';
 
 // Tab
 $_['tab_affiliate']                 = 'Партнер';
@@ -124,7 +124,7 @@ $_['tab_log']                       = 'Лог';
 $_['tab_image']                     = 'Зображення';
 $_['tab_option']                    = 'Опції';
 $_['tab_server']                    = 'Сервер';
-$_['tab_seopro']       				= 'SeoPro';
+$_['tab_seopro']               = 'SeoPro';
 $_['tab_seo']                       = 'SEO';
 $_['tab_store']                     = 'Магазин';
 $_['tab_special']                   = 'Акції';
@@ -147,9 +147,9 @@ $_['tab_recurring']                 = 'Періодичні платежі';
 $_['tab_action']                    = 'Дія';
 $_['tab_google']                    = 'Google';
 $_['tab_sms']                       = 'SMS';
-$_['tab_extra_tab']          		= 'Додаткова вкладка';
-$_['tab_module']          	 		= 'Вкладка';
-$_['tab_related']          	 		= 'Рекомендуємо';
+$_['tab_extra_tab']              = 'Додаткова вкладка';
+$_['tab_module']                 = 'Вкладка';
+$_['tab_related']                 = 'Рекомендуємо';
 
 // Error
 $_['error_exception']               = 'Помилка коду (%s): %s в %s на рядку %s';
