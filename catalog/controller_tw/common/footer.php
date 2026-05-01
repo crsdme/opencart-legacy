@@ -70,6 +70,14 @@ class ControllerCommonFooter extends Controller
 
         $data['scripts'] = $this->document->getScripts('footer');
         $data['styles'] = $this->document->getStyles('footer');
+        $data['rendered_footer_styles'] = '';
+        $data['rendered_footer_scripts'] = '';
+
+        if ($this->registry->has('minifier')) {
+            $minifier = $this->registry->get('minifier');
+            $data['rendered_footer_styles'] = $minifier->renderStyles($data['styles']);
+            $data['rendered_footer_scripts'] = $minifier->renderScripts($data['scripts'], 'footer');
+        }
 
         $data['route'] = $this->request->get['route'] ?? 'common/home';
         $data['microdata'] = $this->load->controller('common/microdata', $data);

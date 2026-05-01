@@ -48,12 +48,20 @@
     </div>
 </footer>
 
-{% for style in styles %}
-    <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
-{% endfor %}
-{% for script in scripts %}
-    <script src="{{ script }}" type="text/javascript"></script>
-{% endfor %}
+{% if rendered_footer_styles %}
+    {{ rendered_footer_styles|raw }}
+{% else %}
+    {% for style in styles %}
+        <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+    {% endfor %}
+{% endif %}
+{% if rendered_footer_scripts %}
+    {{ rendered_footer_scripts|raw }}
+{% else %}
+    {% for script in scripts %}
+        <script src="{{ script }}" type="text/javascript"></script>
+    {% endfor %}
+{% endif %}
 <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="

@@ -202,6 +202,10 @@ class ControllerStartupStartup extends Controller
     // Cart
     $this->registry->set('cart', new Cart\Cart($this->registry));
 
+    // Minifier
+    require_once DIR_SYSTEM . 'library/custom/minifier.php';
+    $this->registry->set('minifier', new Minifier($this->registry));
+
     // Encryption
     $this->registry->set('encryption', new Encryption($this->config->get('config_encryption')));
   }

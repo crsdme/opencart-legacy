@@ -51,12 +51,20 @@ class ControllerCommonHead extends Controller
     $data['robots'] = $this->document->getRobots();
     $data['styles'] = $this->document->getStyles();
     $data['scripts'] = $this->document->getScripts('header');
+    $data['rendered_styles'] = '';
+    $data['rendered_scripts'] = '';
     $data['lang'] = $this->language->get('code');
     $data['direction'] = $this->language->get('direction');
 
     $data['name'] = $this->config->get('config_name');
     $data['theme'] = $this->request->cookie['theme'] ?? null;
     $data['route'] = $this->request->get['route'] ?? 'common/home';
+
+    if ($this->registry->has('minifier')) {
+      $minifier = $this->registry->get('minifier');
+      $data['rendered_styles'] = $minifier->renderStyles($data['styles']);
+      $data['rendered_scripts'] = $minifier->renderScripts($data['scripts'], 'header');
+    }
 
     return $this->load->view('common/head', $data);
   }
