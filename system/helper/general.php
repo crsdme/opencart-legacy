@@ -37,3 +37,15 @@ if(!function_exists('hash_equals')) {
 		}
 	}
 }
+
+if (!function_exists('dev_dump')) {
+	function dev_dump(...$values) {
+		if (!$values) {
+			return;
+		}
+
+		echo '<pre>';
+		call_user_func_array('var_dump', $values);
+		echo '</pre>';
+	}
+}
