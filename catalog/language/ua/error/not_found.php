@@ -1,10 +1,10 @@
 <?php
 
 // Heading
-$_['meta_title'] = 'Page Not Found';
+$_['meta_title'] = 'Сторінку не знайдено';
 $_['meta_description'] =
-  'You’ve landed on a page that doesn’t exist. But don’t worry — Raw Hair Wholesale has plenty of amazing products! Head to our homepage and discover something you\'ll love.';
+  'Ви потрапили на сторінку, якої не існує. Але не хвилюйтеся — у Raw Hair Wholesale багато чудових товарів! Перейдіть на головну сторінку та знайдіть те, що вам сподобається.';
 
 // Text
 $_['text_error'] =
-  'Unfortunately, this page does not exist on the server. If you believe it should, try using the site search to find what you’re looking for.';
+  'На жаль, цієї сторінки немає на сервері. Якщо вона має існувати, скористайтесь пошуком по сайту, щоб знайти потрібне.';

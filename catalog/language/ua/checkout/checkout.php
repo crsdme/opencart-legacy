@@ -1,127 +1,126 @@
 <?php
 // Heading
-$_['heading_title'] = 'Checkout';
+$_['heading_title'] = 'Оформлення замовлення';
 
-$_['button_login'] = 'Login';
-$_['button_order'] = 'Order';
-$_['button_save_changes'] = 'Save changes';
-$_['button_prev'] = 'Back';
-$_['button_next'] = 'Next';
+$_['button_login'] = 'Увійти';
+$_['button_order'] = 'Замовити';
+$_['button_save_changes'] = 'Зберегти зміни';
+$_['button_prev'] = 'Назад';
+$_['button_next'] = 'Далі';
 
-$_['text_sub_total'] = 'Total';
+$_['text_sub_total'] = 'Разом';
 
 // Text
-$_['text_cart'] = 'Cart';
-$_['text_cart_description'] = 'View the products in your cart and place an order';
-$_['text_checkout_customer'] = 'Customer';
-$_['text_checkout_customer_login'] = 'I am registered';
-$_['text_checkout_customer_description'] = 'Fill in the contact details for communication with you';
-$_['text_checkout_customer_cancel'] = 'Cancel';
-$_['text_checkout_shipping_method'] = 'Shipping method';
-$_['text_checkout_shipping_method_description'] = 'Select a convenient shipping method';
-$_['text_checkout_payment_method'] = 'Payment method';
-$_['text_checkout_payment_method_description'] = 'Select a convenient payment method';
-$_['text_checkout_payment_address'] = 'Payment address';
-$_['text_checkout_shipping_address'] = 'Shipping address';
-$_['text_city'] = 'Start typing your city and select it from the list';
-$_['text_shipping_address'] = 'Enter your address to get complete information about delivery';
-$_['text_payment_address'] = 'Enter your address to get complete information about payment';
-$_['text_forgotten'] = 'Forgot your password?';
-$_['text_only'] = 'Region: %s';
-$_['text_reward'] = 'Bonus points: %s';
+$_['text_cart'] = 'Кошик';
+$_['text_cart_description'] = 'Перегляньте товари у кошику та оформіть замовлення';
+$_['text_checkout_customer'] = 'Покупець';
+$_['text_checkout_customer_login'] = 'Я зареєстрований';
+$_['text_checkout_customer_description'] = 'Заповніть контактні дані для зв\'язку з вами';
+$_['text_checkout_customer_cancel'] = 'Скасувати';
+$_['text_checkout_shipping_method'] = 'Спосіб доставки';
+$_['text_checkout_shipping_method_description'] = 'Оберіть зручний спосіб доставки';
+$_['text_checkout_payment_method'] = 'Спосіб оплати';
+$_['text_checkout_payment_method_description'] = 'Оберіть зручний спосіб оплати';
+$_['text_checkout_payment_address'] = 'Платіжна адреса';
+$_['text_checkout_shipping_address'] = 'Адреса доставки';
+$_['text_city'] = 'Почніть вводити ваше місто та оберіть його зі списку';
+$_['text_shipping_address'] = 'Введіть адресу, щоб отримати повну інформацію про доставку';
+$_['text_payment_address'] = 'Введіть адресу, щоб отримати повну інформацію про оплату';
+$_['text_forgotten'] = 'Забули пароль?';
+$_['text_only'] = 'Регіон: %s';
+$_['text_reward'] = 'Бонусні бали: %s';
 $_['text_items'] = '%s';
-$_['text_empty'] = 'Your cart is empty!';
-$_['text_error_2'] = 'Please add products to the cart to place an order.';
+$_['text_empty'] = 'Ваш кошик порожній!';
+$_['text_error_2'] = 'Будь ласка, додайте товари в кошик, щоб оформити замовлення.';
 $_['text_login'] =
-  'You need to log in to the <a href="%s">personal account</a> or create an <a href="%s">account</a> to see prices!';
-$_['text_agree'] = 'I agree with the terms: <a class="colorbox fancybox agree" href="%s" alt="%s"><b>%s</b></a>';
+  'Щоб бачити ціни, увійдіть до <a href="%s">особистого кабінету</a> або створіть <a href="%s">акаунт</a>!';
+$_['text_agree'] = 'Я погоджуюсь з умовами: <a class="colorbox fancybox agree" href="%s" alt="%s"><b>%s</b></a>';
 $_['text_agree_shoppica'] =
-  'I agree with the terms: <a class="s_main_color" rel="prettyPhoto[ajax]" href="%s&iframe=true" alt="%s"><b>%s</b></a>';
-$_['text_private'] = 'Physical person';
-$_['text_company'] = 'Legal person';
-$_['text_add_new'] = 'Add a new address';
-$_['text_your_company'] = 'Company data';
-$_['text_select_address'] = 'Select address';
-$_['text_proceed_payment'] = 'Please wait ... The transition to payment is in progress';
-$_['text_payment_form_title'] = 'Payment';
-$_['text_account_created'] = 'Account created. You can go to payment to place an order.';
-$_['text_need_save_changes'] = 'You need to save changes before payment.';
-$_['text_saving_changes'] = 'Saving changes...';
-$_['text_you_will_be_registered'] = 'You will be registered';
-$_['text_please_confirm'] = 'Order is not confirmed and may be lost';
+  'Я погоджуюсь з умовами: <a class="s_main_color" rel="prettyPhoto[ajax]" href="%s&iframe=true" alt="%s"><b>%s</b></a>';
+$_['text_private'] = 'Фізична особа';
+$_['text_company'] = 'Юридична особа';
+$_['text_add_new'] = 'Додати нову адресу';
+$_['text_your_company'] = 'Дані компанії';
+$_['text_select_address'] = 'Оберіть адресу';
+$_['text_proceed_payment'] = 'Зачекайте... Виконується перехід до оплати';
+$_['text_payment_form_title'] = 'Оплата';
+$_['text_account_created'] = 'Акаунт створено. Ви можете перейти до оплати, щоб оформити замовлення.';
+$_['text_need_save_changes'] = 'Перед оплатою потрібно зберегти зміни.';
+$_['text_saving_changes'] = 'Збереження змін...';
+$_['text_you_will_be_registered'] = 'Ви будете зареєстровані';
+$_['text_please_confirm'] = 'Замовлення не підтверджене і може бути втрачене';
 
-$_['text_instock'] = 'In stock';
-$_['text_sku'] = 'Product code:';
+$_['text_instock'] = 'В наявності';
+$_['text_sku'] = 'Код товару:';
 
 // Login page
-$_['text_login_title'] = 'Authorization';
-$_['text_login_description'] = 'Log in to the account to quickly place orders and track purchases.';
-$_['text_send_code_again'] = 'Send code again';
+$_['text_login_title'] = 'Авторизація';
+$_['text_login_description'] = 'Увійдіть в акаунт, щоб швидко оформлювати замовлення та відстежувати покупки.';
+$_['text_send_code_again'] = 'Надіслати код ще раз';
 
-$_['text_login'] = 'Log in to the account';
-$_['entry_phone'] = 'Phone number';
-$_['text_change_phone'] = 'Change phone number';
-$_['entry_code'] = 'Code';
-$_['button_send_code'] = 'Send code';
-$_['button_login'] = 'Log in';
-$_['text_create_account'] = 'Create an account';
+$_['text_login'] = 'Увійти в акаунт';
+$_['entry_phone'] = 'Номер телефону';
+$_['text_change_phone'] = 'Змінити номер телефону';
+$_['entry_code'] = 'Код';
+$_['button_send_code'] = 'Надіслати код';
+$_['button_login'] = 'Увійти';
+$_['text_create_account'] = 'Створити акаунт';
 
 // Column
-$_['column_image'] = 'Photo';
-$_['column_name'] = 'Product name';
-$_['column_model'] = 'Model';
-$_['column_quantity'] = '<span title="Quantity">Qty</span>';
-$_['column_price'] = 'Price';
-$_['column_total'] = 'Total';
+$_['column_image'] = 'Фото';
+$_['column_name'] = 'Назва товару';
+$_['column_model'] = 'Модель';
+$_['column_quantity'] = '<span title="Кількість">К-сть</span>';
+$_['column_price'] = 'Ціна';
+$_['column_total'] = 'Разом';
 
 // Entry
-$_['entry_email'] = 'Email:';
-$_['entry_password'] = 'Password:';
-$_['entry_password_confirm'] = 'Confirm password:';
-$_['entry_register'] = 'Register on the site:';
-$_['entry_coupon'] = 'Coupon:';
-$_['entry_reward'] = 'Use bonus points (not more than %s):';
-$_['entry_voucher'] = 'Gift certificate:';
-$_['entry_newsletter'] = 'Subscribe to news:';
-$_['entry_address_same'] = 'Shipping address is the same as the payment address';
-$_['entry_customer_type'] = 'Customer type';
+$_['entry_email'] = 'Електронна пошта:';
+$_['entry_password'] = 'Пароль:';
+$_['entry_password_confirm'] = 'Підтвердіть пароль:';
+$_['entry_register'] = 'Зареєструватись на сайті:';
+$_['entry_coupon'] = 'Купон:';
+$_['entry_reward'] = 'Використати бонусні бали (не більше %s):';
+$_['entry_voucher'] = 'Подарунковий сертифікат:';
+$_['entry_newsletter'] = 'Підписатися на новини:';
+$_['entry_address_same'] = 'Адреса доставки збігається з платіжною адресою';
+$_['entry_customer_type'] = 'Тип покупця';
 
 // Error
-$_['error_login'] = 'Invalid E-Mail or password';
-$_['error_exists'] = 'E-Mail is already registered. Log in to place an order.';
+$_['error_login'] = 'Невірна електронна пошта або пароль';
+$_['error_exists'] = 'Електронна пошта вже зареєстрована. Увійдіть, щоб оформити замовлення.';
 $_['error_no_shipping'] =
-  'Delivery to the specified address is not possible. Contact the <a href="%s">administration</a>';
+  'Доставка за вказаною адресою неможлива. Зверніться до <a href="%s">адміністрації</a>';
 $_['error_no_payment'] =
-  'Payment to the specified address is not possible. Contact the <a href="%s">administration</a>';
-$_['error_stock'] = 'Products marked in red are not available in sufficient quantity or are not in stock';
-$_['error_minimum'] = 'The minimum quantity for the order of the product %s is %s';
-$_['error_agree'] = 'You must agree to the terms of the agreement "%s"';
-$_['error_password'] = 'The password must be between 4 and 20 characters';
-$_['error_password_confirm'] = 'The password and the password confirmation must match';
-$_['error_coupon'] = 'The coupon is invalid, has expired, or the limit of its use has been reached';
+  'Оплата за вказаною адресою неможлива. Зверніться до <a href="%s">адміністрації</a>';
+$_['error_stock'] = 'Товари, позначені червоним, відсутні в потрібній кількості або немає в наявності';
+$_['error_minimum'] = 'Мінімальна кількість для замовлення товару %s становить %s';
+$_['error_agree'] = 'Ви повинні погодитися з умовами угоди "%s"';
+$_['error_password'] = 'Пароль має бути від 4 до 20 символів';
+$_['error_password_confirm'] = 'Пароль і підтвердження пароля повинні збігатися';
+$_['error_coupon'] = 'Купон недійсний, термін його дії минув або вичерпано ліміт використання';
 $_['error_voucher'] =
-  'The incorrectly specified code of the gift certificate, or it has already been used, or its term has expired';
-$_['error_reward'] = 'Please specify the number of bonus points you want to use';
-$_['error_points'] = 'You do not have enough bonus points';
-$_['error_maximum'] = 'You can use no more than %s bonus points';
-$_['error_shipping'] = 'You must select a shipping method';
+  'Невірно вказано код подарункового сертифіката, або його вже використано, або термін дії минув';
+$_['error_reward'] = 'Будь ласка, вкажіть кількість бонусних балів, які хочете використати';
+$_['error_points'] = 'У вас недостатньо бонусних балів';
+$_['error_maximum'] = 'Ви можете використати не більше %s бонусних балів';
+$_['error_shipping'] = 'Ви повинні обрати спосіб доставки';
 $_['error_no_shipping'] =
-  'Delivery to the specified address is not possible. Contact the <a href="%s">administration</a>';
-$_['error_payment'] = 'You must select a payment method';
+  'Доставка за вказаною адресою неможлива. Зверніться до <a href="%s">адміністрації</a>';
+$_['error_payment'] = 'Ви повинні обрати спосіб оплати';
 $_['error_no_payment'] =
-  'Payment to the specified address is not possible. Contact the <a href="%s">administration</a>';
-$_['error_min_amount'] = 'The minimum amount for the order is %s';
-$_['error_max_amount'] = 'The maximum amount for the order is %s';
-$_['error_min_quantity'] = 'The minimum quantity for the order is %s';
-$_['error_max_quantity'] = 'The maximum quantity for the order is %s';
-$_['error_min_weight'] = 'The minimum weight for the order is %s';
-$_['error_max_weight'] = 'The maximum weight for the order is %s';
-$_['error_filename'] = 'The name of the file must be between 3 and 64 characters';
-$_['error_filetype'] = 'Invalid file type';
-$_['error_attempts'] = 'You have exceeded the allowed number of login attempts. Please try again in one hour.';
-$_['text_summary'] = 'General information about the order';
-$_['text_summary_comment'] = 'Comment';
-$_['text_summary_shipping_address'] = 'Shipping address';
-$_['text_summary_payment_address'] = 'Payment address';
-$_['text_total_with_discount'] = 'Total with discount';
-?>
+  'Оплата за вказаною адресою неможлива. Зверніться до <a href="%s">адміністрації</a>';
+$_['error_min_amount'] = 'Мінімальна сума замовлення становить %s';
+$_['error_max_amount'] = 'Максимальна сума замовлення становить %s';
+$_['error_min_quantity'] = 'Мінімальна кількість для замовлення становить %s';
+$_['error_max_quantity'] = 'Максимальна кількість для замовлення становить %s';
+$_['error_min_weight'] = 'Мінімальна вага замовлення становить %s';
+$_['error_max_weight'] = 'Максимальна вага замовлення становить %s';
+$_['error_filename'] = 'Назва файлу повинна містити від 3 до 64 символів';
+$_['error_filetype'] = 'Неприпустимий тип файлу';
+$_['error_attempts'] = 'Ви перевищили дозволену кількість спроб входу. Спробуйте ще раз через одну годину.';
+$_['text_summary'] = 'Загальна інформація про замовлення';
+$_['text_summary_comment'] = 'Коментар';
+$_['text_summary_shipping_address'] = 'Адреса доставки';
+$_['text_summary_payment_address'] = 'Платіжна адреса';
+$_['text_total_with_discount'] = 'Разом зі знижкою';

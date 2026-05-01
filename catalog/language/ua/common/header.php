@@ -1,25 +1,25 @@
 <?php
 // Header Navigation
-$_['text_catalog'] = 'Catalog';
-$_['text_contacts'] = 'Contacts';
-$_['text_cart'] = 'Cart';
+$_['text_catalog'] = 'Каталог';
+$_['text_contacts'] = 'Контакти';
+$_['text_cart'] = 'Кошик';
 
 // Menu Sheet
-$_['text_menu'] = 'Menu';
-$_['text_contacts_header'] = 'Contacts';
-$_['text_about'] = 'About';
-$_['text_delivery_payment'] = 'Delivery & Payment';
-$_['text_guarantees_returns'] = 'Guarantees & Returns';
-$_['text_policy'] = 'Policy';
-$_['text_terms_of_service'] = 'Terms of Service';
-$_['text_privacy_policy'] = 'Privacy Policy';
-$_['text_cookie'] = 'Cookie';
-$_['text_telegram_manager'] = 'Telegram Manager';
-$_['text_telegram_channel'] = 'Telegram Channel';
-$_['text_phone_calls_notice'] = 'Phone calls are not accepted <br> please contact us via messaging apps only.';
+$_['text_menu'] = 'Меню';
+$_['text_contacts_header'] = 'Контакти';
+$_['text_about'] = 'Про нас';
+$_['text_delivery_payment'] = 'Доставка та оплата';
+$_['text_guarantees_returns'] = 'Гарантії та повернення';
+$_['text_policy'] = 'Політика';
+$_['text_terms_of_service'] = 'Умови використання';
+$_['text_privacy_policy'] = 'Політика конфіденційності';
+$_['text_cookie'] = 'Файли cookie';
+$_['text_telegram_manager'] = 'Менеджер у Telegram';
+$_['text_telegram_channel'] = 'Канал у Telegram';
+$_['text_phone_calls_notice'] = 'Телефонні дзвінки не приймаються <br> звертайтесь, будь ласка, лише в месенджерах.';
 
 // Search Sheet
-$_['text_search'] = 'Search';
+$_['text_search'] = 'Пошук';
 
 // Product Modal
-$_['text_product_image'] = 'Product Image';
+$_['text_product_image'] = 'Зображення товару';

@@ -1,20 +1,20 @@
 <?php
 // Heading
-$_['heading_title'] = 'Contact Us';
-$_['text_meta_title'] = 'Contact Raw Hair Wholesale — Premium Hair Extensions & Wigs';
+$_['heading_title'] = 'Зв\'язатися з нами';
+$_['text_meta_title'] = 'Контакти Raw Hair Wholesale — Преміальні нарощування волосся та перуки';
 $_['text_meta_description'] =
-  'Contact information for Raw Hair Wholesale 📞 Wide selection ✅ Official warranty 🚚 Worldwide shipping.';
+  'Контактна інформація Raw Hair Wholesale 📞 Широкий вибір ✅ Офіційна гарантія 🚚 Доставка по всьому світу.';
 
 // Text
 $_['text_contact_description'] =
-  'Reach out to us anytime — we speak English, Turkish, and Russian. We\'re always happy to assist you with wholesale hair orders or questions about shipping and products.';
+  'Звертайтесь до нас у будь-який час — ми спілкуємось англійською, турецькою та російською. Із задоволенням допоможемо з оптовими замовленнями волосся або питаннями щодо доставки та товарів.';
 
 // Social Media and Contact Buttons
-$_['text_telegram_manager'] = 'Telegram Manager';
-$_['text_whatsapp_turkish_russian'] = 'WhatsApp: Turkish, Russian';
-$_['text_whatsapp_english'] = 'WhatsApp: English';
-$_['text_contact_form'] = 'Contact Form';
+$_['text_telegram_manager'] = 'Менеджер у Telegram';
+$_['text_whatsapp_turkish_russian'] = 'WhatsApp: турецька, російська';
+$_['text_whatsapp_english'] = 'WhatsApp: англійська';
+$_['text_contact_form'] = 'Форма зворотного зв\'язку';
 
 // Availability Information
-$_['text_availability'] = 'We are available 7 days a week, 9am to 10pm (GMT+3).';
-$_['text_response_time'] = 'Response time is typically within 1 hour.';
+$_['text_availability'] = 'Ми на зв\'язку 7 днів на тиждень, з 9:00 до 22:00 (GMT+3).';
+$_['text_response_time'] = 'Зазвичай відповідаємо протягом 1 години.';

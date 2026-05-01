@@ -1,7 +1,7 @@
 <?php
 // Locale
 $_['code'] = 'ua';
-$_['direction'] = 'l`tr';
+$_['direction'] = 'ltr';
 $_['decimal_point'] = '.';
 $_['thousand_point'] = ',';
 

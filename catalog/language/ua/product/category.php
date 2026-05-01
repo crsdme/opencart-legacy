@@ -1,9 +1,9 @@
 <?php
-$_['text_default'] = 'Default';
-$_['text_name_asc'] = 'Name (A - Z)';
-$_['text_name_desc'] = 'Name (Z - A)';
-$_['text_price_asc'] = 'Price (Low &gt; High)';
-$_['text_price_desc'] = 'Price (High &gt; Low)';
+$_['text_default'] = 'За замовчуванням';
+$_['text_name_asc'] = 'Назва (А - Я)';
+$_['text_name_desc'] = 'Назва (Я - А)';
+$_['text_price_asc'] = 'Ціна (від низької до високої)';
+$_['text_price_desc'] = 'Ціна (від високої до низької)';
 
-$_['text_sort'] = 'Sort by';
-$_['text_limit'] = 'Show';
+$_['text_sort'] = 'Сортувати за';
+$_['text_limit'] = 'Показувати';
