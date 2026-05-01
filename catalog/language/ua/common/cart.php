@@ -1,7 +1,7 @@
 <?php
 
-$_['text_cart'] = 'Кошик';
-$_['text_checkout'] = 'Оформити замовлення';
-$_['text_empty'] = 'Ваш кошик порожній';
+$_['text_cart'] = 'Cart';
+$_['text_checkout'] = 'Checkout';
+$_['text_empty'] = 'Your cart is empty';
 $_['text_items'] = '%s';
-$_['text_success'] = 'Товар %s додано до кошика';
+$_['text_success'] = 'Product %s added to cart';

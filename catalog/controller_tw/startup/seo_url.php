@@ -22,8 +22,6 @@ class ControllerStartupSeoUrl extends Controller
 
       $this->custom_router->prepareRoute($parts);
     }
-
-    $this->custom_router->validate();
   }
 
   public function rewrite($link)

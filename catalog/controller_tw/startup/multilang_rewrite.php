@@ -1,12 +1,23 @@
 <?php
 class ControllerStartupMultilangRewrite extends Controller
 {
+  private $custom_router;
+
+  public function __construct($registry)
+  {
+    parent::__construct($registry);
+    $this->custom_router = new \Custom\Router($registry);
+  }
+
   public function index()
   {
     if (defined('DIR_APPLICATION') && strpos(DIR_APPLICATION, 'admin') !== false)
       return;
 
     $this->url->addRewrite($this);
+
+    // Validate canonical URL after all rewrites are registered.
+    $this->custom_router->validate();
   }
 
   // ADDING LANGUAGE PREFIX TO THIS->URL

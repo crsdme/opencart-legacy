@@ -31,6 +31,8 @@ class ControllerStartupMultilang extends Controller
     $codes = array_keys($languages);
     $main = $this->config->get('config_language_main');
 
+    // var_dump('multilang start ' . $prefix . ' ' . $main);
+
     if ($prefix === '' || !in_array($prefix, $codes, true) || $prefix === $main) {
       if (!isset($languages[$main]) || empty($languages[$main]['status']))
         return;
@@ -65,6 +67,7 @@ class ControllerStartupMultilang extends Controller
     setcookie('language', $prefix, time() + 60 * 60 * 24 * 30, '/', $this->request->server['HTTP_HOST']);
     $language = new Language($prefix);
     $language->load($prefix);
+
     $this->registry->set('language', $language);
   }
 }

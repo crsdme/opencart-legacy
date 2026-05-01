@@ -21,6 +21,7 @@ class Router
   private $url;
   private $session;
   private $db;
+  private $cache;
   private $cat_tree = [];
   private $keywords = [];
   private $queries = [];
@@ -104,7 +105,7 @@ class Router
         } else {
           $this->request->get['path'] .= '_' . $queryValue;
         }
-        return;
+        continue;
       }
 
       if ($queryKey === 'blog_category_id') {
@@ -113,7 +114,7 @@ class Router
         } else {
           $this->request->get['blog_category_id'] .= '_' . $queryValue;
         }
-        return;
+        continue;
       }
 
       $this->request->get[$queryKey] = $queryValue;
