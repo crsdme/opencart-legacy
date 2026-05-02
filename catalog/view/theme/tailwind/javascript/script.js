@@ -1,11 +1,11 @@
 // Language
 
-$('#form-language .dropdown-item').on('click', function(e) {
-  e.preventDefault();
+$('#form-language .dropdown-item').on('click', function (e) {
+    e.preventDefault();
 
-  $('#form-language input[name="code"]').val($(this).attr('name'));
+    $('#form-language input[name="code"]').val($(this).attr('name'));
 
-  $('#form-language').submit();
+    $('#form-language').submit();
 });
 
 // Language
@@ -24,21 +24,46 @@ function toggleTheme() {
 
 // Dropdown
 
-$('#dropdownButton, .dropdown-button').on('click', function (e) {
-    e.stopPropagation();
+function isTouchDevice() {
+    return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+}
 
-    const $button = $(this);
-    const $menu = $button.closest('.dropdown').find('.dropdown-menu');
+$(document).on('click', '#dropdown-button', function (e) {
+    const $dropdown = $(this).closest('.dropdown');
+    const $menu = $dropdown.find('.dropdown-menu');
+    const type = $dropdown.data('type');
+
+    // Если это hover dropdown на desktop — клик не нужен
+    if (type === 'hover' && !isTouchDevice()) {
+        return;
+    }
+
+    e.stopPropagation();
 
     $('.dropdown-menu').not($menu).removeClass('show');
     $menu.toggleClass('show');
+});
+
+$(document).on('mouseenter', '.dropdown[data-type="hover"]', function () {
+    if (isTouchDevice()) return;
+
+    const $menu = $(this).find('.dropdown-menu');
+
+    $('.dropdown-menu').not($menu).removeClass('show');
+    $menu.addClass('show');
+});
+
+$(document).on('mouseleave', '.dropdown[data-type="hover"]', function () {
+    if (isTouchDevice()) return;
+
+    $(this).find('.dropdown-menu').removeClass('show');
 });
 
 $(document).on('click', function () {
     $('.dropdown-menu').removeClass('show');
 });
 
-$('.dropdown-menu').on('click', function (e) {
+$(document).on('click', '.dropdown-menu', function (e) {
     e.stopPropagation();
 });
 
@@ -47,13 +72,13 @@ $('.dropdown-menu').on('click', function (e) {
 // Utils
 
 function debounce(func, wait) {
-  let timeout;
-  return function () {
-      const context = this,
-          args = arguments;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(context, args), wait);
-  };
+    let timeout;
+    return function () {
+        const context = this,
+            args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
 }
 
 // Utils
@@ -69,15 +94,15 @@ const cartOverlay = $('#cart-overlay');
 let cartToastTimeout = null;
 
 function openCart() {
-  cartModal.removeClass('hidden');
-  cartOverlay.removeClass('hidden');
-  $('body').addClass('overflow-hidden');
+    cartModal.removeClass('hidden');
+    cartOverlay.removeClass('hidden');
+    $('body').addClass('overflow-hidden');
 
-  $.ajax({
-      url: 'index.php?route=common/cart/info',
-      cache: false,
-      beforeSend: function () {
-        cartProducts.html(`
+    $.ajax({
+        url: 'index.php?route=common/cart/info',
+        cache: false,
+        beforeSend: function () {
+            cartProducts.html(`
           <div class="space-y-2">
               <div class="skeleton h-25 w-full rounded-md"></div>
               <div class="skeleton h-25 w-full rounded-md"></div>
@@ -85,24 +110,24 @@ function openCart() {
               <div class="skeleton h-25 w-full rounded-md"></div>
           </div>
         `);
-        cartTotals.html(`
+            cartTotals.html(`
             <div class="space-y-2">
                 <div class="skeleton h-25 w-full rounded-md"></div>
             </div>
         `);
-      },
-      success: function (html) {
-        const response = $(html);
-        cartTotals.html(response.filter('#cart-modal-totals').html());
-        cartProducts.html(response.filter('#cart-modal-products').html());
-      },
-  });
+        },
+        success: function (html) {
+            const response = $(html);
+            cartTotals.html(response.filter('#cart-modal-totals').html());
+            cartProducts.html(response.filter('#cart-modal-products').html());
+        },
+    });
 }
 
 function closeCart() {
-  cartModal.addClass('hidden');
-  cartOverlay.addClass('hidden');
-  $('body').removeClass('overflow-hidden');
+    cartModal.addClass('hidden');
+    cartOverlay.addClass('hidden');
+    $('body').removeClass('overflow-hidden');
 }
 
 function addToCart(product_id, quantity = 1, button) {
@@ -144,7 +169,7 @@ function removeCartProduct(productKey) {
         data: `key=${productKey}`,
         cache: false,
         beforeSend: function () {
-          cartProducts.html(`
+            cartProducts.html(`
             <div class="space-y-2">
                 <div class="skeleton h-25 w-full rounded-md"></div>
                 <div class="skeleton h-25 w-full rounded-md"></div>
@@ -152,17 +177,17 @@ function removeCartProduct(productKey) {
                 <div class="skeleton h-25 w-full rounded-md"></div>
             </div>
           `);
-          cartTotals.html(`
+            cartTotals.html(`
               <div class="space-y-2">
                   <div class="skeleton h-25 w-full rounded-md"></div>
               </div>
           `);
         },
         success: function (json) {
-          const response = $(json['html']);
-          cartBadge.text(json['total']);
-          cartTotals.html(response.filter('#cart-modal-totals').html());
-          cartProducts.html(response.filter('#cart-modal-products').html());
+            const response = $(json['html']);
+            cartBadge.text(json['total']);
+            cartTotals.html(response.filter('#cart-modal-totals').html());
+            cartProducts.html(response.filter('#cart-modal-products').html());
         },
     });
 }
@@ -246,6 +271,24 @@ function closeMenu() {
 }
 
 // Menu
+
+// Search
+
+$('#search-button').on('click', function () {
+    const searchValue = $('#search-input').val();
+    const prefix = $('#search-input').data('language');
+    let url = `${prefix}/search`;
+    if (searchValue) url += `?query=${encodeURIComponent(searchValue)}`;
+    location.href = url;
+});
+
+$('#search-input').on('keydown', function (e) {
+    if (e.key === 'Enter') {
+        $('#search-button').trigger('click');
+    }
+});
+
+// Search
 
 // Collapse Text
 

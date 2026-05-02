@@ -91,6 +91,14 @@ class Router
         continue;
 
       if (!in_array($queryKey, $allowedKeys, true)) {
+        if ($queryKey === 'route' && $queryValue !== null && $queryValue !== '') {
+          $this->request->get['route'] = $queryValue;
+          continue;
+        }
+        if ($queryValue === null && strpos($queryKey, '/') !== false) {
+          $this->request->get['route'] = $queryKey;
+          continue;
+        }
         $remainingParts[] = $part;
         return $remainingParts;
       }
