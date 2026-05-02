@@ -1,0 +1,33 @@
+<div class="modal hidden">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h2 class="modal-title">Modal</h2>
+			<button class="button-secondary icon" onclick="closeModal()">
+				<svg aria-hidden="true" viewbox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-close"></use>
+				</svg>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Modal Body</p>
+		</div>
+		<div class="modal-footer">
+			<button class="button-primary">Close</button>
+		</div>
+	</div>
+</div>
+<div class="modal-overlay hidden" onclick="closeModal()"></div>
+
+<div class="button-primary" onclick="openModal()">Open Modal</div>
+
+<script>
+	function openModal() {
+$('.modal').removeClass('hidden');
+$('.modal-overlay').removeClass('hidden');
+}
+
+function closeModal() {
+$('.modal').addClass('hidden');
+$('.modal-overlay').addClass('hidden');
+}
+</script>

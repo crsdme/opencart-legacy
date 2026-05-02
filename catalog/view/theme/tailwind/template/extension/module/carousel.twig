@@ -1,40 +1,40 @@
 <div id="carousel-{{ module }}" class="slider">
-    <div class="slider-track">
-        {% for banner in banners %}
-            <div class="slider-slide flex justify-center shrink-0 w-1/5 px-1">
-                {% if banner.link %}
-                    <a href="{{ banner.link }}">
-                        <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
-                    </a>
-                {% else %}
-                    <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
+	<div class="slider-track">
+		{% for banner in banners %}
+			<div class="slider-slide flex justify-center shrink-0 w-1/5 px-1">
+				{% if banner.link %}
+					<a href="{{ banner.link }}">
+						<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive"/>
+					</a>
+				{% else %}
+					<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive"/>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
 </div>
 
 <div class="slider-controls mt-4 flex gap-2 justify-end">
-    <button id="carousel-prev-{{ module }}" class="button-secondary icon">
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-            <use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
-        </svg>
-    </button>
-    <button id="carousel-next-{{ module }}" class="button-secondary icon">
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-            <use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
-        </svg>
-    </button>
+	<button id="carousel-prev-{{ module }}" class="button-secondary icon">
+		<svg aria-hidden="true" viewbox="0 0 24 24">
+			<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+		</svg>
+	</button>
+	<button id="carousel-next-{{ module }}" class="button-secondary icon">
+		<svg aria-hidden="true" viewbox="0 0 24 24">
+			<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+		</svg>
+	</button>
 </div>
 
 {# prettier-ignore-start #}
 <script>
-  const emblaNode_carousel_{{ module }} = document.getElementById('carousel-{{ module }}');
-  if (emblaNode_carousel_{{ module }}) {
-    const embla = EmblaCarousel(emblaNode_carousel_{{ module }}, { loop: true });
+	const emblaNode_carousel_ {{ module }} = document.getElementById('carousel- {{ module }}');
+if (emblaNode_carousel_ {{ module }}) {
+const embla = EmblaCarousel(emblaNode_carousel_ {{ module }}, {loop: true});
 
-    document.getElementById('carousel-prev-{{ module }}')?.addEventListener('click', () => embla.scrollPrev());
-    document.getElementById('carousel-next-{{ module }}')?.addEventListener('click', () => embla.scrollNext());
-  }
+document.getElementById('carousel-prev- {{ module }}') ?. addEventListener('click', () => embla.scrollPrev());
+document.getElementById('carousel-next- {{ module }}') ?. addEventListener('click', () => embla.scrollNext());
+}
 </script>
 {# prettier-ignore-end #}

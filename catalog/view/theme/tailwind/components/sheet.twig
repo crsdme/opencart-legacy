@@ -1,0 +1,69 @@
+<div class="sheet p-4" data-side="left" id="sheet-left">
+	<div class="sheet-header mb-2">
+		<p>{{ text_category }}</p>
+		<button class="button-secondary icon" onclick="closeMenuLeft()">
+			<svg aria-hidden="true" viewbox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-close"></use>
+			</svg>
+		</button>
+	</div>
+	<hr class="divider"/>
+	<div class="sheet-content">
+		<nav class="flex flex-col gap-2 mt-2">
+			{% for category in categories %}
+				<a href="{{ category.href }}" class="menu-link">{{ category.name }}</a>
+				<hr class="divider"/>
+			{% endfor %}
+		</nav>
+	</div>
+</div>
+<div class='sheet-overlay hidden' id="sheet-overlay-left" onclick='closeMenuLeft()'></div>
+
+<div class="button-primary" onclick="openMenuLeft()">Open Left Menu</div>
+
+<script>
+	function openMenuLeft() {
+$('#sheet-left').addClass('open');
+$('#sheet-overlay-left').removeClass('hidden');
+}
+
+function closeMenuLeft() {
+$('#sheet-left').removeClass('open');
+$('#sheet-overlay-left').addClass('hidden');
+}
+</script>
+
+<div class="sheet p-4" data-side="right" id="sheet-right">
+	<div class="sheet-header mb-2">
+		<p>{{ text_category }}</p>
+		<button class="button-secondary icon" onclick="closeMenuRight()">
+			<svg aria-hidden="true" viewbox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-close"></use>
+			</svg>
+		</button>
+	</div>
+	<hr class="divider"/>
+	<div class="sheet-content">
+		<nav class="flex flex-col gap-2 mt-2">
+			{% for category in categories %}
+				<a href="{{ category.href }}" class="menu-link">{{ category.name }}</a>
+				<hr class="divider"/>
+			{% endfor %}
+		</nav>
+	</div>
+</div>
+<div class='sheet-overlay hidden' id="sheet-overlay-right" onclick='closeMenuRight()'></div>
+
+<div class="button-primary" onclick="openMenuRight()">Open Right Menu</div>
+
+<script>
+	function openMenuRight() {
+$('#sheet-right').addClass('open');
+$('#sheet-overlay-right').removeClass('hidden');
+}
+
+function closeMenuRight() {
+$('#sheet-right').removeClass('open');
+$('#sheet-overlay-right').addClass('hidden');
+}
+</script>

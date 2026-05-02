@@ -1,0 +1,94 @@
+<div class="dropdown" data-align="center" data-type="hover">
+	<button id="dropdown-button" class="button-primary" type="button">
+		<span>Dropdown Center Hover</span>
+		<svg aria-hidden="true" viewbox="0 0 24 24">
+			<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+		</svg>
+	</button>
+	<div id="dropdown-menu" class="dropdown-menu">
+		<a href="#" class="dropdown-item">Item 1</a>
+		<a href="#" class="dropdown-item">Item 2</a>
+		<a href="#" class="dropdown-item">Item 3</a>
+	</div>
+</div>
+
+
+<div class="dropdown" data-align="center" data-type="click">
+	<button id="dropdown-button" class="button-primary" type="button">
+		<span>Dropdown Center Click</span>
+		<svg aria-hidden="true" viewbox="0 0 24 24">
+			<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+		</svg>
+	</button>
+	<div id="dropdown-menu" class="dropdown-menu">
+		<a href="#" class="dropdown-item">Item 1</a>
+		<a href="#" class="dropdown-item">Item 2</a>
+		<a href="#" class="dropdown-item">Item 3</a>
+	</div>
+</div>
+
+<div class="dropdown" data-align="right" data-type="click">
+	<button id="dropdown-button" class="button-primary" type="button">
+		<svg aria-hidden="true" viewbox="0 0 24 24">
+			<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+		</svg>
+	</button>
+	<div id="dropdown-menu" class="dropdown-menu">
+		<a href="#" class="dropdown-item">Item 1</a>
+		<a href="#" class="dropdown-item">Item 2</a>
+		<a href="#" class="dropdown-item">Item 3</a>
+	</div>
+</div>
+
+{# prettier-ignore-start #}
+<script>
+
+	function isTouchDevice() {
+return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+}
+
+$(document).on('click', '#dropdown-button', function (e) {
+const $dropdown = $(this).closest('.dropdown');
+const $menu = $dropdown.find('.dropdown-menu');
+const type = $dropdown.data('type');
+
+if (type === 'hover' && ! isTouchDevice()) {
+return;
+}
+
+e.stopPropagation();
+
+$('.dropdown-menu').not($menu).removeClass('show');
+$menu.toggleClass('show');
+});
+
+$(document).on('mouseenter', '.dropdown[data-type="hover"]', function () {
+if (isTouchDevice()) 
+return;
+
+
+
+const $menu = $(this).find('.dropdown-menu');
+
+$('.dropdown-menu').not($menu).removeClass('show');
+$menu.addClass('show');
+});
+
+$(document).on('mouseleave', '.dropdown[data-type="hover"]', function () {
+if (isTouchDevice()) 
+return;
+
+
+
+$(this).find('.dropdown-menu').removeClass('show');
+});
+
+$(document).on('click', function () {
+$('.dropdown-menu').removeClass('show');
+});
+
+$(document).on('click', '.dropdown-menu', function (e) {
+e.stopPropagation();
+});
+</script>
+{# prettier-ignore-end #}

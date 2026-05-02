@@ -1,22 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>
-            Tailwind UI Components
-        </title>
-        <link rel="stylesheet" href="/catalog/view/theme/tailwind/stylesheet/tailwind.css" />
-    </head>
-    <body class="p-8 bg-white text-black space-y-12">
-        <h1 class="text-4xl font-bold">📦 UI Components Showcase</h1>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>
+			Tailwind UI Components
+		</title>
+		<link rel="stylesheet" href="/catalog/view/theme/tailwind/stylesheet/tailwind.css"/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="/catalog/view/theme/tailwind/javascript/embla-carousel.js"></script>
+	</head>
+	<body class="p-8 bg-white text-black space-y-12">
+		<h1 class="text-4xl font-bold">📦 UI Components Showcase</h1>
 
-        {% for component in components %}
-            <section class="border-t border-gray-300 pt-6">
-                <h2 class="text-2xl font-semibold mb-4">{{ component }}</h2>
-                <div class="flex flex-wrap gap-4">
-                    {% include 'tailwind/components/' ~ component ~ '.twig' %}
-                </div>
-            </section>
-        {% endfor %}
-    </body>
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Button</h2>
+			<div class="flex flex-wrap gap-4">
+				{% include 'tailwind/components/button.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Badge</h2>
+			<div class="flex flex-wrap gap-4">
+				{% include 'tailwind/components/badge.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Typography</h2>
+			<div class="flex flex-wrap gap-4">
+				{% include 'tailwind/components/typography.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Product Card</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% for product in products %}
+					{% include 'tailwind/components/product-card.twig' with { product: product } %}
+				{% endfor %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Modal</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/modal.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Sheet</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/sheet.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Breadcrumbs</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/breadcrumbs.twig' with { breadcrumbs: breadcrumbs } %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Pagination</h2>
+			<div class="container flex flex-wrap gap-4">
+				{{ pagination_first }}
+				{{ pagination_middle }}
+				{{ pagination_last }}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Input</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/input.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Dropdown</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/dropdown.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Text Block</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/text-block.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Divider</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/divider.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Skeleton</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/skeleton.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Icons</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/icons.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Form</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/form.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Toast</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/toast.twig' %}
+			</div>
+		</section>
+
+		<section class="border-t border-gray-300 pt-6">
+			<h2 class="text-2xl font-semibold mb-4">Carousel</h2>
+			<div class="container flex flex-wrap gap-4">
+				{% include 'tailwind/components/carousel.twig' with { slides: carousel_slides } %}
+			</div>
+		</section>
+	</body>
 </html>
