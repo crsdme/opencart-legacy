@@ -70,6 +70,10 @@
         --plyr-color-main: #000000;
     }
 
+    html {
+        overflow-y: scroll;
+    }
+
     body {
         @apply text-neutral-900 bg-white dark:text-white dark:bg-neutral-900;
         font-family: 'Work Sans', sans-serif !important;
@@ -601,6 +605,17 @@
 
     .animate-shimmer {
         animation: shimmer 1.5s infinite;
+    }
+
+    .disable-scroll {
+        overflow: hidden !important;
+        -webkit-overflow-scrolling: auto;
+    }
+
+    body.disable-scroll {
+        overflow: hidden !important;
+        -webkit-overflow-scrolling: auto;
+        height: 100vh;
     }
 
     /* SYSTEM */

@@ -759,6 +759,9 @@
   :root {
     --plyr-color-main: #000000;
   }
+  html {
+    overflow-y: scroll;
+  }
   body {
     background-color: var(--color-white);
     color: var(--color-neutral-900);
@@ -1835,6 +1838,15 @@
   }
   .animate-shimmer {
     animation: shimmer 1.5s infinite;
+  }
+  .disable-scroll {
+    overflow: hidden !important;
+    -webkit-overflow-scrolling: auto;
+  }
+  body.disable-scroll {
+    overflow: hidden !important;
+    -webkit-overflow-scrolling: auto;
+    height: 100vh;
   }
 }
 @property --tw-rotate-x {
