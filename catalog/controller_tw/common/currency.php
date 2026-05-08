@@ -1,6 +1,8 @@
 <?php
-class ControllerCommonCurrency extends Controller {
-	public function index() {
+class ControllerCommonCurrency extends Controller
+{
+	public function index()
+	{
 		$this->load->language('common/currency');
 
 		$data['action'] = $this->url->link('common/currency/currency', '', $this->request->server['HTTPS']);
@@ -9,18 +11,18 @@ class ControllerCommonCurrency extends Controller {
 
 		$this->load->model('localisation/currency');
 
-		$data['currencies'] = array();
+		$data['currencies'] = [];
 
 		$results = $this->model_localisation_currency->getCurrencies();
 
 		foreach ($results as $result) {
 			if ($result['status']) {
-				$data['currencies'][] = array(
-					'title'        => $result['title'],
-					'code'         => $result['code'],
-					'symbol_left'  => $result['symbol_left'],
-					'symbol_right' => $result['symbol_right']
-				);
+				$data['currencies'][] = [
+					'title' => $result['title'],
+					'code' => $result['code'],
+					'symbol_left' => $result['symbol_left'],
+					'symbol_right' => $result['symbol_right'],
+				];
 			}
 		}
 
@@ -47,14 +49,15 @@ class ControllerCommonCurrency extends Controller {
 		return $this->load->view('common/currency', $data);
 	}
 
-	public function currency() {
+	public function currency()
+	{
 		if (isset($this->request->post['code'])) {
 			$this->session->data['currency'] = $this->request->post['code'];
-		
+
 			unset($this->session->data['shipping_method']);
 			unset($this->session->data['shipping_methods']);
 		}
-		
+
 		if (isset($this->request->post['redirect'])) {
 			$this->response->redirect($this->request->post['redirect']);
 		} else {

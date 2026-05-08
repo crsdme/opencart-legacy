@@ -1,9 +1,9 @@
 {% if redirect %}
-    <script type="text/javascript">
-        <!-- 
+	<script type="text/javascript">
+		<!--  
 location = '{{ redirect }}';
-// -->
-    </script>
+//  -->
+	</script>
 {% elseif klarna_checkout %}
-    {{ klarna_checkout }}
+	{{ klarna_checkout }}
 {% endif %}

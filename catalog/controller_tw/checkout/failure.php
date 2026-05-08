@@ -2,34 +2,36 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerCheckoutFailure extends Controller {
-	public function index() {
+class ControllerCheckoutFailure extends Controller
+{
+	public function index()
+	{
 		$this->load->language('checkout/failure');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->setRobots('noindex,follow');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/home')
-		);
+			'href' => $this->url->link('common/home'),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_basket'),
-			'href' => $this->url->link('checkout/cart')
-		);
+			'href' => $this->url->link('checkout/cart'),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_checkout'),
-			'href' => $this->url->link('checkout/checkout', '', true)
-		);
+			'href' => $this->url->link('checkout/checkout', '', true),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_failure'),
-			'href' => $this->url->link('checkout/failure')
-		);
+			'href' => $this->url->link('checkout/failure'),
+		];
 
 		$data['text_message'] = sprintf($this->language->get('text_message'), $this->url->link('information/contact'));
 

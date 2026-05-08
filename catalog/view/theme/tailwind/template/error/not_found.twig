@@ -1,29 +1,29 @@
-{% set class = 'col-span-12 ' %}
+{% set class = "col-span-12 " %}
 {% if column_left and column_right %}
-    {% set class = class ~ 'lg:col-span-6' %}
+	{% set class = class ~ "lg:col-span-6" %}
 {% elseif column_left or column_right %}
-    {% set class = class ~ 'lg:col-span-9' %}
+	{% set class = class ~ "lg:col-span-9" %}
 {% else %}
-    {% set class = class ~ 'lg:col-span-12' %}
+	{% set class = class ~ "lg:col-span-12" %}
 {% endif %}
 
 <div class="container mx-auto px-2">
-    {% include 'tailwind/components/breadcrumbs.twig' %}
+	{% include "tailwind/components/breadcrumbs.twig" %}
 </div>
-<div class="container mx-auto px-2 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    {{ column_left }}
-    <main class="{{ class }}">
-        {{ content_top }}
+<div class="container mx-auto grid grid-cols-1 gap-6 px-2 lg:grid-cols-12">
+	{{ column_left }}
+	<main class="{{ class }}">
+		{{ content_top }}
 
-        <div class="text-block mx-auto my-10 w-full md:w-1/2">
-            <h1 class="heading">{{ heading_title }}</h1>
-            <p>
-                {{ text_error }}
-            </p>
-            <a href="{{ continue }}" class="button button-primary">{{ button_continue }}</a>
-        </div>
+		<div class="text-block mx-auto my-10 w-full md:w-1/2">
+			<h1 class="heading">{{ heading_title }}</h1>
+			<p>
+				{{ text_error }}
+			</p>
+			<a href="{{ continue }}" class="button button-primary">{{ button_continue }}</a>
+		</div>
 
-        {{ content_bottom }}
-    </main>
-    {{ column_right }}
+		{{ content_bottom }}
+	</main>
+	{{ column_right }}
 </div>

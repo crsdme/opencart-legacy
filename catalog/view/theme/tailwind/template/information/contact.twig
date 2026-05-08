@@ -1,106 +1,102 @@
-{% set class = 'col-span-12 ' %}
+{% set class = "col-span-12 " %}
 {% if column_left and column_right %}
-    {% set class = class ~ 'lg:col-span-6' %}
+	{% set class = class ~ "lg:col-span-6" %}
 {% elseif column_left or column_right %}
-    {% set class = class ~ 'lg:col-span-9' %}
+	{% set class = class ~ "lg:col-span-9" %}
 {% else %}
-    {% set class = class ~ 'lg:col-span-12' %}
+	{% set class = class ~ "lg:col-span-12" %}
 {% endif %}
 
 <div class="container mx-auto px-2">
-    {% include 'tailwind/components/breadcrumbs.twig' %}
+	{% include "tailwind/components/breadcrumbs.twig" %}
 
-    <h1 class="heading">{{ heading_title }}</h1>
+	<h1 class="heading">{{ heading_title }}</h1>
 </div>
-<div class="container mx-auto px-2 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    {{ column_left }}
-    <main class="{{ class }}">
-        {{ content_top }}
+<div class="container mx-auto grid grid-cols-1 gap-6 px-2 lg:grid-cols-12">
+	{{ column_left }}
+	<main class="{{ class }}">
+		{{ content_top }}
 
-        <h3>{{ text_location }}</h3>
+		<h3>{{ text_location }}</h3>
 
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {% if image %}
-                <div>
-                    <img src="{{ image }}" alt="{{ store }}" title="{{ store }}" class="img-thumbnail" />
-                </div>
-            {% endif %}
-            <div>
-                <strong>{{ store }}</strong><br />
-                <address>
-                    {{ address }}
-                </address>
-                {% if geocode %}
-                    <a
-                        href="https://maps.google.com/maps?q={{ geocode|url_encode }}&hl={{ geocode_hl }}&t=m&z=15"
-                        target="_blank"
-                        class="btn btn-info"
-                    >
-                        <i class="fa fa-map-marker"></i> {{ button_map }}
-                    </a>
-                {% endif %}
-            </div>
-            <div>
-                <strong>{{ text_telephone }}</strong><br />
-                {{ telephone }}<br />
-                <br />
-                {% if fax %}
-                    <strong>{{ text_fax }}</strong><br />
-                    {{ fax }}
-                {% endif %}
-            </div>
-            <div>
-                {% if open %}
-                    <strong>{{ text_open }}</strong><br />
-                    {{ open }}<br />
-                    <br />
-                {% endif %}
-                {% if comment %}
-                    <strong>{{ text_comment }}</strong><br />
-                    {{ comment }}
-                {% endif %}
-            </div>
-        </section>
+		<section class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+			{% if image %}
+				<div>
+					<img src="{{ image }}" alt="{{ store }}" title="{{ store }}" class="img-thumbnail" />
+				</div>
+			{% endif %}
+			<div>
+				<strong>{{ store }}</strong><br />
+				<address>
+					{{ address }}
+				</address>
+				{% if geocode %}
+					<a href="https://maps.google.com/maps?q={{ geocode | url_encode }}&hl={{ geocode_hl }}&t=m&z=15" target="_blank" class="btn btn-info">
+						<i class="fa fa-map-marker"></i> {{ button_map }}
+					</a>
+				{% endif %}
+			</div>
+			<div>
+				<strong>{{ text_telephone }}</strong><br />
+				{{ telephone }}<br />
+				<br />
+				{% if fax %}
+					<strong>{{ text_fax }}</strong><br />
+					{{ fax }}
+				{% endif %}
+			</div>
+			<div>
+				{% if open %}
+					<strong>{{ text_open }}</strong><br />
+					{{ open }}<br />
+					<br />
+				{% endif %}
+				{% if comment %}
+					<strong>{{ text_comment }}</strong><br />
+					{{ comment }}
+				{% endif %}
+			</div>
+		</section>
 
-        <form action="{{ action }}" method="post" enctype="multipart/form-data">
-            <div class="form-item">
-                <label for="input-name" class="form-label">{{ entry_name }}</label>
-                <input class="input" type="text" name="name" value="{{ name }}" id="input-name" />
-                {% if error_name %}
-                    <div class="text-error">
-                        {{ error_name }}
-                    </div>
-                {% endif %}
-            </div>
+		<form action="{{ action }}" method="post" enctype="multipart/form-data">
+			<div class="form-item">
+				<label for="input-name" class="form-label">{{ entry_name }}</label>
+				<input class="input" type="text" name="name" value="{{ name }}" id="input-name" />
+				{% if error_name %}
+					<div class="text-error">
+						{{ error_name }}
+					</div>
+				{% endif %}
+			</div>
 
-            <div class="form-item">
-                <label for="input-email" class="form-label">{{ entry_email }}</label>
-                <input class="input" type="text" name="email" value="{{ email }}" id="input-email" />
-                {% if error_email %}
-                    <div class="text-error">
-                        {{ error_email }}
-                    </div>
-                {% endif %}
-            </div>
+			<div class="form-item">
+				<label for="input-email" class="form-label">{{ entry_email }}</label>
+				<input class="input" type="text" name="email" value="{{ email }}" id="input-email" />
+				{% if error_email %}
+					<div class="text-error">
+						{{ error_email }}
+					</div>
+				{% endif %}
+			</div>
 
-            <div class="form-item">
-                <label for="input-enquiry" class="form-label">{{ entry_enquiry }}</label>
-                <textarea class="input" name="enquiry" rows="10" id="input-enquiry"></textarea>
-                {% if error_enquiry %}
-                    <div class="text-error">
-                        {{ error_enquiry }}
-                    </div>
-                {% endif %}
-            </div>
+			<div class="form-item">
+				<label for="input-enquiry" class="form-label">{{ entry_enquiry }}</label>
+				<textarea class="input" name="enquiry" rows="10" id="input-enquiry"></textarea>
+				{% if error_enquiry %}
+					<div class="text-error">
+						{{ error_enquiry }}
+					</div>
+				{% endif %}
+			</div>
 
-            {{ captcha }}
+			{{ captcha }}
 
-            <div class="flex justify-end">
-                <button class="button-primary" type="submit">{{ button_submit }}</button>
-            </div>
-        </form>
+			<div class="flex justify-end">
+				<button class="button-primary" type="submit">{{ button_submit }}</button>
+			</div>
+		</form>
 
-        {{ content_bottom }}
-    </main>
-    {{ column_right }}
+		{{ content_bottom }}
+	</main>
+	{{ column_right }}
 </div>

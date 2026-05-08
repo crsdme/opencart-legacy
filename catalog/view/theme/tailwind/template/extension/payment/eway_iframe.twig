@@ -1,29 +1,23 @@
 {% if error %}
-    <div class="alert alert-danger alert-dismissible">
-        {{ text_payment_error }}: {{ error }}
-    </div>
+	<div class="alert alert-danger alert-dismissible">
+		{{ text_payment_error }}: {{ error }}
+	</div>
 {% else %}
-    {% if text_testing %}
-        <div class="alert alert-warning alert-dismissible">
-            {{ text_testing }}
-        </div>
-    {% endif %}
+	{% if text_testing %}
+		<div class="alert alert-warning alert-dismissible">
+			{{ text_testing }}
+		</div>
+	{% endif %}
 
-    <div class="buttons">
-        <div class="pull-right">
-            <input
-                type="button"
-                value="{{ button_pay }}"
-                id="button-confirm"
-                data-loading-text="{{ text_loading }}"
-                class="btn btn-primary"
-            />
-        </div>
-    </div>
+	<div class="buttons">
+		<div class="pull-right">
+			<input type="button" value="{{ button_pay }}" id="button-confirm" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+		</div>
+	</div>
 
-    <script src="https://secure.ewaypayments.com/scripts/eCrypt.js"></script>
-    <script type="text/javascript">
-        //<!-- 
+	<script src="https://secure.ewaypayments.com/scripts/eCrypt.js"></script>
+	<script type="text/javascript">
+		//<!--  
 
 	/**
 	 * eWAY Rapid IFrame config object.
@@ -51,6 +45,6 @@
 		eCrypt.showModalPayment(eWAYConfig, resultCallback);
 	});
 
-// -->
-    </script>
+//  -->
+	</script>
 {% endif %}

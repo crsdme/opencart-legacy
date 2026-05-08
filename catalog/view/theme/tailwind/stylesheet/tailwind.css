@@ -810,11 +810,51 @@
     justify-content: center;
     gap: calc(var(--spacing) * 2);
     border-radius: var(--radius-xs);
-    padding-inline: calc(var(--spacing) * 6);
-    padding-block: calc(var(--spacing) * 2);
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .button-primary[data-size='small'], .button-secondary[data-size='small'], .button-destructive[data-size='small'] {
+    height: calc(var(--spacing) * 8);
+    padding-inline: calc(var(--spacing) * 3);
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .button-primary[data-size='medium'], .button-secondary[data-size='medium'], .button-destructive[data-size='medium'], .button-primary:not([data-size]), .button-secondary:not([data-size]), .button-destructive:not([data-size]) {
+    height: calc(var(--spacing) * 10);
+    padding-inline: calc(var(--spacing) * 6);
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+  .button-primary[data-size='large'], .button-secondary[data-size='large'], .button-destructive[data-size='large'] {
+    height: calc(var(--spacing) * 12);
+    padding-inline: calc(var(--spacing) * 8);
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+  .button-primary[data-type='icon'], .button-secondary[data-type='icon'], .button-destructive[data-type='icon'] {
+    gap: calc(var(--spacing) * 0);
+    padding: calc(var(--spacing) * 0);
+  }
+  .button-primary[data-type='icon'][data-size='small'], .button-secondary[data-type='icon'][data-size='small'], .button-destructive[data-type='icon'][data-size='small'] {
+    height: calc(var(--spacing) * 8);
+    min-height: calc(var(--spacing) * 8);
+    width: calc(var(--spacing) * 8);
+    min-width: calc(var(--spacing) * 8);
+  }
+  .button-primary[data-type='icon'][data-size='medium'], .button-secondary[data-type='icon'][data-size='medium'], .button-destructive[data-type='icon'][data-size='medium'], .button-primary[data-type='icon']:not([data-size]), .button-secondary[data-type='icon']:not([data-size]), .button-destructive[data-type='icon']:not([data-size]) {
+    height: calc(var(--spacing) * 10);
+    min-height: calc(var(--spacing) * 10);
+    width: calc(var(--spacing) * 10);
+    min-width: calc(var(--spacing) * 10);
+  }
+  .button-primary[data-type='icon'][data-size='large'], .button-secondary[data-type='icon'][data-size='large'], .button-destructive[data-type='icon'][data-size='large'] {
+    height: calc(var(--spacing) * 12);
+    min-height: calc(var(--spacing) * 12);
+    width: calc(var(--spacing) * 12);
+    min-width: calc(var(--spacing) * 12);
   }
   .button-primary {
     background-color: var(--color-neutral-900);
@@ -882,20 +922,50 @@
       }
     }
   }
-  .button-primary[data-type='icon'], .button-secondary[data-type='icon'], .button-destructive[data-type='icon'] {
-    height: calc(var(--spacing) * 10);
-    min-height: calc(var(--spacing) * 10);
-    width: calc(var(--spacing) * 10);
-    min-width: calc(var(--spacing) * 10);
-    gap: calc(var(--spacing) * 0);
-    padding: calc(var(--spacing) * 0);
+  .button-primary.active, .button-primary[active], .button-primary[data-active='true'] {
+    background-color: var(--color-neutral-700);
+    color: var(--color-white);
+    &:where(.dark, .dark *) {
+      background-color: var(--color-neutral-200);
+    }
+    &:where(.dark, .dark *) {
+      color: var(--color-black);
+    }
+  }
+  .button-secondary.active, .button-secondary[active], .button-secondary[data-active='true'] {
+    background-color: var(--color-neutral-200);
+    color: var(--color-black);
+    &:where(.dark, .dark *) {
+      background-color: var(--color-neutral-700);
+    }
+    &:where(.dark, .dark *) {
+      color: var(--color-white);
+    }
+  }
+  .button-destructive.active, .button-destructive[active], .button-destructive[data-active='true'] {
+    background-color: var(--color-red-100);
+    color: var(--color-red-700);
+    &:where(.dark, .dark *) {
+      background-color: var(--color-red-800);
+    }
+    &:where(.dark, .dark *) {
+      color: var(--color-red-200);
+    }
   }
   .button-primary svg, .button-secondary svg, .button-destructive svg {
     height: calc(var(--spacing) * 5);
     width: calc(var(--spacing) * 5);
     flex-shrink: 0;
   }
-  .button-primary[disabled], .button-secondary[disabled], .button-destructive[disabled] {
+  .button-primary[data-size='small'] svg, .button-secondary[data-size='small'] svg, .button-destructive[data-size='small'] svg {
+    height: calc(var(--spacing) * 4);
+    width: calc(var(--spacing) * 4);
+  }
+  .button-primary[data-size='large'] svg, .button-secondary[data-size='large'] svg, .button-destructive[data-size='large'] svg {
+    height: calc(var(--spacing) * 5);
+    width: calc(var(--spacing) * 5);
+  }
+  .button-primary[disabled], .button-secondary[disabled], .button-destructive[disabled], .button-primary.disabled, .button-secondary.disabled, .button-destructive.disabled {
     pointer-events: none;
     opacity: 50%;
   }

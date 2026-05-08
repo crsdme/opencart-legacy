@@ -12,53 +12,50 @@
 <button class="button-primary" onclick="sendToast({ message: 'Success!', type: 'success', align: 'right-bottom', timeout: 2500 })">Right Bottom Toast</button>
 
 <button class="button-destructive" onclick="sendToast({ message: 'Error!', type: 'error', align: 'right-top', timeout: 2500 })">Right Top Error Toast</button>
-<button class="button-destructive" onclick="sendToast({ message: 'Error!', type: 'error', align: 'right-bottom', timeout: 2500 })">Right Bottom Error Toast</button>
+<button class="button-destructive" onclick="sendToast({ message: 'Error!', type: 'error', align: 'right-bottom', timeout: 2500 })">
+	Right Bottom Error Toast
+</button>
 
 <script>
-	function sendToast({
-message = 'Success!',
-type = 'success',
-align = 'right-top',
-timeout = 2500
-}) {
-const toast = document.getElementById('toast');
-const icon = document.getElementById('toast-icon');
-const msg = toast.querySelector('.toast-message');
+	function sendToast({ message = 'Success!', type = 'success', align = 'right-top', timeout = 2500 }) {
+		const toast = document.getElementById('toast')
+		const icon = document.getElementById('toast-icon')
+		const msg = toast.querySelector('.toast-message')
 
-const icons = {
-success: '#icon-check',
-error: '#icon-x',
-warning: '#icon-alert-triangle'
-};
+		const icons = {
+			success: '#icon-check',
+			error: '#icon-x',
+			warning: '#icon-alert-triangle',
+		}
 
-toast.setAttribute('data-type', type);
-toast.setAttribute('data-align', align);
-msg.textContent = message;
-icon.setAttribute('href', icons[type] || icons.success);
+		toast.setAttribute('data-type', type)
+		toast.setAttribute('data-align', align)
+		msg.textContent = message
+		icon.setAttribute('href', icons[type] || icons.success)
 
-toast.classList.remove('hidden', 'animate-out');
-toast.classList.add('show', 'animate-in');
+		toast.classList.remove('hidden', 'animate-out')
+		toast.classList.add('show', 'animate-in')
 
-clearTimeout(toast._timeout);
-toast._timeout = setTimeout(() => {
-toast.classList.remove('animate-in');
-toast.classList.add('animate-out');
+		clearTimeout(toast._timeout)
+		toast._timeout = setTimeout(() => {
+			toast.classList.remove('animate-in')
+			toast.classList.add('animate-out')
 
-setTimeout(() => {
-toast.classList.remove('show');
-toast.classList.add('hidden');
-}, 200);
-}, timeout);
-}
+			setTimeout(() => {
+				toast.classList.remove('show')
+				toast.classList.add('hidden')
+			}, 200)
+		}, timeout)
+	}
 
-function closeToast() {
-const toast = document.getElementById('toast');
-toast.classList.remove('animate-in');
-toast.classList.add('animate-out');
+	function closeToast() {
+		const toast = document.getElementById('toast')
+		toast.classList.remove('animate-in')
+		toast.classList.add('animate-out')
 
-setTimeout(() => {
-toast.classList.remove('show');
-toast.classList.add('hidden');
-}, 200);
-}
+		setTimeout(() => {
+			toast.classList.remove('show')
+			toast.classList.add('hidden')
+		}, 200)
+	}
 </script>

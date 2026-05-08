@@ -2,11 +2,16 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerCheckoutLogin extends Controller {
-	public function index() {
+class ControllerCheckoutLogin extends Controller
+{
+	public function index()
+	{
 		$this->load->language('checkout/checkout');
 
-		$data['checkout_guest'] = ($this->config->get('config_checkout_guest') && !$this->config->get('config_customer_price') && !$this->cart->hasDownload());
+		$data['checkout_guest'] =
+			$this->config->get('config_checkout_guest') &&
+			!$this->config->get('config_customer_price') &&
+			!$this->cart->hasDownload();
 
 		if (isset($this->session->data['account'])) {
 			$data['account'] = $this->session->data['account'];
@@ -19,16 +24,20 @@ class ControllerCheckoutLogin extends Controller {
 		$this->response->setOutput($this->load->view('checkout/login', $data));
 	}
 
-	public function save() {
+	public function save()
+	{
 		$this->load->language('checkout/checkout');
 
-		$json = array();
+		$json = [];
 
 		if ($this->customer->isLogged()) {
 			$json['redirect'] = $this->url->link('checkout/checkout', '', true);
 		}
 
-		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
+		if (
+			(!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) ||
+			(!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))
+		) {
 			$json['redirect'] = $this->url->link('checkout/cart');
 		}
 
@@ -38,7 +47,11 @@ class ControllerCheckoutLogin extends Controller {
 			// Check how many login attempts have been made.
 			$login_info = $this->model_account_customer->getLoginAttempts($this->request->post['email']);
 
-			if ($login_info && ($login_info['total'] >= $this->config->get('config_login_attempts')) && strtotime('-1 hour') < strtotime($login_info['date_modified'])) {
+			if (
+				$login_info &&
+				$login_info['total'] >= $this->config->get('config_login_attempts') &&
+				strtotime('-1 hour') < strtotime($login_info['date_modified'])
+			) {
 				$json['error']['warning'] = $this->language->get('error_attempts');
 			}
 
@@ -68,11 +81,15 @@ class ControllerCheckoutLogin extends Controller {
 			$this->load->model('account/address');
 
 			if ($this->config->get('config_tax_customer') == 'payment') {
-				$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
+				$this->session->data['payment_address'] = $this->model_account_address->getAddress(
+					$this->customer->getAddressId(),
+				);
 			}
 
 			if ($this->config->get('config_tax_customer') == 'shipping') {
-				$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
+				$this->session->data['shipping_address'] = $this->model_account_address->getAddress(
+					$this->customer->getAddressId(),
+				);
 			}
 
 			// Wishlist

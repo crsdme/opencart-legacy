@@ -2,11 +2,13 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerCheckoutGuest extends Controller {
-	public function index() {
+class ControllerCheckoutGuest extends Controller
+{
+	public function index()
+	{
 		$this->load->language('checkout/checkout');
 
-		$data['customer_groups'] = array();
+		$data['customer_groups'] = [];
 
 		if (is_array($this->config->get('config_customer_group_display'))) {
 			$this->load->model('account/customer_group');
@@ -14,7 +16,9 @@ class ControllerCheckoutGuest extends Controller {
 			$customer_groups = $this->model_account_customer_group->getCustomerGroups();
 
 			foreach ($customer_groups as $customer_group) {
-				if (in_array($customer_group['customer_group_id'], $this->config->get('config_customer_group_display'))) {
+				if (
+					in_array($customer_group['customer_group_id'], $this->config->get('config_customer_group_display'))
+				) {
 					$data['customer_groups'][] = $customer_group;
 				}
 			}
@@ -111,18 +115,18 @@ class ControllerCheckoutGuest extends Controller {
 			if (isset($this->session->data['guest']['custom_field'])) {
 				$guest_custom_field = $this->session->data['guest']['custom_field'];
 			} else {
-				$guest_custom_field = array();
+				$guest_custom_field = [];
 			}
 
 			if (isset($this->session->data['payment_address']['custom_field'])) {
 				$address_custom_field = $this->session->data['payment_address']['custom_field'];
 			} else {
-				$address_custom_field = array();
+				$address_custom_field = [];
 			}
 
 			$data['guest_custom_field'] = $guest_custom_field + $address_custom_field;
 		} else {
-			$data['guest_custom_field'] = array();
+			$data['guest_custom_field'] = [];
 		}
 
 		$data['shipping_required'] = $this->cart->hasShipping();
@@ -134,19 +138,23 @@ class ControllerCheckoutGuest extends Controller {
 		}
 
 		// Captcha
-		if ($this->config->get('captcha_' . $this->config->get('config_captcha') . '_status') && in_array('guest', (array)$this->config->get('config_captcha_page'))) {
+		if (
+			$this->config->get('captcha_' . $this->config->get('config_captcha') . '_status') &&
+			in_array('guest', (array) $this->config->get('config_captcha_page'))
+		) {
 			$data['captcha'] = $this->load->controller('extension/captcha/' . $this->config->get('config_captcha'));
 		} else {
 			$data['captcha'] = '';
 		}
-		
+
 		$this->response->setOutput($this->load->view('checkout/guest', $data));
 	}
 
-	public function save() {
+	public function save()
+	{
 		$this->load->language('checkout/checkout');
 
-		$json = array();
+		$json = [];
 
 		// Validate if customer is logged in.
 		if ($this->customer->isLogged()) {
@@ -154,38 +162,62 @@ class ControllerCheckoutGuest extends Controller {
 		}
 
 		// Validate cart has products and has stock.
-		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
+		if (
+			(!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) ||
+			(!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))
+		) {
 			$json['redirect'] = $this->url->link('checkout/cart');
 		}
 
 		// Check if guest checkout is available.
-		if (!$this->config->get('config_checkout_guest') || $this->config->get('config_customer_price') || $this->cart->hasDownload()) {
+		if (
+			!$this->config->get('config_checkout_guest') ||
+			$this->config->get('config_customer_price') ||
+			$this->cart->hasDownload()
+		) {
 			$json['redirect'] = $this->url->link('checkout/checkout', '', true);
 		}
 
 		if (!$json) {
-			if ((utf8_strlen(trim($this->request->post['firstname'])) < 1) || (utf8_strlen(trim($this->request->post['firstname'])) > 32)) {
+			if (
+				utf8_strlen(trim($this->request->post['firstname'])) < 1 ||
+				utf8_strlen(trim($this->request->post['firstname'])) > 32
+			) {
 				$json['error']['firstname'] = $this->language->get('error_firstname');
 			}
 
-			if ((utf8_strlen(trim($this->request->post['lastname'])) < 1) || (utf8_strlen(trim($this->request->post['lastname'])) > 32)) {
+			if (
+				utf8_strlen(trim($this->request->post['lastname'])) < 1 ||
+				utf8_strlen(trim($this->request->post['lastname'])) > 32
+			) {
 				$json['error']['lastname'] = $this->language->get('error_lastname');
 			}
 
-			if ((utf8_strlen($this->request->post['email']) > 96) || !filter_var($this->request->post['email'], FILTER_VALIDATE_EMAIL)) {
+			if (
+				utf8_strlen($this->request->post['email']) > 96 ||
+				!filter_var($this->request->post['email'], FILTER_VALIDATE_EMAIL)
+			) {
 				$json['error']['email'] = $this->language->get('error_email');
 			}
 
-			if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
-
+			if (
+				utf8_strlen($this->request->post['telephone']) < 3 ||
+				utf8_strlen($this->request->post['telephone']) > 32
+			) {
 				$json['error']['telephone'] = $this->language->get('error_telephone');
 			}
 
-			if ((utf8_strlen(trim($this->request->post['address_1'])) < 3) || (utf8_strlen(trim($this->request->post['address_1'])) > 128)) {
+			if (
+				utf8_strlen(trim($this->request->post['address_1'])) < 3 ||
+				utf8_strlen(trim($this->request->post['address_1'])) > 128
+			) {
 				$json['error']['address_1'] = $this->language->get('error_address_1');
 			}
 
-			if ((utf8_strlen(trim($this->request->post['city'])) < 2) || (utf8_strlen(trim($this->request->post['city'])) > 128)) {
+			if (
+				utf8_strlen(trim($this->request->post['city'])) < 2 ||
+				utf8_strlen(trim($this->request->post['city'])) > 128
+			) {
 				$json['error']['city'] = $this->language->get('error_city');
 			}
 
@@ -193,7 +225,12 @@ class ControllerCheckoutGuest extends Controller {
 
 			$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
-			if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
+			if (
+				$country_info &&
+				$country_info['postcode_required'] &&
+				(utf8_strlen(trim($this->request->post['postcode'])) < 2 ||
+					utf8_strlen(trim($this->request->post['postcode'])) > 10)
+			) {
 				$json['error']['postcode'] = $this->language->get('error_postcode');
 			}
 
@@ -201,12 +238,20 @@ class ControllerCheckoutGuest extends Controller {
 				$json['error']['country'] = $this->language->get('error_country');
 			}
 
-			if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '' || !is_numeric($this->request->post['zone_id'])) {
+			if (
+				!isset($this->request->post['zone_id']) ||
+				$this->request->post['zone_id'] == '' ||
+				!is_numeric($this->request->post['zone_id'])
+			) {
 				$json['error']['zone'] = $this->language->get('error_zone');
 			}
 
 			// Customer Group
-			if (isset($this->request->post['customer_group_id']) && is_array($this->config->get('config_customer_group_display')) && in_array($this->request->post['customer_group_id'], $this->config->get('config_customer_group_display'))) {
+			if (
+				isset($this->request->post['customer_group_id']) &&
+				is_array($this->config->get('config_customer_group_display')) &&
+				in_array($this->request->post['customer_group_id'], $this->config->get('config_customer_group_display'))
+			) {
 				$customer_group_id = $this->request->post['customer_group_id'];
 			} else {
 				$customer_group_id = $this->config->get('config_customer_group_id');
@@ -218,16 +263,44 @@ class ControllerCheckoutGuest extends Controller {
 			$custom_fields = $this->model_account_custom_field->getCustomFields($customer_group_id);
 
 			foreach ($custom_fields as $custom_field) {
-				if ($custom_field['required'] && empty($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']])) {
-					$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
-				} elseif (($custom_field['type'] == 'text') && !empty($custom_field['validation']) && !filter_var($this->request->post['custom_field'][$custom_field['location']][$custom_field['custom_field_id']], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => $custom_field['validation'])))) {
-                    $json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
-                }
+				if (
+					$custom_field['required'] &&
+					empty(
+						$this->request->post['custom_field'][$custom_field['location']][
+							$custom_field['custom_field_id']
+						]
+					)
+				) {
+					$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf(
+						$this->language->get('error_custom_field'),
+						$custom_field['name'],
+					);
+				} elseif (
+					$custom_field['type'] == 'text' &&
+					!empty($custom_field['validation']) &&
+					!filter_var(
+						$this->request->post['custom_field'][$custom_field['location']][
+							$custom_field['custom_field_id']
+						],
+						FILTER_VALIDATE_REGEXP,
+						['options' => ['regexp' => $custom_field['validation']]],
+					)
+				) {
+					$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf(
+						$this->language->get('error_custom_field'),
+						$custom_field['name'],
+					);
+				}
 			}
 
 			// Captcha
-			if ($this->config->get('captcha_' . $this->config->get('config_captcha') . '_status') && in_array('guest', (array)$this->config->get('config_captcha_page'))) {
-				$captcha = $this->load->controller('extension/captcha/' . $this->config->get('config_captcha') . '/validate');
+			if (
+				$this->config->get('captcha_' . $this->config->get('config_captcha') . '_status') &&
+				in_array('guest', (array) $this->config->get('config_captcha_page'))
+			) {
+				$captcha = $this->load->controller(
+					'extension/captcha/' . $this->config->get('config_captcha') . '/validate',
+				);
 
 				if ($captcha) {
 					$json['error']['captcha'] = $captcha;
@@ -247,7 +320,7 @@ class ControllerCheckoutGuest extends Controller {
 			if (isset($this->request->post['custom_field']['account'])) {
 				$this->session->data['guest']['custom_field'] = $this->request->post['custom_field']['account'];
 			} else {
-				$this->session->data['guest']['custom_field'] = array();
+				$this->session->data['guest']['custom_field'] = [];
 			}
 
 			$this->session->data['payment_address']['firstname'] = $this->request->post['firstname'];
@@ -277,9 +350,10 @@ class ControllerCheckoutGuest extends Controller {
 			}
 
 			if (isset($this->request->post['custom_field']['address'])) {
-				$this->session->data['payment_address']['custom_field'] = $this->request->post['custom_field']['address'];
+				$this->session->data['payment_address']['custom_field'] =
+					$this->request->post['custom_field']['address'];
 			} else {
-				$this->session->data['payment_address']['custom_field'] = array();
+				$this->session->data['payment_address']['custom_field'] = [];
 			}
 
 			$this->load->model('localisation/zone');
@@ -332,9 +406,10 @@ class ControllerCheckoutGuest extends Controller {
 				}
 
 				if (isset($this->request->post['custom_field']['address'])) {
-					$this->session->data['shipping_address']['custom_field'] = $this->request->post['custom_field']['address'];
+					$this->session->data['shipping_address']['custom_field'] =
+						$this->request->post['custom_field']['address'];
 				} else {
-					$this->session->data['shipping_address']['custom_field'] = array();
+					$this->session->data['shipping_address']['custom_field'] = [];
 				}
 			}
 

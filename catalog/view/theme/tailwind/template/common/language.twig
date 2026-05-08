@@ -1,18 +1,20 @@
-{% if languages|length > 1 %}
-<div class="dropdown w-full flex-1" data-align="center">
-	<p id="dropdownButton" class="dropdown-button">{{ text_language }}</p>
-	<ul id="dropdownMenu" class="dropdown-menu">
-		{% for language in languages %}
-		<li>
-			{% if language.active %}
-				<span class="dropdown-item" data-code="{{ language.code }}">{{ language.name }}</span>
-			{% else %}
-				<a class="dropdown-item" href="{{ language.url }}" hreflang="{{ language.code }}">{{ language.name }}</a>
-			{% endif %}
-		</li>
-		{% endfor %}
-	</ul>
-</div>
+{% if (languages | length) > 1 %}
+	<div class="dropdown w-full flex-1" data-align="center">
+		<p id="dropdownButton" class="dropdown-button">
+			{{ text_language }}
+		</p>
+		<ul id="dropdownMenu" class="dropdown-menu">
+			{% for language in languages %}
+				<li>
+					{% if language.active %}
+						<span class="dropdown-item" data-code="{{ language.code }}">{{ language.name }}</span>
+					{% else %}
+						<a class="dropdown-item" href="{{ language.url }}" hreflang="{{ language.code }}">{{ language.name }}</a>
+					{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
 {% endif %}
 {# {% if languages|length > 1 %}
 <div class="dropdown w-full flex-1" data-align="center">

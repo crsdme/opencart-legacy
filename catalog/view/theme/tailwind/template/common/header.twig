@@ -6,18 +6,18 @@
 			</svg>
 		</button>
 	</div>
-	{% if 'common/home' == route %}
-		<img src="{{ logo }}" title="{{ name }}" alt="{{ name }}"/>
+	{% if "common/home" == route %}
+		<img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" />
 	{% else %}
-		<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}"/></a>
+		<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" /></a>
 	{% endif %}
-	<div class="flex flex-wrap items-center gap-2">
+	<div class="flex items-center gap-2">
 		{{ currency }}
 		{{ language }}
 		{{ search }}
 		<button class="button-secondary icon" onclick="toggleTheme()">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
-				<use id="theme-icon" href="{{ theme == 'dark' ? '/assets/icons/sprite.svg#icon-moon' : '/assets/icons/sprite.svg#icon-sun' }}"></use>
+				<use id="theme-icon" href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
 			</svg>
 		</button>
 		<a href="{{ wishlist }}" class="button-secondary icon">

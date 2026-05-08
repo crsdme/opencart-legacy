@@ -12,7 +12,6 @@
 	</div>
 </div>
 
-
 <div class="dropdown" data-align="center" data-type="click">
 	<button id="dropdown-button" class="button-primary" type="button">
 		<span>Dropdown Center Click</span>
@@ -42,53 +41,46 @@
 
 {# prettier-ignore-start #}
 <script>
-
 	function isTouchDevice() {
-return window.matchMedia('(hover: none), (pointer: coarse)').matches;
-}
+		return window.matchMedia('(hover: none), (pointer: coarse)').matches
+	}
 
-$(document).on('click', '#dropdown-button', function (e) {
-const $dropdown = $(this).closest('.dropdown');
-const $menu = $dropdown.find('.dropdown-menu');
-const type = $dropdown.data('type');
+	$(document).on('click', '#dropdown-button', function (e) {
+		const $dropdown = $(this).closest('.dropdown')
+		const $menu = $dropdown.find('.dropdown-menu')
+		const type = $dropdown.data('type')
 
-if (type === 'hover' && ! isTouchDevice()) {
-return;
-}
+		if (type === 'hover' && !isTouchDevice()) {
+			return
+		}
 
-e.stopPropagation();
+		e.stopPropagation()
 
-$('.dropdown-menu').not($menu).removeClass('show');
-$menu.toggleClass('show');
-});
+		$('.dropdown-menu').not($menu).removeClass('show')
+		$menu.toggleClass('show')
+	})
 
-$(document).on('mouseenter', '.dropdown[data-type="hover"]', function () {
-if (isTouchDevice()) 
-return;
+	$(document).on('mouseenter', '.dropdown[data-type="hover"]', function () {
+		if (isTouchDevice()) return
 
+		const $menu = $(this).find('.dropdown-menu')
 
+		$('.dropdown-menu').not($menu).removeClass('show')
+		$menu.addClass('show')
+	})
 
-const $menu = $(this).find('.dropdown-menu');
+	$(document).on('mouseleave', '.dropdown[data-type="hover"]', function () {
+		if (isTouchDevice()) return
 
-$('.dropdown-menu').not($menu).removeClass('show');
-$menu.addClass('show');
-});
+		$(this).find('.dropdown-menu').removeClass('show')
+	})
 
-$(document).on('mouseleave', '.dropdown[data-type="hover"]', function () {
-if (isTouchDevice()) 
-return;
+	$(document).on('click', function () {
+		$('.dropdown-menu').removeClass('show')
+	})
 
-
-
-$(this).find('.dropdown-menu').removeClass('show');
-});
-
-$(document).on('click', function () {
-$('.dropdown-menu').removeClass('show');
-});
-
-$(document).on('click', '.dropdown-menu', function (e) {
-e.stopPropagation();
-});
+	$(document).on('click', '.dropdown-menu', function (e) {
+		e.stopPropagation()
+	})
 </script>
 {# prettier-ignore-end #}

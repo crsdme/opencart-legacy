@@ -1,36 +1,43 @@
 {% if products %}
-
-	<div class="flex flex-col gap-2 h-full" id="cart-modal-products">
+	<div class="flex h-full flex-col gap-2" id="cart-modal-products">
 		{% for product in products %}
 			<div class="flex items-center justify-between">
 				{% if product.thumb %}
 					<a href="{{ product.href }}">
-						<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail"/>
+						<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" />
 
 						<div>
 							<a href="{{ product.href }}">{{ product.name }}</a>
 							{% if product.option %}
 								{% for option in product.option %}
-									<br/>
+									<br />
 									-
-									<small>{{ option.name }}
-										{{ option.value }}</small>
+									<small>
+										{{ option.name }}
+										{{ option.value }}
+									</small>
 								{% endfor %}
 							{% endif %}
 							{% if product.recurring %}
-								<br/>
+								<br />
 								-
-								<small>{{ text_recurring }}
-									{{ product.recurring }}</small>
+								<small>
+									{{ text_recurring }}
+									{{ product.recurring }}
+								</small>
 							{% endif %}
 						</div>
 
 						<div>
-							<p>x{{ product.quantity }}</p>
+							<p>
+								x{{ product.quantity }}
+							</p>
 						</div>
 
 						<div>
-							<p>{{ product.total }}</p>
+							<p>
+								{{ product.total }}
+							</p>
 						</div>
 
 						<div>
@@ -40,8 +47,6 @@
 								</svg>
 							</button>
 						</div>
-
-
 					</a>
 				{% endif %}
 			</div>
@@ -53,17 +58,16 @@
 			<p>
 				<strong>{{ total.title }}</strong>
 			</p>
-			<p>{{ total.text }}</p>
+			<p>
+				{{ total.text }}
+			</p>
 		{% endfor %}
 	</div>
-
 {% else %}
-
-	<div class="flex items-center justify-center h-full" id="cart-modal-products">
+	<div class="flex h-full items-center justify-center" id="cart-modal-products">
 		<p class="text-center">
 			{{ text_empty }}
 		</p>
 	</div>
 	<div class="flex items-center justify-center" id="cart-modal-totals"></div>
-
 {% endif %}

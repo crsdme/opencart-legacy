@@ -6,9 +6,11 @@
 	<div class="cart-toast" id="cart-toast"></div>
 </button>
 
-<div class="modal flex flex-col max-h-md h-full hidden p-4 md:p-6 max-md:rounded-none lg:max-h-[80vh] gap-4 justify-between" id="cart-modal">
+<div class="modal max-h-md flex hidden h-full flex-col justify-between gap-4 p-4 max-md:rounded-none md:p-6 lg:max-h-[80vh]" id="cart-modal">
 	<div class="modal-header">
-		<p class="heading">{{ text_cart }}</p>
+		<p class="heading">
+			{{ text_cart }}
+		</p>
 		<button class="button-secondary icon" onclick="closeCart()">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-close"></use>
@@ -25,9 +27,7 @@
 	</div>
 
 	<div class="flex justify-end gap-2" class="modal-footer">
-		<button class="button-primary">
-			{{ text_checkout }}
-		</button>
+		<button class="button-primary">{{ text_checkout }}</button>
 	</div>
 </div>
 <div class="modal-overlay hidden" id="cart-overlay" onclick="closeCart()"></div>

@@ -1,18 +1,16 @@
 <section class="featured">
-    <p class="heading-tag">
-        Products
-    </p>
-    <p class="heading-2">
-        {{ heading_title }}
-    </p>
-    <p class="text-muted">
-        Look at our latest products
-    </p>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {% for product in products %}
-            {% include 'tailwind/components/product-card.twig' with {
-                product: product
-            } %}
-        {% endfor %}
-    </div>
+	<p class="heading-tag">
+		Products
+	</p>
+	<p class="heading-2">
+		{{ heading_title }}
+	</p>
+	<p class="text-muted">
+		Look at our latest products
+	</p>
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+		{% for product in products %}
+			{% include "tailwind/components/product-card.twig" with { product: product } %}
+		{% endfor %}
+	</div>
 </section>

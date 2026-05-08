@@ -9,7 +9,9 @@
 			</button>
 		</div>
 		<div class="modal-body">
-			<p>Modal Body</p>
+			<p>
+				Modal Body
+			</p>
 		</div>
 		<div class="modal-footer">
 			<button class="button-primary">Close</button>
@@ -18,16 +20,18 @@
 </div>
 <div class="modal-overlay hidden" onclick="closeModal()"></div>
 
-<div class="button-primary" onclick="openModal()">Open Modal</div>
+<div class="button-primary" onclick="openModal( )">
+	Open Modal
+</div>
 
 <script>
 	function openModal() {
-$('.modal').removeClass('hidden');
-$('.modal-overlay').removeClass('hidden');
-}
+		$('.modal').removeClass('hidden')
+		$('.modal-overlay').removeClass('hidden')
+	}
 
-function closeModal() {
-$('.modal').addClass('hidden');
-$('.modal-overlay').addClass('hidden');
-}
+	function closeModal() {
+		$('.modal').addClass('hidden')
+		$('.modal-overlay').addClass('hidden')
+	}
 </script>

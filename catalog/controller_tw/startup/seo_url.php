@@ -4,28 +4,29 @@
 
 class ControllerStartupSeoUrl extends Controller
 {
-  private $custom_router;
+	private $custom_router;
 
-  public function __construct($registry)
-  {
-    parent::__construct($registry);
-    $this->custom_router = new \Custom\Router($registry);
-  }
+	public function __construct($registry)
+	{
+		parent::__construct($registry);
+		$this->custom_router = new \Custom\Router($registry);
+	}
 
-  public function index()
-  {
-    if ($this->config->get('config_seo_url'))
-      $this->url->addRewrite($this);
+	public function index()
+	{
+		if ($this->config->get('config_seo_url')) {
+			$this->url->addRewrite($this);
+		}
 
-    if (isset($this->request->get['_route_'])) {
-      $parts = explode('/', $this->request->get['_route_']);
+		if (isset($this->request->get['_route_'])) {
+			$parts = explode('/', $this->request->get['_route_']);
 
-      $this->custom_router->prepareRoute($parts);
-    }
-  }
+			$this->custom_router->prepareRoute($parts);
+		}
+	}
 
-  public function rewrite($link)
-  {
-    return $this->custom_router->rewrite($link);
-  }
+	public function rewrite($link)
+	{
+		return $this->custom_router->rewrite($link);
+	}
 }

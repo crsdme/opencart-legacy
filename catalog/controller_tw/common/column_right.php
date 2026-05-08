@@ -2,12 +2,14 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerCommonColumnRight extends Controller {
-	public function index() {
+class ControllerCommonColumnRight extends Controller
+{
+	public function index()
+	{
 		$this->load->model('design/layout');
 
 		if (isset($this->request->get['route'])) {
-			$route = (string)$this->request->get['route'];
+			$route = (string) $this->request->get['route'];
 		} else {
 			$route = 'common/home';
 		}
@@ -17,15 +19,17 @@ class ControllerCommonColumnRight extends Controller {
 		if ($route == 'product/category' && isset($this->request->get['path'])) {
 			$this->load->model('catalog/category');
 
-			$path = explode('_', (string)$this->request->get['path']);
+			$path = explode('_', (string) $this->request->get['path']);
 
 			$layout_id = $this->model_catalog_category->getCategoryLayoutId(end($path));
 		}
-		
+
 		if ($route == 'product/manufacturer/info' && isset($this->request->get['manufacturer_id'])) {
 			$this->load->model('catalog/manufacturer');
-		
-			$layout_id = $this->model_catalog_manufacturer->getManufacturerLayoutId($this->request->get['manufacturer_id']);
+
+			$layout_id = $this->model_catalog_manufacturer->getManufacturerLayoutId(
+				$this->request->get['manufacturer_id'],
+			);
 		}
 
 		if ($route == 'product/product' && isset($this->request->get['product_id'])) {
@@ -37,7 +41,9 @@ class ControllerCommonColumnRight extends Controller {
 		if ($route == 'information/information' && isset($this->request->get['information_id'])) {
 			$this->load->model('catalog/information');
 
-			$layout_id = $this->model_catalog_information->getInformationLayoutId($this->request->get['information_id']);
+			$layout_id = $this->model_catalog_information->getInformationLayoutId(
+				$this->request->get['information_id'],
+			);
 		}
 
 		if (!$layout_id) {
@@ -50,7 +56,7 @@ class ControllerCommonColumnRight extends Controller {
 
 		$this->load->model('setting/module');
 
-		$data['modules'] = array();
+		$data['modules'] = [];
 
 		$modules = $this->model_design_layout->getLayoutModules($layout_id, 'column_right');
 

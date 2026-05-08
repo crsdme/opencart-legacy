@@ -2,21 +2,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>
-    {{ title }}
+	{{ title }}
 </title>
 {% if robots %}
-    <meta name="robots" content="{{ robots }}" />
+	<meta name="robots" content="{{ robots }}" />
 {% endif %}
 <base href="{{ base }}" />
 {% if description %}
-    <meta name="description" content="{{ description }}" />
+	<meta name="description" content="{{ description }}" />
 {% endif %}
 {% if keywords %}
-    <meta name="keywords" content="{{ keywords }}" />
+	<meta name="keywords" content="{{ keywords }}" />
 {% endif %}
 
 {% for link in hreflang %}
-  <link rel="alternate" hreflang="{{ link.hreflang }}" href="{{ link.href }}">
+	<link rel="alternate" hreflang="{{ link.hreflang }}" href="{{ link.href }}" />
 {% endfor %}
 
 <link rel="icon" type="image/png" href="/catalog/view/theme/tailwind/image/favicon/favicon-96x96.png" sizes="96x96" />
@@ -28,22 +28,22 @@
 
 <link href="catalog/view/theme/tailwind/stylesheet/tailwind.css" rel="stylesheet" />
 {% if rendered_styles %}
-    {{ rendered_styles|raw }}
+	{{ rendered_styles | raw }}
 {% else %}
-    {% for style in styles %}
-        <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
-    {% endfor %}
+	{% for style in styles %}
+		<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+	{% endfor %}
 {% endif %}
 {% if rendered_scripts %}
-    {{ rendered_scripts|raw }}
+	{{ rendered_scripts | raw }}
 {% else %}
-    {% for script in scripts %}
-        <script src="{{ script }}" type="text/javascript"></script>
-    {% endfor %}
+	{% for script in scripts %}
+		<script src="{{ script }}" type="text/javascript"></script>
+	{% endfor %}
 {% endif %}
 {% for link in links %}
-    <link href="{{ link.href }}" rel="{{ link.rel }}" />
+	<link href="{{ link.href }}" rel="{{ link.rel }}" />
 {% endfor %}
 {% for analytic in analytics %}
-    {{ analytic }}
+	{{ analytic }}
 {% endfor %}

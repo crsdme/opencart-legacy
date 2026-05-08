@@ -1,113 +1,96 @@
-{% set class = 'col-span-12 ' %}
+{% set class = "col-span-12 " %}
 {% if column_left and column_right %}
-    {% set class = class ~ 'lg:col-span-6' %}
+	{% set class = class ~ "lg:col-span-6" %}
 {% elseif column_left or column_right %}
-    {% set class = class ~ 'lg:col-span-9' %}
+	{% set class = class ~ "lg:col-span-9" %}
 {% else %}
-    {% set class = class ~ 'lg:col-span-12' %}
+	{% set class = class ~ "lg:col-span-12" %}
 {% endif %}
 
 <div class="container mx-auto px-2">
-    {% include 'tailwind/components/breadcrumbs.twig' %}
+	{% include "tailwind/components/breadcrumbs.twig" %}
 
-    <h1 class="heading">{{ heading_title }}</h1>
-    <div class="flex gap-2 mb-2">
-        <input
-            type="text"
-            name="search"
-            value="{{ search }}"
-            placeholder="{{ text_keyword }}"
-            id="input-search"
-            class="input"
-        />
-        <button type="button" id="button-search" class="button button-primary">{{ button_search }}</button>
-    </div>
+	<h1 class="heading">{{ heading_title }}</h1>
+	<div class="mb-2 flex gap-2">
+		<input type="text" name="search" value="{{ search }}" placeholder="{{ text_keyword }}" id="input-search" class="input" />
+		<button type="button" id="button-search" class="button button-primary">{{ button_search }}</button>
+	</div>
 </div>
-<div class="container mx-auto px-2 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    {{ column_left }}
-    <main class="{{ class }}">
-        {{ content_top }}
+<div class="container mx-auto grid grid-cols-1 gap-6 px-2 lg:grid-cols-12">
+	{{ column_left }}
+	<main class="{{ class }}">
+		{{ content_top }}
 
-        {% if products %}
-            <section class="w-full mb-2" aria-label="Sort list">
-                <div class="flex gap-2 items-center flex-col lg:flex-row">
-                    <div class="dropdown w-full flex-1" data-align="center">
-                        <button id="dropdownButton" class="dropdown-button w-full border border-neutral-300">
-                            {{ text_sort }}
-                        </button>
+		{% if products %}
+			<section class="mb-2 w-full" aria-label="Sort list">
+				<div class="flex flex-col items-center gap-2 lg:flex-row">
+					<div class="dropdown w-full flex-1" data-align="center">
+						<button id="dropdownButton" class="dropdown-button w-full border border-neutral-300">{{ text_sort }}</button>
 
-                        <div id="dropdownMenu" class="dropdown-menu">
-                            {% for sort in sorts %}
-                                <button class="dropdown-item" onclick="location = '{{ sort.href }}'">
-                                    {{ sort.text }}
-                                </button>
-                            {% endfor %}
-                        </div>
-                    </div>
+						<div id="dropdownMenu" class="dropdown-menu">
+							{% for sort in sorts %}
+								<button class="dropdown-item" onclick="location = '{{ sort.href }}'">{{ sort.text }}</button>
+							{% endfor %}
+						</div>
+					</div>
 
-                    <div class="dropdown w-full flex-1" data-align="center">
-                        <button id="dropdownButton" class="dropdown-button w-full border border-neutral-300">
-                            {{ text_limit }}
-                        </button>
+					<div class="dropdown w-full flex-1" data-align="center">
+						<button id="dropdownButton" class="dropdown-button w-full border border-neutral-300">{{ text_limit }}</button>
 
-                        <div id="dropdownMenu" class="dropdown-menu">
-                            {% for limit in limits %}
-                                <button class="dropdown-item" onclick="location = '{{ limit.href }}'">
-                                    {{ limit.text }}
-                                </button>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </section>
+						<div id="dropdownMenu" class="dropdown-menu">
+							{% for limit in limits %}
+								<button class="dropdown-item" onclick="location = '{{ limit.href }}'">{{ limit.text }}</button>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</section>
 
-            <section class="flex justify-end gap-2" aria-label="Layouts and Compare">
-                <a class="button-secondary icon" href="{{ compare }}">
-                    <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <use href="/assets/icons/sprite.svg#icon-scales"></use>
-                    </svg>
-                </a>
-                <button id="list-view" class="button-secondary icon" onclick="changeLayout('list')">
-                    <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <use href="/assets/icons/sprite.svg#icon-list"></use>
-                    </svg>
-                </button>
-                <button id="grid-view" class="button-secondary icon" onclick="changeLayout('grid')">
-                    <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <use href="/assets/icons/sprite.svg#icon-grid"></use>
-                    </svg>
-                </button>
-            </section>
+			<section class="flex justify-end gap-2" aria-label="Layouts and Compare">
+				<a class="button-secondary icon" href="{{ compare }}">
+					<svg aria-hidden="true" viewBox="0 0 24 24">
+						<use href="/assets/icons/sprite.svg#icon-scales"></use>
+					</svg>
+				</a>
+				<button id="list-view" class="button-secondary icon" onclick="changeLayout('list')">
+					<svg aria-hidden="true" viewBox="0 0 24 24">
+						<use href="/assets/icons/sprite.svg#icon-list"></use>
+					</svg>
+				</button>
+				<button id="grid-view" class="button-secondary icon" onclick="changeLayout('grid')">
+					<svg aria-hidden="true" viewBox="0 0 24 24">
+						<use href="/assets/icons/sprite.svg#icon-grid"></use>
+					</svg>
+				</button>
+			</section>
 
-            <section class="grid grid-cols-2 xl:grid-cols-3 gap-4" aria-label="Products">
-                {% for product in products %}
-                    {% include 'tailwind/components/product-card.twig' with {
-                        product: product
-                    } %}
-                {% endfor %}
-            </section>
+			<section class="grid grid-cols-2 gap-4 xl:grid-cols-3" aria-label="Products">
+				{% for product in products %}
+					{% include "tailwind/components/product-card.twig" with { product: product } %}
+				{% endfor %}
+			</section>
 
-            <section class="flex justify-between mb-2" aria-label="Pagination and Results">
-                {{ pagination }}
-                {{ results }}
-            </section>
-        {% endif %}
+			<section class="mb-2 flex justify-between" aria-label="Pagination and Results">
+				{{ pagination }}
+				{{ results }}
+			</section>
+		{% endif %}
 
-        {% if not products %}
-            <section class="w-full md:w-1/2 mx-auto my-8" aria-label="Empty">
-                <p class="heading">
-                    {{ text_empty }}
-                </p>
-                <p>
-                    {{ text_empty }}
-                </p>
-                <a href="{{ continue }}" class="button button-primary mt-4">{{ button_continue }}</a>
-            </section>
-        {% endif %}
+		{% if not products %}
+			<section class="mx-auto my-8 w-full md:w-1/2" aria-label="Empty">
+				<p class="heading">
+					{{ text_empty }}
+				</p>
+				<p>
+					{{ text_empty }}
+				</p>
+				<a href="{{ continue }}" class="button button-primary mt-4">{{ button_continue }}</a>
+			</section>
+		{% endif %}
 
-        {{ content_bottom }}
-    </main>
-    {{ column_right }}
+		{{ content_bottom }}
+	</main>
+	{{ column_right }}
 </div>
 
 {#

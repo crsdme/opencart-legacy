@@ -2,8 +2,10 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerCheckoutSuccess extends Controller {
-	public function index() {
+class ControllerCheckoutSuccess extends Controller
+{
+	public function index()
+	{
 		$this->load->language('checkout/success');
 
 		if (isset($this->session->data['order_id'])) {
@@ -24,46 +26,63 @@ class ControllerCheckoutSuccess extends Controller {
 			unset($this->session->data['totals']);
 		}
 
-		if (!empty($this->session->data['last_order_id']) ) {
-			$this->document->setTitle(sprintf($this->language->get('heading_title_customer'), $this->session->data['last_order_id']));
+		if (!empty($this->session->data['last_order_id'])) {
+			$this->document->setTitle(
+				sprintf($this->language->get('heading_title_customer'), $this->session->data['last_order_id']),
+			);
 			$this->document->setRobots('noindex,follow');
 		} else {
 			$this->document->setTitle($this->language->get('heading_title'));
 			$this->document->setRobots('noindex,follow');
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/home')
-		);
+			'href' => $this->url->link('common/home'),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_basket'),
-			'href' => $this->url->link('checkout/cart')
-		);
+			'href' => $this->url->link('checkout/cart'),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_checkout'),
-			'href' => $this->url->link('checkout/checkout', '', true)
-		);
+			'href' => $this->url->link('checkout/checkout', '', true),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_success'),
-			'href' => $this->url->link('checkout/success')
-		);
+			'href' => $this->url->link('checkout/success'),
+		];
 
 		if (!empty($this->session->data['last_order_id'])) {
-			$data['heading_title'] = sprintf($this->language->get('heading_title_customer'), $this->session->data['last_order_id']);
+			$data['heading_title'] = sprintf(
+				$this->language->get('heading_title_customer'),
+				$this->session->data['last_order_id'],
+			);
 		} else {
 			$data['heading_title'] = $this->language->get('heading_title');
 		}
 
 		if ($this->customer->isLogged() && !empty($this->session->data['last_order_id'])) {
-			$data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/order/info&order_id=' . $this->session->data['last_order_id'], '', true), $this->url->link('account/account', '', true), $this->url->link('account/order', '', true), $this->url->link('information/contact'), $this->url->link('product/special'), $this->session->data['last_order_id'], $this->url->link('account/download', '', true));
+			$data['text_message'] = sprintf(
+				$this->language->get('text_customer'),
+				$this->url->link('account/order/info&order_id=' . $this->session->data['last_order_id'], '', true),
+				$this->url->link('account/account', '', true),
+				$this->url->link('account/order', '', true),
+				$this->url->link('information/contact'),
+				$this->url->link('product/special'),
+				$this->session->data['last_order_id'],
+				$this->url->link('account/download', '', true),
+			);
 		} else {
-			$data['text_message'] = sprintf($this->language->get('text_guest'), $this->url->link('information/contact'));
+			$data['text_message'] = sprintf(
+				$this->language->get('text_guest'),
+				$this->url->link('information/contact'),
+			);
 		}
 
 		$data['continue'] = $this->url->link('common/home');

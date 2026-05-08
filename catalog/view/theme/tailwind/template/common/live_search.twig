@@ -1,9 +1,7 @@
 {% if products %}
 	{% for product in products %}
 		<a class="live-search-item" href="{{ product.href }}" title="{{ product.name }}">
-			<span class="live-search-image">
-				<img src="{{ product.thumb }}" alt="{{ product.name }}" width="80" height="80" loading="lazy">
-			</span>
+			<span class="live-search-image"><img src="{{ product.thumb }}" alt="{{ product.name }}" width="80" height="80" loading="lazy" /></span>
 
 			<span class="live-search-info">
 				<span class="live-search-name">{{ product.name }}</span>
@@ -22,5 +20,7 @@
 		</a>
 	{% endfor %}
 {% else %}
-	<div class="live-search-state">Ничего не найдено</div>
+	<div class="live-search-state">
+		Ничего не найдено
+	</div>
 {% endif %}

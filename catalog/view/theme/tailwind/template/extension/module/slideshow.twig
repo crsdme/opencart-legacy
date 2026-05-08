@@ -1,40 +1,65 @@
-<div id="slider-{{ module }}" class="slider">
-    <div class="slider-track">
-        {% for banner in banners %}
-            <div class="slider-slide">
-                {% if banner.link %}
-                    <a href="{{ banner.link }}">
-                        <img src="{{ banner.image }}" alt="{{ banner.title|e }}" class="img-responsive" />
-                    </a>
-                {% else %}
-                    <img src="{{ banner.image }}" alt="{{ banner.title|e }}" class="img-responsive" />
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
+<div id="carousel" class="carousel">
+	<div class="carousel-track">
+		{% for slide in slides %}
+			<div class="carousel-slide flex w-1/5 shrink-0 justify-center px-1">
+				<picture>
+					<source srcset="{{ slide.image_mobile }}" media="(max-width: 768px)" />
+					<source srcset="{{ slide.image_desktop }}" media="(min-width: 769px)" />
+					<img src="{{ slide.image_desktop }}" alt="{{ slide.title }}" />
+				</picture>
+			</div>
+		{% endfor %}
+	</div>
 </div>
 
-<div class="slider-controls mt-4 flex gap-2 justify-end">
-    <button id="slider-prev-{{ module }}" class="button-secondary icon">
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-            <use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
-        </svg>
-    </button>
-    <button id="slider-next-{{ module }}" class="button-secondary icon">
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-            <use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
-        </svg>
-    </button>
+<div id="carousel-dots" class="carousel-dots">
+	{% for slide in slides %}
+		<button type="button" class="carousel-dot bg-neutral-300" data-index="{{ loop.index0 }}" aria-label="Slide {{ loop.index }}"></button>
+	{% endfor %}
 </div>
 
-{# prettier-ignore-start #}
+<div class="carousel-controls mt-4 flex justify-end gap-2">
+	<button id="carousel-prev" class="button-secondary icon">
+		<svg aria-hidden="true" viewbox="0 0 24 24">
+			<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+		</svg>
+	</button>
+	<button id="carousel-next" class="button-secondary icon">
+		<svg aria-hidden="true" viewbox="0 0 24 24">
+			<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+		</svg>
+	</button>
+</div>
+
 <script>
-  const emblaNode_slider_{{ module }} = document.getElementById('slider-{{ module }}');
-  if (emblaNode_slider_{{ module }}) {
-    const embla = EmblaCarousel(emblaNode_slider_{{ module }}, { loop: true });
+	const carousel = document.getElementById('carousel')
+	if (carousel) {
+		const Autoplay = window.EmblaCarouselAutoplay?.default || window.EmblaCarouselAutoplay
+		const autoplay = Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
 
-    document.getElementById('slider-prev-{{ module }}')?.addEventListener('click', () => embla.scrollPrev());
-    document.getElementById('slider-next-{{ module }}')?.addEventListener('click', () => embla.scrollNext());
-  }
+		const embla = EmblaCarousel(
+			carousel,
+			{
+				loop: true,
+			},
+			[autoplay],
+		)
+
+		document.getElementById('carousel-prev')?.addEventListener('click', () => embla.scrollPrev())
+		document.getElementById('carousel-next')?.addEventListener('click', () => embla.scrollNext())
+
+		const dots = document.getElementById('carousel-dots').querySelectorAll('.carousel-dot')
+		const syncDots = () => {
+			const i = embla.selectedScrollSnap()
+			dots.forEach((dot, idx) => {
+				dot.classList.toggle('bg-neutral-800', idx === i)
+				dot.classList.toggle('bg-neutral-300', idx !== i)
+			})
+		}
+		embla.on('select', syncDots)
+		syncDots()
+		dots.forEach((dot, idx) => {
+			dot.addEventListener('click', () => embla.scrollTo(idx))
+		})
+	}
 </script>
-{# prettier-ignore-end #}

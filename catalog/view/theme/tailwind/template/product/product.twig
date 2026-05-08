@@ -1,251 +1,208 @@
-{% set class = 'col-span-12 ' %}
+{% set class = "col-span-12 " %}
 {% if column_left and column_right %}
-    {% set class = class ~ 'lg:col-span-6' %}
+	{% set class = class ~ "lg:col-span-6" %}
 {% elseif column_left or column_right %}
-    {% set class = class ~ 'lg:col-span-9' %}
+	{% set class = class ~ "lg:col-span-9" %}
 {% else %}
-    {% set class = class ~ 'lg:col-span-12' %}
+	{% set class = class ~ "lg:col-span-12" %}
 {% endif %}
 
 <div class="container mx-auto px-2">
-    {% include 'tailwind/components/breadcrumbs.twig' %}
+	{% include "tailwind/components/breadcrumbs.twig" %}
 </div>
-<div class="container mx-auto px-2 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    {{ column_left }}
-    <main class="{{ class }}">
-        {{ content_top }}
+<div class="container mx-auto grid grid-cols-1 gap-6 px-2 lg:grid-cols-12">
+	{{ column_left }}
+	<main class="{{ class }}">
+		{{ content_top }}
 
-        <div class="flex flex-col lg:flex-row gap-2">
-            <section class="w-1/2" aria-label="Images">
-                <div class="flex flex-col gap-4">
-                    <img src="{{ thumb }}" alt="{{ heading_title }}" />
-                    <div class="flex gap-2">
-                        {% if images %}
-                            {% for image in images %}
-                                <img src="{{ image.thumb }}" alt="{{ heading_title }}" />
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
+		<div class="flex flex-col gap-2 lg:flex-row">
+			<section class="w-1/2" aria-label="Images">
+				<div class="flex flex-col gap-4">
+					<img src="{{ thumb }}" alt="{{ heading_title }}" />
+					<div class="flex gap-2">
+						{% if images %}
+							{% for image in images %}
+								<img src="{{ image.thumb }}" alt="{{ heading_title }}" />
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+			</section>
 
-            <section class="w-1/2" aria-label="Description">
-                <div class="flex flex-col gap-4">
-                    <h1 class="heading-3">{{ heading_title }}</h1>
+			<section class="w-1/2" aria-label="Description">
+				<div class="flex flex-col gap-4">
+					<h1 class="heading-3">{{ heading_title }}</h1>
 
-                    <div class="flex gap-2">
-                        <button
-                            type="button"
-                            class="button-secondary icon"
-                            title="{{ button_wishlist }}"
-                            onclick="wishlist.add('{{ product_id }}');"
-                        >
-                            <svg aria-hidden="true" viewBox="0 0 24 24">
-                                <use href="/assets/icons/sprite.svg#icon-heart"></use>
-                            </svg>
-                        </button>
-                        <button
-                            type="button"
-                            class="button-secondary icon"
-                            title="{{ button_compare }}"
-                            onclick="compare.add('{{ product_id }}');"
-                        >
-                            <svg aria-hidden="true" viewBox="0 0 24 24">
-                                <use href="/assets/icons/sprite.svg#icon-scales"></use>
-                            </svg>
-                        </button>
-                        {% if review_status %}
-                            <div>
-                                <p>
-                                    {% for i in 1..5 %}
-                                        {% if rating < i %}
-                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
-                                        {% else %}
-                                            <span class="fa fa-stack">
-                                                <i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i>
-                                            </span>
-                                        {% endif %}
-                                    {% endfor %} <a
-                                        href=""
-                                        onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;"
-                                    >
-                                        {{ reviews }}
-                                    </a> / <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{
-                                            text_write
-                                        }}</a>
-                                </p>
-                            </div>
-                        {% endif %}
-                    </div>
+					<div class="flex gap-2">
+						<button type="button" class="button-secondary icon" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product_id }}');">
+							<svg aria-hidden="true" viewBox="0 0 24 24">
+								<use href="/assets/icons/sprite.svg#icon-heart"></use>
+							</svg>
+						</button>
+						<button type="button" class="button-secondary icon" title="{{ button_compare }}" onclick="compare.add('{{ product_id }}');">
+							<svg aria-hidden="true" viewBox="0 0 24 24">
+								<use href="/assets/icons/sprite.svg#icon-scales"></use>
+							</svg>
+						</button>
+						{% if review_status %}
+							<div>
+								<p>
+									{% for i in 1..5 %}
+										{% if rating < i %}
+											<span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+										{% else %}
+											<span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>
+										{% endif %}
+									{% endfor %} <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{ reviews }}</a> / <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{
+											text_write
+										}}</a>
+								</p>
+							</div>
+						{% endif %}
+					</div>
 
-                    <div class="flex flex-col gap-2">
-                        <p>
-                            {{ price }}
-                        </p>
-                        <div class="form-item">
-                            <label class="form-label" for="input-quantity">{{ entry_qty }}</label>
-                            <input
-                                type="text"
-                                name="quantity"
-                                value="{{ minimum }}"
-                                size="2"
-                                id="input-quantity"
-                                class="input"
-                            />
-                            <input type="hidden" name="product_id" value="{{ product_id }}" />
-                            <button class="button-primary">
-                                <svg aria-hidden="true" viewBox="0 0 24 24">
-                                    <use href="/assets/icons/sprite.svg#icon-cart"></use>
-                                </svg>
-                                {{ button_cart }}
-                            </button>
-                            {% if minimum > 1 %}
-                                <div class="form-message">
-                                    {{ text_minimum }}
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
+					<div class="flex flex-col gap-2">
+						<p>
+							{{ price }}
+						</p>
+						<div class="form-item">
+							<label class="form-label" for="input-quantity">{{ entry_qty }}</label>
+							<input type="text" name="quantity" value="{{ minimum }}" size="2" id="input-quantity" class="input" />
+							<input type="hidden" name="product_id" value="{{ product_id }}" />
+							<button class="button-primary">
+								<svg aria-hidden="true" viewBox="0 0 24 24">
+									<use href="/assets/icons/sprite.svg#icon-cart"></use>
+								</svg>
+								{{ button_cart }}
+							</button>
+							{% if minimum > 1 %}
+								<div class="form-message">
+									{{ text_minimum }}
+								</div>
+							{% endif %}
+						</div>
+					</div>
 
-                    <div class="flex gap-2">
-                        <p>
-                            {{ text_manufacturer }} <a href="{{ manufacturers }}">{{ manufacturer }}</a>
-                        </p>
-                        <p>
-                            {{ text_model }} {{ model }}
-                        </p>
-                        <p>
-                            {{ text_reward }} {{ reward }}
-                        </p>
-                        <p>
-                            {{ text_stock }} {{ stock }}
-                        </p>
-                        <p>
-                            {{ text_points }} {{ points }}
-                        </p>
-                        <p>
-                            {{ text_tax }} {{ tax }}
-                        </p>
-                    </div>
+					<div class="flex gap-2">
+						<p>
+							{{ text_manufacturer }} <a href="{{ manufacturers }}">{{ manufacturer }}</a>
+						</p>
+						<p>
+							{{ text_model }} {{ model }}
+						</p>
+						<p>
+							{{ text_reward }} {{ reward }}
+						</p>
+						<p>
+							{{ text_stock }} {{ stock }}
+						</p>
+						<p>
+							{{ text_points }} {{ points }}
+						</p>
+						<p>
+							{{ text_tax }} {{ tax }}
+						</p>
+					</div>
 
-                    {% include 'tailwind/components/product-options.twig' with {
-                        options: options,
-                        text_option: text_option
-                    } %}
+					{% include "tailwind/components/product-options.twig" with { options: options, text_option: text_option } %}
 
-                    {% include 'tailwind/components/product-recurrings.twig' with {
-                        recurrings: recurrings,
-                        text_payment_recurring: text_payment_recurring
-                    } %}
-                </div>
-            </section>
-        </div>
+					{% include "tailwind/components/product-recurrings.twig" with { recurrings: recurrings, text_payment_recurring: text_payment_recurring } %}
+				</div>
+			</section>
+		</div>
 
-        <section class="text-block" aria-label="Description">
-            <div class="text-collapse-wrapper">
-                <div class="text-collapse-content">
-                    {{ description }}
-                </div>
-                <div class="text-collapse-overlay"></div>
-            </div>
+		<section class="text-block" aria-label="Description">
+			<div class="text-collapse-wrapper">
+				<div class="text-collapse-content">
+					{{ description }}
+				</div>
+				<div class="text-collapse-overlay"></div>
+			</div>
 
-            <button class="link collapse-toggle">Читать полностью</button>
-        </section>
+			<button class="link collapse-toggle">Читать полностью</button>
+		</section>
 
-        <hr class="divider" />
+		<hr class="divider" />
 
-        <section aria-label="Attributes">
-            <table class="table table-bordered">
-                {% for attribute_group in attribute_groups %}
-                    <thead>
-                        <tr>
-                            <td colspan="2"><strong>{{ attribute_group.name }}</strong></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for attribute in attribute_group.attribute %}
-                            <tr>
-                                <td>{{ attribute.name }}</td>
-                                <td>{{ attribute.text }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                {% endfor %}
-            </table>
-        </section>
+		<section aria-label="Attributes">
+			<table class="table-bordered table">
+				{% for attribute_group in attribute_groups %}
+					<thead>
+						<tr>
+							<td colspan="2"><strong>{{ attribute_group.name }}</strong></td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for attribute in attribute_group.attribute %}
+							<tr>
+								<td>{{ attribute.name }}</td>
+								<td>{{ attribute.text }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				{% endfor %}
+			</table>
+		</section>
 
-        <hr class="divider" />
+		<hr class="divider" />
 
-        <section aria-label="Reviews">
-            <div id="review"></div>
-            <form id="form-review">
-                <h2>{{ text_write }}</h2>
-                <div class="form-item">
-                    <label class="form-label" for="input-name">{{ entry_name }}</label>
-                    <input type="text" name="name" value="{{ customer_name }}" id="input-name" class="input" />
-                </div>
-                <div class="form-item">
-                    <label class="form-label" for="input-review">{{ entry_review }}</label>
-                    <textarea name="text" rows="5" id="input-review" class="input"></textarea>
-                    <div class="form-description">
-                        {{ text_note }}
-                    </div>
-                </div>
-                <div class="form-item">
-                    <label class="form-label">{{ entry_rating }}</label>
-                    &nbsp;&nbsp;&nbsp; {{ entry_bad }}&nbsp;
-                    <input type="radio" name="rating" value="1" />&nbsp;<input
-                        type="radio"
-                        name="rating"
-                        value="2"
-                    />&nbsp;<input type="radio" name="rating" value="3" />&nbsp;<input
-                        type="radio"
-                        name="rating"
-                        value="4"
-                    />&nbsp;<input type="radio" name="rating" value="5" />&nbsp;{{ entry_good }}
-                </div>
-                <div class="form-item">
-                    <button
-                        type="button"
-                        id="button-review"
-                        data-loading-text="{{ text_loading }}"
-                        class="button-primary"
-                    >
-                        {{ button_continue }}
-                    </button>
-                </div>
-            </form>
-        </section>
+		<section aria-label="Reviews">
+			<div id="review"></div>
+			<form id="form-review">
+				<h2>{{ text_write }}</h2>
+				<div class="form-item">
+					<label class="form-label" for="input-name">{{ entry_name }}</label>
+					<input type="text" name="name" value="{{ customer_name }}" id="input-name" class="input" />
+				</div>
+				<div class="form-item">
+					<label class="form-label" for="input-review">{{ entry_review }}</label>
+					<textarea name="text" rows="5" id="input-review" class="input"></textarea>
+					<div class="form-description">
+						{{ text_note }}
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">{{ entry_rating }}</label>
+					&nbsp;&nbsp;&nbsp; {{ entry_bad }}&nbsp;
+					<input type="radio" name="rating" value="1" />&nbsp;<input type="radio" name="rating" value="2" />&nbsp;<input
+						type="radio"
+						name="rating"
+						value="3"
+					/>&nbsp;<input type="radio" name="rating" value="4" />&nbsp;<input type="radio" name="rating" value="5" />&nbsp;{{ entry_good }}
+				</div>
+				<div class="form-item">
+					<button type="button" id="button-review" data-loading-text="{{ text_loading }}" class="button-primary">{{ button_continue }}</button>
+				</div>
+			</form>
+		</section>
 
-        <section aria-label="Related">
-            <h2>{{ text_related }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {% for product in products %}
-                    {% include 'tailwind/components/product-card.twig' with {
-                        product: product
-                    } %}
-                {% endfor %}
-            </div>
-        </section>
+		<section aria-label="Related">
+			<h2>{{ text_related }}</h2>
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+				{% for product in products %}
+					{% include "tailwind/components/product-card.twig" with { product: product } %}
+				{% endfor %}
+			</div>
+		</section>
 
-        <section aria-label="Tags">
-            {% if tags %}
-                <p>
-                    {{ text_tags }}
-                    {% for i in 0..(tags|length) - 1 %}
-                        {% if i < (tags|length) - 1 %}
-                            <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>,
-                        {% else %}
-                            <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>
-                        {% endif %}
-                    {% endfor %}
-                </p>
-            {% endif %}
-        </section>
+		<section aria-label="Tags">
+			{% if tags %}
+				<p>
+					{{ text_tags }}
+					{% for i in 0..(tags | length) - 1 %}
+						{% if i < (tags | length) - 1 %}
+							<a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>,
+						{% else %}
+							<a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>
+						{% endif %}
+					{% endfor %}
+				</p>
+			{% endif %}
+		</section>
 
-        {{ content_bottom }}
-    </main>
-    {{ column_right }}
+		{{ content_bottom }}
+	</main>
+	{{ column_right }}
 </div>
 
 {#
