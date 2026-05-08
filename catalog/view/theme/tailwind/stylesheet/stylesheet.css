@@ -763,4 +763,26 @@
     }
 
     /* MENU */
+
+    /* LIVE SEARCH */
+
+    .live-search {
+        @apply relative w-full;
+    }
+
+    .live-search-input {
+        @apply relative z-10;
+    }
+
+    .live-search-results {
+        @apply absolute left-0 right-0 top-full z-30 mt-2 max-h-[420px] overflow-y-auto rounded-md border shadow-lg
+        bg-white border-neutral-200
+        dark:bg-neutral-800 dark:border-neutral-700;
+    }
+
+    .live-search-results[hidden] {
+        @apply hidden;
+    }
+
+    /* LIVE SEARCH */
 }

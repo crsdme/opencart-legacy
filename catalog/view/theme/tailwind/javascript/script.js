@@ -290,27 +290,120 @@ $('#search-input').on('keydown', function (e) {
 
 // Search
 
-// Collapse Text
+// Live Search
 
-$(function () {
-    $('.collapse-toggle').on('click', function () {
-        const $btn = $(this);
-        const $wrapper = $btn.closest('.text-block').find('.text-collapse-wrapper');
-        const $content = $wrapper.find('.text-collapse-content');
+(function () {
+    const config = {
+        root: '[data-live-search]',
+        input: '[data-live-search-input]',
+        results: '[data-live-search-results]',
+        url: 'index.php?route=common/search/searchProducts',
+        minLength: 2,
+        delay: 300,
+    };
 
-        if (!$wrapper.length || !$content.length) return;
+    const $root = $(config.root);
 
-        const isExpanded = $wrapper.hasClass('expanded');
+    if (!$root.length) return;
 
-        if (isExpanded) {
-            $wrapper.removeClass('expanded').css('max-height', '300px');
-            $btn.text('Читать полностью');
-        } else {
-            const fullHeight = $content.outerHeight(true);
-            $wrapper.addClass('expanded').css('max-height', fullHeight + 'px');
-            $btn.text('Скрыть');
+    $root.each(function () {
+        const $component = $(this);
+        const $input = $component.find(config.input);
+        const $results = $component.find(config.results);
+
+        let timer = null;
+        let request = null;
+
+        function openResults() {
+            $results.prop('hidden', false);
+            $component.attr('data-open', 'true');
         }
-    });
-});
 
-// Collapse Text
+        function closeResults() {
+            $results.prop('hidden', true);
+            $component.removeAttr('data-open');
+        }
+
+        function renderLoading() {
+            $results.html('<div class="live-search-state">Поиск...</div>');
+            openResults();
+        }
+
+        function renderError() {
+            $results.html('<div class="live-search-state">Ошибка загрузки</div>');
+            openResults();
+        }
+
+        function search(query) {
+            if (request) {
+                request.abort();
+            }
+
+            renderLoading();
+
+            request = $.ajax({
+                url: config.url,
+                type: 'get',
+                dataType: 'html',
+                data: {
+                    filter_name: query,
+                },
+                success: function (html) {
+                    $results.html(html);
+                    openResults();
+                },
+                error: function (xhr, status) {
+                    if (status === 'abort') return;
+                    renderError();
+                },
+                complete: function () {
+                    request = null;
+                },
+            });
+        }
+
+        $input.on('input', function () {
+            const query = $.trim($input.val());
+
+            clearTimeout(timer);
+
+            if (query.length < config.minLength) {
+                closeResults();
+
+                if (request) {
+                    request.abort();
+                    request = null;
+                }
+
+                return;
+            }
+
+            timer = setTimeout(function () {
+                search(query);
+            }, config.delay);
+        });
+
+        $input.on('focus', function () {
+            const query = $.trim($input.val());
+
+            if (query.length >= config.minLength && $results.html().trim()) {
+                openResults();
+            }
+        });
+
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest($component).length) {
+                closeResults();
+            }
+        });
+
+        $(document).on('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeResults();
+                $input.blur();
+            }
+        });
+    });
+})();
+
+// Live Search

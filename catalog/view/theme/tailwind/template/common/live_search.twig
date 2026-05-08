@@ -1,0 +1,26 @@
+{% if products %}
+	{% for product in products %}
+		<a class="live-search-item" href="{{ product.href }}" title="{{ product.name }}">
+			<span class="live-search-image">
+				<img src="{{ product.thumb }}" alt="{{ product.name }}" width="80" height="80" loading="lazy">
+			</span>
+
+			<span class="live-search-info">
+				<span class="live-search-name">{{ product.name }}</span>
+
+				{% if product.price %}
+					<span class="live-search-price">
+						{% if product.special %}
+							<span class="live-search-price-old">{{ product.price }}</span>
+							<span class="live-search-price-new">{{ product.special }}</span>
+						{% else %}
+							<span class="live-search-price-current">{{ product.price }}</span>
+						{% endif %}
+					</span>
+				{% endif %}
+			</span>
+		</a>
+	{% endfor %}
+{% else %}
+	<div class="live-search-state">Ничего не найдено</div>
+{% endif %}
