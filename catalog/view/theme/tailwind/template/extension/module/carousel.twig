@@ -12,54 +12,65 @@
 	</div>
 </div>
 
-<div id="carousel-dots" class="carousel-dots">
-	{% for slide in slides %}
-		<button type="button" class="carousel-dot bg-neutral-300" data-index="{{ loop.index0 }}" aria-label="Slide {{ loop.index }}"></button>
-	{% endfor %}
-</div>
+{% if options.use_controls %}
+	<div id="carousel-dots" class="carousel-dots">
+		{% for slide in slides %}
+			<button type="button" class="carousel-dot bg-neutral-300" data-index="{{ loop.index0 }}" aria-label="Slide {{ loop.index }}"></button>
+		{% endfor %}
+	</div>
+{% endif %}
 
-<div class="carousel-controls mt-4 flex justify-end gap-2">
-	<button id="carousel-prev" class="button-secondary icon">
-		<svg aria-hidden="true" viewbox="0 0 24 24">
-			<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
-		</svg>
-	</button>
-	<button id="carousel-next" class="button-secondary icon">
-		<svg aria-hidden="true" viewbox="0 0 24 24">
-			<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
-		</svg>
-	</button>
-</div>
+{% if options.use_controls %}
+	<div class="carousel-controls mt-4 flex justify-end gap-2">
+		<button id="carousel-prev" class="button-secondary icon">
+			<svg aria-hidden="true" viewbox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+			</svg>
+		</button>
+		<button id="carousel-next" class="button-secondary icon">
+			<svg aria-hidden="true" viewbox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+			</svg>
+		</button>
+	</div>
+{% endif %}
 
 <script>
-	const carousel = document.getElementById('carousel')
-	if (carousel) {
-		const Autoplay = window.EmblaCarouselAutoplay?.default || window.EmblaCarouselAutoplay
-		const autoplay = Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
+	(() => {
+		const carousel = document.getElementById('carousel');
+		const config = {{ config | json_encode | raw }};
 
-		const embla = EmblaCarousel(
-			carousel,
-			{
-				loop: true,
-			},
-			[autoplay],
-		)
+		if (!carousel) return;
 
-		document.getElementById('carousel-prev')?.addEventListener('click', () => embla.scrollPrev())
-		document.getElementById('carousel-next')?.addEventListener('click', () => embla.scrollNext())
+		let embla = null;
 
-		const dots = document.getElementById('carousel-dots').querySelectorAll('.carousel-dot')
-		const syncDots = () => {
-			const i = embla.selectedScrollSnap()
-			dots.forEach((dot, idx) => {
-				dot.classList.toggle('bg-neutral-800', idx === i)
-				dot.classList.toggle('bg-neutral-300', idx !== i)
-			})
+		if (config.use_autoplay) {
+			const Autoplay = window.EmblaCarouselAutoplay?.default || window.EmblaCarouselAutoplay;
+			const autoplay = Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true });
+			embla = EmblaCarousel(carousel, { loop: true }, [autoplay]);
+		} else {
+			embla = EmblaCarousel(carousel, { loop: true });
 		}
-		embla.on('select', syncDots)
-		syncDots()
-		dots.forEach((dot, idx) => {
-			dot.addEventListener('click', () => embla.scrollTo(idx))
-		})
-	}
+
+		if (config.use_controls) {
+			document.getElementById('carousel-prev')?.addEventListener('click', () => embla.scrollPrev());
+			document.getElementById('carousel-next')?.addEventListener('click', () => embla.scrollNext());
+		}
+
+		if (config.use_dots) {
+			const dots = document.getElementById('carousel-dots').querySelectorAll('.carousel-dot');
+			const syncDots = () => {
+				const i = embla.selectedScrollSnap();
+				dots.forEach((dot, idx) => {
+					dot.classList.toggle('bg-neutral-800', idx === i);
+					dot.classList.toggle('bg-neutral-300', idx !== i);
+				});
+			};
+			embla.on('select', syncDots);
+			syncDots();
+			dots.forEach((dot, idx) => {
+				dot.addEventListener('click', () => embla.scrollTo(idx));
+			});
+		}
+	})();
 </script>

@@ -79,12 +79,22 @@
 	</fieldset>
 </form>
 <script type="text/javascript">
-	$('input[name=\'CreateToken\']').on('change', function() { if (this.value === '0') { $('#card-existing').show(); $('#card-save').hide();
-	$('.form-control').prop('disabled', false); $('#card-save :input').prop('disabled', true); } else { $('#card-existing').hide(); $('#card-save').show();
-	$('.form-control').prop('disabled', true); $('#card-save :input').prop('disabled', false); } }); //
+	$("input[name='CreateToken']").on('change', function () {
+		if (this.value === '0') {
+			$('#card-existing').show();
+			$('#card-save').hide();
+			$('.form-control').prop('disabled', false);
+			$('#card-save :input').prop('disabled', true);
+		} else {
+			$('#card-existing').hide();
+			$('#card-save').show();
+			$('.form-control').prop('disabled', true);
+			$('#card-save :input').prop('disabled', false);
+		}
+	}); //
 </script>
 <script type="text/javascript">
-	<!--  
+	<!--   
 $('#button-confirm').bind('click', function() {
 	$.ajax({
 		url: 'index.php?route=extension/payment/sagepay_server/send',
@@ -119,10 +129,10 @@ $('#button-confirm').bind('click', function() {
 		}
 	});
 });
-//  -->
+//   -->
 </script>
 <script type="text/javascript">
-	<!--  
+	<!--   
 $('#button-delete').bind('click', function () {
   if (confirm('{{ text_confirm_delete }}')) {
 	$.ajax({
@@ -158,5 +168,5 @@ $('#button-delete').bind('click', function () {
 	});
   }
 });
-//  -->
+//   -->
 </script>

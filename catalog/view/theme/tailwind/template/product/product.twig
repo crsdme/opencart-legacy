@@ -104,9 +104,15 @@
 						</p>
 					</div>
 
-					{% include "tailwind/components/product-options.twig" with { options: options, text_option: text_option } %}
+					{% include "tailwind/components/product-options.twig" with {
+						options: options,
+						text_option: text_option
+					} %}
 
-					{% include "tailwind/components/product-recurrings.twig" with { recurrings: recurrings, text_payment_recurring: text_payment_recurring } %}
+					{% include "tailwind/components/product-recurrings.twig" with {
+						recurrings: recurrings,
+						text_payment_recurring: text_payment_recurring
+					} %}
 				</div>
 			</section>
 		</div>
@@ -180,7 +186,9 @@
 			<h2>{{ text_related }}</h2>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				{% for product in products %}
-					{% include "tailwind/components/product-card.twig" with { product: product } %}
+					{% include "tailwind/components/product-card.twig" with {
+						product: product
+					} %}
 				{% endfor %}
 			</div>
 		</section>

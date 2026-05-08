@@ -1,23 +1,23 @@
 // Language
 
 $('#form-language .dropdown-item').on('click', function (e) {
-	e.preventDefault()
+	e.preventDefault();
 
-	$('#form-language input[name="code"]').val($(this).attr('name'))
+	$('#form-language input[name="code"]').val($(this).attr('name'));
 
-	$('#form-language').submit()
-})
+	$('#form-language').submit();
+});
 
 // Language
 
 // Theme
 
-const icon = $('#theme-icon')
+const icon = $('#theme-icon');
 
 function toggleTheme() {
-	const isDark = $('html').toggleClass('dark').hasClass('dark')
-	icon.attr('href', isDark ? '/assets/icons/sprite.svg#icon-moon' : '/assets/icons/sprite.svg#icon-sun')
-	document.cookie = 'theme=' + (isDark ? 'dark' : '') + '; path=/; max-age=31536000; samesite=Lax'
+	const isDark = $('html').toggleClass('dark').hasClass('dark');
+	icon.attr('href', isDark ? '/assets/icons/sprite.svg#icon-moon' : '/assets/icons/sprite.svg#icon-sun');
+	document.cookie = 'theme=' + (isDark ? 'dark' : '') + '; path=/; max-age=31536000; samesite=Lax';
 }
 
 // Theme
@@ -25,78 +25,78 @@ function toggleTheme() {
 // Dropdown
 
 function isTouchDevice() {
-	return window.matchMedia('(hover: none), (pointer: coarse)').matches
+	return window.matchMedia('(hover: none), (pointer: coarse)').matches;
 }
 
 $(document).on('click', '#dropdown-button', function (e) {
-	const $dropdown = $(this).closest('.dropdown')
-	const $menu = $dropdown.find('.dropdown-menu')
-	const type = $dropdown.data('type')
+	const $dropdown = $(this).closest('.dropdown');
+	const $menu = $dropdown.find('.dropdown-menu');
+	const type = $dropdown.data('type');
 
 	// Если это hover dropdown на desktop — клик не нужен
 	if (type === 'hover' && !isTouchDevice()) {
-		return
+		return;
 	}
 
-	e.stopPropagation()
+	e.stopPropagation();
 
-	$('.dropdown-menu').not($menu).removeClass('show')
-	$menu.toggleClass('show')
-})
+	$('.dropdown-menu').not($menu).removeClass('show');
+	$menu.toggleClass('show');
+});
 
 $(document).on('mouseenter', '.dropdown[data-type="hover"]', function () {
-	if (isTouchDevice()) return
+	if (isTouchDevice()) return;
 
-	const $menu = $(this).find('.dropdown-menu')
+	const $menu = $(this).find('.dropdown-menu');
 
-	$('.dropdown-menu').not($menu).removeClass('show')
-	$menu.addClass('show')
-})
+	$('.dropdown-menu').not($menu).removeClass('show');
+	$menu.addClass('show');
+});
 
 $(document).on('mouseleave', '.dropdown[data-type="hover"]', function () {
-	if (isTouchDevice()) return
+	if (isTouchDevice()) return;
 
-	$(this).find('.dropdown-menu').removeClass('show')
-})
+	$(this).find('.dropdown-menu').removeClass('show');
+});
 
 $(document).on('click', function () {
-	$('.dropdown-menu').removeClass('show')
-})
+	$('.dropdown-menu').removeClass('show');
+});
 
 $(document).on('click', '.dropdown-menu', function (e) {
-	e.stopPropagation()
-})
+	e.stopPropagation();
+});
 
 // Dropdown
 
 // Utils
 
 function debounce(func, wait) {
-	let timeout
+	let timeout;
 	return function () {
 		const context = this,
-			args = arguments
-		clearTimeout(timeout)
-		timeout = setTimeout(() => func.apply(context, args), wait)
-	}
+			args = arguments;
+		clearTimeout(timeout);
+		timeout = setTimeout(() => func.apply(context, args), wait);
+	};
 }
 
 // Utils
 
 // Cart
 
-const cartButton = $('#cart-button')
-const cartBadge = $('#cart-badge')
-const cartModal = $('#cart-modal')
-const cartProducts = $('#cart-modal-products')
-const cartTotals = $('#cart-modal-totals')
-const cartOverlay = $('#cart-overlay')
-let cartToastTimeout = null
+const cartButton = $('#cart-button');
+const cartBadge = $('#cart-badge');
+const cartModal = $('#cart-modal');
+const cartProducts = $('#cart-modal-products');
+const cartTotals = $('#cart-modal-totals');
+const cartOverlay = $('#cart-overlay');
+let cartToastTimeout = null;
 
 function openCart() {
-	cartModal.removeClass('hidden')
-	cartOverlay.removeClass('hidden')
-	$('body').addClass('disable-scroll')
+	cartModal.removeClass('hidden');
+	cartOverlay.removeClass('hidden');
+	$('body').addClass('disable-scroll');
 
 	$.ajax({
 		url: 'index.php?route=common/cart/info',
@@ -109,25 +109,25 @@ function openCart() {
               <div class="skeleton h-25 w-full rounded-md"></div>
               <div class="skeleton h-25 w-full rounded-md"></div>
           </div>
-        `)
+        `);
 			cartTotals.html(`
             <div class="space-y-2">
                 <div class="skeleton h-25 w-full rounded-md"></div>
             </div>
-        `)
+        `);
 		},
 		success: function (html) {
-			const response = $(html)
-			cartTotals.html(response.filter('#cart-modal-totals').html())
-			cartProducts.html(response.filter('#cart-modal-products').html())
+			const response = $(html);
+			cartTotals.html(response.filter('#cart-modal-totals').html());
+			cartProducts.html(response.filter('#cart-modal-products').html());
 		},
-	})
+	});
 }
 
 function closeCart() {
-	cartModal.addClass('hidden')
-	cartOverlay.addClass('hidden')
-	$('body').removeClass('disable-scroll')
+	cartModal.addClass('hidden');
+	cartOverlay.addClass('hidden');
+	$('body').removeClass('disable-scroll');
 }
 
 function addToCart(product_id, quantity = 1, button) {
@@ -141,12 +141,12 @@ function addToCart(product_id, quantity = 1, button) {
 			// button.setAttribute('disabled', true);
 		},
 		success: function (json) {
-			cartBadge.text(json['total'])
+			cartBadge.text(json['total']);
 			// button.innerHTML = button.getAttribute('data-added-text');
 
 			if (json['error']) {
-				button.setAttribute('disabled', false)
-				return
+				button.setAttribute('disabled', false);
+				return;
 			}
 
 			// $('#cart-toast').html(json['totalPrice']);
@@ -159,7 +159,7 @@ function addToCart(product_id, quantity = 1, button) {
 			// }, 2500);
 			// sendToast({ message: json['success'], type: 'success', align: 'right-bottom', timeout: 4000 });
 		},
-	})
+	});
 }
 
 function removeCartProduct(productKey) {
@@ -176,20 +176,20 @@ function removeCartProduct(productKey) {
                 <div class="skeleton h-25 w-full rounded-md"></div>
                 <div class="skeleton h-25 w-full rounded-md"></div>
             </div>
-          `)
+          `);
 			cartTotals.html(`
               <div class="space-y-2">
                   <div class="skeleton h-25 w-full rounded-md"></div>
               </div>
-          `)
+          `);
 		},
 		success: function (json) {
-			const response = $(json['html'])
-			cartBadge.text(json['total'])
-			cartTotals.html(response.filter('#cart-modal-totals').html())
-			cartProducts.html(response.filter('#cart-modal-products').html())
+			const response = $(json['html']);
+			cartBadge.text(json['total']);
+			cartTotals.html(response.filter('#cart-modal-totals').html());
+			cartProducts.html(response.filter('#cart-modal-products').html());
 		},
-	})
+	});
 }
 
 function addCartProduct(target) {
@@ -206,24 +206,24 @@ function addCartProduct(target) {
         <div class="skeleton h-25 w-full rounded-md"></div>
         <div class="skeleton h-25 w-full rounded-md"></div>
       </div>
-    `)
+    `);
 		},
 		success: function (data) {
-			data = `<div>${data}</div>`
-			$('#cart-products').children().remove()
-			$('#cart-products').append($(data).find('#cart-products').html())
-			$('#cart-total').html($(data).find('#cart-total').children())
+			data = `<div>${data}</div>`;
+			$('#cart-products').children().remove();
+			$('#cart-products').append($(data).find('#cart-products').html());
+			$('#cart-total').html($(data).find('#cart-total').children());
 		},
-	})
+	});
 }
 
 function updateCartProduct(target) {
-	const product_id = $(target).parent().children('input[name=product_id]').val()
-	const quantity = $(target).parent().children('input[name=quantity]').val()
+	const product_id = $(target).parent().children('input[name=product_id]').val();
+	const quantity = $(target).parent().children('input[name=quantity]').val();
 
 	if (isNaN(quantity)) {
-		$(target).parent().children('input[name=quantity]').val(1)
-		return
+		$(target).parent().children('input[name=quantity]').val(1);
+		return;
 	}
 
 	$.ajax({
@@ -239,35 +239,35 @@ function updateCartProduct(target) {
                     <div class="skeleton h-25 w-full rounded-md"></div>
                     <div class="skeleton h-25 w-full rounded-md"></div>
                 </div>
-            `)
+            `);
 		},
 		success: function (data) {
-			data = `<div>${data}</div>`
-			$('#cart-products').children().remove()
-			$('#cart-products').append($(data).find('#cart-products').html())
-			$('#cart-total').html($(data).find('#cart-total').children())
+			data = `<div>${data}</div>`;
+			$('#cart-products').children().remove();
+			$('#cart-products').append($(data).find('#cart-products').html());
+			$('#cart-total').html($(data).find('#cart-total').children());
 		},
-	})
+	});
 }
 
-const addCartProductDebounced = debounce(addCartProduct, 500)
+const addCartProductDebounced = debounce(addCartProduct, 500);
 
-const updateCartProductDebounced = debounce(updateCartProduct, 500)
+const updateCartProductDebounced = debounce(updateCartProduct, 500);
 
 // Cart
 
 // Menu
 
 function openMenu() {
-	$('#menu-sheet').toggleClass('open')
-	$('#sheet-overlay').toggleClass('hidden')
-	$('body').toggleClass('disable-scroll')
+	$('#menu-sheet').toggleClass('open');
+	$('#sheet-overlay').toggleClass('hidden');
+	$('body').toggleClass('disable-scroll');
 }
 
 function closeMenu() {
-	$('#menu-sheet').toggleClass('open')
-	$('#sheet-overlay').toggleClass('hidden')
-	$('body').toggleClass('disable-scroll')
+	$('#menu-sheet').toggleClass('open');
+	$('#sheet-overlay').toggleClass('hidden');
+	$('body').toggleClass('disable-scroll');
 }
 
 // Menu
@@ -275,23 +275,23 @@ function closeMenu() {
 // Search
 
 $('#search-button').on('click', function () {
-	const searchValue = $('#search-input').val()
-	const prefix = $('#search-input').data('language')
-	let url = `${prefix}/search`
-	if (searchValue) url += `?query=${encodeURIComponent(searchValue)}`
-	location.href = url
-})
+	const searchValue = $('#search-input').val();
+	const prefix = $('#search-input').data('language');
+	let url = `${prefix}/search`;
+	if (searchValue) url += `?query=${encodeURIComponent(searchValue)}`;
+	location.href = url;
+});
 
 $('#search-input').on('keydown', function (e) {
 	if (e.key === 'Enter') {
-		$('#search-button').trigger('click')
+		$('#search-button').trigger('click');
 	}
-})
+});
 
 // Search
 
 // Live Search
-;(function () {
+(function () {
 	const config = {
 		root: '[data-live-search]',
 		input: '[data-live-search-input]',
@@ -299,46 +299,46 @@ $('#search-input').on('keydown', function (e) {
 		url: 'index.php?route=common/search/searchProducts',
 		minLength: 2,
 		delay: 300,
-	}
+	};
 
-	const $root = $(config.root)
+	const $root = $(config.root);
 
-	if (!$root.length) return
+	if (!$root.length) return;
 
 	$root.each(function () {
-		const $component = $(this)
-		const $input = $component.find(config.input)
-		const $results = $component.find(config.results)
+		const $component = $(this);
+		const $input = $component.find(config.input);
+		const $results = $component.find(config.results);
 
-		let timer = null
-		let request = null
+		let timer = null;
+		let request = null;
 
 		function openResults() {
-			$results.prop('hidden', false)
-			$component.attr('data-open', 'true')
+			$results.prop('hidden', false);
+			$component.attr('data-open', 'true');
 		}
 
 		function closeResults() {
-			$results.prop('hidden', true)
-			$component.removeAttr('data-open')
+			$results.prop('hidden', true);
+			$component.removeAttr('data-open');
 		}
 
 		function renderLoading() {
-			$results.html('<div class="live-search-state">Поиск...</div>')
-			openResults()
+			$results.html('<div class="live-search-state">Поиск...</div>');
+			openResults();
 		}
 
 		function renderError() {
-			$results.html('<div class="live-search-state">Ошибка загрузки</div>')
-			openResults()
+			$results.html('<div class="live-search-state">Ошибка загрузки</div>');
+			openResults();
 		}
 
 		function search(query) {
 			if (request) {
-				request.abort()
+				request.abort();
 			}
 
-			renderLoading()
+			renderLoading();
 
 			request = $.ajax({
 				url: config.url,
@@ -348,61 +348,61 @@ $('#search-input').on('keydown', function (e) {
 					filter_name: query,
 				},
 				success: function (html) {
-					$results.html(html)
-					openResults()
+					$results.html(html);
+					openResults();
 				},
 				error: function (xhr, status) {
-					if (status === 'abort') return
-					renderError()
+					if (status === 'abort') return;
+					renderError();
 				},
 				complete: function () {
-					request = null
+					request = null;
 				},
-			})
+			});
 		}
 
 		$input.on('input', function () {
-			const query = $.trim($input.val())
+			const query = $.trim($input.val());
 
-			clearTimeout(timer)
+			clearTimeout(timer);
 
 			if (query.length < config.minLength) {
-				closeResults()
+				closeResults();
 
 				if (request) {
-					request.abort()
-					request = null
+					request.abort();
+					request = null;
 				}
 
-				return
+				return;
 			}
 
 			timer = setTimeout(function () {
-				search(query)
-			}, config.delay)
-		})
+				search(query);
+			}, config.delay);
+		});
 
 		$input.on('focus', function () {
-			const query = $.trim($input.val())
+			const query = $.trim($input.val());
 
 			if (query.length >= config.minLength && $results.html().trim()) {
-				openResults()
+				openResults();
 			}
-		})
+		});
 
 		$(document).on('click', function (event) {
 			if (!$(event.target).closest($component).length) {
-				closeResults()
+				closeResults();
 			}
-		})
+		});
 
 		$(document).on('keydown', function (event) {
 			if (event.key === 'Escape') {
-				closeResults()
-				$input.blur()
+				closeResults();
+				$input.blur();
 			}
-		})
-	})
-})()
+		});
+	});
+})();
 
 // Live Search

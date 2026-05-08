@@ -18,44 +18,44 @@
 
 <script>
 	function sendToast({ message = 'Success!', type = 'success', align = 'right-top', timeout = 2500 }) {
-		const toast = document.getElementById('toast')
-		const icon = document.getElementById('toast-icon')
-		const msg = toast.querySelector('.toast-message')
+		const toast = document.getElementById('toast');
+		const icon = document.getElementById('toast-icon');
+		const msg = toast.querySelector('.toast-message');
 
 		const icons = {
 			success: '#icon-check',
 			error: '#icon-x',
 			warning: '#icon-alert-triangle',
-		}
+		};
 
-		toast.setAttribute('data-type', type)
-		toast.setAttribute('data-align', align)
-		msg.textContent = message
-		icon.setAttribute('href', icons[type] || icons.success)
+		toast.setAttribute('data-type', type);
+		toast.setAttribute('data-align', align);
+		msg.textContent = message;
+		icon.setAttribute('href', icons[type] || icons.success);
 
-		toast.classList.remove('hidden', 'animate-out')
-		toast.classList.add('show', 'animate-in')
+		toast.classList.remove('hidden', 'animate-out');
+		toast.classList.add('show', 'animate-in');
 
-		clearTimeout(toast._timeout)
+		clearTimeout(toast._timeout);
 		toast._timeout = setTimeout(() => {
-			toast.classList.remove('animate-in')
-			toast.classList.add('animate-out')
+			toast.classList.remove('animate-in');
+			toast.classList.add('animate-out');
 
 			setTimeout(() => {
-				toast.classList.remove('show')
-				toast.classList.add('hidden')
-			}, 200)
-		}, timeout)
+				toast.classList.remove('show');
+				toast.classList.add('hidden');
+			}, 200);
+		}, timeout);
 	}
 
 	function closeToast() {
-		const toast = document.getElementById('toast')
-		toast.classList.remove('animate-in')
-		toast.classList.add('animate-out')
+		const toast = document.getElementById('toast');
+		toast.classList.remove('animate-in');
+		toast.classList.add('animate-out');
 
 		setTimeout(() => {
-			toast.classList.remove('show')
-			toast.classList.add('hidden')
-		}, 200)
+			toast.classList.remove('show');
+			toast.classList.add('hidden');
+		}, 200);
 	}
 </script>
