@@ -1,44 +1,63 @@
-<button class="button-primary">Button</button>
-
-<button class="button-secondary">Button</button>
-
-<button class="button-destructive">Button</button>
-
-<button class="button-secondary" data-type="icon">
+{% macro plus_icon() %}
 	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 	</svg>
-</button>
+{% endmacro %}
+{% import _self as button %}
 
-<button class="button-primary" data-type="icon">
-	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-	</svg>
-</button>
+<div class="flex w-full flex-col gap-6">
+	{# Варианты: один размер (medium), разные стили #}
+	<div class="flex flex-wrap items-center gap-3">
+		<button type="button" class="button-primary" data-size="medium">Primary</button>
+		<button type="button" class="button-secondary" data-size="medium">Secondary</button>
+		<button type="button" class="button-destructive" data-size="medium">Destructive</button>
+		<button type="button" class="button-ghost" data-size="medium">Ghost</button>
+	</div>
 
-<button class="button-destructive" data-type="icon">
-	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-	</svg>
-</button>
+	{# Размеры: только primary (остальные варианты используют те же data-size) #}
+	<div class="flex flex-wrap items-center gap-3">
+		<button type="button" class="button-primary" data-size="small">Small</button>
+		<button type="button" class="button-primary" data-size="medium">Medium</button>
+		<button type="button" class="button-primary" data-size="large">Large</button>
+	</div>
 
-<button class="button-secondary">
-	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-	</svg>
-	<span>Button</span>
-</button>
+	{# Disabled: по одному на вариант, без повторения сетки размеров #}
+	<div class="flex flex-wrap items-center gap-3">
+		<button type="button" class="button-primary" data-size="medium" disabled>Disabled</button>
+		<button type="button" class="button-secondary" data-size="medium" disabled>Disabled</button>
+		<button type="button" class="button-destructive" data-size="medium" disabled>Disabled</button>
+	</div>
 
-<button class="button-primary">
-	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-	</svg>
-	<span>Button</span>
-</button>
+	{# Только иконка: размеры на primary + disabled #}
+	<div class="flex flex-wrap items-center gap-3">
+		<button type="button" class="button-primary" data-type="icon" data-size="small" aria-label="Add">{{ button.plus_icon() }}</button>
+		<button type="button" class="button-primary" data-type="icon" data-size="medium" aria-label="Add">{{ button.plus_icon() }}</button>
+		<button type="button" class="button-primary" data-type="icon" data-size="large" aria-label="Add">{{ button.plus_icon() }}</button>
+		<button type="button" class="button-primary" data-type="icon" data-size="medium" disabled aria-label="Unavailable">{{ button.plus_icon() }}</button>
+	</div>
 
-<button class="button-destructive">
-	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-	</svg>
-	<span>Button</span>
-</button>
+	{# Иконка + текст: варианты без дублирования размеров #}
+	<div class="flex flex-wrap items-center gap-3">
+		<button type="button" class="button-primary" data-size="medium">{{ button.plus_icon() }}<span>Button</span></button>
+		<button type="button" class="button-primary" data-size="medium" disabled>{{ button.plus_icon() }}<span>Button</span></button>
+		<button type="button" class="button-secondary" data-size="medium">{{ button.plus_icon() }}<span>Button</span></button>
+		<button type="button" class="button-destructive" data-size="medium">{{ button.plus_icon() }}<span>Button</span></button>
+		<button type="button" class="button-ghost" data-size="medium">{{ button.plus_icon() }}<span>Button</span></button>
+	</div>
+
+	{# Badge #}
+	<div class="flex flex-wrap items-center gap-3">
+		<button type="button" class="button-primary">
+			<span>Button</span>
+			<span class="button-badge badge">1</span>
+		</button>
+		<button type="button" class="button-secondary">
+			<span>Button</span>
+			<span class="button-badge badge" data-variant="success">1</span>
+		</button>
+		<button type="button" class="button-ghost" data-type="icon">
+			{{ button.plus_icon() }}
+			<span class="button-badge badge" data-variant="warning">1</span>
+		</button>
+	</div>
+</div>

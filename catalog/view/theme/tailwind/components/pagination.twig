@@ -1,14 +1,147 @@
-<nav class="breadcrumbs" aria-label="Breadcrumb">
-	<ol class="breadcrumbs-list">
-		{% for breadcrumb in breadcrumbs %}
-			{% if loop.last %}
-				<li class="breadcrumbs-current" aria-current="page">{{ breadcrumb.text }}</li>
+{% if pagination %}
+	{% set total = (pagination.total | default(0)) + 0 %}
+	{% set page = (pagination.page | default(1)) + 0 %}
+	{% set limit = (pagination.limit | default(10)) + 0 %}
+	{% set num_links = (pagination.num_links | default(5)) + 0 %}
+	{% set num_pages = (total / limit) | round(0, "ceil") %}
+	{% set url = pagination.url %}
+
+	{% if page < 1 %}
+		{% set page = 1 %}
+	{% endif %}
+
+	{% if page > num_pages %}
+		{% set page = num_pages %}
+	{% endif %}
+
+	{% set first_url =
+		url | replace({
+			"&amp;page={page}": "",
+			"?page={page}": "",
+			"&page={page}": "",
+			"/page-{page}": ""
+		})
+	%}
+
+	{% if num_pages > 1 %}
+		{% set half = (num_links / 2) | round(0, "floor") %}
+		{% set start = page - half %}
+		{% set end = start + num_links - 1 %}
+
+		{% if start < 1 %}
+			{% set start = 1 %}
+			{% set end = num_links %}
+		{% endif %}
+
+		{% if end > num_pages %}
+			{% set end = num_pages %}
+			{% set start = num_pages - num_links + 1 %}
+		{% endif %}
+
+		{% if start < 1 %}
+			{% set start = 1 %}
+		{% endif %}
+
+		<div class="pagination">
+			{% if page > 1 %}
+				{% set prev_page = page - 1 %}
+				{% set prev_url = prev_page == 1
+					? first_url
+					: url | replace({
+						"{page}": prev_page
+					})
+				%}
+
+				<a class="button-secondary pagination-prev" href="{{ prev_url }}">
+					<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+						<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+					</svg>
+					<span class="hidden md:block">{{ pagination.text_prev }}</span>
+				</a>
 			{% else %}
-				<li>
-					<a href="{{ breadcrumb.href }}" class="breadcrumbs-link">{{ breadcrumb.text }}</a>
-					<span class="breadcrumbs-separator">/</span>
-				</li>
+				<span class="button-secondary pagination-prev disabled">
+					<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+						<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+					</svg>
+					<span class="hidden md:block">{{ pagination.text_prev }}</span>
+				</span>
 			{% endif %}
-		{% endfor %}
-	</ol>
-</nav>
+
+			{% if start > 1 %}
+				<a class="button-secondary" href="{{ first_url }}">1</a>
+
+				{% if start > 2 %}
+					{% set dots_prev_page = start - 1 %}
+					{% set dots_prev_url = dots_prev_page == 1
+						? first_url
+						: url | replace({
+							"{page}": dots_prev_page
+						})
+					%}
+
+					<a class="button-secondary pagination-dots" href="{{ dots_prev_url }}">...</a>
+				{% endif %}
+			{% endif %}
+
+			{% for i in start..end %}
+				{% set page_url = i == 1
+					? first_url
+					: url | replace({
+						"{page}": i
+					})
+				%}
+
+				{% if i == page %}
+					<span class="button-secondary active">{{ i }}</span>
+				{% else %}
+					<a class="button-secondary" href="{{ page_url }}">{{ i }}</a>
+				{% endif %}
+			{% endfor %}
+
+			{% if end < num_pages %}
+				{% if end < num_pages - 1 %}
+					{% set dots_next_page = end + 1 %}
+
+					<a
+						class="button-secondary pagination-dots"
+						href="{{ url | replace({
+							"{page}": dots_next_page
+						}) }}"
+					>
+						...
+					</a>
+				{% endif %}
+
+				<a
+					class="button-secondary"
+					href="{{ url | replace({
+						"{page}": num_pages
+					}) }}"
+				>
+					{{ num_pages }}
+				</a>
+			{% endif %}
+
+			{% if page < num_pages %}
+				<a
+					class="button-secondary pagination-next"
+					href="{{ url | replace({
+						"{page}": page + 1
+					}) }}"
+				>
+					<span class="hidden md:block">{{ pagination.text_next }}</span>
+					<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+						<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+					</svg>
+				</a>
+			{% else %}
+				<span class="button-secondary pagination-next disabled">
+					<span class="hidden md:block">{{ pagination.text_next }}</span>
+					<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+						<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+					</svg>
+				</span>
+			{% endif %}
+		</div>
+	{% endif %}
+{% endif %}

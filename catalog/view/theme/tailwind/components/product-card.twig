@@ -1,40 +1,66 @@
+{% set config =
+	{
+		class: class | default(""),
+		image_class: image_class | default(""),
+		title_class: title_class | default(""),
+		price_class: price_class | default(""),
+		special_class: special_class | default(""),
+		button_class: button_class | default(""),
+		badges: badges | default(true),
+		favorite: favorite | default(true),
+		description: description | default(true)
+	} | merge(config | default({}))
+%}
+
 {% if product.quantity < 1 %}
-  {% set class = 'out-of-stock' %}
-  {% set outofstock = true %}
+	{% set class = "out-of-stock" %}
+	{% set outofstock = true %}
 {% endif %}
 
 <div class="product-card">
-  <a href="{{ product.href }}" class="product-card-image">
-    {% if product.specs %}
-      <div class="product-card-badges">
-        {% for spec in product.specs %}
-          <p class="product-card-badge">
-            {{ spec }}
-          </p>
-        {% endfor %}
-      </div>
-    {% endif %}
-    <img src="{{ product.thumb }}" alt="{{ product.name }}" width="370" height="370" />
-  </a>
-  <div class="product-card-content">
-    <a href="{{ product.href }}" class="product-card-title">
-      {{ product.name }}
-    </a>
-    <p class="product-card-price">
-      {{ product.price }}
-      {% if product.special %}
-        <span class="product-card-special">
-          {{ product.special }}
-        </span>
-      {% endif %}
-    </p>
-    <button
-      data-added-text="Added to cart"
-      class="button-primary mt-auto"
-      onclick="addToCart({{ product.product_id }}, 1, this)"
-      {% if outofstock %}disabled{% endif %}
-    >
-        {% if outofstock %}Out of stock{% else %}Add to cart{% endif %}
-    </button>
-  </div>
+	<div class="product-card-media">
+		<a href="{{ product.href }}" class="product-card-image"><img src="{{ product.thumb }}" alt="{{ product.name }}" width="370" height="370" /></a>
+
+		{% if product.badges and config.badges %}
+			<div class="product-card-badges">
+				{% for badge in product.badges %}
+					<div class="product-card-badge badge" data-variant="secondary">
+						{{ badge }}
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+
+		{% if config.favorite %}
+			<button class="product-card-favorite button-secondary" data-type="icon">
+				<svg aria-hidden="true" viewBox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-heart"></use>
+				</svg>
+			</button>
+		{% endif %}
+	</div>
+
+	<div class="product-card-content">
+		<a href="{{ product.href }}" class="product-card-title">{{ product.name }}</a>
+
+		{% if product.description %}
+			<p class="product-card-description">
+				{{ product.description }}
+			</p>
+		{% endif %}
+
+		<p class="product-card-price">
+			{{ product.price }}
+			{% if product.special %}
+				<span class="product-card-special">{{ product.special }}</span>
+			{% endif %}
+		</p>
+
+		<button class="button-primary mt-auto" onclick="addToCart({{ product.product_id }}, 1, this)" {{ outofstock ? "disabled" : "" }}>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-cart"></use>
+			</svg>
+			<span class="max-md:hidden">{{ text_add_to_cart }}</span>
+		</button>
+	</div>
 </div>

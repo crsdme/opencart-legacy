@@ -1,19 +1,117 @@
-<form>
+<form class="grid gap-4">
 	<div class="form-item">
-		<label class="form-label">Label</label>
-		<input class="form-input" type="text" placeholder="Input" />
+		<label class="form-label" for="name">Name</label>
+		<div class="input-field">
+			<input class="form-input input" id="name" type="text" placeholder="Enter your name" />
+		</div>
 	</div>
+
 	<div class="form-item">
-		<label class="form-label">Label</label>
-		<input class="form-input" type="text" placeholder="Input" />
-		<span class="form-description">Description</span>
+		<label class="form-label" for="email">Email</label>
+		<input class="form-input input" id="email" type="email" placeholder="name@example.com" />
+		<span class="form-description">We will not share your email.</span>
 	</div>
+
 	<div class="form-item">
-		<label class="form-label">Label</label>
-		<textarea class="form-input" placeholder="Input"></textarea>
-		<span class="form-message">Message</span>
+		<label class="form-label" for="phone">Phone</label>
+		<input class="form-input" id="phone" type="text" placeholder="+380..." data-error="true" />
+		<span class="form-message">Enter a valid phone number.</span>
 	</div>
+
 	<div class="form-item">
-		<button class="button-primary">Button</button>
+		<label class="form-label" for="password">Password</label>
+
+		<div class="input-group">
+			<input class="form-input" id="password" type="password" placeholder="Enter password" />
+
+			<button class="input-action" type="button" aria-label="Show password">
+				<svg aria-hidden="true" viewBox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-eye"></use>
+				</svg>
+			</button>
+		</div>
+	</div>
+
+	<div class="form-item">
+		<label class="form-label" for="search">Search</label>
+
+		<div class="input-group" data-side="left">
+			<span class="input-addon" data-side="left">
+				<svg aria-hidden="true" viewBox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-search"></use>
+				</svg>
+			</span>
+
+			<input class="form-input" id="search" type="text" placeholder="Search products..." />
+		</div>
+	</div>
+
+	<div class="form-item">
+		<label class="form-label" for="promo">Promo code</label>
+
+		<div class="input-button-group">
+			<input class="form-input" id="promo" type="text" placeholder="Enter code" />
+			<button class="button-secondary" type="button">Apply</button>
+		</div>
+	</div>
+
+	<div class="form-item">
+		<label class="form-label" for="country">Country</label>
+
+		<select class="form-input" id="country">
+			<option value="">
+				Select country
+			</option>
+			<option value="ua">
+				Ukraine
+			</option>
+			<option value="pl">
+				Poland
+			</option>
+			<option value="it">
+				Italy
+			</option>
+		</select>
+	</div>
+
+	<div class="form-item">
+		<label class="form-label" for="message">Message</label>
+		<textarea class="form-input min-h-28 resize-y" id="message" placeholder="Write your message"></textarea>
+		<span class="form-message">Message is required.</span>
+	</div>
+
+	<div class="form-item">
+		<label class="form-label" for="readonly">Readonly</label>
+		<input class="form-input" id="readonly" type="text" value="Readonly value" readonly />
+	</div>
+
+	<div class="form-item">
+		<label class="form-label" for="disabled">Disabled</label>
+		<input class="form-input" id="disabled" type="text" placeholder="Disabled input" disabled />
+	</div>
+
+	<div class="form-item">
+		<label class="flex items-center gap-2 text-sm">
+			<input type="checkbox" class="checkbox" />
+			<span>Accept terms</span>
+		</label>
+	</div>
+
+	<div class="form-item">
+		<div class="grid gap-2">
+			<label class="flex items-center gap-2 text-sm">
+				<input type="radio" name="delivery" class="radio" checked />
+				<span>Pickup</span>
+			</label>
+
+			<label class="flex items-center gap-2 text-sm">
+				<input type="radio" name="delivery" class="radio" />
+				<span>Delivery</span>
+			</label>
+		</div>
+	</div>
+
+	<div class="form-item">
+		<button class="button-primary" type="submit">Button</button>
 	</div>
 </form>

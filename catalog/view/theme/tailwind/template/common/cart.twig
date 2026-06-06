@@ -1,18 +1,19 @@
-<button class="button-primary icon relative" id="cart-button" onclick="openCart()">
-	<svg aria-hidden="true" viewbox="0 0 24 24">
+<button class="button-primary" data-type="icon" id="cart-button" data-modal-open="#cart-modal">
+	<svg aria-hidden="true" viewBox="0 0 24 24">
 		<use href="/assets/icons/sprite.svg#icon-cart"></use>
 	</svg>
 	<span id="cart-badge" class="badge button-badge">{{ productCount }}</span>
 	<div class="cart-toast" id="cart-toast"></div>
 </button>
 
-<div class="modal max-h-md flex hidden h-full flex-col justify-between gap-4 p-4 max-md:rounded-none md:p-6 lg:max-h-[80vh]" id="cart-modal">
+<div class="modal max-h-md flex h-full flex-col justify-between gap-4 p-4 max-md:rounded-none md:p-6 lg:max-h-[80vh]" id="cart-modal">
 	<div class="modal-header">
 		<p class="heading">
 			{{ text_cart }}
 		</p>
-		<button class="button-secondary icon" onclick="closeCart()">
-			<svg aria-hidden="true" viewbox="0 0 24 24">
+
+		<button class="button-secondary icon" data-type="icon" data-modal-close>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-close"></use>
 			</svg>
 		</button>
@@ -26,8 +27,9 @@
 		<div class="skeleton h-25 w-full rounded-md"></div>
 	</div>
 
-	<div class="flex justify-end gap-2" class="modal-footer">
+	<div class="modal-footer flex justify-end gap-2">
 		<button class="button-primary">{{ text_checkout }}</button>
 	</div>
 </div>
-<div class="modal-overlay hidden" id="cart-overlay" onclick="closeCart()"></div>
+
+<div class="modal-overlay" data-modal-overlay></div>

@@ -1,6 +1,6 @@
 <header class="header">
 	<div class="flex flex-wrap items-center gap-2">
-		<button class="button-secondary icon" onclick="openMenu()">
+		<button class="button-ghost" type="button" data-type="icon" data-sheet-open="left-sheet">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-menu"></use>
 			</svg>
@@ -11,33 +11,33 @@
 	{% else %}
 		<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" /></a>
 	{% endif %}
-	<div class="flex items-center gap-2">
+	<div class="flex flex-1 items-center gap-2">
 		{{ currency }}
 		{{ language }}
 		{{ search }}
-		<button class="button-secondary icon" onclick="toggleTheme()">
+		<button class="button-secondary max-md:hidden" type="button" data-type="icon" onclick="toggleTheme()">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
-				<use id="theme-icon" href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
+				<use data-theme-icon href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
 			</svg>
 		</button>
-		<a href="{{ wishlist }}" class="button-secondary icon">
+		<a href="{{ wishlist }}" class="button-secondary max-md:hidden" type="button" data-type="icon">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-heart"></use>
 			</svg>
 		</a>
-		<a href="{{ account }}" class="button-secondary icon">
+		<a href="{{ account }}" class="button-secondary max-md:hidden" type="button" data-type="icon">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-user"></use>
 			</svg>
 		</a>
-		<div class="dropdown w-full flex-1" data-align="right" data-type="hover">
-			<button id="dropdown-button" data-type="icon" class="button-secondary icon">
+		<div class="dropdown max-md:hidden" data-dropdown data-align="right" data-type="hover">
+			<button class="button-secondary" type="button" data-type="icon" data-dropdown-button>
 				<svg aria-hidden="true" viewbox="0 0 24 24">
 					<use href="/assets/icons/sprite.svg#icon-phone"></use>
 				</svg>
 			</button>
 
-			<div id="dropdownMenu" class="dropdown-menu">
+			<div class="dropdown-menu" data-dropdown-menu>
 				<a class="dropdown-item" href="tel:+380668875507">+38 (123) 456 7890</a>
 				<a class="dropdown-item" href="mailto:info@example.com">info@example.com</a>
 				<a class="dropdown-item" href="https://wa.me/905314918688">+90 531 491 8688</a>
@@ -46,4 +46,24 @@
 		{{ cart }}
 	</div>
 </header>
+
+<template id="toast-template">
+	<div class="toast" data-type="default">
+		<div class="toast-content">
+			<div class="toast-text">
+				<div class="toast-title"></div>
+				<div class="toast-description"></div>
+			</div>
+
+			<button class="toast-action button-secondary" data-size="small" type="button"></button>
+
+			<button class="toast-close button-ghost" data-type="icon" data-size="small" type="button" aria-label="Close toast">
+				<svg aria-hidden="true" viewBox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-close"></use>
+				</svg>
+			</button>
+		</div>
+	</div>
+</template>
+
 {{ menu }}

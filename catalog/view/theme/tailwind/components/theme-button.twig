@@ -1,0 +1,15 @@
+<button class="button-secondary icon sticky bottom-10 right-10" onclick="toggleTheme()">
+	<svg aria-hidden="true" viewbox="0 0 24 24">
+		<use data-theme-icon href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
+	</svg>
+</button>
+
+<script>
+	const icon = $('[data-theme-icon]');
+
+	function toggleTheme() {
+		const isDark = $('html').toggleClass('dark').hasClass('dark');
+		icon.attr('href', isDark ? '/assets/icons/sprite.svg#icon-moon' : '/assets/icons/sprite.svg#icon-sun');
+		document.cookie = 'theme=' + (isDark ? 'dark' : '') + '; path=/; max-age=31536000; samesite=Lax';
+	}
+</script>

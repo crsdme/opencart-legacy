@@ -20,5 +20,9 @@ $_['button_continue'] = 'Continue';
 $_['button_cancel'] = 'Cancel';
 $_['button_load_more'] = 'Load more';
 
+// Pagination
+$_['text_prev'] = 'Previous';
+$_['text_next'] = 'Next';
+
 // Error
 $_['heading_title_error'] = 'Page not found';

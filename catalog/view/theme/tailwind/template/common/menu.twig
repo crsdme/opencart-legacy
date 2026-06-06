@@ -1,9 +1,9 @@
-<div class="sheet p-4" data-side="left" id="menu-sheet">
+<div class="sheet p-4" data-sheet="left-sheet" data-side="left">
 	<div class="sheet-header mb-2">
 		<p>
 			{{ text_category }}
 		</p>
-		<button class="button-secondary icon" onclick="closeMenu()">
+		<button class="button-ghost" type="button" data-type="icon" data-sheet-close>
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-close"></use>
 			</svg>
@@ -19,4 +19,4 @@
 		</nav>
 	</div>
 </div>
-<div class='sheet-overlay hidden' id="sheet-overlay" onclick='closeMenu()'></div>
+<div class="sheet-overlay" data-sheet-overlay></div>

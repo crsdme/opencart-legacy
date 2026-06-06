@@ -1,5 +1,68 @@
-<input class="input" type="text" placeholder="Input" />
+<!-- Default -->
+<div class="input-field">
+	<label class="input-label" for="input-name">Name</label>
+	<input class="input" id="input-name" type="text" placeholder="Enter your name" />
+</div>
 
-<input class="input" type="text" placeholder="Input" data-error="true" />
+<!-- With description -->
+<div class="input-field">
+	<label class="input-label" for="input-email">Email</label>
+	<input class="input" id="input-email" type="email" placeholder="name@example.com" />
+	<p class="input-description">
+		We will not share your email.
+	</p>
+</div>
 
-<input class="input" type="text" placeholder="Input" disabled />
+<!-- Error -->
+<div class="input-field">
+	<label class="input-label" for="input-phone">Phone</label>
+	<input class="input" id="input-phone" type="text" placeholder="+380..." data-error="true" />
+	<p class="input-error">
+		Enter a valid phone number.
+	</p>
+</div>
+
+<!-- Disabled -->
+<div class="input-field">
+	<label class="input-label" for="input-disabled">Disabled</label>
+	<input class="input" id="input-disabled" type="text" placeholder="Disabled input" disabled />
+</div>
+
+<!-- Readonly -->
+<div class="input-field">
+	<label class="input-label" for="input-readonly">Readonly</label>
+	<input class="input" id="input-readonly" type="text" value="Readonly value" readonly />
+</div>
+
+<!-- Small -->
+<div class="input-field">
+	<label class="input-label" for="input-small">Small</label>
+	<input class="input" id="input-small" type="text" placeholder="Small input" data-size="sm" />
+</div>
+
+<!-- Medium -->
+<div class="input-field">
+	<label class="input-label" for="input-medium">Medium</label>
+	<input class="input" id="input-medium" type="text" placeholder="Medium input" data-size="md" />
+</div>
+
+<!-- Large -->
+<div class="input-field">
+	<label class="input-label" for="input-large">Large</label>
+	<input class="input" id="input-large" type="text" placeholder="Large input" data-size="lg" />
+</div>
+
+{# Input Group #}
+<div class="input-field">
+	<label class="input-label" for="input-search">Search</label>
+
+	<div class="input-group" data-side="left">
+		<span class="input-addon" data-side="left">
+			<svg aria-hidden="true" viewBox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-search"></use>
+			</svg>
+		</span>
+
+		<input class="input" id="input-search" type="text" placeholder="Search products..." />
+	</div>
+</div>

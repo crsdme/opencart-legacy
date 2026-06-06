@@ -1,61 +1,149 @@
-<div id="toast" class="toast hidden" data-align="right-top" data-type="success">
-	<div class="toast-content">
-		<svg class="toast-icon" viewbox="0 0 24 24" aria-hidden="true">
-			<use id="toast-icon" href="#icon-check"></use>
-		</svg>
-		<div class="toast-message"></div>
-		<button class="toast-close" onclick="closeToast()">×</button>
+<template id="toast-template">
+	<div class="toast" data-type="default">
+		<div class="toast-content">
+			<div class="toast-text">
+				<div class="toast-title"></div>
+				<div class="toast-description"></div>
+			</div>
+
+			<button class="toast-action button-secondary" data-size="small" type="button"></button>
+
+			<button class="toast-close button-ghost" data-type="icon" data-size="small" type="button" aria-label="Close toast">
+				<svg aria-hidden="true" viewBox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-close"></use>
+				</svg>
+			</button>
+		</div>
 	</div>
-</div>
+</template>
 
-<button class="button-primary" onclick="sendToast({ message: 'Success!', type: 'success', align: 'right-top', timeout: 2500 })">Right Top Toast</button>
-<button class="button-primary" onclick="sendToast({ message: 'Success!', type: 'success', align: 'right-bottom', timeout: 2500 })">Right Bottom Toast</button>
+<div class="toast-viewport" data-toast-viewport="right-top"></div>
+<div class="toast-viewport" data-toast-viewport="right-bottom"></div>
 
-<button class="button-destructive" onclick="sendToast({ message: 'Error!', type: 'error', align: 'right-top', timeout: 2500 })">Right Top Error Toast</button>
-<button class="button-destructive" onclick="sendToast({ message: 'Error!', type: 'error', align: 'right-bottom', timeout: 2500 })">
-	Right Bottom Error Toast
+<button
+	class="button-primary"
+	type="button"
+	onclick="sendToast({
+		title: 'Event has been created',
+		description: 'Sunday, December 03, 2023 at 9:00 AM',
+		actionText: 'Undo',
+		align: 'right-top'
+	})"
+>
+	Show Toast
+</button>
+
+<button
+	class="button-secondary"
+	type="button"
+	onclick="sendToast({
+		title: 'Product added to cart',
+		description: 'The cart has been updated',
+		actionText: 'View',
+		align: 'right-bottom',
+		timeout: 10000
+	})"
+>
+	Cart Toast
+</button>
+
+<button
+	class="button-destructive"
+	type="button"
+	onclick="sendToast({
+		title: 'Error',
+		description: 'An error occurred while processing the request',
+		align: 'right-bottom',
+		type: 'error'
+	})"
+>
+	Error Toast
 </button>
 
 <script>
-	function sendToast({ message = 'Success!', type = 'success', align = 'right-top', timeout = 2500 }) {
-		const toast = document.getElementById('toast');
-		const icon = document.getElementById('toast-icon');
-		const msg = toast.querySelector('.toast-message');
+	function createToastViewport(align) {
+		let viewport = document.querySelector(`[data-toast-viewport="${align}"]`);
 
-		const icons = {
-			success: '#icon-check',
-			error: '#icon-x',
-			warning: '#icon-alert-triangle',
-		};
+		if (!viewport) {
+			viewport = document.createElement('div');
+			viewport.className = 'toast-viewport';
+			viewport.setAttribute('data-toast-viewport', align);
+			document.body.appendChild(viewport);
+		}
 
-		toast.setAttribute('data-type', type);
-		toast.setAttribute('data-align', align);
-		msg.textContent = message;
-		icon.setAttribute('href', icons[type] || icons.success);
-
-		toast.classList.remove('hidden', 'animate-out');
-		toast.classList.add('show', 'animate-in');
-
-		clearTimeout(toast._timeout);
-		toast._timeout = setTimeout(() => {
-			toast.classList.remove('animate-in');
-			toast.classList.add('animate-out');
-
-			setTimeout(() => {
-				toast.classList.remove('show');
-				toast.classList.add('hidden');
-			}, 200);
-		}, timeout);
+		return viewport;
 	}
 
-	function closeToast() {
-		const toast = document.getElementById('toast');
-		toast.classList.remove('animate-in');
-		toast.classList.add('animate-out');
+	function closeToast(toast) {
+		toast.classList.remove('show');
+		toast.classList.add('hide');
 
-		setTimeout(() => {
-			toast.classList.remove('show');
-			toast.classList.add('hidden');
-		}, 200);
+		setTimeout(function () {
+			toast.remove();
+		}, 220);
+	}
+
+	function sendToast({ title = '', description = '', actionText = '', onAction = null, type = 'default', align = 'right-top', timeout = 3500 }) {
+		const template = document.getElementById('toast-template');
+		const viewport = createToastViewport(align);
+
+		if (!template || !viewport) return;
+
+		const toast = template.content.firstElementChild.cloneNode(true);
+		const titleElement = toast.querySelector('.toast-title');
+		const descriptionElement = toast.querySelector('.toast-description');
+		const actionButton = toast.querySelector('.toast-action');
+		const closeButton = toast.querySelector('.toast-close');
+
+		toast.setAttribute('data-type', type);
+
+		titleElement.textContent = title;
+		descriptionElement.textContent = description;
+
+		if (!description) {
+			descriptionElement.remove();
+		}
+
+		if (actionText) {
+			actionButton.textContent = actionText;
+
+			actionButton.addEventListener('click', function () {
+				if (typeof onAction === 'function') {
+					onAction();
+				}
+
+				closeToast(toast);
+			});
+		} else {
+			actionButton.remove();
+		}
+
+		closeButton.addEventListener('click', function () {
+			closeToast(toast);
+		});
+
+		viewport.appendChild(toast);
+
+		requestAnimationFrame(function () {
+			toast.classList.add('show');
+		});
+
+		if (timeout) {
+			toast._timeout = setTimeout(function () {
+				closeToast(toast);
+			}, timeout);
+		}
+
+		toast.addEventListener('mouseenter', function () {
+			clearTimeout(toast._timeout);
+		});
+
+		toast.addEventListener('mouseleave', function () {
+			if (timeout) {
+				toast._timeout = setTimeout(function () {
+					closeToast(toast);
+				}, 1200);
+			}
+		});
 	}
 </script>

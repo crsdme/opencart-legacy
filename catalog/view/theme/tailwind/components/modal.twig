@@ -1,8 +1,8 @@
-<div class="modal hidden">
+<div class="modal" data-modal>
 	<div class="modal-content">
 		<div class="modal-header">
 			<h2 class="modal-title">Modal</h2>
-			<button class="button-secondary icon" onclick="closeModal()">
+			<button class="button-ghost" type="button" data-type="icon" data-modal-close>
 				<svg aria-hidden="true" viewbox="0 0 24 24">
 					<use href="/assets/icons/sprite.svg#icon-close"></use>
 				</svg>
@@ -18,20 +18,44 @@
 		</div>
 	</div>
 </div>
-<div class="modal-overlay hidden" onclick="closeModal()"></div>
+<div class="modal-overlay" data-modal-overlay></div>
 
-<div class="button-primary" onclick="openModal( )">
+<div class="button-primary" type="button" data-modal-open="[data-modal]">
 	Open Modal
 </div>
 
 <script>
-	function openModal() {
-		$('.modal').removeClass('hidden');
-		$('.modal-overlay').removeClass('hidden');
+	let activeModal = null;
+
+	function openModal(selector) {
+		activeModal = $(selector);
+
+		activeModal.addClass('open');
+		$('[data-modal-overlay]').addClass('open');
+		$('#viewport').addClass('disable-scroll');
 	}
 
 	function closeModal() {
-		$('.modal').addClass('hidden');
-		$('.modal-overlay').addClass('hidden');
+		if (!activeModal) return;
+
+		activeModal.removeClass('open');
+		$('[data-modal-overlay]').removeClass('open');
+		$('#viewport').removeClass('disable-scroll');
+
+		activeModal = null;
 	}
+
+	$(document).on('click', '[data-modal-open]', function () {
+		openModal($(this).data('modal-open'));
+	});
+
+	$(document).on('click', '[data-modal-close], [data-modal-overlay]', function () {
+		closeModal();
+	});
+
+	$(document).on('keydown', function (e) {
+		if (e.key === 'Escape') {
+			closeModal();
+		}
+	});
 </script>

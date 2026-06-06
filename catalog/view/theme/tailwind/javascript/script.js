@@ -1,18 +1,6 @@
-// Language
-
-$('#form-language .dropdown-item').on('click', function (e) {
-	e.preventDefault();
-
-	$('#form-language input[name="code"]').val($(this).attr('name'));
-
-	$('#form-language').submit();
-});
-
-// Language
-
 // Theme
 
-const icon = $('#theme-icon');
+const icon = $('[data-theme-icon]');
 
 function toggleTheme() {
 	const isDark = $('html').toggleClass('dark').hasClass('dark');
@@ -28,43 +16,98 @@ function isTouchDevice() {
 	return window.matchMedia('(hover: none), (pointer: coarse)').matches;
 }
 
-$(document).on('click', '#dropdown-button', function (e) {
-	const $dropdown = $(this).closest('.dropdown');
-	const $menu = $dropdown.find('.dropdown-menu');
+let dropdownCloseTimer = null;
+
+function getDropdownMenu($dropdown) {
+	return $dropdown.find('[data-dropdown-menu]').first();
+}
+
+function isDropdownOpen($menu) {
+	return $menu.attr('data-state') === 'open';
+}
+
+function openDropdown($dropdown) {
+	const $menu = getDropdownMenu($dropdown);
+
+	if (!$menu.length) return;
+
+	clearTimeout(dropdownCloseTimer);
+
+	$('[data-dropdown-menu]').not($menu).removeAttr('data-state');
+	$menu.attr('data-state', 'open');
+}
+
+function closeDropdown($dropdown) {
+	const $menu = getDropdownMenu($dropdown);
+
+	if (!$menu.length) return;
+
+	dropdownCloseTimer = setTimeout(function () {
+		$menu.removeAttr('data-state');
+	}, 150);
+}
+
+function closeAllDropdowns() {
+	$('[data-dropdown-menu]').removeAttr('data-state');
+}
+
+function toggleDropdown($dropdown) {
+	const $menu = getDropdownMenu($dropdown);
+
+	if (!$menu.length) return;
+
+	$('[data-dropdown-menu]').not($menu).removeAttr('data-state');
+
+	if (isDropdownOpen($menu)) {
+		$menu.removeAttr('data-state');
+	} else {
+		$menu.attr('data-state', 'open');
+	}
+}
+
+$(document).on('click', '[data-dropdown-button]', function (e) {
+	const $dropdown = $(this).closest('[data-dropdown]');
 	const type = $dropdown.data('type');
 
-	// Если это hover dropdown на desktop — клик не нужен
+	if (!$dropdown.length) return;
+
 	if (type === 'hover' && !isTouchDevice()) {
 		return;
 	}
 
 	e.stopPropagation();
 
-	$('.dropdown-menu').not($menu).removeClass('show');
-	$menu.toggleClass('show');
+	toggleDropdown($dropdown);
 });
 
-$(document).on('mouseenter', '.dropdown[data-type="hover"]', function () {
+$(document).on('mouseenter', '[data-dropdown][data-type="hover"]', function () {
 	if (isTouchDevice()) return;
 
-	const $menu = $(this).find('.dropdown-menu');
-
-	$('.dropdown-menu').not($menu).removeClass('show');
-	$menu.addClass('show');
+	openDropdown($(this));
 });
 
-$(document).on('mouseleave', '.dropdown[data-type="hover"]', function () {
+$(document).on('mouseleave', '[data-dropdown][data-type="hover"]', function () {
 	if (isTouchDevice()) return;
 
-	$(this).find('.dropdown-menu').removeClass('show');
+	closeDropdown($(this));
+});
+
+$(document).on('mouseenter', '[data-dropdown-menu]', function () {
+	clearTimeout(dropdownCloseTimer);
 });
 
 $(document).on('click', function () {
-	$('.dropdown-menu').removeClass('show');
+	closeAllDropdowns();
 });
 
-$(document).on('click', '.dropdown-menu', function (e) {
+$(document).on('click', '[data-dropdown-menu]', function (e) {
 	e.stopPropagation();
+});
+
+$(document).on('keydown', function (e) {
+	if (e.key === 'Escape') {
+		closeAllDropdowns();
+	}
 });
 
 // Dropdown
@@ -85,192 +128,217 @@ function debounce(func, wait) {
 
 // Cart
 
-const cartButton = $('#cart-button');
-const cartBadge = $('#cart-badge');
-const cartModal = $('#cart-modal');
-const cartProducts = $('#cart-modal-products');
-const cartTotals = $('#cart-modal-totals');
-const cartOverlay = $('#cart-overlay');
-let cartToastTimeout = null;
+let cartRequest = null;
 
-function openCart() {
-	cartModal.removeClass('hidden');
-	cartOverlay.removeClass('hidden');
-	$('body').addClass('disable-scroll');
+function renderCartSkeleton() {
+	$('#cart-modal-products').html(`
+		<div class="space-y-2">
+			<div class="skeleton h-25 w-full rounded-md"></div>
+			<div class="skeleton h-25 w-full rounded-md"></div>
+			<div class="skeleton h-25 w-full rounded-md"></div>
+			<div class="skeleton h-25 w-full rounded-md"></div>
+		</div>
+	`);
 
-	$.ajax({
+	$('#cart-modal-totals').html(`
+		<div class="space-y-2">
+			<div class="skeleton h-25 w-full rounded-md"></div>
+		</div>
+	`);
+}
+
+function getHtmlPart(html, selector) {
+	const response = $('<div>').append($.parseHTML(html, document, true));
+	const element = response.find(selector);
+
+	return element.length ? element.first().html() : '';
+}
+
+function updateCartModal(html) {
+	const productsHtml = getHtmlPart(html, '#cart-modal-products');
+	const totalsHtml = getHtmlPart(html, '#cart-modal-totals');
+
+	if (productsHtml) {
+		$('#cart-modal-products').html(productsHtml);
+	}
+
+	if (totalsHtml) {
+		$('#cart-modal-totals').html(totalsHtml);
+	}
+}
+
+function loadCartModal() {
+	if (cartRequest) {
+		cartRequest.abort();
+	}
+
+	cartRequest = $.ajax({
 		url: 'index.php?route=common/cart/info',
+		type: 'get',
+		dataType: 'html',
 		cache: false,
-		beforeSend: function () {
-			cartProducts.html(`
-          <div class="space-y-2">
-              <div class="skeleton h-25 w-full rounded-md"></div>
-              <div class="skeleton h-25 w-full rounded-md"></div>
-              <div class="skeleton h-25 w-full rounded-md"></div>
-              <div class="skeleton h-25 w-full rounded-md"></div>
-          </div>
-        `);
-			cartTotals.html(`
-            <div class="space-y-2">
-                <div class="skeleton h-25 w-full rounded-md"></div>
-            </div>
-        `);
-		},
+		beforeSend: renderCartSkeleton,
 		success: function (html) {
-			const response = $(html);
-			cartTotals.html(response.filter('#cart-modal-totals').html());
-			cartProducts.html(response.filter('#cart-modal-products').html());
+			updateCartModal(html);
+		},
+		error: function (xhr, status) {
+			if (status === 'abort') return;
+
+			$('#cart-modal-products').html('<p>Не удалось загрузить корзину</p>');
+			$('#cart-modal-totals').empty();
+		},
+		complete: function () {
+			cartRequest = null;
 		},
 	});
 }
 
-function closeCart() {
-	cartModal.addClass('hidden');
-	cartOverlay.addClass('hidden');
-	$('body').removeClass('disable-scroll');
-}
+$(document).on('modal:open', '#cart-modal', function () {
+	loadCartModal();
+});
 
-function addToCart(product_id, quantity = 1, button) {
+function addToCart(product_id, quantity = 1, button = null) {
 	$.ajax({
 		url: 'index.php?route=common/cart/add',
 		type: 'post',
-		data: 'product_id=' + product_id + '&quantity=' + quantity,
+		data: {
+			product_id: product_id,
+			quantity: quantity,
+		},
 		dataType: 'json',
 		cache: false,
-		beforeSend: function () {
-			// button.setAttribute('disabled', true);
-		},
 		success: function (json) {
-			cartBadge.text(json['total']);
-			// button.innerHTML = button.getAttribute('data-added-text');
-
 			if (json['error']) {
-				button.setAttribute('disabled', false);
+				if (button) {
+					button.removeAttribute('disabled');
+				}
+
 				return;
 			}
 
-			// $('#cart-toast').html(json['totalPrice']);
-			// $('#cart-toast').addClass('show');
+			sendToast({
+				title: 'Product added to cart',
+				description: 'The cart has been updated',
+				align: 'right-bottom',
+				timeout: 4000,
+			});
 
-			// if (cartToastTimeout) clearTimeout(cartToastTimeout);
-			// cartToastTimeout = setTimeout(function () {
-			//     $('#cart-toast').removeClass('show');
-			//     cartToastTimeout = null;
-			// }, 2500);
-			// sendToast({ message: json['success'], type: 'success', align: 'right-bottom', timeout: 4000 });
+			$('#cart-badge').text(json['total']);
 		},
 	});
 }
 
 function removeCartProduct(productKey) {
 	$.ajax({
-		url: `index.php?route=common/cart/remove`,
+		url: 'index.php?route=common/cart/remove',
 		type: 'post',
-		data: `key=${productKey}`,
-		cache: false,
-		beforeSend: function () {
-			cartProducts.html(`
-            <div class="space-y-2">
-                <div class="skeleton h-25 w-full rounded-md"></div>
-                <div class="skeleton h-25 w-full rounded-md"></div>
-                <div class="skeleton h-25 w-full rounded-md"></div>
-                <div class="skeleton h-25 w-full rounded-md"></div>
-            </div>
-          `);
-			cartTotals.html(`
-              <div class="space-y-2">
-                  <div class="skeleton h-25 w-full rounded-md"></div>
-              </div>
-          `);
+		data: {
+			key: productKey,
 		},
+		dataType: 'json',
+		cache: false,
+		beforeSend: renderCartSkeleton,
 		success: function (json) {
-			const response = $(json['html']);
-			cartBadge.text(json['total']);
-			cartTotals.html(response.filter('#cart-modal-totals').html());
-			cartProducts.html(response.filter('#cart-modal-products').html());
+			$('#cart-badge').text(json['total']);
+
+			if (json['html']) {
+				updateCartModal(json['html']);
+			}
+		},
+		error: function () {
+			$('#cart-modal-products').html('<p>Не удалось обновить корзину</p>');
+			$('#cart-modal-totals').empty();
 		},
 	});
 }
-
-function addCartProduct(target) {
-	$.ajax({
-		url: `index.php?route=common/cart&add=${target}&quantity=1`,
-		type: 'get',
-		dataType: 'html',
-		cache: false,
-		beforeSend: function () {
-			$('#cart-products').html(`
-      <div class="space-y-2">
-        <div class="skeleton h-25 w-full rounded-md"></div>
-        <div class="skeleton h-25 w-full rounded-md"></div>
-        <div class="skeleton h-25 w-full rounded-md"></div>
-        <div class="skeleton h-25 w-full rounded-md"></div>
-      </div>
-    `);
-		},
-		success: function (data) {
-			data = `<div>${data}</div>`;
-			$('#cart-products').children().remove();
-			$('#cart-products').append($(data).find('#cart-products').html());
-			$('#cart-total').html($(data).find('#cart-total').children());
-		},
-	});
-}
-
-function updateCartProduct(target) {
-	const product_id = $(target).parent().children('input[name=product_id]').val();
-	const quantity = $(target).parent().children('input[name=quantity]').val();
-
-	if (isNaN(quantity)) {
-		$(target).parent().children('input[name=quantity]').val(1);
-		return;
-	}
-
-	$.ajax({
-		url: `index.php?route=common/cart&update=${product_id}&quantity=${quantity}`,
-		type: 'get',
-		dataType: 'html',
-		cache: false,
-		beforeSend: function () {
-			$('#cart-products').html(`
-                <div class="space-y-2">
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                    <div class="skeleton h-25 w-full rounded-md"></div>
-                </div>
-            `);
-		},
-		success: function (data) {
-			data = `<div>${data}</div>`;
-			$('#cart-products').children().remove();
-			$('#cart-products').append($(data).find('#cart-products').html());
-			$('#cart-total').html($(data).find('#cart-total').children());
-		},
-	});
-}
-
-const addCartProductDebounced = debounce(addCartProduct, 500);
-
-const updateCartProductDebounced = debounce(updateCartProduct, 500);
 
 // Cart
 
-// Menu
+// Sheet
 
-function openMenu() {
-	$('#menu-sheet').toggleClass('open');
-	$('#sheet-overlay').toggleClass('hidden');
-	$('body').toggleClass('disable-scroll');
+let activeSheet = null;
+
+function openSheet(name) {
+	activeSheet = $(`[data-sheet="${name}"]`);
+
+	if (!activeSheet.length) return;
+
+	activeSheet.addClass('open');
+	$('[data-sheet-overlay]').addClass('open');
+	$('#viewport').addClass('disable-scroll');
 }
 
-function closeMenu() {
-	$('#menu-sheet').toggleClass('open');
-	$('#sheet-overlay').toggleClass('hidden');
-	$('body').toggleClass('disable-scroll');
+function closeSheet() {
+	if (!activeSheet || !activeSheet.length) return;
+
+	activeSheet.removeClass('open');
+	$('[data-sheet-overlay]').removeClass('open');
+	$('#viewport').removeClass('disable-scroll');
+
+	activeSheet = null;
 }
 
-// Menu
+$(document).on('click', '[data-sheet-open]', function () {
+	openSheet($(this).data('sheet-open'));
+});
+
+$(document).on('click', '[data-sheet-close], [data-sheet-overlay]', function () {
+	closeSheet();
+});
+
+$(document).on('keydown', function (e) {
+	if (e.key === 'Escape') {
+		closeSheet();
+	}
+});
+
+// Sheet
+
+// Modal
+
+let activeModal = null;
+
+function openModal(selector) {
+	const modal = $(selector);
+
+	if (!modal.length) return;
+
+	activeModal = modal;
+
+	activeModal.addClass('open');
+	$('[data-modal-overlay]').addClass('open');
+	$('#viewport').addClass('disable-scroll');
+
+	activeModal.trigger('modal:open');
+}
+
+function closeModal() {
+	if (!activeModal || !activeModal.length) return;
+
+	activeModal.trigger('modal:close');
+
+	activeModal.removeClass('open');
+	$('[data-modal-overlay]').removeClass('open');
+	$('#viewport').removeClass('disable-scroll');
+
+	activeModal = null;
+}
+
+$(document).on('click', '[data-modal-open]', function () {
+	openModal($(this).attr('data-modal-open'));
+});
+
+$(document).on('click', '[data-modal-close], [data-modal-overlay]', function () {
+	closeModal();
+});
+
+$(document).on('keydown', function (e) {
+	if (e.key === 'Escape') {
+		closeModal();
+	}
+});
+
+// Modal
 
 // Search
 
@@ -406,3 +474,101 @@ $('#search-input').on('keydown', function (e) {
 })();
 
 // Live Search
+
+// Toast
+
+function createToastViewport(align) {
+	let viewport = document.querySelector(`[data-toast-viewport="${align}"]`);
+
+	if (!viewport) {
+		viewport = document.createElement('div');
+		viewport.className = 'toast-viewport';
+		viewport.setAttribute('data-toast-viewport', align);
+		document.body.appendChild(viewport);
+	}
+
+	return viewport;
+}
+
+function closeToast(toast) {
+	toast.classList.remove('show');
+	toast.classList.add('hide');
+
+	setTimeout(function () {
+		toast.remove();
+	}, 220);
+}
+
+function sendToast({
+	title = '',
+	description = '',
+	actionText = '',
+	onAction = null,
+	type = 'default',
+	align = 'right-top',
+	timeout = 3500,
+}) {
+	const template = document.getElementById('toast-template');
+	const viewport = createToastViewport(align);
+
+	if (!template || !viewport) return;
+
+	const toast = template.content.firstElementChild.cloneNode(true);
+	const titleElement = toast.querySelector('.toast-title');
+	const descriptionElement = toast.querySelector('.toast-description');
+	const actionButton = toast.querySelector('.toast-action');
+	const closeButton = toast.querySelector('.toast-close');
+
+	toast.setAttribute('data-type', type);
+
+	titleElement.textContent = title;
+	descriptionElement.textContent = description;
+
+	if (!description) {
+		descriptionElement.remove();
+	}
+
+	if (actionText) {
+		actionButton.textContent = actionText;
+
+		actionButton.addEventListener('click', function () {
+			if (typeof onAction === 'function') {
+				onAction();
+			}
+
+			closeToast(toast);
+		});
+	} else {
+		actionButton.remove();
+	}
+
+	closeButton.addEventListener('click', function () {
+		closeToast(toast);
+	});
+
+	viewport.appendChild(toast);
+
+	requestAnimationFrame(function () {
+		toast.classList.add('show');
+	});
+
+	if (timeout) {
+		toast._timeout = setTimeout(function () {
+			closeToast(toast);
+		}, timeout);
+	}
+
+	toast.addEventListener('mouseenter', function () {
+		clearTimeout(toast._timeout);
+	});
+
+	toast.addEventListener('mouseleave', function () {
+		if (timeout) {
+			toast._timeout = setTimeout(function () {
+				closeToast(toast);
+			}, 1200);
+		}
+	});
+}
+
+// Toast

@@ -1,51 +1,64 @@
 {% set config =
 	{
+		id: id | default("carousel"),
 		use_autoplay: use_autoplay | default(true),
 		use_controls: use_controls | default(true),
-		use_dots: use_dots | default(true)
+		use_dots: use_dots | default(true),
+		use_loop: use_loop | default(true),
+		use_picture: use_picture | default(false),
+		carousel_slide_class: carousel_slide_class | default("flex w-1/5 shrink-0 justify-center px-1")
 	} | merge(config | default({}))
 %}
 
-<div id="carousel" class="carousel">
+<div class="carousel" data-carousel="{{ config.id }}">
 	<div class="carousel-track">
 		{% for slide in slides %}
-			<div class="carousel-slide flex w-1/5 shrink-0 justify-center px-1">
-				<picture>
-					<source srcset="{{ slide.image_mobile }}" media="(max-width: 768px)" />
-					<source srcset="{{ slide.image_desktop }}" media="(min-width: 769px)" />
-					<img src="{{ slide.image_desktop }}" alt="{{ slide.title }}" />
-				</picture>
+			<div class="carousel-slide {{ config.carousel_slide_class }}">
+				{% if config.use_picture %}
+					<picture>
+						<source srcset="{{ slide.image_mobile }}" media="(max-width: 768px)" />
+						<source srcset="{{ slide.image }}" media="(min-width: 769px)" />
+						<img src="{{ slide.image }}" alt="{{ slide.title }}" />
+					</picture>
+				{% else %}
+					<img src="{{ slide.image }}" alt="{{ slide.title }}" />
+				{% endif %}
 			</div>
 		{% endfor %}
 	</div>
 </div>
 
-{% if config.use_controls %}
-	<div id="carousel-dots" class="carousel-dots">
+{% if config.use_dots %}
+	<div class="carousel-dots" data-carousel-dots="{{ config.id }}">
 		{% for slide in slides %}
-			<button type="button" class="carousel-dot bg-neutral-300" data-index="{{ loop.index0 }}" aria-label="Slide {{ loop.index }}"></button>
+			<button type="button" class="carousel-dot bg-neutral-300" data-carousel-dot data-index="{{ loop.index0 }}" aria-label="Slide {{ loop.index }}">
+
+			</button>
 		{% endfor %}
 	</div>
 {% endif %}
 
 {% if config.use_controls %}
 	<div class="carousel-controls mt-4 flex justify-end gap-2">
-		<button id="carousel-prev" class="button-secondary icon">
+		<button type="button" class="button-secondary icon" data-carousel-prev="{{ config.id }}">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
 			</svg>
 		</button>
-		<button id="carousel-next" class="button-secondary icon">
+
+		<button type="button" class="button-secondary icon" data-carousel-next="{{ config.id }}">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
 			</svg>
 		</button>
 	</div>
 {% endif %}
+
 <script>
 	(() => {
-		const carousel = document.getElementById('carousel');
 		const config = {{ config | json_encode | raw }};
+
+		const carousel = document.querySelector(`[data-carousel="${config.id}"]`);
 
 		if (!carousel) return;
 
@@ -53,29 +66,46 @@
 
 		{% if config.use_autoplay %}
 			const Autoplay = window.EmblaCarouselAutoplay?.default || window.EmblaCarouselAutoplay;
-			plugins.push(Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true }));
+
+			if (Autoplay) {
+				plugins.push(
+					Autoplay({
+						delay: 3000,
+						stopOnInteraction: false,
+						stopOnMouseEnter: true,
+					}),
+				);
+			}
 		{% endif %}
 
-		const embla = EmblaCarousel(carousel, { loop: true }, plugins);
+		const embla = EmblaCarousel(carousel, { loop: config.use_loop }, plugins);
 
 		{% if config.use_controls %}
-			document.getElementById('carousel-prev')?.addEventListener('click', () => embla.scrollPrev());
-			document.getElementById('carousel-next')?.addEventListener('click', () => embla.scrollNext());
+			const prevButton = document.querySelector(`[data-carousel-prev="${config.id}"]`);
+			const nextButton = document.querySelector(`[data-carousel-next="${config.id}"]`);
+
+			prevButton?.addEventListener('click', () => embla.scrollPrev());
+			nextButton?.addEventListener('click', () => embla.scrollNext());
 		{% endif %}
 
 		{% if config.use_dots %}
-			const dots = document.getElementById('carousel-dots').querySelectorAll('.carousel-dot');
+			const dotsWrapper = document.querySelector(`[data-carousel-dots="${config.id}"]`);
+			const dots = dotsWrapper ? dotsWrapper.querySelectorAll('[data-carousel-dot]') : [];
+
 			const syncDots = () => {
-				const i = embla.selectedScrollSnap();
-				dots.forEach((dot, idx) => {
-					dot.classList.toggle('bg-neutral-800', idx === i);
-					dot.classList.toggle('bg-neutral-300', idx !== i);
+				const selectedIndex = embla.selectedScrollSnap();
+
+				dots.forEach((dot, index) => {
+					dot.classList.toggle('bg-neutral-800', index === selectedIndex);
+					dot.classList.toggle('bg-neutral-300', index !== selectedIndex);
 				});
 			};
+
 			embla.on('select', syncDots);
 			syncDots();
-			dots.forEach((dot, idx) => {
-				dot.addEventListener('click', () => embla.scrollTo(idx));
+
+			dots.forEach((dot, index) => {
+				dot.addEventListener('click', () => embla.scrollTo(index));
 			});
 		{% endif %}
 	})();

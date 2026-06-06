@@ -1,54 +1,94 @@
-<div class="dropdown" data-align="center" data-type="hover">
-	<button id="dropdown-button" class="button-primary" type="button">
+<div class="dropdown" data-dropdown data-align="center" data-type="hover">
+	<button class="button-secondary" type="button" data-dropdown-button>
 		<span>Dropdown Center Hover</span>
-		<svg aria-hidden="true" viewbox="0 0 24 24">
+		<svg aria-hidden="true" viewBox="0 0 24 24">
 			<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
 		</svg>
 	</button>
-	<div id="dropdown-menu" class="dropdown-menu">
+
+	<div class="dropdown-menu" data-dropdown-menu>
 		<a href="#" class="dropdown-item">Item 1</a>
 		<a href="#" class="dropdown-item">Item 2</a>
 		<a href="#" class="dropdown-item">Item 3</a>
 	</div>
 </div>
 
-<div class="dropdown" data-align="center" data-type="click">
-	<button id="dropdown-button" class="button-primary" type="button">
+<div class="dropdown" data-dropdown data-align="right" data-type="click">
+	<button class="button-secondary" type="button" data-dropdown-button>
 		<span>Dropdown Center Click</span>
-		<svg aria-hidden="true" viewbox="0 0 24 24">
+		<svg aria-hidden="true" viewBox="0 0 24 24">
 			<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
 		</svg>
 	</button>
-	<div id="dropdown-menu" class="dropdown-menu">
+
+	<div class="dropdown-menu" data-dropdown-menu>
 		<a href="#" class="dropdown-item">Item 1</a>
 		<a href="#" class="dropdown-item">Item 2</a>
 		<a href="#" class="dropdown-item">Item 3</a>
 	</div>
 </div>
 
-<div class="dropdown" data-align="right" data-type="click">
-	<button id="dropdown-button" class="button-primary" type="button">
-		<svg aria-hidden="true" viewbox="0 0 24 24">
-			<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
-		</svg>
-	</button>
-	<div id="dropdown-menu" class="dropdown-menu">
-		<a href="#" class="dropdown-item">Item 1</a>
-		<a href="#" class="dropdown-item">Item 2</a>
-		<a href="#" class="dropdown-item">Item 3</a>
-	</div>
-</div>
-
-{# prettier-ignore-start #}
 <script>
+	// Dropdown
+
 	function isTouchDevice() {
 		return window.matchMedia('(hover: none), (pointer: coarse)').matches;
 	}
 
-	$(document).on('click', '#dropdown-button', function (e) {
-		const $dropdown = $(this).closest('.dropdown');
-		const $menu = $dropdown.find('.dropdown-menu');
+	let dropdownCloseTimer = null;
+
+	function getDropdownMenu($dropdown) {
+		return $dropdown.find('[data-dropdown-menu]').first();
+	}
+
+	function isDropdownOpen($menu) {
+		return $menu.attr('data-state') === 'open';
+	}
+
+	function openDropdown($dropdown) {
+		const $menu = getDropdownMenu($dropdown);
+
+		if (!$menu.length) return;
+
+		clearTimeout(dropdownCloseTimer);
+
+		$('[data-dropdown-menu]').not($menu).removeAttr('data-state');
+		$menu.attr('data-state', 'open');
+	}
+
+	function closeDropdown($dropdown) {
+		const $menu = getDropdownMenu($dropdown);
+
+		if (!$menu.length) return;
+
+		dropdownCloseTimer = setTimeout(function () {
+			$menu.removeAttr('data-state');
+		}, 150);
+	}
+
+	function closeAllDropdowns() {
+		$('[data-dropdown-menu]').removeAttr('data-state');
+	}
+
+	function toggleDropdown($dropdown) {
+		const $menu = getDropdownMenu($dropdown);
+
+		if (!$menu.length) return;
+
+		$('[data-dropdown-menu]').not($menu).removeAttr('data-state');
+
+		if (isDropdownOpen($menu)) {
+			$menu.removeAttr('data-state');
+		} else {
+			$menu.attr('data-state', 'open');
+		}
+	}
+
+	$(document).on('click', '[data-dropdown-button]', function (e) {
+		const $dropdown = $(this).closest('[data-dropdown]');
 		const type = $dropdown.data('type');
+
+		if (!$dropdown.length) return;
 
 		if (type === 'hover' && !isTouchDevice()) {
 			return;
@@ -56,31 +96,38 @@
 
 		e.stopPropagation();
 
-		$('.dropdown-menu').not($menu).removeClass('show');
-		$menu.toggleClass('show');
+		toggleDropdown($dropdown);
 	});
 
-	$(document).on('mouseenter', '.dropdown[data-type="hover"]', function () {
+	$(document).on('mouseenter', '[data-dropdown][data-type="hover"]', function () {
 		if (isTouchDevice()) return;
 
-		const $menu = $(this).find('.dropdown-menu');
-
-		$('.dropdown-menu').not($menu).removeClass('show');
-		$menu.addClass('show');
+		openDropdown($(this));
 	});
 
-	$(document).on('mouseleave', '.dropdown[data-type="hover"]', function () {
+	$(document).on('mouseleave', '[data-dropdown][data-type="hover"]', function () {
 		if (isTouchDevice()) return;
 
-		$(this).find('.dropdown-menu').removeClass('show');
+		closeDropdown($(this));
+	});
+
+	$(document).on('mouseenter', '[data-dropdown-menu]', function () {
+		clearTimeout(dropdownCloseTimer);
 	});
 
 	$(document).on('click', function () {
-		$('.dropdown-menu').removeClass('show');
+		closeAllDropdowns();
 	});
 
-	$(document).on('click', '.dropdown-menu', function (e) {
+	$(document).on('click', '[data-dropdown-menu]', function (e) {
 		e.stopPropagation();
 	});
+
+	$(document).on('keydown', function (e) {
+		if (e.key === 'Escape') {
+			closeAllDropdowns();
+		}
+	});
+
+	// Dropdown
 </script>
-{# prettier-ignore-end #}

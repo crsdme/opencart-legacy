@@ -13,6 +13,12 @@ namespace Custom;
 
 class Router
 {
+  /**
+   * Пагинация категории в SEO-пути: /category/page-2/ (true) или только ?page=2 (false).
+   * Меняйте здесь; при false входящий /page-N/ всё ещё разбирается, validate() уведёт на канон с параметром.
+   */
+  public const CATEGORY_PAGINATION_SEO_PATH = true;
+
   private $config;
   private $ajax = false;
   private $request;
@@ -135,7 +141,84 @@ class Router
 
     $this->resolveFinalRoute();
 
+    if (
+      isset($this->request->get['route'])
+      && $this->request->get['route'] === 'product/category'
+      && $remainingParts !== []
+    ) {
+      if (!$this->applyCategoryPageSegments($remainingParts)) {
+        $this->request->get['route'] = 'error/not_found';
+        return [];
+      }
+    }
+
     return $remainingParts;
+  }
+
+  /**
+   * Хвост SEO-URL категории: один сегмент вида page-12 → request page (перекрывает query string).
+   */
+  private function applyCategoryPageSegments(array $segments): bool
+  {
+    if ($segments === []) {
+      return true;
+    }
+
+    if (count($segments) !== 1) {
+      return false;
+    }
+
+    $part = strtolower((string) reset($segments));
+    if (!preg_match('/^page-(\d+)$/', $part, $m)) {
+      return false;
+    }
+
+    $page = (int) $m[1];
+    if ($page < 1) {
+      return false;
+    }
+
+    $this->request->get['page'] = $page;
+
+    return true;
+  }
+
+  /**
+   * ЧПУ категории: page 2+ в путь /.../page-N; плейсхолдер {page} для шаблона пагинации; page 1 не добавляем.
+   */
+  private function appendCategoryPaginationPathSegment(string &$url, array &$data): void
+  {
+    if (!self::CATEGORY_PAGINATION_SEO_PATH) {
+      return;
+    }
+
+    if (!isset($data['page'])) {
+      return;
+    }
+
+    $raw = trim((string) $data['page']);
+    if ($raw === '') {
+      unset($data['page']);
+
+      return;
+    }
+
+    if ($raw === '{page}' || strpos($raw, '{page}') !== false) {
+      $url .= '/page-{page}';
+      unset($data['page']);
+
+      return;
+    }
+
+    $n = (int) $raw;
+    if ($n < 2) {
+      unset($data['page']);
+
+      return;
+    }
+
+    $url .= '/page-' . $n;
+    unset($data['page']);
   }
 
   private function resolveFinalRoute()
@@ -386,7 +469,11 @@ class Router
     $data = array();
     parse_str($url_info['query'], $data);
 
+    $route_before_base_rewrite = isset($data['route']) ? (string) $data['route'] : '';
+
     list($url, $data, $postfix) =  $this->baseRewrite($data, (int)$this->config->get('config_language_id'));
+
+    $rewritten_route = isset($data['route']) ? (string) $data['route'] : '';
 
     foreach ($data as $key => $value) {
       if (isset($data['route'])) {
@@ -419,6 +506,12 @@ class Router
     }
 
     unset($data['route']);
+
+    $category_seo_path = ($route_before_base_rewrite === 'product/category' || $rewritten_route === 'product/category');
+
+    if ($category_seo_path && $url !== null && $url !== '') {
+      $this->appendCategoryPaginationPathSegment($url, $data);
+    }
 
     $query = '';
 

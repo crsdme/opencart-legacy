@@ -1,11 +1,14 @@
 {% if (currencies | length) > 1 %}
-	<div class="dropdown w-full flex-1" data-align="center">
+	<div class="dropdown w-full flex-1" data-align="center" data-dropdown data-type="hover">
 		<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-currency">
-			<p id="dropdownButton" class="dropdown-button">
+			<button class="button-secondary" type="button" data-dropdown-button>
 				{{ text_currency }}
-			</p>
+				<svg aria-hidden="true" viewbox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+				</svg>
+			</button>
 
-			<div id="dropdownMenu" class="dropdown-menu">
+			<div class="dropdown-menu" data-dropdown-menu>
 				{% for currency in currencies %}
 					{% if currency.symbol_left %}
 						<button class="dropdown-item" type="button" name="{{ currency.code }}">{{ currency.symbol_left }} {{ currency.title }}</button>

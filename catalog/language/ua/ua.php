@@ -20,5 +20,9 @@ $_['button_continue'] = 'Продовжити';
 $_['button_cancel'] = 'Скасувати';
 $_['button_load_more'] = 'Завантажити більше';
 
+// Pagination
+$_['text_prev'] = 'Попередня';
+$_['text_next'] = 'Наступна';
+
 // Error
 $_['heading_title_error'] = 'Сторінка не знайдена';

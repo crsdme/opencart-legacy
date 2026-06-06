@@ -1,15 +1,18 @@
-<div class="sheet p-4" data-side="left" id="sheet-left">
+<div class="sheet p-4" data-sheet="left-sheet" data-side="left">
 	<div class="sheet-header mb-2">
 		<p>
-			{{ text_category }}
+			Left Menu
 		</p>
-		<button class="button-secondary icon" onclick="closeMenuLeft()">
-			<svg aria-hidden="true" viewbox="0 0 24 24">
+
+		<button class="button-ghost" type="button" data-type="icon" data-sheet-close>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-close"></use>
 			</svg>
 		</button>
 	</div>
+
 	<hr class="divider" />
+
 	<div class="sheet-content">
 		<nav class="mt-2 flex flex-col gap-2">
 			{% for category in categories %}
@@ -19,36 +22,24 @@
 		</nav>
 	</div>
 </div>
-<div class='sheet-overlay hidden' id="sheet-overlay-left" onclick='closeMenuLeft()'></div>
 
-<div class="button-primary" onclick="openMenuLeft()">
-	Open Left Menu
-</div>
+<button class="button-primary" type="button" data-sheet-open="left">Open Left Menu</button>
 
-<script>
-	function openMenuLeft() {
-		$('#sheet-left').addClass('open');
-		$('#sheet-overlay-left').removeClass('hidden');
-	}
-
-	function closeMenuLeft() {
-		$('#sheet-left').removeClass('open');
-		$('#sheet-overlay-left').addClass('hidden');
-	}
-</script>
-
-<div class="sheet p-4" data-side="right" id="sheet-right">
+<div class="sheet p-4" data-sheet="right-sheet" data-side="right">
 	<div class="sheet-header mb-2">
 		<p>
-			{{ text_category }}
+			Right Menu
 		</p>
-		<button class="button-secondary icon" onclick="closeMenuRight()">
-			<svg aria-hidden="true" viewbox="0 0 24 24">
+
+		<button class="button-ghost" type="button" data-type="icon" data-sheet-close>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-close"></use>
 			</svg>
 		</button>
 	</div>
+
 	<hr class="divider" />
+
 	<div class="sheet-content">
 		<nav class="mt-2 flex flex-col gap-2">
 			{% for category in categories %}
@@ -58,20 +49,45 @@
 		</nav>
 	</div>
 </div>
-<div class='sheet-overlay hidden' id="sheet-overlay-right" onclick='closeMenuRight()'></div>
 
-<div class="button-primary" onclick="openMenuRight()">
-	Open Right Menu
-</div>
+<button class="button-primary" type="button" data-sheet-open="right">Open Right Menu</button>
+
+<div class="sheet-overlay" data-sheet-overlay></div>
 
 <script>
-	function openMenuRight() {
-		$('#sheet-right').addClass('open');
-		$('#sheet-overlay-right').removeClass('hidden');
+	let activeSheet = null;
+
+	function openSheet(name) {
+		activeSheet = $(`[data-sheet="${name}"]`);
+
+		if (!activeSheet.length) return;
+
+		activeSheet.addClass('open');
+		$('[data-sheet-overlay]').addClass('open');
+		$('#viewport').addClass('disable-scroll');
 	}
 
-	function closeMenuRight() {
-		$('#sheet-right').removeClass('open');
-		$('#sheet-overlay-right').addClass('hidden');
+	function closeSheet() {
+		if (!activeSheet || !activeSheet.length) return;
+
+		activeSheet.removeClass('open');
+		$('[data-sheet-overlay]').removeClass('open');
+		$('#viewport').removeClass('disable-scroll');
+
+		activeSheet = null;
 	}
+
+	$(document).on('click', '[data-sheet-open]', function () {
+		openSheet($(this).data('sheet-open'));
+	});
+
+	$(document).on('click', '[data-sheet-close], [data-sheet-overlay]', function () {
+		closeSheet();
+	});
+
+	$(document).on('keydown', function (e) {
+		if (e.key === 'Escape') {
+			closeSheet();
+		}
+	});
 </script>
