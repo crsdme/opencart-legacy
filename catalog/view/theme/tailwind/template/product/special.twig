@@ -29,21 +29,31 @@
 
 		{% if products %}
 			<section class="mb-2 w-full" aria-label="Sort list">
-				<div class="flex flex-col items-center gap-2 lg:flex-row">
-					<div class="dropdown w-full flex-1" data-align="center">
-						<button id="dropdownButton" class="dropdown-button w-full border border-neutral-300">{{ text_sort }}</button>
+				<div class="flex flex-col items-center justify-end gap-2 lg:flex-row">
+					<div class="dropdown w-full flex-1 lg:w-auto lg:flex-none" data-dropdown data-align="center" data-type="hover">
+						<button class="button-secondary w-full" type="button" data-dropdown-button>
+							{{ text_sort }}
+							<svg aria-hidden="true" viewBox="0 0 24 24">
+								<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+							</svg>
+						</button>
 
-						<div id="dropdownMenu" class="dropdown-menu">
+						<div class="dropdown-menu" data-dropdown-menu>
 							{% for sort in sorts %}
 								<button class="dropdown-item" onclick="location = '{{ sort.href }}'">{{ sort.text }}</button>
 							{% endfor %}
 						</div>
 					</div>
 
-					<div class="dropdown w-full flex-1" data-align="center">
-						<button id="dropdownButton" class="dropdown-button w-full border border-neutral-300">{{ text_limit }}</button>
+					<div class="dropdown w-full flex-1 lg:w-auto lg:flex-none" data-dropdown data-align="center" data-type="hover">
+						<button class="button-secondary w-full" type="button" data-dropdown-button>
+							{{ text_limit }}
+							<svg aria-hidden="true" viewBox="0 0 24 24">
+								<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+							</svg>
+						</button>
 
-						<div id="dropdownMenu" class="dropdown-menu">
+						<div class="dropdown-menu" data-dropdown-menu>
 							{% for limit in limits %}
 								<button class="dropdown-item" onclick="location = '{{ limit.href }}'">{{ limit.text }}</button>
 							{% endfor %}
@@ -52,25 +62,7 @@
 				</div>
 			</section>
 
-			<section class="flex justify-end gap-2" aria-label="Layouts and Compare">
-				<a class="button-secondary icon" href="{{ compare }}">
-					<svg aria-hidden="true" viewBox="0 0 24 24">
-						<use href="/assets/icons/sprite.svg#icon-scales"></use>
-					</svg>
-				</a>
-				<button id="list-view" class="button-secondary icon" onclick="changeLayout('list')">
-					<svg aria-hidden="true" viewBox="0 0 24 24">
-						<use href="/assets/icons/sprite.svg#icon-list"></use>
-					</svg>
-				</button>
-				<button id="grid-view" class="button-secondary icon" onclick="changeLayout('grid')">
-					<svg aria-hidden="true" viewBox="0 0 24 24">
-						<use href="/assets/icons/sprite.svg#icon-grid"></use>
-					</svg>
-				</button>
-			</section>
-
-			<section class="grid grid-cols-2 gap-4 xl:grid-cols-3" aria-label="Products">
+			<section class="grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-3" aria-label="Products">
 				{% for product in products %}
 					{% include "tailwind/components/product-card.twig" with {
 						product: product

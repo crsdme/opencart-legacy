@@ -19,7 +19,9 @@ $_['column_action']      = 'Дія';
 $_['entry_name']         = 'Назва банера';
 $_['entry_title']        = 'Заголовок';
 $_['entry_link']         = 'Посилання';
-$_['entry_image']        = 'Зображення';
+$_['entry_image']          = 'Зображення';
+$_['entry_desktop_image']  = 'Зображення (десктоп)';
+$_['entry_mobile_image']   = 'Зображення (мобільне)';
 $_['entry_status']       = 'Статус';
 $_['entry_sort_order']   = 'Порядок сортування';
 

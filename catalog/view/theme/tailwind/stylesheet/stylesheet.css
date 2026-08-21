@@ -3,63 +3,65 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-	--color-primary-50: #e5efe7;
-	--color-primary-100: #ccdfcf;
-	--color-primary-200: #a5c4a8;
-	--color-primary-300: #7faa82;
-	--color-primary-400: #4f9158;
-	--color-primary-500: #046311;
-	--color-primary-600: #034f0d;
-	--color-primary-700: #023b0a;
-	--color-primary-800: #012706;
-	--color-primary-900: #011d05;
+	--color-primary: #000000;
+	--color-primary-50: #f5f5f5;
+	--color-primary-100: #e5e5e5;
+	--color-primary-200: #d4d4d4;
+	--color-primary-300: #a3a3a3;
+	--color-primary-400: #737373;
+	--color-primary-500: #000000;
+	--color-primary-600: #000000;
+	--color-primary-700: #000000;
+	--color-primary-800: #000000;
+	--color-primary-900: #000000;
+	--font-geist: 'Geist', sans-serif;
 }
 
 @font-face {
-	font-family: 'Work Sans';
+	font-family: 'Geist';
 	src:
-		url('./fonts/WorkSans-Regular.woff2') format('woff2'),
-		url('./fonts/WorkSans-Regular.woff') format('woff');
+		url('../fonts/geist/Geist-Regular.woff2') format('woff2'),
+		url('../fonts/geist/Geist-Regular.woff') format('woff');
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Work Sans';
+	font-family: 'Geist';
 	src:
-		url('./fonts/WorkSans-Medium.woff2') format('woff2'),
-		url('./fonts/WorkSans-Medium.woff') format('woff');
+		url('../fonts/geist/Geist-Medium.woff2') format('woff2'),
+		url('../fonts/geist/Geist-Medium.woff') format('woff');
 	font-weight: 500;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Work Sans';
+	font-family: 'Geist';
 	src:
-		url('./fonts/WorkSans-Semibold.woff2') format('woff2'),
-		url('./fonts/WorkSans-Semibold.woff') format('woff');
+		url('../fonts/geist/Geist-Semibold.woff2') format('woff2'),
+		url('../fonts/geist/Geist-Semibold.woff') format('woff');
 	font-weight: 600;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Work Sans';
+	font-family: 'Geist';
 	src:
-		url('./fonts/WorkSans-Bold.woff2') format('woff2'),
-		url('./fonts/WorkSans-Bold.woff') format('woff');
+		url('../fonts/geist/Geist-Bold.woff2') format('woff2'),
+		url('../fonts/geist/Geist-Bold.woff') format('woff');
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Work Sans';
+	font-family: 'Geist';
 	src:
-		url('./fonts/WorkSans-Black.woff2') format('woff2'),
-		url('./fonts/WorkSans-Black.woff') format('woff');
+		url('../fonts/geist/Geist-Black.woff2') format('woff2'),
+		url('../fonts/geist/Geist-Black.woff') format('woff');
 	font-weight: 900;
 	font-style: normal;
 	font-display: swap;
@@ -68,7 +70,7 @@
 @layer base {
 	body {
 		@apply bg-white text-neutral-900 dark:bg-neutral-900 dark:text-white;
-		font-family: 'Work Sans', sans-serif !important;
+		font-family: var(--font-geist) !important;
 	}
 
 	#viewport {
@@ -130,7 +132,7 @@
 	/* VARIANTS */
 
 	.button-primary {
-		@apply bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-white dark:text-black dark:hover:bg-neutral-200;
+		@apply bg-primary hover:bg-primary/80 text-white dark:bg-white dark:text-black dark:hover:bg-neutral-200;
 	}
 
 	.button-secondary {
@@ -148,7 +150,7 @@
 	/* ACTIVE */
 
 	.button-primary:is(.active, [active], [data-active='true']) {
-		@apply bg-neutral-700 text-white dark:bg-neutral-200 dark:text-black;
+		@apply bg-primary/70 text-white dark:bg-neutral-200 dark:text-black;
 	}
 
 	.button-secondary:is(.active, [active], [data-active='true']) {
@@ -196,7 +198,7 @@
 	}
 
 	.badge[data-variant='primary'] {
-		@apply bg-neutral-900;
+		@apply bg-primary;
 	}
 
 	.badge[data-variant='secondary'] {
@@ -220,7 +222,27 @@
 	/* HEADER */
 
 	.header {
-		@apply sticky left-0 right-0 top-0 z-40 flex flex-col flex-wrap items-center justify-between gap-10 border-b border-neutral-200 bg-white p-4 lg:flex-row dark:border-neutral-800 dark:bg-neutral-900;
+		@apply sticky left-0 right-0 top-0 z-40 flex w-full flex-col border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900;
+	}
+
+	.header-top {
+		@apply w-full bg-black text-white;
+	}
+
+	.header-top-inner {
+		@apply flex items-center justify-center px-3 py-2;
+	}
+
+	.header-top-text {
+		@apply m-0 text-center text-xs font-medium leading-snug tracking-wide text-white sm:text-sm;
+	}
+
+	.header-main {
+		@apply w-full p-4;
+	}
+
+	.header-logo {
+		@apply shrink-0 text-neutral-900 dark:text-white;
 	}
 
 	/* HEADER */
@@ -253,10 +275,27 @@
 
 	.carousel-track {
 		@apply flex;
+		gap: var(--slide-gap, 0px);
 	}
 
 	.carousel-slide {
-		@apply w-full flex-shrink-0;
+		box-sizing: border-box;
+		flex: 0 0 calc((100% - (var(--slides-desktop, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-desktop, 1));
+		width: calc((100% - (var(--slides-desktop, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-desktop, 1));
+		max-width: calc((100% - (var(--slides-desktop, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-desktop, 1));
+		min-width: 0;
+	}
+
+	.carousel.is-loop .carousel-slide:last-child {
+		margin-right: var(--slide-gap, 0px);
+	}
+
+	.carousel-slide a,
+	.carousel-slide picture,
+	.carousel-slide img {
+		display: block;
+		width: 100%;
+		height: auto;
 	}
 
 	.carousel-controls {
@@ -338,15 +377,15 @@
 	/* PRODUCT CARD */
 
 	.product-card {
-		@apply flex h-full flex-col overflow-hidden rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900;
+		@apply flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900;
 	}
 
 	.product-card-media {
-		@apply relative border-b border-neutral-100 bg-white dark:border-neutral-800 dark:bg-neutral-950;
+		@apply relative bg-white dark:bg-neutral-950;
 	}
 
 	.product-card-image {
-		@apply flex aspect-square w-full items-center justify-center overflow-hidden p-5;
+		@apply flex aspect-square w-full items-center justify-center overflow-hidden p-4;
 	}
 
 	.product-card-image img {
@@ -354,35 +393,49 @@
 	}
 
 	.product-card-badges {
-		@apply absolute left-4 top-4 z-10 flex items-center gap-1;
+		@apply absolute left-3 top-3 z-10 flex items-center gap-1;
 	}
 
-	/* .product-card-badge {
-		@apply ;
-	} */
-
 	.product-card-favorite {
-		@apply absolute right-2 top-2 z-10;
+		@apply absolute right-2 top-2 z-10 opacity-0 transition-opacity;
+	}
+
+	.product-card:hover .product-card-favorite {
+		@apply opacity-100;
+	}
+
+	@media (hover: none) {
+		.product-card-favorite {
+			@apply opacity-100;
+		}
 	}
 
 	.product-card-content {
-		@apply flex flex-1 flex-col p-3;
+		@apply flex flex-1 flex-col px-4 pb-4 pt-1;
 	}
 
 	.product-card-title {
-		@apply line-clamp-1 text-lg font-bold;
+		@apply line-clamp-1 text-base font-semibold text-neutral-900 dark:text-white;
 	}
 
 	.product-card-description {
-		@apply line-clamp-1 text-neutral-500 dark:text-neutral-400;
+		@apply mt-0.5 line-clamp-1 text-sm text-neutral-400 dark:text-neutral-500;
+	}
+
+	.product-card-footer {
+		@apply mt-auto flex items-center justify-between gap-3 pt-3;
 	}
 
 	.product-card-price {
-		@apply flex items-center gap-2 py-2 font-semibold text-neutral-900 dark:text-white;
+		@apply flex min-w-0 items-center gap-2 text-lg font-bold text-neutral-900 dark:text-white;
 	}
 
 	.product-card-special {
 		@apply text-sm font-medium text-neutral-400 line-through dark:text-neutral-500;
+	}
+
+	.product-card-buy {
+		@apply shrink-0;
 	}
 
 	.out-of-stock {
@@ -528,7 +581,7 @@
 	/* INPUTS */
 
 	.input {
-		@apply flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm transition-[color,box-shadow,border-color] duration-200 placeholder:text-neutral-400 focus-visible:border-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500/20 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:placeholder:text-neutral-500 dark:focus-visible:border-neutral-400 dark:focus-visible:ring-neutral-400/20;
+		@apply flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 transition-[color,border-color] duration-200 placeholder:text-neutral-400 focus-visible:border-neutral-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:placeholder:text-neutral-500 dark:focus-visible:border-neutral-400;
 	}
 
 	.input[data-size='sm'] {
@@ -545,7 +598,7 @@
 	}
 
 	.input[data-error='true'] {
-		@apply border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/20 dark:border-red-400 dark:focus-visible:border-red-400 dark:focus-visible:ring-red-400/20;
+		@apply border-red-500 focus-visible:border-red-500 dark:border-red-400 dark:focus-visible:border-red-400;
 	}
 
 	.input[readonly] {
@@ -639,7 +692,7 @@
 	}
 
 	.dropdown-menu {
-		@apply absolute top-full z-20 mt-2 min-w-full rounded-sm border border-neutral-200 bg-white text-neutral-900 shadow-lg dark:border-neutral-700 dark:bg-neutral-800 dark:text-white;
+		@apply absolute top-full z-20 mt-2 w-max min-w-full rounded-sm border border-neutral-200 bg-white text-neutral-900 shadow-lg dark:border-neutral-700 dark:bg-neutral-800 dark:text-white;
 
 		@apply pointer-events-none invisible translate-y-1 opacity-0;
 		@apply transition-all duration-150 ease-out;
@@ -655,7 +708,7 @@
 	}
 
 	.dropdown-item {
-		@apply block w-full cursor-pointer px-4 py-2 text-left text-sm transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700;
+		@apply block w-full cursor-pointer whitespace-nowrap px-4 py-2 text-left text-sm transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700;
 	}
 
 	.dropdown[data-align='left'] .dropdown-menu {
@@ -953,6 +1006,42 @@
 
 	.live-search-price-special {
 		@apply text-sm font-semibold text-red-600 dark:text-red-400;
+	}
+
+	.live-search-state {
+		@apply flex flex-col items-center justify-center gap-1 px-4 py-10 text-center;
+	}
+
+	.live-search-state-title {
+		@apply text-sm font-medium text-neutral-600 dark:text-neutral-300;
+	}
+
+	.live-search-state[data-type='error'] .live-search-state-title {
+		@apply text-neutral-700 dark:text-neutral-200;
+	}
+
+	.live-search-skeleton {
+		@apply flex flex-col gap-0.5;
+	}
+
+	.live-search-skeleton-item {
+		@apply flex items-center gap-3 p-2;
+	}
+
+	.live-search-skeleton-image {
+		@apply h-16 w-16 shrink-0 rounded-md;
+	}
+
+	.live-search-skeleton-info {
+		@apply flex min-w-0 flex-1 flex-col gap-2;
+	}
+
+	.live-search-skeleton-line {
+		@apply h-3 w-full max-w-[12rem] rounded-sm;
+	}
+
+	.live-search-skeleton-line.is-short {
+		@apply max-w-[5rem];
 	}
 
 	/* mobile */

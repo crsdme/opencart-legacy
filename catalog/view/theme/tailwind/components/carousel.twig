@@ -5,31 +5,79 @@
 		use_controls: use_controls | default(true),
 		use_dots: use_dots | default(true),
 		use_loop: use_loop | default(true),
+		use_autoplay_mobile: use_autoplay_mobile | default(true),
+		use_controls_mobile: use_controls_mobile | default(true),
+		use_dots_mobile: use_dots_mobile | default(true),
+		use_loop_mobile: use_loop_mobile | default(true),
 		use_picture: use_picture | default(false),
-		carousel_slide_class: carousel_slide_class | default("flex w-1/5 shrink-0 justify-center px-1")
+		slides: slides | default(1),
+		slides_mobile: slides_mobile | default(1),
+		gap: gap | default(8),
+		breakpoint: breakpoint | default(768),
+		autoplay_delay: autoplay_delay | default(3),
+		carousel_slide_class: carousel_slide_class | default("")
 	} | merge(config | default({}))
 %}
 
-<div class="carousel" data-carousel="{{ config.id }}">
+{% set show_controls = config.use_controls or config.use_controls_mobile %}
+{% set show_dots = config.use_dots or config.use_dots_mobile %}
+{% set controls_visibility = config.use_controls and config.use_controls_mobile ? '' : (config.use_controls ? 'carousel-desktop-only' : 'carousel-mobile-only') %}
+{% set dots_visibility = config.use_dots and config.use_dots_mobile ? '' : (config.use_dots ? 'carousel-desktop-only' : 'carousel-mobile-only') %}
+{% set breakpoint = config.breakpoint | default(768) %}
+{% set breakpoint_desktop = breakpoint + 1 %}
+
+<style>
+	@media (max-width: {{ breakpoint }}px) {
+		[data-carousel="{{ config.id }}"] .carousel-slide {
+			flex-basis: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+			width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+			max-width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+		}
+
+		[data-carousel-dots="{{ config.id }}"].carousel-desktop-only,
+		[data-carousel-controls="{{ config.id }}"].carousel-desktop-only {
+			display: none !important;
+		}
+	}
+
+	@media (min-width: {{ breakpoint_desktop }}px) {
+		[data-carousel-dots="{{ config.id }}"].carousel-mobile-only,
+		[data-carousel-controls="{{ config.id }}"].carousel-mobile-only {
+			display: none !important;
+		}
+	}
+</style>
+
+<div
+	class="carousel"
+	data-carousel="{{ config.id }}"
+	style="--slides-desktop: {{ config.slides }}; --slides-mobile: {{ config.slides_mobile }}; --slide-gap: {{ config.gap }}px"
+>
 	<div class="carousel-track">
 		{% for slide in slides %}
 			<div class="carousel-slide {{ config.carousel_slide_class }}">
+				{% if slide.link %}
+					<a href="{{ slide.link }}">
+				{% endif %}
 				{% if config.use_picture %}
 					<picture>
-						<source srcset="{{ slide.image_mobile }}" media="(max-width: 768px)" />
-						<source srcset="{{ slide.image }}" media="(min-width: 769px)" />
-						<img src="{{ slide.image }}" alt="{{ slide.title }}" />
+						<source srcset="{{ slide.image_mobile ?: slide.image }}" media="(max-width: {{ breakpoint }}px)" />
+						<source srcset="{{ slide.image }}" media="(min-width: {{ breakpoint_desktop }}px)" />
+						<img src="{{ slide.image }}" alt="{{ slide.title }}" class="w-full" />
 					</picture>
 				{% else %}
-					<img src="{{ slide.image }}" alt="{{ slide.title }}" />
+					<img src="{{ slide.image }}" alt="{{ slide.title }}" class="w-full" />
+				{% endif %}
+				{% if slide.link %}
+					</a>
 				{% endif %}
 			</div>
 		{% endfor %}
 	</div>
 </div>
 
-{% if config.use_dots %}
-	<div class="carousel-dots" data-carousel-dots="{{ config.id }}">
+{% if show_dots %}
+	<div class="carousel-dots {{ dots_visibility }}" data-carousel-dots="{{ config.id }}">
 		{% for slide in slides %}
 			<button type="button" class="carousel-dot bg-neutral-300" data-carousel-dot data-index="{{ loop.index0 }}" aria-label="Slide {{ loop.index }}">
 
@@ -38,8 +86,8 @@
 	</div>
 {% endif %}
 
-{% if config.use_controls %}
-	<div class="carousel-controls mt-4 flex justify-end gap-2">
+{% if show_controls %}
+	<div class="carousel-controls mt-4 flex justify-end gap-2 {{ controls_visibility }}" data-carousel-controls="{{ config.id }}">
 		<button type="button" class="button-secondary icon" data-carousel-prev="{{ config.id }}">
 			<svg aria-hidden="true" viewbox="0 0 24 24">
 				<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
@@ -60,27 +108,40 @@
 
 		const carousel = document.querySelector(`[data-carousel="${config.id}"]`);
 
-		if (!carousel) return;
+		if (!carousel || typeof EmblaCarousel === 'undefined') return;
+
+		const breakpoint = Number(config.breakpoint) || 768;
+		const mobileQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
+		const isMobile = () => mobileQuery.matches;
+		const bool = (value) => value === true || value === 1 || value === '1';
+		const option = (desktopKey, mobileKey) => (isMobile() ? bool(config[mobileKey]) : bool(config[desktopKey]));
+
+		const syncLoopClass = () => {
+			carousel.classList.toggle('is-loop', option('use_loop', 'use_loop_mobile'));
+		};
+
+		syncLoopClass();
 
 		const plugins = [];
+		let autoplay = null;
 
-		{% if config.use_autoplay %}
+		if (bool(config.use_autoplay) || bool(config.use_autoplay_mobile)) {
 			const Autoplay = window.EmblaCarouselAutoplay?.default || window.EmblaCarouselAutoplay;
 
 			if (Autoplay) {
-				plugins.push(
-					Autoplay({
-						delay: 3000,
-						stopOnInteraction: false,
-						stopOnMouseEnter: true,
-					}),
-				);
+				autoplay = Autoplay({
+					delay: Math.max(1, Number(config.autoplay_delay) || 3) * 1000,
+					playOnInit: option('use_autoplay', 'use_autoplay_mobile'),
+					stopOnInteraction: false,
+					stopOnMouseEnter: true,
+				});
+				plugins.push(autoplay);
 			}
-		{% endif %}
+		}
 
-		const embla = EmblaCarousel(carousel, { loop: config.use_loop }, plugins);
+		const embla = EmblaCarousel(carousel, { loop: option('use_loop', 'use_loop_mobile') }, plugins);
 
-		{% if config.use_controls %}
+		{% if show_controls %}
 			const prevButton = document.querySelector(`[data-carousel-prev="${config.id}"]`);
 			const nextButton = document.querySelector(`[data-carousel-next="${config.id}"]`);
 
@@ -88,7 +149,7 @@
 			nextButton?.addEventListener('click', () => embla.scrollNext());
 		{% endif %}
 
-		{% if config.use_dots %}
+		{% if show_dots %}
 			const dotsWrapper = document.querySelector(`[data-carousel-dots="${config.id}"]`);
 			const dots = dotsWrapper ? dotsWrapper.querySelectorAll('[data-carousel-dot]') : [];
 
@@ -108,5 +169,24 @@
 				dot.addEventListener('click', () => embla.scrollTo(index));
 			});
 		{% endif %}
+
+		const syncBreakpoint = () => {
+			syncLoopClass();
+			embla.reInit({ loop: option('use_loop', 'use_loop_mobile') });
+
+			if (!autoplay) return;
+
+			if (option('use_autoplay', 'use_autoplay_mobile')) {
+				autoplay.play();
+			} else {
+				autoplay.stop();
+			}
+		};
+
+		if (mobileQuery.addEventListener) {
+			mobileQuery.addEventListener('change', syncBreakpoint);
+		} else {
+			mobileQuery.addListener(syncBreakpoint);
+		}
 	})();
 </script>

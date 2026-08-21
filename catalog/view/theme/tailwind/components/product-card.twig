@@ -49,18 +49,28 @@
 			</p>
 		{% endif %}
 
-		<p class="product-card-price">
-			{{ product.price }}
-			{% if product.special %}
-				<span class="product-card-special">{{ product.special }}</span>
+		<div class="product-card-footer">
+			{% if product.price %}
+				<p class="product-card-price">
+					{% if product.special %}
+						{{ product.special }}
+						<span class="product-card-special">{{ product.price }}</span>
+					{% else %}
+						{{ product.price }}
+					{% endif %}
+				</p>
 			{% endif %}
-		</p>
 
-		<button class="button-primary mt-auto" onclick="addToCart({{ product.product_id }}, 1, this)" {{ outofstock ? "disabled" : "" }}>
-			<svg aria-hidden="true" viewBox="0 0 24 24">
-				<use href="/assets/icons/sprite.svg#icon-cart"></use>
-			</svg>
-			<span class="max-md:hidden">{{ text_add_to_cart }}</span>
-		</button>
+			<button
+				class="product-card-buy button-primary"
+				onclick="addToCart({{ product.product_id }}, 1, this)"
+				{{ outofstock ? "disabled" : "" }}
+			>
+				<svg aria-hidden="true" viewBox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-cart"></use>
+				</svg>
+				<span>{{ text_add_to_cart }}</span>
+			</button>
+		</div>
 	</div>
 </div>

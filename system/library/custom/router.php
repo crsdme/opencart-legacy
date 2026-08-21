@@ -36,7 +36,6 @@ class Router
 
   public function __construct($registry)
   {
-    $this->detectAjax();
     $this->registry = $registry;
     $this->config = $registry->get('config');
     $this->request = $registry->get('request');
@@ -46,6 +45,7 @@ class Router
     $this->db = $registry->get('db');
     $this->cache = $registry->get('cache');
 
+    $this->detectAjax();
     $this->detectPostfix();
     // $this->detectLanguage();
     $this->initHelpers();
@@ -748,6 +748,7 @@ class Router
         'extension/feed/google_base',
         'extension/feed/sitemap_pro',
         'extension/feed/sitemap',
+        'common/search/searchProducts',
       ];
 
       if (in_array($this->request->get['route'], $break_routes)) {

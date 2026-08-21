@@ -12,7 +12,14 @@ class ControllerCommonLayout extends Controller
 		$data['footer'] = $this->load->controller('common/footer', $data);
 		$data['header'] = $this->load->controller('common/header', $data);
 		$data['head'] = $this->load->controller('common/head', $data);
-		$data['microdata'] = $this->load->controller('common/microdata', $data);
+
+		$microdata = $this->load->controller('common/microdata', $data);
+		$data['microdata'] = is_array($microdata)
+			? $microdata
+			: [
+				'head' => '',
+				'body' => '',
+			];
 
 		$data['content'] = $this->load->view($data['view'], $data);
 		return $this->load->view('common/layout', $data);

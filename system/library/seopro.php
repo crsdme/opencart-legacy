@@ -28,7 +28,6 @@ class SeoPro
 
   public function __construct($registry)
   {
-    $this->detectAjax();
     $this->registry = $registry;
     $this->config = $registry->get('config');
 
@@ -42,6 +41,7 @@ class SeoPro
     $this->url = $registry->get('url');
     $this->db = $registry->get('db');
     $this->cache = $registry->get('cache');
+    $this->detectAjax();
     $this->detectPostfix();
     // $this->detectLanguage();
     $this->initHelpers();

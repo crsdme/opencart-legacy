@@ -3,6 +3,7 @@
 $_['text_catalog'] = 'Catalog';
 $_['text_contacts'] = 'Contacts';
 $_['text_cart'] = 'Cart';
+$_['text_announcement'] = 'Sale: up to −30% on selected products. Free shipping from $50.';
 
 // Menu Sheet
 $_['text_menu'] = 'Menu';

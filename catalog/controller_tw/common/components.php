@@ -198,9 +198,13 @@ class ControllerCommonComponents extends Controller
 
     foreach ($results as $result) {
       if (is_file(DIR_IMAGE . $result['image'])) {
+        $mobile_image = !empty($result['mobile_image']) && is_file(DIR_IMAGE . $result['mobile_image'])
+          ? $result['mobile_image']
+          : $result['image'];
+
         $slides[] = [
           'title' => $result['title'],
-          'image_mobile' => $this->model_tool_image->resize($result['image'], 375, 210),
+          'image_mobile' => $this->model_tool_image->resize($mobile_image, 375, 210),
           'image' => $this->model_tool_image->resize($result['image'], 1920, 1080),
           'link' => $result['link'],
         ];

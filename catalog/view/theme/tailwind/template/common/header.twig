@@ -1,49 +1,67 @@
 <header class="header">
-	<div class="flex flex-wrap items-center gap-2">
-		<button class="button-ghost" type="button" data-type="icon" data-sheet-open="left-sheet">
-			<svg aria-hidden="true" viewbox="0 0 24 24">
-				<use href="/assets/icons/sprite.svg#icon-menu"></use>
-			</svg>
-		</button>
-	</div>
-	{% if "common/home" == route %}
-		<img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" />
-	{% else %}
-		<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" /></a>
-	{% endif %}
-	<div class="flex flex-1 items-center gap-2">
-		{{ currency }}
-		{{ language }}
-		{{ search }}
-		<button class="button-secondary max-md:hidden" type="button" data-type="icon" onclick="toggleTheme()">
-			<svg aria-hidden="true" viewbox="0 0 24 24">
-				<use data-theme-icon href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
-			</svg>
-		</button>
-		<a href="{{ wishlist }}" class="button-secondary max-md:hidden" type="button" data-type="icon">
-			<svg aria-hidden="true" viewbox="0 0 24 24">
-				<use href="/assets/icons/sprite.svg#icon-heart"></use>
-			</svg>
-		</a>
-		<a href="{{ account }}" class="button-secondary max-md:hidden" type="button" data-type="icon">
-			<svg aria-hidden="true" viewbox="0 0 24 24">
-				<use href="/assets/icons/sprite.svg#icon-user"></use>
-			</svg>
-		</a>
-		<div class="dropdown max-md:hidden" data-dropdown data-align="right" data-type="hover">
-			<button class="button-secondary" type="button" data-type="icon" data-dropdown-button>
-				<svg aria-hidden="true" viewbox="0 0 24 24">
-					<use href="/assets/icons/sprite.svg#icon-phone"></use>
-				</svg>
-			</button>
-
-			<div class="dropdown-menu" data-dropdown-menu>
-				<a class="dropdown-item" href="tel:+380668875507">+38 (123) 456 7890</a>
-				<a class="dropdown-item" href="mailto:info@example.com">info@example.com</a>
-				<a class="dropdown-item" href="https://wa.me/905314918688">+90 531 491 8688</a>
+	{% if text_announcement %}
+		<div class="header-top">
+			<div class="header-top-inner container mx-auto">
+				<p class="header-top-text">{{ text_announcement }}</p>
 			</div>
 		</div>
-		{{ cart }}
+	{% endif %}
+
+	<div class="header-main">
+		<div class="header-main-inner container mx-auto flex flex-wrap items-center justify-between gap-2 px-2 lg:flex-row lg:gap-4">
+			<div class="flex flex-wrap items-center gap-2">
+				<button class="button-ghost" type="button" data-type="icon" data-sheet-open="left-sheet">
+					<svg aria-hidden="true" viewbox="0 0 24 24">
+						<use href="/assets/icons/sprite.svg#icon-menu"></use>
+					</svg>
+				</button>
+			</div>
+			{% if "common/home" == route %}
+				<svg class="header-logo" aria-hidden="true" width="100" height="31">
+					<use href="/assets/icons/sprite.svg#logo"></use>
+				</svg>
+			{% else %}
+				<a class="header-logo" href="{{ home }}">
+					<svg aria-hidden="true" width="100" height="31">
+						<use href="/assets/icons/sprite.svg#logo"></use>
+					</svg>
+				</a>
+			{% endif %}
+			<div class="flex flex-1 items-center gap-2">
+				{{ search }}
+				{{ currency }}
+				{{ language }}
+				<button class="button-secondary max-md:hidden" type="button" data-type="icon" onclick="toggleTheme()">
+					<svg aria-hidden="true" viewbox="0 0 24 24">
+						<use data-theme-icon href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
+					</svg>
+				</button>
+				<a href="{{ wishlist }}" class="button-secondary max-md:hidden" type="button" data-type="icon">
+					<svg aria-hidden="true" viewbox="0 0 24 24">
+						<use href="/assets/icons/sprite.svg#icon-heart"></use>
+					</svg>
+				</a>
+				<a href="{{ account }}" class="button-secondary max-md:hidden" type="button" data-type="icon">
+					<svg aria-hidden="true" viewbox="0 0 24 24">
+						<use href="/assets/icons/sprite.svg#icon-user"></use>
+					</svg>
+				</a>
+				<div class="dropdown max-md:hidden" data-dropdown data-align="right" data-type="hover">
+					<button class="button-secondary" type="button" data-type="icon" data-dropdown-button>
+						<svg aria-hidden="true" viewbox="0 0 24 24">
+							<use href="/assets/icons/sprite.svg#icon-phone"></use>
+						</svg>
+					</button>
+
+					<div class="dropdown-menu" data-dropdown-menu>
+						<a class="dropdown-item" href="tel:+380668875507">+38 (123) 456 7890</a>
+						<a class="dropdown-item" href="mailto:info@example.com">info@example.com</a>
+						<a class="dropdown-item" href="https://wa.me/905314918688">+90 531 491 8688</a>
+					</div>
+				</div>
+				{{ cart }}
+			</div>
+		</div>
 	</div>
 </header>
 

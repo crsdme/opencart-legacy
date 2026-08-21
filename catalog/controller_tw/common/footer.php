@@ -80,7 +80,6 @@ class ControllerCommonFooter extends Controller
 		}
 
 		$data['route'] = $this->request->get['route'] ?? 'common/home';
-		$data['microdata'] = $this->load->controller('common/microdata', $data);
 
 		return $this->load->view('common/footer', $data);
 	}

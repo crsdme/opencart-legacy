@@ -3,12 +3,59 @@ class ControllerCommonMicrodata extends Controller
 {
 	public function index($data)
 	{
-		$microdata['head'] = $this->openGraphController($data);
+		$empty = [
+			'head' => '',
+			'body' => '',
+		];
 
-		$jsonLdBlocks[] = $this->organizationController($data);
+		if (!$this->config->get('config_microdata')) {
+			return $empty;
+		}
+
+		$context = $this->getContext($data);
+		$route = $this->request->get['route'] ?? 'common/home';
+
+		$head = '';
+
+		if ($this->isEnabled('config_microdata_opengraph', true)) {
+			$head .= $this->openGraphSchema($context, $route);
+		}
+
+		if ($this->isEnabled('config_microdata_twitter', false)) {
+			$head .= $this->twitterSchema($context);
+		}
+
+		$blocks = [];
+		$blocks[] = $this->organizationSchema($context);
+		$blocks[] = $this->websiteSchema($context);
+		$blocks[] = $this->webPageSchema($context);
+		$blocks[] = $this->breadcrumbsSchema($data);
+
+		if ($route === 'common/home') {
+			$blocks[] = $this->localBusinessSchema($context);
+		}
+
+		if ($route === 'product/product') {
+			$blocks[] = $this->productSchema($data, $context);
+		}
+
+		if (
+			in_array(
+				$route,
+				['product/category', 'product/manufacturer/info', 'product/special', 'product/search'],
+				true,
+			)
+		) {
+			$blocks[] = $this->productListSchema($data);
+		}
 
 		$html = '';
-		foreach ($jsonLdBlocks as $block) {
+
+		foreach ($blocks as $block) {
+			if (empty($block['json'])) {
+				continue;
+			}
+
 			$html .= '<!-- ' . $block['comment'] . ' -->' . PHP_EOL;
 			$html .= '<script type="application/ld+json">' . PHP_EOL;
 			$html .= $block['json'] . PHP_EOL;
@@ -16,554 +63,667 @@ class ControllerCommonMicrodata extends Controller
 			$html .= '<!-- ' . $block['comment'] . ' END -->' . PHP_EOL;
 		}
 
-		$microdata['body'] = str_replace('><', '>' . PHP_EOL . '<', $html . PHP_EOL);
-
-		return $microdata;
+		return [
+			'head' => $head,
+			'body' => $html,
+		];
 	}
 
-	private function openGraphController($data)
+	private function isEnabled($key, $default = false)
 	{
-		$data['locale'] = 'ru';
-		$data['og_type'] = 'website';
-		$data['title'] = 'test';
-		$data['description'] = 'test';
-		$data['image'] = 'test';
-		$data['image_width'] = '100';
-		$data['image_height'] = '100';
-		$data['url'] = 'test';
-		$data['street_address'] = 'test';
-		$data['locality'] = 'test';
-		$data['postal_code'] = 'test';
-		$data['country_name'] = 'test';
-		$data['latitude'] = 'test';
-		$data['longitude'] = 'test';
-		$data['email'] = 'test';
-		$data['microdatapro_profile_id'] = 'test';
-
-		return $this->openGraphSchema($data);
-	}
-
-	private function openGraphSchema($data)
-	{
-		$html = '';
-
-		$html .= '<!--schema open graph start -->';
-		$html .= '<meta property="og:locale" content="' . $data['locale'] . '">';
-		$html .= '<meta property="og:type" content="' . $data['og_type'] . '">';
-		$html .= '<meta property="og:title" content="' . $data['title'] . '">';
-		$html .= '<meta property="og:description" content="' . $data['description'] . '">';
-		$html .= '<meta property="og:image" content="' . $data['image'] . '">';
-		$html .= '<meta property="og:image:width" content="' . $data['image_width'] . '">';
-		$html .= '<meta property="og:image:height" content="' . $data['image_height'] . '">';
-		$html .= '<meta property="og:url" content="' . $data['url'] . '">';
-		$html .= '<meta property="business:contact_data:street_address" content="' . $data['street_address'] . '">';
-		$html .= '<meta property="business:contact_data:locality" content="' . $data['locality'] . '">';
-		$html .= '<meta property="business:contact_data:postal_code" content="' . $data['postal_code'] . '">';
-		$html .= '<meta property="business:contact_data:country_name" content="' . $data['country_name'] . '">';
-		$html .= '<meta property="place:location:latitude" content="' . $data['latitude'] . '">';
-		$html .= '<meta property="place:location:longitude" content="' . $data['longitude'] . '">';
-		$html .= '<meta property="business:contact_data:email" content="' . $data['email'] . '">';
-		if ($data['microdatapro_profile_id']) {
-			$html .= '<meta property="fb:profile_id" content="' . $data['microdatapro_profile_id'] . '">';
-		}
-		$html .= '<!--schema open graph end -->';
-
-		return str_replace('><', '>' . PHP_EOL . '<', $html . PHP_EOL);
-	}
-
-	private function twitterController($data)
-	{
-		return $this->twitterSchema($data);
-	}
-
-	private function twitterSchema($data)
-	{
-		$html = '';
-
-		if ($data['twitter']) {
-			$html .= '<!--schema twitter cards start -->';
-			$html .= '<meta property="twitter:card" content="summary_large_image">';
-			$html .= '<meta property="twitter:creator" content="' . $data['twitter_account'] . '">';
-			$html .= '<meta property="twitter:site" content="' . $data['twitter_account'] . '">';
-			$html .= '<meta property="twitter:title" content="' . $data['title'] . '">';
-			$html .= '<meta property="twitter:description" content="' . $data['description'] . '">';
-			$html .= '<meta property="twitter:image" content="' . $data['image'] . '">';
-			$html .= '<meta property="twitter:image:alt" content="' . $data['title'] . '">';
-			$html .= '<!--schema twitter cards end -->';
+		if ($this->config->has($key)) {
+			return (bool) $this->config->get($key);
 		}
 
-		return str_replace('><', '>' . PHP_EOL . '<', $html . PHP_EOL);
+		return (bool) $default;
 	}
 
-	private function organizationController($data)
+	private function getContext($data)
 	{
-		$data['organization_url'] = 'test';
-		$data['organization_name'] = 'test';
-		$data['organization_logo'] = 'test';
-		$data['organization_email'] = 'test';
-		$data['organization_groups'] = 'test';
-		$data['organization_locations'] = [
-			[
-				'postalCode' => 'test',
-				'streetAddress' => 'test',
-				'latitude' => 'test',
-				'longitude' => 'test',
-			],
-		];
+		$store_url = $this->getStoreUrl();
+		$locale_code = $this->language->get('code');
+		$country = $this->getCountry();
+		$zone = $this->getZone();
+		$geo = $this->parseGeocode();
+		$logo = $this->getImageUrl($this->config->get('config_logo'));
+		$image = !empty($data['popup'])
+			? $data['popup']
+			: (!empty($data['thumb'])
+				? $data['thumb']
+				: $logo);
 
-		return $this->organizationSchema($data);
-	}
+		$title = $this->document->getTitle();
+		$description = $this->plainText($this->document->getDescription());
 
-	private function organizationSchema($data)
-	{
-		$organizationSchema = [
-			'@context' => 'https://schema.org',
-			'@type' => 'Organization',
-			'@id' => $data['organization_url'] . '#organization',
-			'name' => $data['organization_name'],
-			'url' => $data['organization_url'],
-			'logo' => [
-				'@type' => 'ImageObject',
-				'url' => $data['organization_logo'],
-			],
-			'email' => $data['organization_email'],
-			'sameAs' => $data['organization_groups'] ?? [],
-			'address' => [
-				'@type' => 'PostalAddress',
-				'postalCode' => $data['organization_locations'][0]['postalCode'],
-				'streetAddress' => $data['organization_locations'][0]['streetAddress'],
-				'addressLocality' => 'Київ',
-				'addressRegion' => 'Київ',
-				'addressCountry' => 'UA',
-			],
-			'contactPoint' => array_map(function ($contact) {
-				return [
-					'@type' => 'ContactPoint',
-					'telephone' => '+380930002928',
-					'contactType' => 'customer service',
-					'areaServed' => 'UA',
-					'availableLanguage' => ['uk', 'ru'],
-				];
-			}, $data['organization_phones'] ?? []),
-		];
+		if ($description === '' && !empty($data['description'])) {
+			$description = $this->plainText($data['description']);
+		}
 
 		return [
-			'comment' => 'Organization JSON-LD',
-			'json' => json_encode(
-				$organizationSchema,
-				JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT,
-			),
+			'locale' => $this->getOgLocale($locale_code),
+			'language' => $locale_code,
+			'title' => $title,
+			'description' => $description,
+			'url' => $this->getPageUrl($data),
+			'image' => $image,
+			'store_url' => $store_url,
+			'store_name' => (string) $this->config->get('config_name'),
+			'store_email' => (string) $this->config->get('config_email'),
+			'store_telephone' => (string) $this->config->get('config_telephone'),
+			'store_address' => (string) $this->config->get('config_address'),
+			'store_open' => (string) $this->config->get('config_open'),
+			'logo' => $logo,
+			'postal_code' => '',
+			'locality' => $zone['name'] ?? '',
+			'region' => $zone['name'] ?? '',
+			'country_name' => $country['name'] ?? '',
+			'country_code' => $country['iso_code_2'] ?? '',
+			'latitude' => $geo['latitude'],
+			'longitude' => $geo['longitude'],
+			'same_as' => $this->getSameAs(),
+			'facebook_id' => (string) $this->config->get('config_microdata_facebook_id'),
+			'twitter_account' => (string) $this->config->get('config_microdata_twitter_account'),
+			'currency' => $this->session->data['currency'] ?? $this->config->get('config_currency'),
 		];
 	}
 
-	private function localBusinessController($data)
+	private function openGraphSchema($context, $route)
 	{
-		return $this->localBusinessSchema($data);
+		$type = $route === 'product/product' ? 'product' : 'website';
+
+		$tags = [
+			'og:locale' => $context['locale'],
+			'og:type' => $type,
+			'og:site_name' => $context['store_name'],
+			'og:title' => $context['title'],
+			'og:description' => $context['description'],
+			'og:url' => $context['url'],
+			'og:image' => $context['image'],
+			'business:contact_data:street_address' => $context['store_address'],
+			'business:contact_data:locality' => $context['locality'],
+			'business:contact_data:country_name' => $context['country_name'],
+			'business:contact_data:email' => $context['store_email'],
+			'place:location:latitude' => $context['latitude'],
+			'place:location:longitude' => $context['longitude'],
+		];
+
+		if ($context['facebook_id']) {
+			$tags['fb:app_id'] = $context['facebook_id'];
+		}
+
+		$html = '<!-- schema open graph start -->' . PHP_EOL;
+
+		foreach ($tags as $property => $content) {
+			if ($content === '' || $content === null) {
+				continue;
+			}
+
+			$html .=
+				'<meta property="' .
+				$this->escape($property) .
+				'" content="' .
+				$this->escape($content) .
+				'">' .
+				PHP_EOL;
+		}
+
+		$html .= '<!-- schema open graph end -->' . PHP_EOL;
+
+		return $html;
 	}
 
-	private function localBusinessSchema($data)
+	private function twitterSchema($context)
 	{
-		$localBusinessSchema = [
+		if ($context['twitter_account'] === '' && $context['image'] === '') {
+			return '';
+		}
+
+		$tags = [
+			'twitter:card' => 'summary_large_image',
+			'twitter:title' => $context['title'],
+			'twitter:description' => $context['description'],
+			'twitter:image' => $context['image'],
+			'twitter:image:alt' => $context['title'],
+		];
+
+		if ($context['twitter_account']) {
+			$account = $this->normalizeTwitter($context['twitter_account']);
+			$tags['twitter:site'] = $account;
+			$tags['twitter:creator'] = $account;
+		}
+
+		$html = '<!-- schema twitter cards start -->' . PHP_EOL;
+
+		foreach ($tags as $property => $content) {
+			if ($content === '' || $content === null) {
+				continue;
+			}
+
+			$html .=
+				'<meta name="' .
+				$this->escape($property) .
+				'" content="' .
+				$this->escape($content) .
+				'">' .
+				PHP_EOL;
+		}
+
+		$html .= '<!-- schema twitter cards end -->' . PHP_EOL;
+
+		return $html;
+	}
+
+	private function organizationSchema($context)
+	{
+		$schema = [
 			'@context' => 'https://schema.org',
-			'@type' => 'LocalBusiness',
-			'@id' => $data['organization_url'] . '#store',
-			'name' => $data['organization_name'],
-			'url' => $data['organization_url'],
-			'image' => $data['organization_logo'],
-			'logo' => $data['organization_logo'],
-			'email' => $data['organization_email'],
-			'hasMap' => $data['organization_map'] ?? null,
-			'telephone' => '+380930002928',
-			'sameAs' => $data['organization_groups'] ?? [],
-			'currenciesAccepted' => 'UAH',
-			'address' => isset($data['organization_locations'][0])
-				? (object) [
-					'@type' => 'PostalAddress',
-					'postalCode' => $data['organization_locations'][0]['postalCode'],
-					'streetAddress' => $data['organization_locations'][0]['streetAddress'],
-					'addressLocality' => 'Київ',
-					'addressRegion' => 'Київ',
-					'addressCountry' => 'UA',
-				]
-				: null,
-			'geo' => isset($data['organization_locations'][0])
-				? (object) [
-					'@type' => 'GeoCoordinates',
-					'latitude' => $data['organization_locations'][0]['latitude'],
-					'longitude' => $data['organization_locations'][0]['longitude'],
-				]
-				: null,
-			'openingHoursSpecification' => array_map(
-				function ($day, $hours) {
-					return [
-						'@type' => 'OpeningHoursSpecification',
-						'dayOfWeek' => 'https://schema.org/' . $day,
-						'opens' => $hours['open'],
-						'closes' => $hours['close'],
-					];
-				},
-				array_keys($data['organization_oh'] ?? []),
-				$data['organization_oh'] ?? [],
-			),
-			'priceRange' => '₴₴',
-			'paymentAccepted' => 'Cash, Credit Card',
-			'acceptedPaymentMethod' => ['Cash', 'CreditCard'],
+			'@type' => 'Organization',
+			'@id' => $context['store_url'] . '#organization',
+			'name' => $context['store_name'],
+			'url' => $context['store_url'],
+			'email' => $context['store_email'] ?: null,
+			'telephone' => $context['store_telephone'] ?: null,
+			'sameAs' => $context['same_as'],
 		];
 
-		$jsonLdBlocks[] = [
-			'comment' => 'LocalBusiness JSON-LD',
-			'json' => json_encode(
-				$localBusinessSchema,
-				JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT,
-			),
-		];
+		if ($context['logo']) {
+			$schema['logo'] = [
+				'@type' => 'ImageObject',
+				'url' => $context['logo'],
+			];
+		}
+
+		if ($context['store_address'] || $context['country_code']) {
+			$schema['address'] = [
+				'@type' => 'PostalAddress',
+				'streetAddress' => $context['store_address'] ?: null,
+				'addressLocality' => $context['locality'] ?: null,
+				'addressRegion' => $context['region'] ?: null,
+				'addressCountry' => $context['country_code'] ?: null,
+			];
+		}
+
+		$phones = $this->splitPhones($context['store_telephone']);
+
+		if ($phones) {
+			$schema['contactPoint'] = array_map(function ($phone) use ($context) {
+				return [
+					'@type' => 'ContactPoint',
+					'telephone' => $phone,
+					'contactType' => 'customer service',
+					'areaServed' => $context['country_code'] ?: null,
+					'availableLanguage' => $context['language'],
+				];
+			}, $phones);
+		}
+
+		return $this->jsonLdBlock('Organization JSON-LD', $schema);
 	}
 
-	private function breadcrumbsController($data)
+	private function localBusinessSchema($context)
 	{
-		return $this->breadcrumbsSchema($data);
+		$schema = [
+			'@context' => 'https://schema.org',
+			'@type' => 'OnlineStore',
+			'@id' => $context['store_url'] . '#store',
+			'name' => $context['store_name'],
+			'url' => $context['store_url'],
+			'image' => $context['logo'] ?: null,
+			'logo' => $context['logo'] ?: null,
+			'email' => $context['store_email'] ?: null,
+			'telephone' => $context['store_telephone'] ?: null,
+			'sameAs' => $context['same_as'],
+			'currenciesAccepted' => $context['currency'],
+			'parentOrganization' => [
+				'@id' => $context['store_url'] . '#organization',
+			],
+		];
+
+		if ($context['store_address'] || $context['country_code']) {
+			$schema['address'] = [
+				'@type' => 'PostalAddress',
+				'streetAddress' => $context['store_address'] ?: null,
+				'addressLocality' => $context['locality'] ?: null,
+				'addressRegion' => $context['region'] ?: null,
+				'addressCountry' => $context['country_code'] ?: null,
+			];
+		}
+
+		if ($context['latitude'] !== '' && $context['longitude'] !== '') {
+			$schema['geo'] = [
+				'@type' => 'GeoCoordinates',
+				'latitude' => $context['latitude'],
+				'longitude' => $context['longitude'],
+			];
+		}
+
+		if ($context['store_open']) {
+			$schema['openingHours'] = $context['store_open'];
+		}
+
+		return $this->jsonLdBlock('LocalBusiness JSON-LD', $schema);
 	}
 
 	private function breadcrumbsSchema($data)
 	{
-		if (empty($data['breadcrumbs'])) {
-			return;
+		if (empty($data['breadcrumbs']) || !is_array($data['breadcrumbs'])) {
+			return null;
 		}
 
-		$breadcrumbsSchema = [
+		$items = [];
+		$position = 1;
+
+		foreach ($data['breadcrumbs'] as $breadcrumb) {
+			if (empty($breadcrumb['href']) || empty($breadcrumb['text'])) {
+				continue;
+			}
+
+			$items[] = [
+				'@type' => 'ListItem',
+				'position' => $position,
+				'item' => [
+					'@id' => $breadcrumb['href'],
+					'name' => html_entity_decode($breadcrumb['text'], ENT_QUOTES, 'UTF-8'),
+				],
+			];
+
+			$position++;
+		}
+
+		if (!$items) {
+			return null;
+		}
+
+		return $this->jsonLdBlock('Breadcrumbs JSON-LD', [
 			'@context' => 'https://schema.org',
 			'@type' => 'BreadcrumbList',
-			'itemListElement' => array_map(
-				function ($breadcrumb, $key) {
-					return [
-						'@type' => 'ListItem',
-						'position' => $key,
-						'item' => [
-							'@id' => $breadcrumb['href'],
-							'name' => $breadcrumb['text'],
-						],
-					];
-				},
-				$data['breadcrumbs'],
-				array_keys($data['breadcrumbs']),
-			),
-		];
-
-		$jsonLdBlocks[] = [
-			'comment' => 'Breadcrumbs JSON-LD',
-			'json' => json_encode(
-				$breadcrumbsSchema,
-				JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT,
-			),
-		];
+			'itemListElement' => $items,
+		]);
 	}
 
-	private function productController($data)
+	private function productSchema($data, $context)
 	{
-		return $this->productSchema($data);
-	}
+		$product_id = (int) ($this->request->get['product_id'] ?? 0);
 
-	private function productSchema($data)
-	{
-		// product
-		$productSchema = [
+		if (!$product_id) {
+			return null;
+		}
+
+		$this->load->model('catalog/product');
+
+		$product_info = $this->model_catalog_product->getProduct($product_id);
+
+		if (!$product_info) {
+			return null;
+		}
+
+		$name = html_entity_decode($product_info['name'], ENT_QUOTES, 'UTF-8');
+		$description = $this->plainText($product_info['meta_description'] ?: $product_info['description']);
+		$url = $this->url->link('product/product', 'product_id=' . $product_id);
+		$image = !empty($data['popup']) ? $data['popup'] : $context['image'];
+		$sku = $product_info['sku'] ?: $product_info['model'];
+
+		$schema = [
 			'@context' => 'https://schema.org',
 			'@type' => 'Product',
-			'url' => $data['url'],
-			'name' => $data['name'],
-			'description' => $data['description'],
-			'itemCondition' => 'https://schema.org/' . $data['condition'],
+			'name' => $name,
+			'url' => $url,
+			'description' => $description ?: null,
+			'sku' => $sku ?: null,
+			'mpn' => !empty($product_info['mpn']) ? $product_info['mpn'] : null,
+			'image' => $image ?: null,
+			'itemCondition' => 'https://schema.org/NewCondition',
 		];
 
-		// Дополнительные поля
-		if (!empty($data['category'])) {
-			$productSchema['category'] = $data['category'];
-		}
-		if (!empty($data['popup'])) {
-			$productSchema['image'] = $data['popup'];
-		}
-		if (!empty($data['sku'])) {
-			$productSchema['sku'] = $data['sku'];
+		if (!empty($product_info['manufacturer'])) {
+			$schema['brand'] = [
+				'@type' => 'Brand',
+				'name' => html_entity_decode($product_info['manufacturer'], ENT_QUOTES, 'UTF-8'),
+			];
 		}
 
-		// Рейтинг
-		if (!empty($data['reviews'])) {
-			$productSchema['aggregateRating'] = [
+		$review_count = (int) $product_info['reviews'];
+		$rating = (float) $product_info['rating'];
+
+		if ($this->config->get('config_review_status') && $review_count > 0 && $rating > 0) {
+			$schema['aggregateRating'] = [
 				'@type' => 'AggregateRating',
-				'ratingValue' => $data['rating'],
-				'reviewCount' => $data['reviewCount'],
-				'bestRating' => '5',
-				'worstRating' => '1',
+				'ratingValue' => $rating,
+				'reviewCount' => $review_count,
+				'bestRating' => 5,
+				'worstRating' => 1,
 			];
 		}
 
-		// Предложения
-		if (!empty($data['price'])) {
-			$productSchema['offers'] = [
+		if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+			$raw_price = !is_null($product_info['special']) && (float) $product_info['special'] >= 0
+				? (float) $product_info['special']
+				: (float) $product_info['price'];
+
+			$price = $this->tax->calculate($raw_price, $product_info['tax_class_id'], $this->config->get('config_tax'));
+			$formatted_price = $this->currency->format($price, $context['currency'], '', false);
+
+			$schema['offers'] = [
 				'@type' => 'Offer',
-				'availability' => 'https://schema.org/' . $data['stock'],
+				'url' => $url,
+				'priceCurrency' => $context['currency'],
+				'price' => $formatted_price,
+				'availability' =>
+					(int) $product_info['quantity'] > 0
+						? 'https://schema.org/InStock'
+						: 'https://schema.org/OutOfStock',
 				'itemCondition' => 'https://schema.org/NewCondition',
-				'price' => $data['price'],
-				'priceCurrency' => $data['code'],
-				'priceValidUntil' => $data['price_valid'],
-				'hasMerchantReturnPolicy' => [
-					'@type' => 'MerchantReturnPolicy',
-					'applicableCountry' => $data['shipping_country'],
-					'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
-					'merchantReturnDays' => $data['return_days'],
-					'returnMethod' => 'https://schema.org/ReturnByMail',
-					'returnFees' => 'https://schema.org/FreeReturn',
-				],
-				'shippingDetails' => [
-					[
-						'@type' => 'OfferShippingDetails',
-						'name' => $data['shipping_name'][$this->session->data['language'] . '-1'],
-						'shippingDestination' => [
-							'@type' => 'DefinedRegion',
-							'addressCountry' => 'UA',
-							'addressRegion' => 'Kyiv',
-						],
-					],
-					[
-						'@type' => 'OfferShippingDetails',
-						'name' => $data['shipping_name'][$this->session->data['language'] . '-2'],
-						'shippingDestination' => [
-							'@type' => 'DefinedRegion',
-							'addressCountry' => 'UA',
-							'addressRegion' => 'Kyiv',
-						],
-					],
-					[
-						'@type' => 'OfferShippingDetails',
-						'name' => $data['shipping_name'][$this->session->data['language'] . '-3'],
-						'shippingDestination' => [
-							'@type' => 'DefinedRegion',
-							'addressCountry' => 'UA',
-						],
-					],
+				'seller' => [
+					'@id' => $context['store_url'] . '#organization',
 				],
 			];
 		}
 
-		// Добавление схемы продукта в массив JSON-LD блоков
-		$jsonLdBlocks[] = [
-			'comment' => 'Product JSON-LD',
-			'json' => json_encode($productSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
-		];
-		// product
-	}
-
-	private function productListController($data)
-	{
-		return $this->productListSchema($data);
+		return $this->jsonLdBlock('Product JSON-LD', $schema);
 	}
 
 	private function productListSchema($data)
 	{
-		if (!empty($data['list'])) {
-			return;
+		if (empty($data['products']) || !is_array($data['products'])) {
+			return null;
 		}
 
-		$itemListSchema = [
-			'@context' => 'https://schema.org/',
+		$elements = [];
+		$position = 1;
+
+		foreach ($data['products'] as $product) {
+			if (empty($product['href']) || empty($product['name'])) {
+				continue;
+			}
+
+			$elements[] = [
+				'@type' => 'ListItem',
+				'position' => $position,
+				'url' => $product['href'],
+				'name' => html_entity_decode($product['name'], ENT_QUOTES, 'UTF-8'),
+			];
+
+			$position++;
+		}
+
+		if (!$elements) {
+			return null;
+		}
+
+		return $this->jsonLdBlock('Item List JSON-LD', [
+			'@context' => 'https://schema.org',
 			'@type' => 'ItemList',
-			'name' => $data['categoryName'],
-			'url' => $data['categoryUrl'],
-			'numberOfItems' => count($data['list']),
-			'itemListElement' => $data['itemListElement'],
-		];
-
-		$itemListSchema['itemListElement'] = array_map(
-			function ($item, $key) {
-				return [
-					'@type' => 'ListItem',
-					'position' => $key,
-					'url' => $item['url'],
-					'name' => $item['name'],
-				];
-			},
-			$data['list'],
-			array_keys($data['list']),
-		);
-
-		$jsonLdBlocks[] = [
-			'comment' => 'Item List JSON-LD',
-			'json' => json_encode($itemListSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
-		];
+			'name' => $this->document->getTitle(),
+			'url' => $this->getPageUrl($data),
+			'numberOfItems' => count($elements),
+			'itemListElement' => $elements,
+		]);
 	}
 
-	private function websiteController($data)
+	private function websiteSchema($context)
 	{
-		return $this->websiteSchema($data);
-	}
+		$search_url = $this->url->link('product/search');
+		$separator = strpos($search_url, '?') !== false ? '&' : '?';
 
-	private function websiteSchema($data)
-	{
-		$websiteSchema = [
+		return $this->jsonLdBlock('Website JSON-LD', [
 			'@context' => 'https://schema.org',
 			'@type' => 'WebSite',
-			'@id' => $data['organization_url'] . '#website',
-			'name' => $data['organization_name'],
-			'alternateName' => $data['organization_alternate_name'],
-			'url' => $data['organization_url'],
+			'@id' => $context['store_url'] . '#website',
+			'name' => $context['store_name'],
+			'url' => $context['store_url'],
 			'publisher' => [
-				'@id' => $data['organization_url'] . '#organization',
+				'@id' => $context['store_url'] . '#organization',
 			],
 			'potentialAction' => [
 				'@type' => 'SearchAction',
-				'target' => $data['organization_url'] . 'search?search={search_term_string}',
+				'target' => [
+					'@type' => 'EntryPoint',
+					'urlTemplate' => $search_url . $separator . 'search={search_term_string}',
+				],
 				'query-input' => 'required name=search_term_string',
 			],
-		];
-
-		$jsonLdBlocks[] = [
-			'comment' => 'Website JSON-LD',
-			'json' => json_encode($websiteSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
-		];
+		]);
 	}
 
-	private function webPageController($data)
+	private function webPageSchema($context)
 	{
-		return $this->webPageSchema($data);
-	}
-
-	private function webPageSchema($data)
-	{
-		$webPageSchema = [
+		return $this->jsonLdBlock('WebPage JSON-LD', [
 			'@context' => 'https://schema.org',
 			'@type' => 'WebPage',
-			'@id' => $data['url'] . '#webpage',
-			'url' => $data['url'],
-			'description' => $data['description'],
-			'name' => $data['name'],
-			'inLanguage' => $data['locale'],
+			'@id' => $context['url'] . '#webpage',
+			'url' => $context['url'],
+			'name' => $context['title'],
+			'description' => $context['description'] ?: null,
+			'inLanguage' => $context['locale'],
 			'isPartOf' => [
-				'@id' => $data['organization_url'] . '#website',
+				'@id' => $context['store_url'] . '#website',
 			],
-			'primaryImageOfPage' => [
-				'@id' => $data['url'] . '#primaryimage',
-			],
-			'datePublished' => $data['date_added'],
-			'dateModified' => $data['date_modified'],
-		];
-
-		$jsonLdBlocks[] = [
-			'comment' => 'WebPage JSON-LD',
-			'json' => json_encode($webPageSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
-		];
+			'primaryImageOfPage' => $context['image']
+				? [
+					'@type' => 'ImageObject',
+					'url' => $context['image'],
+				]
+				: null,
+		]);
 	}
 
-	private function articleController($data)
+	private function jsonLdBlock($comment, $schema)
 	{
-		return $this->articleSchema($data);
-	}
+		$schema = $this->filterEmpty($schema);
 
-	private function articleSchema($data)
-	{
-		if (!empty($data['author'])) {
-			return;
-		}
-		$articleSchema = [
-			'@context' => 'https://schema.org',
-			'@type' => 'BlogPosting',
-			'@id' => $data['url'] . '#article',
-			'isPartOf' => [
-				'@id' => $data['url'] . '#webpage',
-			],
-			'author' => [
-				'@id' => $data['author']['url'],
-			],
-			'headline' => $data['name'],
-			'datePublished' => $data['date_added'],
-			'dateModified' => $data['date_modified'],
-			'commentCount' => $data['comment_count'],
-			'mainEntityOfPage' => [
-				'@id' => $data['url'] . '#webpage',
-			],
-			'publisher' => [
-				'@id' => $data['organization_url'] . '#organization',
-			],
-			'image' => [
-				'@id' => $data['url'] . '#primaryimage',
-			],
-			'articleSection' => $data['articleSection'],
-		];
-
-		$jsonLdBlocks[] = [
-			'comment' => 'Article JSON-LD',
-			'json' => json_encode($articleSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
+		return [
+			'comment' => $comment,
+			'json' => json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
 		];
 	}
 
-	private function authorController($data)
+	private function filterEmpty($value)
 	{
-		return $this->authorSchema($data);
-	}
-
-	private function authorSchema($data)
-	{
-		if (!empty($data['author'])) {
-			return;
+		if (!is_array($value)) {
+			return $value;
 		}
 
-		$authorSchema = [
-			'@context' => 'https://schema.org',
-			'@type' => 'Person',
-			'@id' => $data['author']['url'],
-			'name' => $data['author']['name'],
-			'image' => [
-				'@type' => 'ImageObject',
-				'@id' => $data['organization_url'] . '#authorlogo',
-				'url' => $data['author']['image'],
-				'caption' => $data['author']['name'],
-			],
-			'description' => $data['author']['description'],
-		];
+		$filtered = [];
 
-		$jsonLdBlocks[] = [
-			'comment' => 'Author JSON-LD',
-			'json' => json_encode($authorSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
+		foreach ($value as $key => $item) {
+			if (is_array($item)) {
+				$item = $this->filterEmpty($item);
+
+				if ($item === [] || $item === null) {
+					continue;
+				}
+			}
+
+			if ($item === null || $item === '') {
+				continue;
+			}
+
+			$filtered[$key] = $item;
+		}
+
+		return $filtered;
+	}
+
+	private function getStoreUrl()
+	{
+		$url = $this->request->server['HTTPS']
+			? $this->config->get('config_ssl')
+			: $this->config->get('config_url');
+
+		return rtrim((string) $url, '/') . '/';
+	}
+
+	private function getPageUrl($data)
+	{
+		if (!empty($data['share'])) {
+			return $data['share'];
+		}
+
+		$links = $this->document->getLinks();
+
+		if (is_array($links)) {
+			foreach ($links as $link) {
+				if (!empty($link['rel']) && $link['rel'] === 'canonical' && !empty($link['href'])) {
+					return $link['href'];
+				}
+			}
+		}
+
+		$route = $this->request->get['route'] ?? 'common/home';
+		$query = $this->request->get;
+		unset($query['route'], $query['_route_'], $query['language']);
+
+		return $this->url->link($route, http_build_query($query));
+	}
+
+	private function getImageUrl($filename)
+	{
+		if (!$filename) {
+			return '';
+		}
+
+		if (preg_match('#^https?://#i', $filename)) {
+			return $filename;
+		}
+
+		return $this->getStoreUrl() . 'image/' . ltrim(str_replace('\\', '/', $filename), '/');
+	}
+
+	private function getCountry()
+	{
+		$country_id = (int) $this->config->get('config_country_id');
+
+		if (!$country_id) {
+			return [];
+		}
+
+		$this->load->model('localisation/country');
+
+		return $this->model_localisation_country->getCountry($country_id) ?: [];
+	}
+
+	private function getZone()
+	{
+		$zone_id = (int) $this->config->get('config_zone_id');
+
+		if (!$zone_id) {
+			return [];
+		}
+
+		$this->load->model('localisation/zone');
+
+		return $this->model_localisation_zone->getZone($zone_id) ?: [];
+	}
+
+	private function parseGeocode()
+	{
+		$geocode = trim((string) $this->config->get('config_geocode'));
+
+		if ($geocode === '' || strpos($geocode, ',') === false) {
+			return [
+				'latitude' => '',
+				'longitude' => '',
+			];
+		}
+
+		$parts = array_map('trim', explode(',', $geocode, 2));
+
+		return [
+			'latitude' => $parts[0] ?? '',
+			'longitude' => $parts[1] ?? '',
 		];
 	}
 
-	//     //product
-	//     if (!empty($data['range']) || !empty($data['review'])) {
-	//         $productSchema = [
-	//             '@context' => 'https://schema.org/',
-	//             '@type' => 'Product',
-	//             'name' => $data['name'],
-	//             'image' => $data['image'],
-	//             'brand' => [
-	//                 '@type' => 'Brand',
-	//                 'name' => $data['name'],
-	//             ],
-	//             'description' => $data['description'],
-	//         ];
+	private function getSameAs()
+	{
+		$raw = (string) $this->config->get('config_microdata_same_as');
 
-	//         $productSchema['aggregateRating'] = [
-	//             '@type' => 'AggregateRating',
-	//             'bestRating' => 5,
-	//             'ratingValue' => (float) $data['rating_value'],
-	//             'ratingCount' => (int) $data['rating_count'],
-	//         ];
+		if ($raw === '') {
+			return [];
+		}
 
-	//         if (!empty($data['range'])) {
-	//             $productSchema['offers'] = [
-	//                 '@type' => 'AggregateOffer',
-	//                 'lowPrice' => $data['min'],
-	//                 'highPrice' => $data['max'],
-	//                 'offerCount' => $data['ttl'],
-	//                 'priceCurrency' => $data['code'],
-	//             ];
-	//         }
+		$lines = preg_split('/\r\n|\r|\n/', $raw);
+		$urls = [];
 
-	//         $jsonLdBlocks[] = [
-	//             'comment' => 'Product JSON-LD',
-	//             'json' => json_encode(
-	//                 $productSchema,
-	//                 JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
-	//             ),
-	//         ];
-	//     }
-	//     //product
+		foreach ($lines as $line) {
+			$line = trim($line);
+
+			if ($line !== '') {
+				$urls[] = $line;
+			}
+		}
+
+		return array_values(array_unique($urls));
+	}
+
+	private function splitPhones($telephone)
+	{
+		if ($telephone === '') {
+			return [];
+		}
+
+		$parts = preg_split('/[,;]+/', $telephone);
+		$phones = [];
+
+		foreach ($parts as $part) {
+			$part = trim($part);
+
+			if ($part !== '') {
+				$phones[] = $part;
+			}
+		}
+
+		return $phones;
+	}
+
+	private function getOgLocale($code)
+	{
+		$map = [
+			'ua' => 'uk_UA',
+			'uk' => 'uk_UA',
+			'uk-ua' => 'uk_UA',
+			'ru' => 'ru_RU',
+			'ru-ru' => 'ru_RU',
+			'en' => 'en_US',
+			'en-gb' => 'en_GB',
+			'en-us' => 'en_US',
+		];
+
+		$code = strtolower((string) $code);
+
+		if (isset($map[$code])) {
+			return $map[$code];
+		}
+
+		return str_replace('-', '_', $code);
+	}
+
+	private function normalizeTwitter($account)
+	{
+		$account = trim($account);
+
+		if ($account === '') {
+			return '';
+		}
+
+		if ($account[0] !== '@') {
+			$account = '@' . ltrim($account, '@');
+		}
+
+		return $account;
+	}
+
+	private function plainText($value)
+	{
+		$text = html_entity_decode((string) $value, ENT_QUOTES, 'UTF-8');
+		$text = strip_tags($text);
+		$text = preg_replace('/\s+/u', ' ', $text);
+
+		return trim($text);
+	}
+
+	private function escape($value)
+	{
+		return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+	}
 }

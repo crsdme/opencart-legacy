@@ -28,6 +28,7 @@ class ControllerCommonHeader extends Controller
 		$data['logged'] = $this->customer->isLogged();
 		$data['telephone'] = $this->config->get('config_telephone');
 		$data['name'] = $this->config->get('config_name');
+		$data['text_announcement'] = $this->language->get('text_announcement');
 
 		$data['language'] = $this->load->controller('common/language');
 		$data['currency'] = $this->load->controller('common/currency');

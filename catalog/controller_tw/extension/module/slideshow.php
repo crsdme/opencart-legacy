@@ -1,32 +1,56 @@
 <?php
 class ControllerExtensionModuleSlideshow extends Controller
 {
-  public function index($setting)
-  {
-    static $module = 0;
+	public function index($setting)
+	{
+		if (!isset($setting['slides'])) {
+			$setting['slides'] = 1;
+		}
 
-    $this->load->model('design/banner');
-    $this->load->model('tool/image');
+		if (!isset($setting['slides_mobile'])) {
+			$setting['slides_mobile'] = 1;
+		}
 
-    $this->document->addScript('https://unpkg.com/embla-carousel/embla-carousel.umd.js');
+		if (empty($setting['width_mobile'])) {
+			$setting['width_mobile'] = 375;
+		}
 
-    $data['banners'] = [];
+		if (empty($setting['height_mobile'])) {
+			$setting['height_mobile'] = 210;
+		}
 
-    $results = $this->model_design_banner->getBanner($setting['banner_id']);
+		if (!isset($setting['use_controls'])) {
+			$setting['use_controls'] = 1;
+		}
 
-    foreach ($results as $result) {
-      if (is_file(DIR_IMAGE . $result['image'])) {
-        $data['banners'][] = [
-          'title' => $result['title'],
-          'link' => $result['link'],
-          'image' => $this->model_tool_image->resize($result['image'], $setting['width'], $setting['height']),
-          'image_mobile' => $this->model_tool_image->resize($result['image'], 375, 210),
-        ];
-      }
-    }
+		if (!isset($setting['use_dots'])) {
+			$setting['use_dots'] = 1;
+		}
 
-    $data['module'] = $module++;
+		if (!isset($setting['use_autoplay'])) {
+			$setting['use_autoplay'] = 1;
+		}
 
-    return $this->load->view('extension/module/slideshow', $data);
-  }
+		if (!isset($setting['use_loop'])) {
+			$setting['use_loop'] = 1;
+		}
+
+		if (!isset($setting['use_controls_mobile'])) {
+			$setting['use_controls_mobile'] = $setting['use_controls'];
+		}
+
+		if (!isset($setting['use_dots_mobile'])) {
+			$setting['use_dots_mobile'] = $setting['use_dots'];
+		}
+
+		if (!isset($setting['use_autoplay_mobile'])) {
+			$setting['use_autoplay_mobile'] = $setting['use_autoplay'];
+		}
+
+		if (!isset($setting['use_loop_mobile'])) {
+			$setting['use_loop_mobile'] = $setting['use_loop'];
+		}
+
+		return $this->load->controller('extension/module/carousel', $setting);
+	}
 }

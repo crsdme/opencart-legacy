@@ -41,8 +41,6 @@ class ControllerCommonHead extends Controller
         substr($this->request->server['REQUEST_URI'], 1, strlen($this->request->server['REQUEST_URI']) - 1);
     }
 
-    $this->document->addLink($server . 'image/' . $this->config->get('config_icon'), 'icon');
-
     $data['base'] = $server;
     $data['title'] = $this->document->getTitle();
     $data['description'] = $this->document->getDescription();

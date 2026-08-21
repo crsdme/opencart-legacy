@@ -25,7 +25,7 @@
       </div>
       <div class="panel-body">
         <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
-          <div class="form-group">
+          <div class="form-group required">
             <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
             <div class="col-sm-10">
               <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
@@ -48,38 +48,231 @@
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-width">{{ entry_width }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="width" value="{{ width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control" />
-              {% if error_width %}
-              <div class="text-danger">{{ error_width }}</div>
-              {% endif %}
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-height">{{ entry_height }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="height" value="{{ height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control" />
-              {% if error_height %}
-              <div class="text-danger">{{ error_height }}</div>
-              {% endif %}
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
-            <div class="col-sm-10">
-              <select name="status" id="input-status" class="form-control">
-                {% if status %}
-                <option value="1" selected="selected">{{ text_enabled }}</option>
-                <option value="0">{{ text_disabled }}</option>
-                {% else %}
-                <option value="1">{{ text_enabled }}</option>
-                <option value="0" selected="selected">{{ text_disabled }}</option>
+          <fieldset>
+            <legend>{{ text_desktop }}</legend>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-width">{{ entry_width }}</label>
+              <div class="col-sm-10">
+                <input type="text" name="width" value="{{ width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control" />
+                {% if error_width %}
+                <div class="text-danger">{{ error_width }}</div>
                 {% endif %}
-              </select>
+              </div>
             </div>
-          </div>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-height">{{ entry_height }}</label>
+              <div class="col-sm-10">
+                <input type="text" name="height" value="{{ height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control" />
+                {% if error_height %}
+                <div class="text-danger">{{ error_height }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-slides">{{ entry_slides }}</label>
+              <div class="col-sm-10">
+                <input type="text" name="slides" value="{{ slides }}" placeholder="{{ entry_slides }}" id="input-slides" class="form-control" />
+                {% if error_slides %}
+                <div class="text-danger">{{ error_slides }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-autoplay">{{ entry_autoplay }}</label>
+              <div class="col-sm-10">
+                <select name="use_autoplay" id="input-autoplay" class="form-control">
+                  {% if use_autoplay %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-controls">{{ entry_controls }}</label>
+              <div class="col-sm-10">
+                <select name="use_controls" id="input-controls" class="form-control">
+                  {% if use_controls %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-dots">{{ entry_dots }}</label>
+              <div class="col-sm-10">
+                <select name="use_dots" id="input-dots" class="form-control">
+                  {% if use_dots %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-loop">{{ entry_loop }}</label>
+              <div class="col-sm-10">
+                <select name="use_loop" id="input-loop" class="form-control">
+                  {% if use_loop %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>{{ text_mobile }}</legend>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-width-mobile">{{ entry_width_mobile }}</label>
+              <div class="col-sm-10">
+                <input type="text" name="width_mobile" value="{{ width_mobile }}" placeholder="{{ entry_width_mobile }}" id="input-width-mobile" class="form-control" />
+                {% if error_width_mobile %}
+                <div class="text-danger">{{ error_width_mobile }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-height-mobile">{{ entry_height_mobile }}</label>
+              <div class="col-sm-10">
+                <input type="text" name="height_mobile" value="{{ height_mobile }}" placeholder="{{ entry_height_mobile }}" id="input-height-mobile" class="form-control" />
+                {% if error_height_mobile %}
+                <div class="text-danger">{{ error_height_mobile }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-slides-mobile">{{ entry_slides_mobile }}</label>
+              <div class="col-sm-10">
+                <input type="text" name="slides_mobile" value="{{ slides_mobile }}" placeholder="{{ entry_slides_mobile }}" id="input-slides-mobile" class="form-control" />
+                {% if error_slides_mobile %}
+                <div class="text-danger">{{ error_slides_mobile }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-autoplay-mobile">{{ entry_autoplay }}</label>
+              <div class="col-sm-10">
+                <select name="use_autoplay_mobile" id="input-autoplay-mobile" class="form-control">
+                  {% if use_autoplay_mobile %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-controls-mobile">{{ entry_controls }}</label>
+              <div class="col-sm-10">
+                <select name="use_controls_mobile" id="input-controls-mobile" class="form-control">
+                  {% if use_controls_mobile %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-dots-mobile">{{ entry_dots }}</label>
+              <div class="col-sm-10">
+                <select name="use_dots_mobile" id="input-dots-mobile" class="form-control">
+                  {% if use_dots_mobile %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-loop-mobile">{{ entry_loop }}</label>
+              <div class="col-sm-10">
+                <select name="use_loop_mobile" id="input-loop-mobile" class="form-control">
+                  {% if use_loop_mobile %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>{{ text_general }}</legend>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-gap">{{ entry_gap }}</label>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="text" name="gap" value="{{ gap }}" placeholder="{{ entry_gap }}" id="input-gap" class="form-control" />
+                  <span class="input-group-addon">px</span>
+                </div>
+                {% if error_gap %}
+                <div class="text-danger">{{ error_gap }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-breakpoint">{{ entry_breakpoint }}</label>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="text" name="breakpoint" value="{{ breakpoint }}" placeholder="{{ entry_breakpoint }}" id="input-breakpoint" class="form-control" />
+                  <span class="input-group-addon">px</span>
+                </div>
+                {% if error_breakpoint %}
+                <div class="text-danger">{{ error_breakpoint }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-autoplay-delay">{{ entry_autoplay_delay }}</label>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="text" name="autoplay_delay" value="{{ autoplay_delay }}" placeholder="{{ entry_autoplay_delay }}" id="input-autoplay-delay" class="form-control" />
+                  <span class="input-group-addon">с</span>
+                </div>
+                {% if error_autoplay_delay %}
+                <div class="text-danger">{{ error_autoplay_delay }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+              <div class="col-sm-10">
+                <select name="status" id="input-status" class="form-control">
+                  {% if status %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+          </fieldset>
         </form>
       </div>
     </div>

@@ -125,6 +125,7 @@ $_['tab_image']                     = 'Зображення';
 $_['tab_option']                    = 'Опції';
 $_['tab_server']                    = 'Сервер';
 $_['tab_seopro']               = 'SeoPro';
+$_['tab_microdata']            = 'Microdata';
 $_['tab_seo']                       = 'SEO';
 $_['tab_store']                     = 'Магазин';
 $_['tab_special']                   = 'Акції';

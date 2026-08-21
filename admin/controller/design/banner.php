@@ -340,20 +340,31 @@ class ControllerDesignBanner extends Controller {
 
 		foreach ($banner_images as $key => $value) {
 			foreach ($value as $banner_image) {
-				if (is_file(DIR_IMAGE . $banner_image['image'])) {
-					$image = $banner_image['image'];
-					$thumb = $banner_image['image'];
+				$desktop_image = isset($banner_image['desktop_image']) ? $banner_image['desktop_image'] : (isset($banner_image['image']) ? $banner_image['image'] : '');
+				$mobile_image = isset($banner_image['mobile_image']) ? $banner_image['mobile_image'] : '';
+
+				if (is_file(DIR_IMAGE . $desktop_image)) {
+					$thumb = $desktop_image;
 				} else {
-					$image = '';
+					$desktop_image = '';
 					$thumb = 'no_image.png';
 				}
 
+				if (is_file(DIR_IMAGE . $mobile_image)) {
+					$thumb_mobile = $mobile_image;
+				} else {
+					$mobile_image = '';
+					$thumb_mobile = 'no_image.png';
+				}
+
 				$data['banner_images'][$key][] = array(
-					'title'      => $banner_image['title'],
-					'link'       => $banner_image['link'],
-					'image'      => $image,
-					'thumb'      => $this->model_tool_image->resize($thumb, 100, 100),
-					'sort_order' => $banner_image['sort_order']
+					'title'          => $banner_image['title'],
+					'link'           => $banner_image['link'],
+					'desktop_image'  => $desktop_image,
+					'thumb'          => $this->model_tool_image->resize($thumb, 100, 100),
+					'mobile_image'   => $mobile_image,
+					'thumb_mobile'   => $this->model_tool_image->resize($thumb_mobile, 100, 100),
+					'sort_order'     => $banner_image['sort_order']
 				);
 			}
 		}

@@ -1,68 +1,254 @@
-{{ header }}
-<div id="account-account" class="container">
-	<ul class="breadcrumb">
-		{% for breadcrumb in breadcrumbs %}
-			<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-		{% endfor %}
-	</ul>
+<div id="account-account" class="container mx-auto pb-4">
+	<div class="mx-auto px-2">
+		{% include "tailwind/components/breadcrumbs.twig" %}
+	</div>
+
 	{% if success %}
 		<div class="alert alert-success alert-dismissible">
 			<i class="fa fa-check-circle"></i> {{ success }}
 		</div>
 	{% endif %}
-	<div class="row">
-		{{ column_left }}
-		{% if column_left and column_right %}
-			{% set class = "col-sm-6" %}
-		{% elseif column_left or column_right %}
-			{% set class = "col-sm-9" %}
-		{% else %}
-			{% set class = "col-sm-12" %}
-		{% endif %}
-		<div id="content" class="{{ class }}">
-			{{ content_top }}
-			<h2>{{ text_my_account }}</h2>
-			<ul class="list-unstyled">
-				<li><a href="{{ edit }}">{{ text_edit }}</a></li>
-				<li><a href="{{ password }}">{{ text_password }}</a></li>
-				<li><a href="{{ address }}">{{ text_address }}</a></li>
-				<li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
-			</ul>
-			{% if credit_cards %}
-				<h2>{{ text_credit_card }}</h2>
-				<ul class="list-unstyled">
-					{% for credit_card in credit_cards %}
-						<li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>
-					{% endfor %}
-				</ul>
-			{% endif %}
-			<h2>{{ text_my_orders }}</h2>
-			<ul class="list-unstyled">
-				<li><a href="{{ order }}">{{ text_order }}</a></li>
-				<li><a href="{{ download }}">{{ text_download }}</a></li>
-				{% if reward %}
-					<li><a href="{{ reward }}">{{ text_reward }}</a></li>
-				{% endif %}
-				<li><a href="{{ return }}">{{ text_return }}</a></li>
-				<li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
-				<li><a href="{{ recurring }}">{{ text_recurring }}</a></li>
-			</ul>
-			<h2>{{ text_my_affiliate }}</h2>
-			<ul class="list-unstyled">
-				{% if not tracking %}
-					<li><a href="{{ affiliate }}">{{ text_affiliate_add }}</a></li>
-				{% else %}
-					<li><a href="{{ affiliate }}">{{ text_affiliate_edit }}</a></li>
-					<li><a href="{{ tracking }}">{{ text_tracking }}</a></li>
-				{% endif %}
-			</ul>
-			<h2>{{ text_my_newsletter }}</h2>
-			<ul class="list-unstyled">
-				<li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
-			</ul>
-			{{ content_bottom }}
+
+	<div class="mx-auto max-w-5xl px-2 pb-8">
+		<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+			<h1 class="text-xl font-bold">{{ heading_title }}</h1>
+			<a href="{{ logout }}" class="button-destructive">{{ text_logout }}</a>
 		</div>
-		{{ column_right }}
+
+		<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+			<section class="flex flex-col rounded-lg bg-white p-6 shadow">
+				<h2 class="mb-4 text-lg font-semibold text-gray-800">{{ text_my_account }}</h2>
+				<nav class="flex flex-col gap-1" aria-label="{{ text_my_account }}">
+					<a
+						href="{{ edit }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_edit }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+					<a
+						href="{{ password }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_password }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+					<a
+						href="{{ address }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_address }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+					<a
+						href="{{ wishlist }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_wishlist }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+				</nav>
+			</section>
+
+			{% if credit_cards %}
+				<section class="flex flex-col rounded-lg bg-white p-6 shadow">
+					<h2 class="mb-4 text-lg font-semibold text-gray-800">{{ text_credit_card }}</h2>
+					<nav class="flex flex-col gap-1" aria-label="{{ text_credit_card }}">
+						{% for credit_card in credit_cards %}
+							<a
+								href="{{ credit_card.href }}"
+								class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+							>
+								<span>{{ credit_card.name }}</span>
+								<svg
+									aria-hidden="true"
+									class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+									viewBox="0 0 24 24"
+								>
+									<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+								</svg>
+							</a>
+						{% endfor %}
+					</nav>
+				</section>
+			{% endif %}
+
+			<section class="flex flex-col rounded-lg bg-white p-6 shadow">
+				<h2 class="mb-4 text-lg font-semibold text-gray-800">{{ text_my_orders }}</h2>
+				<nav class="flex flex-col gap-1" aria-label="{{ text_my_orders }}">
+					<a
+						href="{{ order }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_order }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+					<a
+						href="{{ download }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_download }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+					{% if reward %}
+						<a
+							href="{{ reward }}"
+							class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+						>
+							<span>{{ text_reward }}</span>
+							<svg
+								aria-hidden="true"
+								class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+								viewBox="0 0 24 24"
+							>
+								<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+							</svg>
+						</a>
+					{% endif %}
+					<a
+						href="{{ return }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_return }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+					<a
+						href="{{ transaction }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_transaction }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+					<a
+						href="{{ recurring }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_recurring }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+				</nav>
+			</section>
+
+			<section class="flex flex-col rounded-lg bg-white p-6 shadow">
+				<h2 class="mb-4 text-lg font-semibold text-gray-800">{{ text_my_affiliate }}</h2>
+				<nav class="flex flex-col gap-1" aria-label="{{ text_my_affiliate }}">
+					{% if not tracking %}
+						<a
+							href="{{ affiliate }}"
+							class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+						>
+							<span>{{ text_affiliate_add }}</span>
+							<svg
+								aria-hidden="true"
+								class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+								viewBox="0 0 24 24"
+							>
+								<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+							</svg>
+						</a>
+					{% else %}
+						<a
+							href="{{ affiliate }}"
+							class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+						>
+							<span>{{ text_affiliate_edit }}</span>
+							<svg
+								aria-hidden="true"
+								class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+								viewBox="0 0 24 24"
+							>
+								<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+							</svg>
+						</a>
+						<a
+							href="{{ tracking }}"
+							class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+						>
+							<span>{{ text_tracking }}</span>
+							<svg
+								aria-hidden="true"
+								class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+								viewBox="0 0 24 24"
+							>
+								<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+							</svg>
+						</a>
+					{% endif %}
+				</nav>
+			</section>
+
+			<section class="flex flex-col rounded-lg bg-white p-6 shadow">
+				<h2 class="mb-4 text-lg font-semibold text-gray-800">{{ text_my_newsletter }}</h2>
+				<nav class="flex flex-col gap-1" aria-label="{{ text_my_newsletter }}">
+					<a
+						href="{{ newsletter }}"
+						class="group flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-neutral-50"
+					>
+						<span>{{ text_newsletter }}</span>
+						<svg
+							aria-hidden="true"
+							class="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-600"
+							viewBox="0 0 24 24"
+						>
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</a>
+				</nav>
+			</section>
+		</div>
 	</div>
 </div>
-{{ footer }}

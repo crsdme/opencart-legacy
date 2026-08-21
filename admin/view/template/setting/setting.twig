@@ -36,8 +36,9 @@
             <li><a href="#tab-option" data-toggle="tab">{{ tab_option }}</a></li>
             <li><a href="#tab-image" data-toggle="tab">{{ tab_image }}</a></li>
             <li><a href="#tab-mail" data-toggle="tab">{{ tab_mail }}</a></li>
-            <li><a href="#tab-server" data-toggle="tab">{{ tab_server }}</a></li>
+			<li><a href="#tab-server" data-toggle="tab">{{ tab_server }}</a></li>
 			<li><a href="#tab-seopro" data-toggle="tab">{{ tab_seopro }}</a></li>
+			<li><a href="#tab-microdata" data-toggle="tab">{{ tab_microdata }}</a></li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="tab-general">
@@ -1621,6 +1622,98 @@
             </div>
 		  </fieldset>
 		</div>
+			<div class="tab-pane" id="tab-microdata">
+			  <fieldset>
+				<legend>{{ text_general }}</legend>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_microdata }}">{{ entry_microdata }}</span></label>
+				  <div class="col-sm-10">
+					<label class="radio-inline">
+					  {% if config_microdata %}
+					  <input type="radio" name="config_microdata" value="1" checked="checked" />
+					  {{ text_yes }}
+					  {% else %}
+					  <input type="radio" name="config_microdata" value="1" />
+					  {{ text_yes }}
+					  {% endif %}
+					</label>
+					<label class="radio-inline">
+					  {% if not config_microdata %}
+					  <input type="radio" name="config_microdata" value="0" checked="checked" />
+					  {{ text_no }}
+					  {% else %}
+					  <input type="radio" name="config_microdata" value="0" />
+					  {{ text_no }}
+					  {% endif %}
+					</label>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_microdata_opengraph }}">{{ entry_microdata_opengraph }}</span></label>
+				  <div class="col-sm-10">
+					<label class="radio-inline">
+					  {% if config_microdata_opengraph %}
+					  <input type="radio" name="config_microdata_opengraph" value="1" checked="checked" />
+					  {{ text_yes }}
+					  {% else %}
+					  <input type="radio" name="config_microdata_opengraph" value="1" />
+					  {{ text_yes }}
+					  {% endif %}
+					</label>
+					<label class="radio-inline">
+					  {% if not config_microdata_opengraph %}
+					  <input type="radio" name="config_microdata_opengraph" value="0" checked="checked" />
+					  {{ text_no }}
+					  {% else %}
+					  <input type="radio" name="config_microdata_opengraph" value="0" />
+					  {{ text_no }}
+					  {% endif %}
+					</label>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_microdata_twitter }}">{{ entry_microdata_twitter }}</span></label>
+				  <div class="col-sm-10">
+					<label class="radio-inline">
+					  {% if config_microdata_twitter %}
+					  <input type="radio" name="config_microdata_twitter" value="1" checked="checked" />
+					  {{ text_yes }}
+					  {% else %}
+					  <input type="radio" name="config_microdata_twitter" value="1" />
+					  {{ text_yes }}
+					  {% endif %}
+					</label>
+					<label class="radio-inline">
+					  {% if not config_microdata_twitter %}
+					  <input type="radio" name="config_microdata_twitter" value="0" checked="checked" />
+					  {{ text_no }}
+					  {% else %}
+					  <input type="radio" name="config_microdata_twitter" value="0" />
+					  {{ text_no }}
+					  {% endif %}
+					</label>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label" for="input-microdata-twitter-account">{{ entry_microdata_twitter_account }}</label>
+				  <div class="col-sm-10">
+					<input type="text" name="config_microdata_twitter_account" value="{{ config_microdata_twitter_account }}" placeholder="@shop" id="input-microdata-twitter-account" class="form-control" />
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label" for="input-microdata-facebook-id"><span data-toggle="tooltip" title="{{ help_microdata_facebook_id }}">{{ entry_microdata_facebook_id }}</span></label>
+				  <div class="col-sm-10">
+					<input type="text" name="config_microdata_facebook_id" value="{{ config_microdata_facebook_id }}" placeholder="{{ entry_microdata_facebook_id }}" id="input-microdata-facebook-id" class="form-control" />
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label" for="input-microdata-same-as"><span data-toggle="tooltip" title="{{ help_microdata_same_as }}">{{ entry_microdata_same_as }}</span></label>
+				  <div class="col-sm-10">
+					<textarea name="config_microdata_same_as" rows="5" placeholder="{{ help_microdata_same_as }}" id="input-microdata-same-as" class="form-control">{{ config_microdata_same_as }}</textarea>
+				  </div>
+				</div>
+			  </fieldset>
+			</div>
 			
 			
           </div>

@@ -1,4 +1,9 @@
-<div class="live-search" data-live-search>
+<div
+	class="live-search"
+	data-live-search
+	data-text-loading="{{ text_live_search_loading }}"
+	data-text-error="{{ text_live_search_error }}"
+>
 	<div class="live-search-input">
 		<div class="input-field w-full">
 			<div class="input-group" data-side="left">
@@ -14,6 +19,7 @@
 					value="{{ search }}"
 					autocomplete="off"
 					data-live-search-input
+					data-live-search-url="{{ live_search_url }}"
 					id="live-search-input"
 					type="text"
 					placeholder="{{ text_search }}"

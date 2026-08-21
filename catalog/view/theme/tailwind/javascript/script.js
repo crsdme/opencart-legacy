@@ -364,7 +364,6 @@ $('#search-input').on('keydown', function (e) {
 		root: '[data-live-search]',
 		input: '[data-live-search-input]',
 		results: '[data-live-search-results]',
-		url: 'index.php?route=common/search/searchProducts',
 		minLength: 2,
 		delay: 300,
 	};
@@ -377,6 +376,11 @@ $('#search-input').on('keydown', function (e) {
 		const $component = $(this);
 		const $input = $component.find(config.input);
 		const $results = $component.find(config.results);
+		const url = $input.data('live-search-url');
+		const textLoading = $component.data('text-loading') || 'Searching…';
+		const textError = $component.data('text-error') || 'Could not load results';
+
+		if (!url) return;
 
 		let timer = null;
 		let request = null;
@@ -391,13 +395,35 @@ $('#search-input').on('keydown', function (e) {
 			$component.removeAttr('data-open');
 		}
 
+		function skeletonItem() {
+			return `
+				<div class="live-search-skeleton-item" aria-hidden="true">
+					<span class="live-search-skeleton-image skeleton"></span>
+					<span class="live-search-skeleton-info">
+						<span class="live-search-skeleton-line skeleton"></span>
+						<span class="live-search-skeleton-line skeleton is-short"></span>
+					</span>
+				</div>
+			`;
+		}
+
 		function renderLoading() {
-			$results.html('<div class="live-search-state">Поиск...</div>');
+			$results.html(`
+				<div class="live-search-skeleton" role="status" aria-live="polite" aria-label="${textLoading}">
+					${skeletonItem()}
+					${skeletonItem()}
+					${skeletonItem()}
+				</div>
+			`);
 			openResults();
 		}
 
 		function renderError() {
-			$results.html('<div class="live-search-state">Ошибка загрузки</div>');
+			$results.html(`
+				<div class="live-search-state" data-type="error" role="alert">
+					<span class="live-search-state-title">${textError}</span>
+				</div>
+			`);
 			openResults();
 		}
 
@@ -409,7 +435,7 @@ $('#search-input').on('keydown', function (e) {
 			renderLoading();
 
 			request = $.ajax({
-				url: config.url,
+				url: url,
 				type: 'get',
 				dataType: 'html',
 				data: {

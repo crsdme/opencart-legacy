@@ -1023,6 +1023,44 @@ class ControllerSettingSetting extends Controller {
 			$data['config_valide_params'] = "block\r\nfrommarket\r\ngclid\r\nfbclid\r\nkeyword\r\nlist_type\r\nopenstat\r\nopenstat_service\r\nopenstat_campaign\r\nopenstat_ad\r\nopenstat_source\r\nposition\r\nsource\r\ntracking\r\ntype\r\nyclid\r\nymclid\r\nuri\r\nurltype\r\nutm_source\r\nutm_medium\r\nutm_campaign\r\nutm_term\r\nutm_content";
 		}
 
+		if (isset($this->request->post['config_microdata'])) {
+			$data['config_microdata'] = $this->request->post['config_microdata'];
+		} else {
+			$data['config_microdata'] = $this->config->get('config_microdata');
+		}
+
+		if (isset($this->request->post['config_microdata_opengraph'])) {
+			$data['config_microdata_opengraph'] = $this->request->post['config_microdata_opengraph'];
+		} elseif ($this->config->has('config_microdata_opengraph')) {
+			$data['config_microdata_opengraph'] = $this->config->get('config_microdata_opengraph');
+		} else {
+			$data['config_microdata_opengraph'] = 1;
+		}
+
+		if (isset($this->request->post['config_microdata_twitter'])) {
+			$data['config_microdata_twitter'] = $this->request->post['config_microdata_twitter'];
+		} else {
+			$data['config_microdata_twitter'] = $this->config->get('config_microdata_twitter');
+		}
+
+		if (isset($this->request->post['config_microdata_twitter_account'])) {
+			$data['config_microdata_twitter_account'] = $this->request->post['config_microdata_twitter_account'];
+		} else {
+			$data['config_microdata_twitter_account'] = $this->config->get('config_microdata_twitter_account');
+		}
+
+		if (isset($this->request->post['config_microdata_facebook_id'])) {
+			$data['config_microdata_facebook_id'] = $this->request->post['config_microdata_facebook_id'];
+		} else {
+			$data['config_microdata_facebook_id'] = $this->config->get('config_microdata_facebook_id');
+		}
+
+		if (isset($this->request->post['config_microdata_same_as'])) {
+			$data['config_microdata_same_as'] = $this->request->post['config_microdata_same_as'];
+		} else {
+			$data['config_microdata_same_as'] = $this->config->get('config_microdata_same_as');
+		}
+
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

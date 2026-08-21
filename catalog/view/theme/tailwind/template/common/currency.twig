@@ -1,10 +1,9 @@
 {% if (currencies | length) > 1 %}
-	<div class="dropdown w-full flex-1" data-align="center" data-dropdown data-type="hover">
+	<div class="dropdown" data-align="center" data-dropdown data-type="hover">
 		<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-currency">
 			<button class="button-secondary" type="button" data-dropdown-button>
-				{{ text_currency }}
 				<svg aria-hidden="true" viewbox="0 0 24 24">
-					<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+					<use href="/assets/icons/sprite.svg#icon-currency"></use>
 				</svg>
 			</button>
 

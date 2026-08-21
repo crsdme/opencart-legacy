@@ -130,7 +130,12 @@
 					{% include "tailwind/components/carousel.twig" with {
 						slides: carousel_slides,
 						config: {
-							use_controls: false
+							id: "components-carousel",
+							use_controls: false,
+							use_controls_mobile: false,
+							use_picture: true,
+							slides: 5,
+							slides_mobile: 2
 						}
 					} %}
 				</div>

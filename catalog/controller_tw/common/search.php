@@ -6,12 +6,21 @@ class ControllerCommonSearch extends Controller
 		$this->load->language('common/search');
 
 		$data['text_search'] = $this->language->get('text_search');
+		$data['text_live_search_loading'] = $this->language->get('text_live_search_loading');
+		$data['text_live_search_error'] = $this->language->get('text_live_search_error');
 		$data['language'] = $this->config->get('config_language');
+		// Avoid language-prefixed url->link(): /en/index.php gets SEO-rewritten and redirected to home
+		$base = (!empty($this->request->server['HTTPS']) && $this->request->server['HTTPS'] !== 'off')
+			? $this->config->get('config_ssl')
+			: $this->config->get('config_url');
+		$data['live_search_url'] = rtrim($base, '/') . '/index.php?route=common/search/searchProducts';
 
-		if (isset($this->request->get['query'])) {
-			$data['query'] = $this->request->get['query'];
+		if (isset($this->request->get['search'])) {
+			$data['search'] = $this->request->get['search'];
+		} elseif (isset($this->request->get['query'])) {
+			$data['search'] = $this->request->get['query'];
 		} else {
-			$data['query'] = '';
+			$data['search'] = '';
 		}
 
 		return $this->load->view('common/search', $data);
@@ -19,17 +28,20 @@ class ControllerCommonSearch extends Controller
 
 	public function searchProducts()
 	{
+		$this->load->language('common/search');
+
 		$this->response->addHeader('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 		$this->response->addHeader('Pragma: no-cache');
 		$this->response->addHeader('Expires: 0');
+		$this->response->addHeader('Content-Type: text/html; charset=utf-8');
 
 		$data['products'] = [];
+		$data['text_live_search_empty'] = $this->language->get('text_live_search_empty');
 
 		$search = isset($this->request->get['filter_name']) ? trim($this->request->get['filter_name']) : '';
 
 		if (utf8_strlen($search) < 2) {
-			$this->response->addHeader('Content-Type: text/html; charset=utf-8');
-			$this->response->setOutput($this->load->view('common/live-search', $data));
+			$this->response->setOutput($this->load->view('common/live_search', $data));
 			return;
 		}
 
@@ -94,7 +106,6 @@ class ControllerCommonSearch extends Controller
 			];
 		}
 
-		$this->response->addHeader('Content-Type: text/html; charset=utf-8');
 		$this->response->setOutput($this->load->view('common/live_search', $data));
 	}
 }
