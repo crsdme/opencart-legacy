@@ -1,0 +1,21 @@
+<script>
+	window.Ecommerce = {
+		events: {{ events_json|raw }},
+		event: function (name, params) {
+			if (!this.events || !this.events[name]) {
+				return;
+			}
+
+			params = params || {};
+
+			if (typeof gtag === 'function') {
+				gtag('event', name, params);
+				return;
+			}
+
+			window.dataLayer = window.dataLayer || [];
+			dataLayer.push({ ecommerce: null });
+			dataLayer.push({ event: name, ecommerce: params });
+		},
+	};
+</script>

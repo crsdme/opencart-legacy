@@ -2,8 +2,10 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerAccountSuccess extends Controller {
-	public function index() {
+class ControllerAccountSuccess extends Controller
+{
+	public function index()
+	{
 		$this->load->language('account/success');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -38,13 +40,7 @@ class ControllerAccountSuccess extends Controller {
 			$data['continue'] = $this->url->link('account/account', '', true);
 		}
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('common/success', $data));
+		$data['view'] = 'common/success';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 }

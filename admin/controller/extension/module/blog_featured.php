@@ -1,15 +1,12 @@
 <?php
-// *	@source		See SOURCE.txt for source and other copyright.
-// *	@license	GNU General Public License version 3; see LICENSE.txt
-
 class ControllerExtensionModuleBlogFeatured extends Controller {
 	private $error = array();
 
 	public function index() {
 		$this->load->language('extension/module/blog_featured');
 
-        $this->document->addScript('view/javascript/jquery/Sortable.js');
-        $this->document->addScript('view/javascript/jquery/jquery-sortable.js');
+		$this->document->addScript('view/javascript/jquery/Sortable.js');
+		$this->document->addScript('view/javascript/jquery/jquery-sortable.js');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -39,16 +36,28 @@ class ControllerExtensionModuleBlogFeatured extends Controller {
 			$data['error_name'] = '';
 		}
 
-		if (isset($this->error['width'])) {
-			$data['error_width'] = $this->error['width'];
+		if (isset($this->error['gap'])) {
+			$data['error_gap'] = $this->error['gap'];
 		} else {
-			$data['error_width'] = '';
+			$data['error_gap'] = '';
 		}
 
-		if (isset($this->error['height'])) {
-			$data['error_height'] = $this->error['height'];
+		if (isset($this->error['gap_mobile'])) {
+			$data['error_gap_mobile'] = $this->error['gap_mobile'];
 		} else {
-			$data['error_height'] = '';
+			$data['error_gap_mobile'] = '';
+		}
+
+		if (isset($this->error['breakpoint'])) {
+			$data['error_breakpoint'] = $this->error['breakpoint'];
+		} else {
+			$data['error_breakpoint'] = '';
+		}
+
+		if (isset($this->error['autoplay_delay'])) {
+			$data['error_autoplay_delay'] = $this->error['autoplay_delay'];
+		} else {
+			$data['error_autoplay_delay'] = '';
 		}
 
 		$data['breadcrumbs'] = array();
@@ -83,11 +92,25 @@ class ControllerExtensionModuleBlogFeatured extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true);
 
+		$module_info = array();
+
 		if (isset($this->request->get['module_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
 			$module_info = $this->model_setting_module->getModule($this->request->get['module_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
+
+		$this->load->model('localisation/language');
+
+		$data['languages'] = $this->model_localisation_language->getLanguages();
+
+		if (isset($this->request->post['module_description'])) {
+			$data['module_description'] = $this->request->post['module_description'];
+		} elseif (!empty($module_info['module_description'])) {
+			$data['module_description'] = $module_info['module_description'];
+		} else {
+			$data['module_description'] = array();
+		}
 
 		if (isset($this->request->post['name'])) {
 			$data['name'] = $this->request->post['name'];
@@ -98,6 +121,7 @@ class ControllerExtensionModuleBlogFeatured extends Controller {
 		}
 
 		$this->load->model('blog/article');
+		$this->load->model('blog/category');
 
 		$data['articles'] = array();
 
@@ -120,28 +144,33 @@ class ControllerExtensionModuleBlogFeatured extends Controller {
 			}
 		}
 
+		$data['categories'] = array();
+
+		if (!empty($this->request->post['category'])) {
+			$categories = $this->request->post['category'];
+		} elseif (!empty($module_info['category'])) {
+			$categories = $module_info['category'];
+		} else {
+			$categories = array();
+		}
+
+		foreach ($categories as $category_id) {
+			$category_info = $this->model_blog_category->getCategory($category_id);
+
+			if ($category_info) {
+				$data['categories'][] = array(
+					'category_id' => $category_info['blog_category_id'],
+					'name'        => (!empty($category_info['path']) ? $category_info['path'] . ' &gt; ' : '') . $category_info['name']
+				);
+			}
+		}
+
 		if (isset($this->request->post['limit'])) {
 			$data['limit'] = $this->request->post['limit'];
 		} elseif (!empty($module_info)) {
 			$data['limit'] = $module_info['limit'];
 		} else {
 			$data['limit'] = 5;
-		}
-
-		if (isset($this->request->post['width'])) {
-			$data['width'] = $this->request->post['width'];
-		} elseif (!empty($module_info)) {
-			$data['width'] = $module_info['width'];
-		} else {
-			$data['width'] = 200;
-		}
-
-		if (isset($this->request->post['height'])) {
-			$data['height'] = $this->request->post['height'];
-		} elseif (!empty($module_info)) {
-			$data['height'] = $module_info['height'];
-		} else {
-			$data['height'] = 200;
 		}
 
 		if (isset($this->request->post['status'])) {
@@ -151,6 +180,17 @@ class ControllerExtensionModuleBlogFeatured extends Controller {
 		} else {
 			$data['status'] = '';
 		}
+
+		$data['use_autoplay'] = $this->getField($module_info, 'use_autoplay', 0);
+		$data['use_controls'] = $this->getField($module_info, 'use_controls', 1);
+		$data['use_loop'] = $this->getField($module_info, 'use_loop', 1);
+		$data['use_autoplay_mobile'] = $this->getField($module_info, 'use_autoplay_mobile', $data['use_autoplay']);
+		$data['use_controls_mobile'] = $this->getField($module_info, 'use_controls_mobile', $data['use_controls']);
+		$data['use_loop_mobile'] = $this->getField($module_info, 'use_loop_mobile', $data['use_loop']);
+		$data['gap'] = $this->getField($module_info, 'gap', 16);
+		$data['gap_mobile'] = $this->getField($module_info, 'gap_mobile', $data['gap']);
+		$data['breakpoint'] = $this->getField($module_info, 'breakpoint', 1024);
+		$data['autoplay_delay'] = $this->getField($module_info, 'autoplay_delay', 3);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -168,14 +208,34 @@ class ControllerExtensionModuleBlogFeatured extends Controller {
 			$this->error['name'] = $this->language->get('error_name');
 		}
 
-		if (!$this->request->post['width']) {
-			$this->error['width'] = $this->language->get('error_width');
+		if (!isset($this->request->post['gap']) || $this->request->post['gap'] === '' || (int)$this->request->post['gap'] < 0) {
+			$this->error['gap'] = $this->language->get('error_gap');
 		}
 
-		if (!$this->request->post['height']) {
-			$this->error['height'] = $this->language->get('error_height');
+		if (!isset($this->request->post['gap_mobile']) || $this->request->post['gap_mobile'] === '' || (int)$this->request->post['gap_mobile'] < 0) {
+			$this->error['gap_mobile'] = $this->language->get('error_gap');
+		}
+
+		if (!isset($this->request->post['breakpoint']) || (int)$this->request->post['breakpoint'] < 1) {
+			$this->error['breakpoint'] = $this->language->get('error_breakpoint');
+		}
+
+		if (!isset($this->request->post['autoplay_delay']) || (int)$this->request->post['autoplay_delay'] < 1) {
+			$this->error['autoplay_delay'] = $this->language->get('error_autoplay_delay');
 		}
 
 		return !$this->error;
+	}
+
+	private function getField($module_info, $key, $default = '') {
+		if (isset($this->request->post[$key])) {
+			return $this->request->post[$key];
+		}
+
+		if (!empty($module_info) && isset($module_info[$key]) && $module_info[$key] !== '') {
+			return $module_info[$key];
+		}
+
+		return $default;
 	}
 }

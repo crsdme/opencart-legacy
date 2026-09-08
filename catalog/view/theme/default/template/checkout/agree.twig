@@ -1,0 +1,14 @@
+<section class="checkout-block checkout-confirm">
+	<div class="checkout-block-body">
+		{% if text_agree %}
+			<label class="checkout-agree">
+				<input type="checkbox" name="agree" value="1" class="checkbox" required />
+				<span>{{ text_agree|raw }}</span>
+			</label>
+		{% endif %}
+
+		<div class="checkout-alert" id="checkout-error" hidden role="alert"></div>
+
+		<button type="submit" class="button-primary w-full" data-checkout-confirm>{{ button_confirm }}</button>
+	</div>
+</section>

@@ -1,51 +1,35 @@
-<div id="cart" class="btn-group btn-block">
-  <button type="button" data-toggle="dropdown" data-loading-text="{{ text_loading }}" class="btn btn-inverse btn-block btn-lg dropdown-toggle"><i class="fa fa-shopping-cart"></i> <span id="cart-total">{{ text_items }}</span></button>
-  <ul class="dropdown-menu pull-right">
-    {% if products or vouchers %}
-    <li>
-      <table class="table table-striped">
-        {% for product in products %}
-        <tr>
-          <td class="text-center">{% if product.thumb %} <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" /></a> {% endif %}</td>
-          <td class="text-left"><a href="{{ product.href }}">{{ product.name }}</a> {% if product.option %}
-            {% for option in product.option %} <br />
-            - <small>{{ option.name }} {{ option.value }}</small> {% endfor %}
-            {% endif %}
-            {% if product.recurring %} <br />
-            - <small>{{ text_recurring }} {{ product.recurring }}</small> {% endif %}</td>
-          <td class="text-right">x {{ product.quantity }}</td>
-          <td class="text-right">{{ product.total }}</td>
-          <td class="text-center"><button type="button" onclick="cart.remove('{{ product.cart_id }}');" title="{{ button_remove }}" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button></td>
-        </tr>
-        {% endfor %}
-        {% for voucher in vouchers %}
-        <tr>
-          <td class="text-center"></td>
-          <td class="text-left">{{ voucher.description }}</td>
-          <td class="text-right">x&nbsp;1</td>
-          <td class="text-right">{{ voucher.amount }}</td>
-          <td class="text-center text-danger"><button type="button" onclick="voucher.remove('{{ voucher.key }}');" title="{{ button_remove }}" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button></td>
-        </tr>
-        {% endfor %}
-      </table>
-    </li>
-    <li>
-      <div>
-        <table class="table table-bordered">
-          {% for total in totals %}
-          <tr>
-            <td class="text-right"><strong>{{ total.title }}</strong></td>
-            <td class="text-right">{{ total.text }}</td>
-          </tr>
-          {% endfor %}
-        </table>
-        <p class="text-right"><a href="{{ cart }}"><strong><i class="fa fa-shopping-cart"></i> {{ text_cart }}</strong></a>&nbsp;&nbsp;&nbsp;<a href="{{ checkout }}"><strong><i class="fa fa-share"></i> {{ text_checkout }}</strong></a></p>
-      </div>
-    </li>
-    {% else %}
-    <li>
-      <p class="text-center">{{ text_empty }}</p>
-    </li>
-    {% endif %}
-  </ul>
+<button class="button-primary" data-type="icon" id="cart-button" data-modal-open="#cart-modal">
+	<svg aria-hidden="true" viewBox="0 0 24 24">
+		<use href="/assets/icons/sprite.svg#icon-cart"></use>
+	</svg>
+	<span id="cart-badge" class="badge button-badge">{{ productCount }}</span>
+	<div class="cart-toast" id="cart-toast"></div>
+</button>
+
+<div class="modal max-h-md flex h-full flex-col justify-between gap-4 p-4 max-md:rounded-none md:p-6 lg:max-h-[80vh]" id="cart-modal">
+	<div class="modal-header">
+		<p class="heading">
+			{{ text_cart }}
+		</p>
+
+		<button class="button-secondary icon" data-type="icon" data-modal-close>
+			<svg aria-hidden="true" viewBox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-close"></use>
+			</svg>
+		</button>
+	</div>
+
+	<div class="min-h-0 flex-1 overflow-y-auto" id="cart-modal-products">
+		<div class="skeleton h-full w-full rounded-md"></div>
+	</div>
+
+	<div id="cart-modal-totals">
+		<div class="skeleton h-25 w-full rounded-md"></div>
+	</div>
+
+	<div class="modal-footer">
+		<a href="{{ checkout }}" class="button-primary w-full">{{ text_checkout }}</a>
+	</div>
 </div>
+
+<div class="modal-overlay" data-modal-overlay></div>

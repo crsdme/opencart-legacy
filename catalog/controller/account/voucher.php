@@ -6,7 +6,8 @@ class ControllerAccountVoucher extends Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->language('account/voucher');
+		$this->language->set('_account_page', 'voucher');
+		$this->load->language('account/account');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->setRobots('noindex,follow');
@@ -149,18 +150,13 @@ class ControllerAccountVoucher extends Controller {
 			$data['agree'] = false;
 		}
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('account/voucher', $data));
+		$data['view'] = 'account/voucher';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 
 	public function success() {
-		$this->load->language('account/voucher');
+		$this->language->set('_account_page', 'voucher');
+		$this->load->language('account/account');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->setRobots('noindex,follow');
@@ -179,14 +175,8 @@ class ControllerAccountVoucher extends Controller {
 
 		$data['continue'] = $this->url->link('checkout/cart');
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('common/success', $data));
+		$data['view'] = 'common/success';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 
 	protected function validate() {

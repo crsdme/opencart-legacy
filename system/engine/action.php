@@ -25,16 +25,11 @@ class Action {
 		
 		$parts = explode('/', preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route));
 
-		$ALT_CTRL_DIR = 'controller_tw';
-
 		// Break apart the route
 		while ($parts) {
-			$relative = implode('/', $parts) . '.php';
+			$file = DIR_APPLICATION . 'controller/' . implode('/', $parts) . '.php';
 
-			$file_std = DIR_APPLICATION . 'controller/' . $relative;
-            $file_alt = DIR_APPLICATION . $ALT_CTRL_DIR . '/' . $relative;
-
-			if (is_file($file_std) || is_file($file_alt)) {
+			if (is_file($file)) {
 				$this->route = implode('/', $parts);		
 				
 				break;
@@ -66,14 +61,7 @@ class Action {
 			return new \Exception('Error: Calls to magic methods are not allowed!');
 		}
 
-		$ALT_CTRL_DIR = 'controller_tw';
-
-        $relative = $this->route . '.php';
-
-        $file_std = DIR_APPLICATION . 'controller/' . $relative;
-        $file_alt = DIR_APPLICATION . $ALT_CTRL_DIR . '/' . $relative;
-
-        $file = is_file($file_alt) ? $file_alt : $file_std;	
+		$file  = DIR_APPLICATION . 'controller/' . $this->route . '.php';
 		$class = 'Controller' . preg_replace('/[^a-zA-Z0-9]/', '', $this->route);
 		
 		// Initialize the class

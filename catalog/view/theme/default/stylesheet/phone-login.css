@@ -1,0 +1,53 @@
+/* Phone login / intl-tel-input — loaded with Account::addPhoneAssets() */
+
+.iti {
+	--iti-border-color: #d4d4d4;
+	--iti-hover-color: #f5f5f5;
+	--iti-icon-color: #737373;
+	--iti-selected-dial-code-color: #171717;
+	--iti-country-selector-bg: #fff;
+	display: block;
+	width: 100%;
+}
+
+.dark .iti {
+	--iti-border-color: #404040;
+	--iti-hover-color: #262626;
+	--iti-icon-color: #a3a3a3;
+	--iti-selected-dial-code-color: #fff;
+	--iti-country-selector-bg: #171717;
+}
+
+.iti .input,
+.iti input.iti__tel-input {
+	height: 2.5rem;
+	border-radius: 0.375rem;
+	border-color: #d4d4d4;
+	background-color: #fff;
+	padding-right: 0.75rem;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	color: #171717;
+}
+
+.dark .iti .input,
+.dark .iti input.iti__tel-input {
+	border-color: #404040;
+	background-color: #171717;
+	color: #fff;
+}
+
+.iti .input:focus-visible,
+.iti input.iti__tel-input:focus-visible {
+	border-color: #737373;
+	outline: none;
+}
+
+.iti__selected-dial-code {
+	color: var(--iti-selected-dial-code-color);
+	font-size: 0.875rem;
+}
+
+.iti__country-selector {
+	border-radius: 0.375rem;
+}

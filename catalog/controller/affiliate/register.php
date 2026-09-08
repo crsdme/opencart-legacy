@@ -294,20 +294,10 @@ class ControllerAffiliateRegister extends Controller {
 			$data['text_agree'] = '';
 		}
 
-		if (isset($this->request->post['agree'])) {
-			$data['agree'] = $this->request->post['agree'];
-		} else {
-			$data['agree'] = false;
-		}
+		$data['agree'] = isset($this->request->post['agree']) ? $this->request->post['agree'] : false;
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('affiliate/register', $data));
+		$data['view'] = 'affiliate/register';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 
 	protected function validate() {

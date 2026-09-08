@@ -1,0 +1,128 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        {% if can_modify %}<button type="submit" form="form-rule" class="btn btn-primary"><i class="fa fa-save"></i></button>{% endif %}
+        <a href="{{ cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">{% for breadcrumb in breadcrumbs %}<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>{% endfor %}</ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}<div class="alert alert-danger">{{ error_warning }}</div>{% endif %}
+    {% if conflict %}<div class="alert alert-warning">{{ error_duplicate }}<br />{{ column_source }}: {{ conflict.source_url }}<br />{{ text_current_target }}: {{ conflict.target_url }}</div>{% endif %}
+    {% include 'extension/redirect_manager/tabs.twig' %}
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title">{{ text_form }}</h3></div>
+      <div class="panel-body">
+        <form action="{{ save }}" method="post" id="form-rule" class="form-horizontal">
+          <div class="form-group required">
+            <label class="col-sm-2 control-label">{{ entry_source }}</label>
+            <div class="col-sm-10"><input type="text" name="source_url" value="{{ source_url }}" class="form-control" /></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{ entry_action }}</label>
+            <div class="col-sm-10">
+              <select name="action" id="input-action" class="form-control">
+                <option value="redirect"{% if action == 'redirect' %} selected="selected"{% endif %}>{{ text_action_redirect }}</option>
+                <option value="status"{% if action == 'status' %} selected="selected"{% endif %}>{{ text_action_status }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{ entry_http_code }}</label>
+            <div class="col-sm-10">
+              <select name="http_code" class="form-control">
+                {% for code in redirect_codes %}<option value="{{ code }}"{% if http_code == code %} selected="selected"{% endif %}>{{ code }}</option>{% endfor %}
+                {% for code in status_codes %}<option value="{{ code }}"{% if http_code == code %} selected="selected"{% endif %}>{{ code }}</option>{% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="target-box">
+            <label class="col-sm-2 control-label">{{ entry_target_type }}</label>
+            <div class="col-sm-10">
+              <select name="target_type" id="input-target-type" class="form-control">
+                <option value="custom"{% if target_type == 'custom' %} selected="selected"{% endif %}>{{ text_custom_url }}</option>
+                <option value="product"{% if target_type == 'product' %} selected="selected"{% endif %}>{{ text_product }}</option>
+                <option value="category"{% if target_type == 'category' %} selected="selected"{% endif %}>{{ text_category }}</option>
+                <option value="information"{% if target_type == 'information' %} selected="selected"{% endif %}>{{ text_information }}</option>
+                <option value="manufacturer"{% if target_type == 'manufacturer' %} selected="selected"{% endif %}>{{ text_manufacturer }}</option>
+                <option value="home"{% if target_type == 'home' %} selected="selected"{% endif %}>{{ text_home_page }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="entity-box">
+            <label class="col-sm-2 control-label">{{ entry_entity }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="entity_name" value="" class="form-control" />
+              <input type="hidden" name="target_entity_id" value="{{ target_entity_id }}" />
+            </div>
+          </div>
+          <div class="form-group" id="url-box">
+            <label class="col-sm-2 control-label">{{ entry_target }}</label>
+            <div class="col-sm-10"><input type="text" name="target_url" value="{{ target_url }}" class="form-control" /></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{ entry_query_mode }}</label>
+            <div class="col-sm-10">
+              <select name="query_mode" class="form-control">
+                {% for mode in query_modes %}<option value="{{ mode }}"{% if query_mode == mode %} selected="selected"{% endif %}>{{ mode }}</option>{% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{ entry_store }}</label>
+            <div class="col-sm-10">
+              <select name="store_id" class="form-control">{% for store in stores %}<option value="{{ store.store_id }}"{% if store_id == store.store_id %} selected="selected"{% endif %}>{{ store.name }}</option>{% endfor %}</select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{ entry_language }}</label>
+            <div class="col-sm-10">
+              <select name="language_id" class="form-control">{% for language in languages %}<option value="{{ language.language_id }}"{% if language_id == language.language_id %} selected="selected"{% endif %}>{{ language.name }}</option>{% endfor %}</select>
+            </div>
+          </div>
+          <input type="hidden" name="source_type" value="{{ source_type ? source_type : 'manual' }}" />
+          <input type="hidden" name="source_entity_id" value="{{ source_entity_id }}" />
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="enabled" class="form-control">
+                <option value="1"{% if enabled %} selected="selected"{% endif %}>{{ text_enabled }}</option>
+                <option value="0"{% if not enabled %} selected="selected"{% endif %}>{{ text_disabled }}</option>
+              </select>
+            </div>
+          </div>
+          {% if conflict %}<div class="form-group"><label class="col-sm-2 control-label">{{ text_replace }}</label><div class="col-sm-10"><input type="checkbox" name="replace" value="1" /></div></div>{% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function toggleTarget() {
+  var a = $('#input-action').val();
+  var t = $('#input-target-type').val();
+  $('#target-box, #url-box').toggle(a === 'redirect');
+  $('#entity-box').toggle(a === 'redirect' && t !== 'custom' && t !== 'home' && t !== 'status');
+}
+$('#input-action, #input-target-type').on('change', toggleTarget);
+toggleTarget();
+$('input[name="entity_name"]').autocomplete({
+  source: function(request, response) {
+    $.ajax({
+      url: 'index.php?route=extension/redirect_manager/rule/autocomplete&user_token={{ user_token }}&type=' + $('#input-target-type').val() + '&filter_name=' + encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) { response($.map(json, function(item) { return { label: item.name, value: item.id, url: item.url }; })); }
+    });
+  },
+  select: function(item) {
+    $('input[name="entity_name"]').val(item['label']);
+    $('input[name="target_entity_id"]').val(item['value']);
+    $('input[name="target_url"]').val(item['url']);
+  }
+});
+</script>
+{{ footer }}

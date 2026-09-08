@@ -1,0 +1,53 @@
+		</div>
+		<div class="docs-code" data-docs-code>
+			<button class="docs-copy" type="button" data-docs-copy aria-label="Copy">
+				<svg class="docs-copy-default" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<rect x="9" y="9" width="13" height="13" rx="2"></rect>
+					<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+				</svg>
+				<svg class="docs-copy-done" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M20 6 9 17l-5-5"></path>
+				</svg>
+			</button>
+			<pre><code>{{ section.snippet }}</code></pre>
+		</div>
+	</div>
+	{% if section.params %}
+		<details class="docs-params">
+			<summary class="docs-params-summary">
+				<span>Parameters</span>
+				<svg aria-hidden="true" viewBox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+				</svg>
+			</summary>
+			<table class="docs-params-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Required</th>
+						<th>Default</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for param in section.params %}
+						<tr>
+							<td><code>{{ param.name }}</code></td>
+							<td>{{ param.type }}</td>
+							<td>
+								{% if param.required %}
+									<span class="docs-params-required">yes</span>
+								{% else %}
+									<span class="docs-params-optional">no</span>
+								{% endif %}
+							</td>
+							<td>{% if param.default %}<code>{{ param.default }}</code>{% else %}—{% endif %}</td>
+							<td>{{ param.text }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</details>
+	{% endif %}
+</section>

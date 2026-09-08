@@ -1,0 +1,66 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        {% if can_modify %}
+        <a href="{{ generate }}" data-toggle="tooltip" title="{{ button_generate }}" class="btn btn-primary"><i class="fa fa-cogs"></i></a>
+        {% endif %}
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">{% for breadcrumb in breadcrumbs %}<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>{% endfor %}</ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>{% endif %}
+    {% if success %}<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>{% endif %}
+    {% if dirty %}<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> {{ text_config_dirty }} <a href="{{ generate }}">{{ button_generate }}</a></div>{% endif %}
+    {% include 'extension/redirect_manager/tabs.twig' %}
+    <div class="row">
+      <div class="col-lg-3 col-md-6"><div class="tile tile-primary"><div class="tile-heading">{{ text_total_rules }}</div><div class="tile-body"><i class="fa fa-random"></i><h2 class="pull-right">{{ stats.total ? stats.total : 0 }}</h2></div></div></div>
+      <div class="col-lg-3 col-md-6"><div class="tile tile-primary"><div class="tile-heading">{{ text_redirects }}</div><div class="tile-body"><i class="fa fa-share"></i><h2 class="pull-right">{{ stats.redirects ? stats.redirects : 0 }}</h2></div></div></div>
+      <div class="col-lg-3 col-md-6"><div class="tile tile-primary"><div class="tile-heading">{{ text_410 }}</div><div class="tile-body"><i class="fa fa-ban"></i><h2 class="pull-right">{{ stats.gone ? stats.gone : 0 }}</h2></div></div></div>
+      <div class="col-lg-3 col-md-6"><div class="tile tile-primary"><div class="tile-heading">{{ text_301 }}</div><div class="tile-body"><i class="fa fa-level-up"></i><h2 class="pull-right">{{ stats.c301 ? stats.c301 : 0 }}</h2></div></div></div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-bar-chart"></i> {{ text_tab_dashboard }}</h3></div>
+      <div class="panel-body">
+        <table class="table table-bordered">
+          <tr><td>{{ text_backend }}</td><td>{{ backend }}</td></tr>
+          <tr><td>{{ text_backend_status }}</td><td>{% if dirty %}{{ text_outdated }}{% elseif sync.status %}{{ sync.status }}{% else %}{{ text_idle }}{% endif %}</td></tr>
+          <tr><td>{{ text_enabled }} / {{ text_disabled }}</td><td>{{ stats.enabled ? stats.enabled : 0 }} / {{ stats.disabled ? stats.disabled : 0 }}</td></tr>
+          <tr><td>{{ text_302 }}</td><td>{{ stats.c302 ? stats.c302 : 0 }}</td></tr>
+          <tr><td>{{ text_broken }}</td><td>{{ stats.broken ? stats.broken : 0 }}</td></tr>
+          <tr><td>{{ text_chains }}</td><td>{{ chains|length }} {% if chains|length and can_modify %}<a href="{{ flatten }}" class="btn btn-xs btn-default">{{ button_flatten }}</a>{% endif %}</td></tr>
+          <tr><td>{{ text_loops }}</td><td>{% if loops|length %}<span class="text-danger">{{ loops|length }}</span>{% else %}0{% endif %}</td></tr>
+          <tr><td>{{ text_last_generated }}</td><td>{{ sync.date_generated }}</td></tr>
+          <tr><td>{{ text_last_sync }}</td><td>{{ sync.date_synced }}</td></tr>
+          <tr><td>{{ text_generated_file }}</td><td>{{ sync.file_path }}</td></tr>
+          <tr><td>{{ text_rules_hash }}</td><td><code>{{ rules_hash }}</code></td></tr>
+        </table>
+        {% if batches %}
+        <h4>{{ text_groups }}</h4>
+        <table class="table table-bordered table-hover">
+          <thead><tr><td>{{ column_group }}</td><td>{{ column_rules }}</td><td>{{ column_date }}</td><td>{{ column_action }}</td></tr></thead>
+          <tbody>
+          {% for batch in batches %}
+          <tr>
+            <td>{{ batch.title }} ({{ batch.type }})</td>
+            <td>{{ batch.rules_count }}</td>
+            <td>{{ batch.date_added }}</td>
+            <td class="text-right">
+              <a href="index.php?route=extension/redirect_manager/rule&user_token={{ user_token }}&filter_batch_id={{ batch.batch_id }}" class="btn btn-xs btn-default">{{ button_view }}</a>
+              {% if can_modify and batch.status != 'undone' %}
+              <a href="index.php?route=extension/redirect_manager/mass/undo&user_token={{ user_token }}&batch_id={{ batch.batch_id }}" class="btn btn-xs btn-danger" onclick="return confirm('{{ text_confirm }}');">{{ button_undo }}</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

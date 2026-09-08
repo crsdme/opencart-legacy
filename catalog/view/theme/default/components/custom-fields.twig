@@ -1,0 +1,163 @@
+{% set field_values = field_values|default({}) %}
+{% set error_custom_field = error_custom_field|default({}) %}
+
+{% for custom_field in custom_fields|default([]) %}
+	{% if not location or custom_field.location == location %}
+		{% set scoped_values = field_values[custom_field.location] is defined ? field_values[custom_field.location] : field_values %}
+		{% set field_value = scoped_values[custom_field.custom_field_id] is defined ? scoped_values[custom_field.custom_field_id] : custom_field.value %}
+		{% set field_error = error_custom_field[custom_field.custom_field_id] is defined ? error_custom_field[custom_field.custom_field_id] : '' %}
+
+		{% if custom_field.type == 'select' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<label for="input-custom-field{{ custom_field.custom_field_id }}" class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</label>
+				<select name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" id="input-custom-field{{ custom_field.custom_field_id }}" class="input w-full">
+					<option value="">{{ text_select }}</option>
+					{% for custom_field_value in custom_field.custom_field_value %}
+						<option value="{{ custom_field_value.custom_field_value_id }}"{% if field_value == custom_field_value.custom_field_value_id %} selected="selected"{% endif %}>{{ custom_field_value.name }}</option>
+					{% endfor %}
+				</select>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'radio' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<span class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</span>
+				<div class="grid gap-2">
+					{% for custom_field_value in custom_field.custom_field_value %}
+						<label class="flex items-center gap-2 text-sm">
+							<input
+								type="radio"
+								name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+								value="{{ custom_field_value.custom_field_value_id }}"
+								class="radio"
+								{% if field_value == custom_field_value.custom_field_value_id %}checked="checked"{% endif %}
+							/>
+							<span>{{ custom_field_value.name }}</span>
+						</label>
+					{% endfor %}
+				</div>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'checkbox' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<span class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</span>
+				<div class="grid gap-2">
+					{% for custom_field_value in custom_field.custom_field_value %}
+						<label class="flex items-center gap-2 text-sm">
+							<input
+								type="checkbox"
+								name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]"
+								value="{{ custom_field_value.custom_field_value_id }}"
+								class="checkbox"
+								{% if field_value and custom_field_value.custom_field_value_id in field_value %}checked="checked"{% endif %}
+							/>
+							<span>{{ custom_field_value.name }}</span>
+						</label>
+					{% endfor %}
+				</div>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'text' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<label for="input-custom-field{{ custom_field.custom_field_id }}" class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</label>
+				<input
+					type="text"
+					name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+					value="{{ field_value }}"
+					placeholder="{{ custom_field.name }}"
+					id="input-custom-field{{ custom_field.custom_field_id }}"
+					class="input w-full"
+				/>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'textarea' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<label for="input-custom-field{{ custom_field.custom_field_id }}" class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</label>
+				<textarea
+					name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+					rows="5"
+					placeholder="{{ custom_field.name }}"
+					id="input-custom-field{{ custom_field.custom_field_id }}"
+					class="input min-h-28 w-full resize-y"
+				>{{ field_value }}</textarea>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'file' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<span class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</span>
+				<button type="button" id="button-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="button-secondary">{{ button_upload }}</button>
+				<input type="hidden" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ field_value }}" />
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'date' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<label for="input-custom-field{{ custom_field.custom_field_id }}" class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</label>
+				<input
+					type="date"
+					name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+					value="{{ field_value }}"
+					id="input-custom-field{{ custom_field.custom_field_id }}"
+					class="input w-full"
+				/>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'time' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<label for="input-custom-field{{ custom_field.custom_field_id }}" class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</label>
+				<input
+					type="time"
+					name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+					value="{{ field_value }}"
+					id="input-custom-field{{ custom_field.custom_field_id }}"
+					class="input w-full"
+				/>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if custom_field.type == 'datetime' %}
+			<div id="custom-field{{ custom_field.custom_field_id }}" class="custom-field" data-sort="{{ custom_field.sort_order }}">
+				<label for="input-custom-field{{ custom_field.custom_field_id }}" class="mb-1 block text-sm font-medium text-gray-700">{{ custom_field.name }}</label>
+				<input
+					type="datetime-local"
+					name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]"
+					value="{{ field_value }}"
+					id="input-custom-field{{ custom_field.custom_field_id }}"
+					class="input w-full"
+				/>
+				{% if field_error %}
+					<p class="form-message">{{ field_error }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+	{% endif %}
+{% endfor %}

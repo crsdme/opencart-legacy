@@ -175,6 +175,8 @@ class ModelUpgrade1004 extends Model {
 						}
 					}
 				} elseif (in_array($result['code'], array('banner', 'carousel', 'slideshow'))) {
+					$module_code = 'carousel';
+
 					if ($value) {
 						foreach ($value as $k => $v) {
 							$module_data['name'] = ($result['key'] . '_' . $k);
@@ -185,9 +187,9 @@ class ModelUpgrade1004 extends Model {
 							if (isset($v['width'])) {	$module_data['width'] = $v['width']; }
 							if (isset($v['height'])) {	$module_data['height'] = $v['height']; }
 
-							$this->db->query("INSERT INTO `" . DB_PREFIX . "module` (`name`, `code`, `setting`) values ('" . $this->db->escape($result['key']) . '_' . $k . "', '" . $this->db->escape($result['code']) . "', '" . $this->db->escape(json_encode($module_data)) . "')");
+							$this->db->query("INSERT INTO `" . DB_PREFIX . "module` (`name`, `code`, `setting`) values ('" . $this->db->escape($result['key']) . '_' . $k . "', '" . $this->db->escape($module_code) . "', '" . $this->db->escape(json_encode($module_data)) . "')");
 							$module_id = $this->db->getLastId();
-							$this->db->query("INSERT INTO `" . DB_PREFIX . "layout_module` (`layout_id`, `code`, `position`, `sort_order`) values ('" . (int)$v['layout_id'] . "', '" . ($result['code'] . '.' . $module_id)  . "', '" . $this->db->escape($v['position']) . "', '" . (int)$v['sort_order'] . "')");
+							$this->db->query("INSERT INTO `" . DB_PREFIX . "layout_module` (`layout_id`, `code`, `position`, `sort_order`) values ('" . (int)$v['layout_id'] . "', '" . ($module_code . '.' . $module_id)  . "', '" . $this->db->escape($v['position']) . "', '" . (int)$v['sort_order'] . "')");
 							$this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE store_id = '" . $result['store_id'] . "' AND `code` = '" . $result['code'] . "'");
 						}
 					} else {

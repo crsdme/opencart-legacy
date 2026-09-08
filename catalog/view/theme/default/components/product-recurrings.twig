@@ -1,0 +1,16 @@
+{% if recurrings %}
+	<div class="form-item required">
+		<label class="form-label" for="input-recurring">{{ text_payment_recurring }}</label>
+		<select name="recurring_id" id="input-recurring" class="input">
+			<option value="">
+				{{ text_select }}
+			</option>
+			{% for recurring in recurrings %}
+				<option value="{{ recurring.recurring_id }}">
+					{{ recurring.name }}
+				</option>
+			{% endfor %}
+		</select>
+		<p class="form-description" id="recurring-description"></p>
+	</div>
+{% endif %}

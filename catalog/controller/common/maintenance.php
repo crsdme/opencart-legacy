@@ -1,6 +1,8 @@
 <?php
-class ControllerCommonMaintenance extends Controller {
-	public function index() {
+class ControllerCommonMaintenance extends Controller
+{
+	public function index()
+	{
 		$this->load->language('common/maintenance');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -13,19 +15,16 @@ class ControllerCommonMaintenance extends Controller {
 
 		$this->response->addHeader('Retry-After: 3600');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_maintenance'),
-			'href' => $this->url->link('common/maintenance')
-		);
+			'href' => $this->url->link('common/maintenance'),
+		];
 
 		$data['message'] = $this->language->get('text_message');
 
-		$data['header'] = $this->load->controller('common/header');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['head'] = $this->load->controller('common/head');
-
-		$this->response->setOutput($this->load->view('common/maintenance', $data));
+		$data['view'] = 'common/maintenance';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 }

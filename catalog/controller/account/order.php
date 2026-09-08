@@ -10,7 +10,8 @@ class ControllerAccountOrder extends Controller {
 			$this->response->redirect($this->url->link('account/login', '', true));
 		}
 
-		$this->load->language('account/order');
+		$this->language->set('_account_page', 'order');
+		$this->load->language('account/account');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->setRobots('noindex,follow');
@@ -67,30 +68,26 @@ class ControllerAccountOrder extends Controller {
 			);
 		}
 
-		$pagination = new Pagination();
-		$pagination->total = $order_total;
-		$pagination->page = $page;
-		$pagination->limit = 10;
-		$pagination->url = $this->url->link('account/order', 'page={page}', true);
-
-		$data['pagination'] = $pagination->render();
+		$data['pagination_data'] = [
+			'total' => $order_total,
+			'page' => $page,
+			'limit' => 10,
+			'text_prev' => $this->language->get('text_prev'),
+			'text_next' => $this->language->get('text_next'),
+			'url' => $this->url->link('account/order', 'page={page}', true),
+		];
 
 		$data['results'] = sprintf($this->language->get('text_pagination'), ($order_total) ? (($page - 1) * 10) + 1 : 0, ((($page - 1) * 10) > ($order_total - 10)) ? $order_total : ((($page - 1) * 10) + 10), $order_total, ceil($order_total / 10));
 
 		$data['continue'] = $this->url->link('account/account', '', true);
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('account/order_list', $data));
+		$data['view'] = 'account/order_list';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 
 	public function info() {
-		$this->load->language('account/order');
+		$this->language->set('_account_page', 'order');
+		$this->load->language('account/account');
 
 		if (isset($this->request->get['order_id'])) {
 			$order_id = $this->request->get['order_id'];
@@ -329,21 +326,16 @@ class ControllerAccountOrder extends Controller {
 
 			$data['continue'] = $this->url->link('account/order', '', true);
 
-			$data['column_left'] = $this->load->controller('common/column_left');
-			$data['column_right'] = $this->load->controller('common/column_right');
-			$data['content_top'] = $this->load->controller('common/content_top');
-			$data['content_bottom'] = $this->load->controller('common/content_bottom');
-			$data['footer'] = $this->load->controller('common/footer');
-			$data['header'] = $this->load->controller('common/header');
-
-			$this->response->setOutput($this->load->view('account/order_info', $data));
+			$data['view'] = 'account/order_info';
+			$this->response->setOutput($this->load->controller('common/layout', $data));
 		} else {
 			return new Action('error/not_found');
 		}
 	}
 
 	public function reorder() {
-		$this->load->language('account/order');
+		$this->language->set('_account_page', 'order');
+		$this->load->language('account/account');
 
 		if (isset($this->request->get['order_id'])) {
 			$order_id = $this->request->get['order_id'];

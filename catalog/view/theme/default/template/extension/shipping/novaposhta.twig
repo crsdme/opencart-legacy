@@ -1,0 +1,78 @@
+<section class="checkout-block" data-carrier-extra data-type="{{ type }}" data-search="{{ search }}">
+	<h2 class="checkout-block-title">{{ text_heading }}</h2>
+	<p class="checkout-block-hint">{{ text_hint }}</p>
+	<div class="checkout-block-body checkout-fields">
+		<div class="form-item required">
+			<label class="form-label" for="input-carrier-city">{{ entry_city }}</label>
+			<div class="checkout-suggest">
+				<input
+					class="input w-full"
+					type="text"
+					name="city"
+					value="{{ city }}"
+					id="input-carrier-city"
+					placeholder="{{ text_city }}"
+					autocomplete="off"
+					required
+					data-checkout-address
+					data-carrier-search="cities"
+				/>
+				<input type="hidden" name="shipping_ref" value="{{ city_ref }}" data-checkout-address data-carrier-ref />
+				<ul class="checkout-suggest-list" hidden></ul>
+			</div>
+		</div>
+
+		{% if type == 'doors' %}
+			<div class="form-item required">
+				<label class="form-label" for="input-carrier-street">{{ entry_street }}</label>
+				<div class="checkout-suggest">
+					<input
+						class="input w-full"
+						type="text"
+						name="address_1"
+						value="{{ address_1 }}"
+						id="input-carrier-street"
+						placeholder="{{ text_street }}"
+						autocomplete="off"
+						required
+						data-checkout-address
+						{% if online_streets %}data-carrier-search="streets"{% endif %}
+					/>
+					<ul class="checkout-suggest-list" hidden></ul>
+				</div>
+			</div>
+			<div class="form-item required">
+				<label class="form-label" for="input-carrier-house">{{ entry_house }}</label>
+				<input
+					class="input w-full"
+					type="text"
+					name="address_2"
+					value="{{ address_2 }}"
+					id="input-carrier-house"
+					autocomplete="off"
+					required
+					data-checkout-address
+				/>
+			</div>
+		{% else %}
+			<div class="form-item required">
+				<label class="form-label" for="input-carrier-warehouse">{{ type == 'poshtomat' ? entry_poshtomat : entry_warehouse }}</label>
+				<div class="checkout-suggest">
+					<input
+						class="input w-full"
+						type="text"
+						name="address_1"
+						value="{{ address_1 }}"
+						id="input-carrier-warehouse"
+						placeholder="{{ text_warehouse }}"
+						autocomplete="off"
+						required
+						data-checkout-address
+						data-carrier-search="warehouses"
+					/>
+					<ul class="checkout-suggest-list" hidden></ul>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</section>

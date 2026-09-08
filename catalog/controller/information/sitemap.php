@@ -1,57 +1,81 @@
 <?php
-class ControllerInformationSitemap extends Controller {
-	public function index() {
+class ControllerInformationSitemap extends Controller
+{
+	public function index()
+	{
 		$this->load->language('information/sitemap');
+		$this->load->model('seo/meta');
 
-		$this->document->setTitle($this->language->get('heading_title'));
+		$seo = $this->model_seo_meta->build(
+			[],
+			[
+				'name' => $this->language->get('heading_title'),
+			],
+			'sitemap',
+			'information/sitemap'
+		);
 
-		$data['breadcrumbs'] = array();
+		$this->model_seo_meta->apply($seo);
+		$data['heading_title'] = $seo['h1'];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'] = [];
+
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/home')
-		);
+			'href' => $this->url->link('common/home'),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('information/sitemap')
-		);
+			'href' => $this->url->link('information/sitemap'),
+		];
 
 		$this->load->model('catalog/category');
 
-		$data['categories'] = array();
+		$data['categories'] = [];
 
 		$categories_1 = $this->model_catalog_category->getCategories(0);
 
 		foreach ($categories_1 as $category_1) {
-			$level_2_data = array();
+			$level_2_data = [];
 
 			$categories_2 = $this->model_catalog_category->getCategories($category_1['category_id']);
 
 			foreach ($categories_2 as $category_2) {
-				$level_3_data = array();
+				$level_3_data = [];
 
 				$categories_3 = $this->model_catalog_category->getCategories($category_2['category_id']);
 
 				foreach ($categories_3 as $category_3) {
-					$level_3_data[] = array(
+					$level_3_data[] = [
 						'name' => $category_3['name'],
-						'href' => $this->url->link('product/category', 'path=' . $category_1['category_id'] . '_' . $category_2['category_id'] . '_' . $category_3['category_id'])
-					);
+						'href' => $this->url->link(
+							'product/category',
+							'path=' .
+								$category_1['category_id'] .
+								'_' .
+								$category_2['category_id'] .
+								'_' .
+								$category_3['category_id'],
+						),
+					];
 				}
 
-				$level_2_data[] = array(
-					'name'     => $category_2['name'],
+				$level_2_data[] = [
+					'name' => $category_2['name'],
 					'children' => $level_3_data,
-					'href'     => $this->url->link('product/category', 'path=' . $category_1['category_id'] . '_' . $category_2['category_id'])
-				);
+					'href' => $this->url->link(
+						'product/category',
+						'path=' . $category_1['category_id'] . '_' . $category_2['category_id'],
+					),
+				];
 			}
 
-			$data['categories'][] = array(
-				'name'     => $category_1['name'],
+			$data['categories'][] = [
+				'name' => $category_1['name'],
 				'children' => $level_2_data,
-				'href'     => $this->url->link('product/category', 'path=' . $category_1['category_id'])
-			);
+				'href' => $this->url->link('product/category', 'path=' . $category_1['category_id']),
+			];
 		}
 
 		$data['special'] = $this->url->link('product/special');
@@ -68,23 +92,33 @@ class ControllerInformationSitemap extends Controller {
 
 		$this->load->model('catalog/information');
 
-		$data['informations'] = array();
+		$data['informations'] = [];
 
 		foreach ($this->model_catalog_information->getInformations() as $result) {
-			$data['informations'][] = array(
+			$data['informations'][] = [
 				'title' => $result['title'],
-				'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
-			);
+				'href' => $this->url->link('information/information', 'information_id=' . $result['information_id']),
+			];
 		}
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-		$data['head'] = $this->load->controller('common/head');
+		$data['blog'] = '';
+		$data['blog_authors'] = [];
+		$pages = new \Custom\Pages($this->config);
 
-		$this->response->setOutput($this->load->view('information/sitemap', $data));
+		if ($pages->enabled('blog')) {
+			$this->load->model('blog/helper');
+			$data['blog'] = $this->url->link('blog/latest');
+			$data['text_blog'] = $this->model_blog_helper->getBlogName($this->language->get('text_blog'));
+
+			foreach ($this->model_blog_helper->getAuthors() as $author) {
+				$data['blog_authors'][] = [
+					'name' => $author['name'],
+					'href' => $author['href'],
+				];
+			}
+		}
+
+		$data['view'] = 'information/sitemap';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 }

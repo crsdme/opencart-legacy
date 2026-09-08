@@ -1,42 +1,137 @@
-<h3>{{ heading_title }}</h3>
-<div class="row">
- {% for product in products %}
-  <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
-    <div class="product-thumb transition">
-      <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
-      <div class="caption">
-        <h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
-        <p>{{ product.description }}</p>
-        {% if product.rating %}
-        <div class="rating">
-          {% for i in 1..5 %}
-          {% if product.rating < i %}
-          <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
-          {% else %}
-          <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
-          {% endif %}
-          {% endfor %}
-        </div>
-        {% endif %}
-        {% if product.price %}
-        <p class="price">
-          {% if not product.special %}
-          {{ product.price }}
-          {% else %}
-          <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span>
-          {% endif %}
-          {% if product.tax %}
-          <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
-          {% endif %}
-        </p>
-        {% endif %}
-      </div>
-      <div class="button-group">
-        <button type="button" onclick="cart.add('{{ product.product_id }}');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span></button>
-        <button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="fa fa-heart"></i></button>
-        <button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fa fa-exchange"></i></button>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
+{% if products %}
+	{% set config = slider_config | default({}) %}
+	{% set show_controls = slider and (config.use_controls or config.use_controls_mobile) %}
+	{% set controls_visibility = config.use_controls and config.use_controls_mobile ? '' : (config.use_controls ? 'carousel-desktop-only' : 'carousel-mobile-only') %}
+	{% set breakpoint = config.breakpoint | default(1024) %}
+	{% set breakpoint_desktop = breakpoint + 1 %}
+	<section class="my-8" aria-labelledby="{{ heading_id }}">
+		{% if slider %}
+			<style>
+				[data-slider="{{ heading_id }}"] {
+					--slide-gap: {{ config.gap }}px;
+				}
+
+				@media (max-width: {{ breakpoint }}px) {
+					[data-slider="{{ heading_id }}"] {
+						--slide-gap: {{ config.gap_mobile }}px;
+					}
+
+					[data-slider="{{ heading_id }}"] .carousel-slide {
+						flex-basis: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+						width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+						max-width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+					}
+
+					[data-slider-controls="{{ heading_id }}"].carousel-desktop-only {
+						display: none !important;
+					}
+				}
+
+				@media (min-width: {{ breakpoint_desktop }}px) {
+					[data-slider-controls="{{ heading_id }}"].carousel-mobile-only {
+						display: none !important;
+					}
+				}
+			</style>
+		{% endif %}
+		<div class="carousel-header">
+			<h2 id="{{ heading_id }}" class="heading mb-0">{{ heading_title }}</h2>
+			{% if show_controls %}
+				<div class="carousel-controls {{ controls_visibility }}" data-slider-controls="{{ heading_id }}">
+					<button type="button" class="button-secondary" data-type="icon" data-slider-prev="{{ heading_id }}">
+						<svg aria-hidden="true" viewBox="0 0 24 24">
+							<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+						</svg>
+					</button>
+					<button type="button" class="button-secondary" data-type="icon" data-slider-next="{{ heading_id }}">
+						<svg aria-hidden="true" viewBox="0 0 24 24">
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</button>
+				</div>
+			{% endif %}
+		</div>
+		{% if slider %}
+			<div class="carousel product-slider{% if config.use_loop %} is-loop{% endif %}" data-slider="{{ heading_id }}">
+				<div class="carousel-track">
+					{% for product in products %}
+						<div class="carousel-slide">
+							{% include "default/components/product-card.twig" with {
+								product: product
+							} %}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			<script>
+				(() => {
+					const config = {{ config | json_encode | raw }};
+					const root = document.querySelector(`[data-slider="${config.id}"]`);
+
+					if (!root || typeof EmblaCarousel === 'undefined') return;
+
+					const breakpoint = Number(config.breakpoint) || 1024;
+					const mobileQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
+					const isMobile = () => mobileQuery.matches;
+					const bool = (value) => value === true || value === 1 || value === '1';
+					const option = (desktopKey, mobileKey) => (isMobile() ? bool(config[mobileKey]) : bool(config[desktopKey]));
+
+					const syncLoopClass = () => {
+						root.classList.toggle('is-loop', option('use_loop', 'use_loop_mobile'));
+					};
+
+					syncLoopClass();
+
+					const plugins = [];
+					let autoplay = null;
+
+					if (bool(config.use_autoplay) || bool(config.use_autoplay_mobile)) {
+						const Autoplay = window.EmblaCarouselAutoplay?.default || window.EmblaCarouselAutoplay;
+
+						if (Autoplay) {
+							autoplay = Autoplay({
+								delay: Math.max(1, Number(config.autoplay_delay) || 3) * 1000,
+								playOnInit: option('use_autoplay', 'use_autoplay_mobile'),
+								stopOnInteraction: false,
+								stopOnMouseEnter: true,
+							});
+							plugins.push(autoplay);
+						}
+					}
+
+					const embla = EmblaCarousel(root, { loop: option('use_loop', 'use_loop_mobile'), align: 'start' }, plugins);
+
+					document.querySelector(`[data-slider-prev="${config.id}"]`)?.addEventListener('click', () => embla.scrollPrev());
+					document.querySelector(`[data-slider-next="${config.id}"]`)?.addEventListener('click', () => embla.scrollNext());
+
+					const syncBreakpoint = () => {
+						syncLoopClass();
+						embla.reInit({ loop: option('use_loop', 'use_loop_mobile'), align: 'start' });
+
+						if (!autoplay) return;
+
+						if (option('use_autoplay', 'use_autoplay_mobile')) {
+							autoplay.play();
+						} else {
+							autoplay.stop();
+						}
+					};
+
+					if (mobileQuery.addEventListener) {
+						mobileQuery.addEventListener('change', syncBreakpoint);
+					} else {
+						mobileQuery.addListener(syncBreakpoint);
+					}
+				})();
+			</script>
+		{% else %}
+			<div class="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4">
+				{% for product in products %}
+					{% include "default/components/product-card.twig" with {
+						product: product
+					} %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	</section>
+{% endif %}

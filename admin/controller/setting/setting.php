@@ -440,6 +440,35 @@ class ControllerSettingSetting extends Controller {
             $data['config_limit_autocomplete'] = 5;
         }
 
+		$data['page_families'] = array();
+		$data['page_account_families'] = array();
+
+		$pages = new \Custom\Pages($this->config);
+
+		foreach (\Custom\Pages::families() as $code => $def) {
+			$key = $def['config'];
+
+			if (isset($this->request->post[$key])) {
+				$value = $this->request->post[$key];
+			} else {
+				$value = $pages->enabled($code) ? 1 : 0;
+			}
+
+			$item = array(
+				'code'  => $code,
+				'name'  => $key,
+				'value' => $value,
+				'entry' => $this->language->get('entry_pages_' . $code),
+				'help'  => $this->language->get('help_pages_' . $code)
+			);
+
+			if (!empty($def['group']) && $def['group'] === 'account') {
+				$data['page_account_families'][] = $item;
+			} else {
+				$data['page_families'][] = $item;
+			}
+		}
+
 		if (isset($this->request->post['config_product_count'])) {
 			$data['config_product_count'] = $this->request->post['config_product_count'];
 		} else {
@@ -854,6 +883,28 @@ class ControllerSettingSetting extends Controller {
 			$data['config_mail_alert_email'] = $this->config->get('config_mail_alert_email');
 		}
 
+		$sms_defaults = [
+			'config_phone_prefix' => '380',
+			'config_sms_gateway' => 'log',
+			'config_sms_sender' => '',
+			'config_sms_http_url' => '',
+			'config_sms_http_token' => '',
+			'config_sms_http_body' => '{"phone":"{phone}","message":"{message}"}',
+		];
+
+		foreach ($sms_defaults as $key => $default) {
+			if (isset($this->request->post[$key])) {
+				$data[$key] = $this->request->post[$key];
+			} elseif ($this->config->has($key)) {
+				$data[$key] = $this->config->get($key);
+			} else {
+				$legacy = str_replace('config_', 'theme_default_', $key);
+				$data[$key] = $this->config->has($legacy) ? $this->config->get($legacy) : $default;
+			}
+		}
+
+		$data['sms_gateways'] = $this->smsGateways();
+
 		if (isset($this->request->post['config_secure'])) {
 			$data['config_secure'] = $this->request->post['config_secure'];
 		} else {
@@ -952,6 +1003,12 @@ class ControllerSettingSetting extends Controller {
 			$data['config_compression'] = $this->request->post['config_compression'];
 		} else {
 			$data['config_compression'] = $this->config->get('config_compression');
+		}
+
+		if (isset($this->request->post['config_minifier'])) {
+			$data['config_minifier'] = $this->request->post['config_minifier'];
+		} else {
+			$data['config_minifier'] = $this->config->get('config_minifier');
 		}
 
 		if (isset($this->request->post['config_error_display'])) {
@@ -1147,6 +1204,32 @@ class ControllerSettingSetting extends Controller {
 		}
 
 		return !$this->error;
+	}
+
+	private function smsGateways()
+	{
+		$gateways = [];
+		$files = glob(DIR_SYSTEM . 'library/sms/gateway/*.php');
+
+		if ($files) {
+			foreach ($files as $file) {
+				$code = basename($file, '.php');
+				$key = 'text_sms_gateway_' . $code;
+				$gateways[] = [
+					'code' => $code,
+					'name' => $this->language->get($key) !== $key ? $this->language->get($key) : $code,
+				];
+			}
+		}
+
+		if (!$gateways) {
+			$gateways[] = [
+				'code' => 'log',
+				'name' => $this->language->get('text_sms_gateway_log'),
+			];
+		}
+
+		return $gateways;
 	}
 
 	public function theme() {

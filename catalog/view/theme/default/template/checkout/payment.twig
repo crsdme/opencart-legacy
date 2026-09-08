@@ -1,0 +1,33 @@
+<section class="checkout-block">
+	<h2 class="checkout-block-title">{{ text_checkout_payment_method }}</h2>
+	<p class="checkout-block-hint">{{ text_checkout_payment_method_description }}</p>
+	<div class="checkout-block-body">
+		{% if payment_error %}
+			<p class="checkout-cart-warning">{{ payment_error|raw }}</p>
+		{% endif %}
+
+		{% if payment_methods %}
+			<div class="checkout-methods">
+				{% for method in payment_methods %}
+					<label class="checkout-method">
+						<input
+							class="radio"
+							type="radio"
+							name="payment_method"
+							value="{{ method.code }}"
+							{% if method.code == payment_code %}checked{% endif %}
+							data-checkout-payment
+							required
+						/>
+						<span class="checkout-method-body">
+							<span class="checkout-method-title">{{ method.title }}</span>
+							{% if method.description %}
+								<span class="checkout-method-note">{{ method.description }}</span>
+							{% endif %}
+						</span>
+					</label>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+</section>

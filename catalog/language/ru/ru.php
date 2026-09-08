@@ -12,6 +12,7 @@ $_['text_added_to_cart'] = 'Добавлено в корзину';
 
 // Text
 $_['text_home'] = 'Главная';
+$_['date_format_short'] = 'd.m.Y';
 $_['text_yes'] = 'Да';
 $_['text_no'] = 'Нет';
 $_['text_select'] = ' --- Выберите --- ';

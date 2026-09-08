@@ -1,0 +1,80 @@
+<section class="checkout-block">
+	<h2 class="checkout-block-title">{{ text_checkout_customer }}</h2>
+	<p class="checkout-block-hint">{{ text_checkout_customer_description }}</p>
+	<div class="checkout-block-body checkout-fields">
+		{% if fields.firstname.show %}
+			<div class="form-item{% if fields.firstname.required %} required{% endif %}">
+				<label class="form-label" for="input-firstname">{{ entry_firstname }}</label>
+				<input
+					class="input w-full"
+					type="text"
+					name="firstname"
+					value="{{ firstname }}"
+					id="input-firstname"
+					autocomplete="given-name"
+					{% if fields.firstname.required %}required{% endif %}
+				/>
+			</div>
+		{% endif %}
+
+		{% if fields.lastname.show %}
+			<div class="form-item{% if fields.lastname.required %} required{% endif %}">
+				<label class="form-label" for="input-lastname">{{ entry_lastname }}</label>
+				<input
+					class="input w-full"
+					type="text"
+					name="lastname"
+					value="{{ lastname }}"
+					id="input-lastname"
+					autocomplete="family-name"
+					{% if fields.lastname.required %}required{% endif %}
+				/>
+			</div>
+		{% endif %}
+
+		{% if fields.telephone.show %}
+			<div class="form-item{% if fields.telephone.required %} required{% endif %}">
+				<label class="form-label" for="input-telephone">{{ entry_telephone }}</label>
+				<input
+					class="input w-full"
+					type="tel"
+					value="{{ telephone }}"
+					id="input-telephone"
+					autocomplete="tel"
+					inputmode="tel"
+					data-phone-input
+					data-checkout-phone
+				/>
+				<input type="hidden" name="telephone" value="{{ telephone }}" />
+			</div>
+		{% endif %}
+
+		{% if fields.email.show %}
+			<div class="form-item{% if fields.email.required %} required{% endif %}">
+				<label class="form-label" for="input-email">{{ entry_email }}</label>
+				<input
+					class="input w-full"
+					type="email"
+					name="email"
+					value="{{ email }}"
+					id="input-email"
+					autocomplete="email"
+					{% if fields.email.required %}required{% endif %}
+				/>
+			</div>
+		{% endif %}
+
+		{% if fields.comment.show %}
+			<div class="form-item{% if fields.comment.required %} required{% endif %}">
+				<label class="form-label" for="input-comment">{{ entry_comment }}</label>
+				<textarea
+					class="input w-full min-h-24"
+					name="comment"
+					id="input-comment"
+					placeholder="{{ text_comments }}"
+					{% if fields.comment.required %}required{% endif %}
+				>{{ comment }}</textarea>
+			</div>
+		{% endif %}
+	</div>
+</section>

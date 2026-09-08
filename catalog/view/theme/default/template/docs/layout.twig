@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="{{ theme }}">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex,nofollow" />
+		<title>{{ title }}</title>
+		<link rel="stylesheet" href="/catalog/view/theme/default/stylesheet/tailwind.css" />
+		<link rel="stylesheet" href="/catalog/view/theme/default/stylesheet/docs.css?v=6" />
+		<script src="/catalog/view/theme/default/javascript/jquery.min.js"></script>
+		<script src="/catalog/view/theme/default/javascript/embla-carousel.js"></script>
+		<script src="/catalog/view/theme/default/javascript/ui.js"></script>
+		<script src="/catalog/view/theme/default/javascript/docs.js?v=5"></script>
+	</head>
+	<body>
+		<div id="viewport" class="docs-root">
+			<aside class="docs-sidebar" data-docs-sidebar>
+				<div class="docs-sidebar-top">
+					<nav class="docs-tabs" aria-label="Docs">
+						<a class="docs-tab{% if page == 'components' %} is-active{% endif %}" href="{{ link_components }}">Components</a>
+						<a class="docs-tab{% if page == 'docs' %} is-active{% endif %}" href="{{ link_docs }}">Docs</a>
+					</nav>
+					<button class="button-ghost" type="button" data-type="icon" data-size="small" onclick="toggleTheme()" aria-label="Toggle theme">
+						<svg aria-hidden="true" viewBox="0 0 24 24">
+							<use data-theme-icon href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
+						</svg>
+					</button>
+				</div>
+				{% if page == 'components' %}
+					<div class="docs-search">
+						<input class="input" type="search" data-docs-filter placeholder="Search" />
+					</div>
+				{% endif %}
+				<nav class="docs-sidebar-nav">
+					{% for group in groups %}
+						<div class="docs-folder" data-docs-group>
+							<div class="docs-folder-title">{{ group.title }}</div>
+							{% for item in group.items %}
+								<a class="docs-folder-link{% if item.active %} is-active{% endif %}" href="{{ item.href }}" data-docs-link data-title="{{ item.title }}">{{ item.title }}</a>
+							{% endfor %}
+						</div>
+					{% endfor %}
+				</nav>
+			</aside>
+			<div class="docs-page">
+				<header class="docs-navbar">
+					<button class="button-ghost" type="button" data-type="icon" data-docs-menu aria-label="Menu">
+						<svg aria-hidden="true" viewBox="0 0 24 24">
+							<use href="/assets/icons/sprite.svg#icon-menu"></use>
+						</svg>
+					</button>
+					<nav class="docs-tabs" aria-label="Docs">
+						<a class="docs-tab{% if page == 'components' %} is-active{% endif %}" href="{{ link_components }}">Components</a>
+						<a class="docs-tab{% if page == 'docs' %} is-active{% endif %}" href="{{ link_docs }}">Docs</a>
+					</nav>
+					<button class="button-ghost" type="button" data-type="icon" data-size="small" onclick="toggleTheme()" aria-label="Toggle theme">
+						<svg aria-hidden="true" viewBox="0 0 24 24">
+							<use data-theme-icon href="{{ theme == "dark" ? "/assets/icons/sprite.svg#icon-moon" : "/assets/icons/sprite.svg#icon-sun" }}"></use>
+						</svg>
+					</button>
+				</header>
+		<div class="docs-page-body{% if toc|length %} has-toc{% endif %}">
+					<main class="docs-main">
+						{{ content }}
+					</main>
+					{% if toc|length %}
+						<nav class="docs-toc" aria-label="On this page">
+							<p class="docs-toc-title">On this page</p>
+							{% for item in toc %}
+								<a class="docs-toc-link is-h{{ item.level }}" href="#{{ item.id }}" data-docs-link>{{ item.text }}</a>
+							{% endfor %}
+						</nav>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

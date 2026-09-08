@@ -1,0 +1,195 @@
+/* Product page — gallery, sticky columns, reviews, options */
+
+/* PRODUCT PAGE */
+
+.product-hero-col.is-sticky {
+	position: sticky;
+	top: var(--product-sticky-top, 7rem);
+	z-index: 20;
+	align-self: flex-start;
+}
+
+.product-gallery {
+	@apply flex flex-col gap-3;
+}
+
+.product-gallery-main {
+	@apply overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950;
+}
+
+.product-gallery-main img {
+	@apply aspect-square w-full object-contain p-4;
+}
+
+.product-gallery-thumbs {
+	@apply flex flex-wrap gap-2;
+}
+
+.product-gallery-thumb {
+	@apply h-20 w-20 overflow-hidden rounded-md border border-neutral-200 bg-white p-1 dark:border-neutral-800 dark:bg-neutral-950;
+}
+
+.product-gallery-thumb[data-active='true'] {
+	@apply border-neutral-900 dark:border-white;
+}
+
+.product-gallery-thumb img {
+	@apply h-full w-full object-contain;
+}
+
+.product-price {
+	@apply flex flex-wrap items-center gap-3 text-3xl font-bold text-neutral-900 dark:text-white;
+}
+
+.product-price-old {
+	@apply text-lg font-medium text-neutral-400 line-through dark:text-neutral-500;
+}
+
+.product-meta {
+	@apply grid gap-2 text-sm;
+}
+
+.product-meta > div {
+	@apply flex flex-wrap gap-2;
+}
+
+.product-meta dt {
+	@apply text-neutral-500 dark:text-neutral-400;
+}
+
+.product-meta dd {
+	@apply font-medium text-neutral-900 dark:text-white;
+}
+
+.product-qty {
+	@apply inline-flex w-max shrink-0 items-center;
+}
+
+.product-qty .button-secondary:first-child {
+	@apply rounded-r-none;
+}
+
+.product-qty .input {
+	@apply w-14 shrink-0 rounded-none border-l-0 border-r-0 text-center sm:w-16;
+	-moz-appearance: textfield;
+}
+
+.product-qty .input[data-size='sm'] {
+	@apply h-8 w-10 px-0 sm:w-12;
+}
+
+.product-qty .input::-webkit-outer-spin-button,
+.product-qty .input::-webkit-inner-spin-button {
+	margin: 0;
+	-webkit-appearance: none;
+}
+
+.product-qty .button-secondary:last-child {
+	@apply rounded-l-none;
+}
+
+.product-panel,
+.product-buy {
+	@apply rounded-xl border border-neutral-200 bg-white p-4 sm:p-6 dark:border-neutral-800 dark:bg-neutral-900;
+}
+
+.product-buy-actions {
+	@apply flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4;
+}
+
+.product-buy-cart {
+	@apply w-full sm:min-w-52 sm:flex-1;
+}
+
+.product-attributes {
+	@apply mb-6 last:mb-0;
+}
+
+.product-attributes-row {
+	@apply grid grid-cols-2 gap-4 border-b border-neutral-200 py-3 text-sm dark:border-neutral-800;
+}
+
+.product-attributes-row dt {
+	@apply text-neutral-500 dark:text-neutral-400;
+}
+
+.product-attributes-row dd {
+	@apply font-medium text-neutral-900 dark:text-white;
+}
+
+.product-review {
+	@apply rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900;
+}
+
+.rating {
+	@apply inline-flex items-center gap-0.5;
+}
+
+.rating-star {
+	@apply h-4 w-4 fill-none stroke-current text-neutral-300 dark:text-neutral-600;
+}
+
+.rating-star.is-filled {
+	@apply fill-current text-yellow-500;
+}
+
+.rating-input {
+	@apply relative flex flex-row-reverse justify-end gap-0.5;
+}
+
+.rating-input input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.rating-input-label {
+	@apply cursor-pointer;
+}
+
+.rating-input .rating-star {
+	@apply h-6 w-6;
+}
+
+.rating-input input:checked + .rating-input-label .rating-star,
+.rating-input input:checked ~ .rating-input-label .rating-star {
+	@apply fill-current text-yellow-500;
+}
+
+.rating-input:hover .rating-input-label .rating-star {
+	@apply fill-none text-neutral-300 dark:text-neutral-600;
+}
+
+.rating-input:hover .rating-input-label:hover .rating-star,
+.rating-input:hover .rating-input-label:hover ~ .rating-input-label .rating-star {
+	@apply fill-current text-yellow-500;
+}
+
+.text-collapse-wrapper {
+	@apply relative overflow-hidden transition-[max-height] duration-500 ease-in-out;
+	max-height: 300px;
+}
+
+.text-collapse-overlay {
+	@apply pointer-events-none absolute bottom-0 left-0 h-[50px] w-full bg-gradient-to-b from-transparent to-white dark:to-neutral-900;
+}
+
+.text-collapse.is-expanded .text-collapse-wrapper {
+	max-height: none;
+}
+
+.text-collapse.is-expanded .text-collapse-overlay {
+	@apply hidden;
+}
+
+/* PRODUCT PAGE */

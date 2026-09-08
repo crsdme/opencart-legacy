@@ -36,6 +36,7 @@
             <li><a href="#tab-option" data-toggle="tab">{{ tab_option }}</a></li>
             <li><a href="#tab-image" data-toggle="tab">{{ tab_image }}</a></li>
             <li><a href="#tab-mail" data-toggle="tab">{{ tab_mail }}</a></li>
+            <li><a href="#tab-sms" data-toggle="tab">{{ tab_sms }}</a></li>
 			<li><a href="#tab-server" data-toggle="tab">{{ tab_server }}</a></li>
 			<li><a href="#tab-seopro" data-toggle="tab">{{ tab_seopro }}</a></li>
 			<li><a href="#tab-microdata" data-toggle="tab">{{ tab_microdata }}</a></li>
@@ -368,6 +369,54 @@
               </div>
             </div>
             <div class="tab-pane" id="tab-option">
+              <fieldset>
+                <legend>{{ text_pages }}</legend>
+                {% for family in page_families %}
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ family.help }}">{{ family.entry }}</span></label>
+                  <div class="col-sm-10">
+                    <label class="radio-inline"> {% if family.value %}
+                      <input type="radio" name="{{ family.name }}" value="1" checked="checked" />
+                      {{ text_yes }}
+                      {% else %}
+                      <input type="radio" name="{{ family.name }}" value="1" />
+                      {{ text_yes }}
+                      {% endif %} </label>
+                    <label class="radio-inline"> {% if not family.value %}
+                      <input type="radio" name="{{ family.name }}" value="0" checked="checked" />
+                      {{ text_no }}
+                      {% else %}
+                      <input type="radio" name="{{ family.name }}" value="0" />
+                      {{ text_no }}
+                      {% endif %} </label>
+                  </div>
+                </div>
+                {% endfor %}
+              </fieldset>
+              <fieldset>
+                <legend>{{ text_pages_account }}</legend>
+                {% for family in page_account_families %}
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ family.help }}">{{ family.entry }}</span></label>
+                  <div class="col-sm-10">
+                    <label class="radio-inline"> {% if family.value %}
+                      <input type="radio" name="{{ family.name }}" value="1" checked="checked" />
+                      {{ text_yes }}
+                      {% else %}
+                      <input type="radio" name="{{ family.name }}" value="1" />
+                      {{ text_yes }}
+                      {% endif %} </label>
+                    <label class="radio-inline"> {% if not family.value %}
+                      <input type="radio" name="{{ family.name }}" value="0" checked="checked" />
+                      {{ text_no }}
+                      {% else %}
+                      <input type="radio" name="{{ family.name }}" value="0" />
+                      {{ text_no }}
+                      {% endif %} </label>
+                  </div>
+                </div>
+                {% endfor %}
+              </fieldset>
               <fieldset>
                 <legend>{{ text_product }}</legend>
                 <div class="form-group">
@@ -1194,6 +1243,51 @@
                 </div>
               </fieldset>
             </div>
+            <div class="tab-pane" id="tab-sms">
+              <fieldset>
+                <legend>{{ tab_sms }}</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-phone-prefix"><span data-toggle="tooltip" title="{{ help_phone_prefix }}">{{ entry_phone_prefix }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="config_phone_prefix" value="{{ config_phone_prefix }}" placeholder="380" id="input-phone-prefix" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-sms-gateway"><span data-toggle="tooltip" title="{{ help_sms_gateway }}">{{ entry_sms_gateway }}</span></label>
+                  <div class="col-sm-10">
+                    <select name="config_sms_gateway" id="input-sms-gateway" class="form-control">
+                      {% for gateway in sms_gateways %}
+                      <option value="{{ gateway.code }}"{% if config_sms_gateway == gateway.code %} selected="selected"{% endif %}>{{ gateway.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-sms-sender"><span data-toggle="tooltip" title="{{ help_sms_sender }}">{{ entry_sms_from }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="config_sms_sender" value="{{ config_sms_sender }}" id="input-sms-sender" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group sms-token">
+                  <label class="col-sm-2 control-label" for="input-sms-http-token"><span data-toggle="tooltip" title="{{ help_sms_http_token }}">{{ entry_sms_http_token }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="password" name="config_sms_http_token" value="{{ config_sms_http_token }}" id="input-sms-http-token" class="form-control" autocomplete="new-password" />
+                  </div>
+                </div>
+                <div class="form-group sms-http">
+                  <label class="col-sm-2 control-label" for="input-sms-http-url"><span data-toggle="tooltip" title="{{ help_sms_http_url }}">{{ entry_sms_http_url }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="config_sms_http_url" value="{{ config_sms_http_url }}" id="input-sms-http-url" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group sms-http">
+                  <label class="col-sm-2 control-label" for="input-sms-http-body"><span data-toggle="tooltip" title="{{ help_sms_http_body }}">{{ entry_sms_http_body }}</span></label>
+                  <div class="col-sm-10">
+                    <textarea name="config_sms_http_body" rows="4" id="input-sms-http-body" class="form-control">{{ config_sms_http_body }}</textarea>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
             <div class="tab-pane" id="tab-server">
               <fieldset>
                 <legend>{{ text_general }}</legend>
@@ -1245,6 +1339,25 @@
                   <label class="col-sm-2 control-label" for="input-compression"><span data-toggle="tooltip" title="{{ help_compression }}">{{ entry_compression }}</span></label>
                   <div class="col-sm-10">
                     <input type="text" name="config_compression" value="{{ config_compression }}" placeholder="{{ entry_compression }}" id="input-compression" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_minifier }}">{{ entry_minifier }}</span></label>
+                  <div class="col-sm-10">
+                    <label class="radio-inline"> {% if config_minifier %}
+                      <input type="radio" name="config_minifier" value="1" checked="checked" />
+                      {{ text_yes }}
+                      {% else %}
+                      <input type="radio" name="config_minifier" value="1" />
+                      {{ text_yes }}
+                      {% endif %} </label>
+                    <label class="radio-inline"> {% if not config_minifier %}
+                      <input type="radio" name="config_minifier" value="0" checked="checked" />
+                      {{ text_no }}
+                      {% else %}
+                      <input type="radio" name="config_minifier" value="0" />
+                      {{ text_no }}
+                      {% endif %} </label>
                   </div>
                 </div>
               </fieldset>
@@ -1782,5 +1895,25 @@ $('select[name=\'config_country_id\']').on('change', function() {
 });
 
 $('select[name=\'config_country_id\']').trigger('change');
+//--></script>
+<script type="text/javascript"><!--
+function toggleSmsGatewayFields() {
+	var gateway = $('#input-sms-gateway').val();
+
+	if (gateway === 'http') {
+		$('.sms-http').show();
+	} else {
+		$('.sms-http').hide();
+	}
+
+	if (gateway === 'http' || gateway === 'turbosms') {
+		$('.sms-token').show();
+	} else {
+		$('.sms-token').hide();
+	}
+}
+
+$('#input-sms-gateway').on('change', toggleSmsGatewayFields);
+toggleSmsGatewayFields();
 //--></script></div>
 {{ footer }} 

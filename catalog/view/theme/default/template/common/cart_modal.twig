@@ -1,0 +1,83 @@
+{% if products %}
+	<div id="cart-modal-products">
+		{% for product in products %}
+			<div class="cart-item">
+				{% if product.thumb %}
+					<a href="{{ product.href }}" class="cart-item-image">
+						<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" width="80" height="80" />
+					</a>
+				{% endif %}
+
+				<div class="cart-item-body">
+					<div class="cart-item-top">
+						<div class="min-w-0">
+							<a href="{{ product.href }}" class="cart-item-name">{{ product.name }}</a>
+							{% if product.option %}
+								{% for option in product.option %}
+									<p class="cart-item-option">{{ option.name }}: {{ option.value }}</p>
+								{% endfor %}
+							{% endif %}
+							{% if product.recurring %}
+								<p class="cart-item-option">{{ product.recurring }}</p>
+							{% endif %}
+							{% if product.price %}
+								<p class="cart-item-price">{{ product.price }}</p>
+							{% endif %}
+						</div>
+
+						<button
+							type="button"
+							class="button-destructive"
+							data-type="icon"
+							data-size="small"
+							onclick="removeCartProduct('{{ product.cart_id }}');"
+							title="{{ button_remove }}"
+							aria-label="{{ button_remove }}"
+						>
+							<svg aria-hidden="true" viewBox="0 0 24 24">
+								<use href="/assets/icons/sprite.svg#icon-trash"></use>
+							</svg>
+						</button>
+					</div>
+
+					<div class="cart-item-bottom">
+						<div class="product-qty">
+							<button type="button" class="button-secondary" data-type="icon" data-size="small" data-qty="minus" aria-label="-">-</button>
+							<input
+								class="input text-center"
+								data-size="sm"
+								type="number"
+								value="{{ product.quantity }}"
+								min="{{ product.minimum }}"
+								data-cart-qty="{{ product.cart_id }}"
+							/>
+							<button type="button" class="button-secondary" data-type="icon" data-size="small" data-qty="plus" aria-label="+">+</button>
+						</div>
+
+						<p class="cart-item-total">{{ product.total }}</p>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+	<div id="cart-modal-totals">
+		<div class="cart-totals">
+			{% for total in totals %}
+				<div class="cart-total-row{% if loop.last %} is-grand{% endif %}">
+					<span>{{ total.title }}</span>
+					<span>{{ total.text }}</span>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% else %}
+	<div id="cart-modal-products">
+		<div class="flex h-full items-center justify-center">
+			<p class="text-muted text-center">
+				{{ text_empty }}
+			</p>
+		</div>
+	</div>
+	<div id="cart-modal-totals"></div>
+{% endif %}

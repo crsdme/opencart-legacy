@@ -42,6 +42,10 @@ class ControllerMailOrder extends Controller {
 	}
 		
 	public function add($order_info, $order_status_id, $comment, $notify) {
+		if (!$this->canMailCustomer($order_info)) {
+			return;
+		}
+
 		// Check for any downloadable products
 		$download_status = false;
 
@@ -276,6 +280,10 @@ class ControllerMailOrder extends Controller {
 	}
 	
 	public function edit($order_info, $order_status_id, $comment) {
+		if (!$this->canMailCustomer($order_info)) {
+			return;
+		}
+
 		$language = new Language($order_info['language_code']);
 		$language->load($order_info['language_code']);
 		$language->load('mail/order_edit');
@@ -444,6 +452,12 @@ class ControllerMailOrder extends Controller {
 
 			$data['comment'] = strip_tags($order_info['comment']);
 
+			$from = trim((string) $this->config->get('config_email'));
+
+			if (!$from || !filter_var($from, FILTER_VALIDATE_EMAIL)) {
+				return;
+			}
+
 			$mail = new Mail($this->config->get('config_mail_engine'));
 			$mail->parameter = $this->config->get('config_mail_parameter');
 			$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
@@ -452,8 +466,8 @@ class ControllerMailOrder extends Controller {
 			$mail->smtp_port = $this->config->get('config_mail_smtp_port');
 			$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
 
-			$mail->setTo($this->config->get('config_email'));
-			$mail->setFrom($this->config->get('config_email'));
+			$mail->setTo($from);
+			$mail->setFrom($from);
 			$mail->setSender(html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'));
 			$mail->setSubject(html_entity_decode(sprintf($this->language->get('text_subject'), $this->config->get('config_name'), $order_info['order_id']), ENT_QUOTES, 'UTF-8'));
 			$mail->setText($this->load->view('mail/order_alert', $data));
@@ -470,5 +484,12 @@ class ControllerMailOrder extends Controller {
 				}
 			}
 		}
+	}
+
+	private function canMailCustomer($order_info)
+	{
+		$email = isset($order_info['email']) ? trim((string) $order_info['email']) : '';
+
+		return $email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 }

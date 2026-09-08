@@ -11,6 +11,8 @@ class ControllerBlogArticle extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('blog/article');
+		$this->load->model('blog/author');
+		$this->model_blog_author->install();
 
 		$this->getList();
 	}
@@ -21,6 +23,9 @@ class ControllerBlogArticle extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('blog/article');
+
+		$this->load->model('blog/author');
+		$this->model_blog_author->install();
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_blog_article->addArticle($this->request->post);
@@ -65,6 +70,9 @@ class ControllerBlogArticle extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('blog/article');
+
+		$this->load->model('blog/author');
+		$this->model_blog_author->install();
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_blog_article->editArticle($this->request->get['article_id'], $this->request->post);
@@ -572,6 +580,19 @@ class ControllerBlogArticle extends Controller {
 		} else {
 			$data['status'] = true;
 		}
+
+		$this->load->model('blog/author');
+		$this->model_blog_author->install();
+
+		if (isset($this->request->post['author_id'])) {
+			$data['author_id'] = (int)$this->request->post['author_id'];
+		} elseif (!empty($article_info['author_id'])) {
+			$data['author_id'] = (int)$article_info['author_id'];
+		} else {
+			$data['author_id'] = 0;
+		}
+
+		$data['authors'] = $this->model_blog_author->getAuthors(array('sort' => 'ad.name', 'order' => 'ASC'));
 		
 		if (isset($this->request->post['noindex'])) {
 			$data['noindex'] = $this->request->post['noindex'];

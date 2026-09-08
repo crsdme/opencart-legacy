@@ -1,0 +1,10 @@
+{% if totals %}
+	<div class="cart-totals">
+		{% for total in totals %}
+			<div class="cart-total-row{% if loop.last %} is-grand{% endif %}">
+				<span>{{ total.title }}</span>
+				<span>{{ total.text }}</span>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}

@@ -4,7 +4,7 @@
 
 class ModelBlogArticle extends Model {
 	public function addArticle($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "article SET status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_added = NOW()");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "article SET author_id = '" . (int)($data['author_id'] ?? 0) . "', status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_added = NOW()");
 
 		$article_id = $this->db->getLastId();
 
@@ -91,7 +91,7 @@ class ModelBlogArticle extends Model {
 
 	public function editArticle($article_id, $data) {
 
-		$this->db->query("UPDATE " . DB_PREFIX . "article SET status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_modified = NOW() WHERE article_id = '" . (int)$article_id . "'");
+		$this->db->query("UPDATE " . DB_PREFIX . "article SET author_id = '" . (int)($data['author_id'] ?? 0) . "', status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_modified = NOW() WHERE article_id = '" . (int)$article_id . "'");
 
 		if (isset($data['image'])) {
 			$this->db->query("UPDATE " . DB_PREFIX . "article SET image = '" . $this->db->escape($data['image']) . "' WHERE article_id = '" . (int)$article_id . "'");

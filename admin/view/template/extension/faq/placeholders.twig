@@ -1,0 +1,71 @@
+<div class="faq-placeholders">
+	<p class="help-block">{{ help_placeholders }}</p>
+	<div class="faq-placeholder-list">
+		{% for tag in placeholders %}
+			<button type="button" class="faq-placeholder-tag" data-tag="{{ tag }}" title="{{ help_placeholder_copy }}">{{ tag }}</button>
+		{% endfor %}
+	</div>
+</div>
+<style>
+.faq-placeholders { margin: 0 0 16px; }
+.faq-placeholder-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.faq-placeholder-tag {
+	display: inline-block;
+	margin: 0;
+	padding: 4px 8px;
+	border: 0;
+	border-radius: 3px;
+	background: #5bc0de;
+	color: #fff;
+	font-size: 12px;
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	line-height: 1.4;
+	cursor: pointer;
+}
+.faq-placeholder-tag:hover,
+.faq-placeholder-tag:focus {
+	background: #31b0d5;
+	color: #fff;
+	outline: 0;
+}
+.faq-placeholder-tag.is-copied {
+	background: #5cb85c;
+}
+</style>
+<script type="text/javascript">
+if (typeof faqPlaceholderReady === 'undefined') {
+	var faqPlaceholderReady = true;
+	var faqPlaceholderField = null;
+	var faqPlaceholderCopied = {{ text_copied|json_encode|raw }};
+
+	$(document).on('focusin', '#tab-faq input, #tab-faq textarea, #form-faq input, #form-faq textarea', function() {
+		if (this.name && this.name.indexOf('faq') !== -1) {
+			faqPlaceholderField = this;
+		}
+	});
+
+	$(document).on('click', '.faq-placeholder-tag', function() {
+		var tag = $(this).data('tag');
+		var field = faqPlaceholderField;
+		var button = this;
+
+		if (field && typeof field.selectionStart === 'number') {
+			var start = field.selectionStart;
+			var end = field.selectionEnd;
+			var value = field.value;
+			field.value = value.slice(0, start) + tag + value.slice(end);
+			field.selectionStart = field.selectionEnd = start + tag.length;
+			field.focus();
+		}
+
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(tag);
+		}
+
+		$(button).addClass('is-copied').attr('title', faqPlaceholderCopied);
+		setTimeout(function() {
+			$(button).removeClass('is-copied').attr('title', {{ help_placeholder_copy|json_encode|raw }});
+		}, 1200);
+	});
+}
+</script>
