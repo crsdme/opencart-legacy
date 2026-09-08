@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs">
+	{% for tab in tabs %}
+		<li class="{{ tab.active ? 'active' : '' }}"><a href="{{ tab.href }}">{{ tab.name }}</a></li>
+	{% endfor %}
+</ul>
