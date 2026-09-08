@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prettier": "prettier --write \"public_html/catalog/view/theme/default/**/*.twig\" \"public_html/catalog/view/theme/default/**/*.css\" \"public_html/catalog/view/theme/default/**/*.js\" \"public_html/catalog/controller/**/*.php\" \"public_html/catalog/model/**/*.php\"",
-    "dev": "npx tailwindcss -i ./public_html/catalog/view/theme/default/stylesheet/stylesheet.css -o ./public_html/catalog/view/theme/default/stylesheet/tailwind.css --watch --minify"
+    "dev": "npx tailwindcss -i ./public_html/catalog/view/theme/default/stylesheet/stylesheet.css -o ./public_html/catalog/view/theme/default/stylesheet/tailwind.css --watch --minify",
+    "git:deploy": "git subtree push --prefix=public_html origin deploy"
   },
   "keywords": [],
   "author": "",

@@ -13,8 +13,11 @@ public_html/system/storage/backup/*
 !public_html/system/storage/backup/index.html
 public_html/image/cache/
 public_html/image/cachewebp/
-public_html/admin/config.php
+
+# Local secrets / env — keep config-dist.php and .htaccess.example
 public_html/config.php
+public_html/admin/config.php
+public_html/.htaccess
 
 # Node
 node_modules/
