@@ -111,6 +111,14 @@ OpenCart (ocStore) is the engine. Tailwind and Docker are the kit around it. The
 - Placeholders (`{name}`, `{price}`, `{category}`, `{month}`, `{year}`, …) are replaced on the storefront. Full list: `docs/faq.md`.
 - Tables (`DB_PREFIX`): `faq`, `faq_description`, `faq_page`. Uninstall does not drop data unless **Delete FAQ data on uninstall** is on.
 
+## IMPORT / EXPORT
+
+- Module: Admin → Extensions → Extensions → Modules → Import / Export. Full notes: `docs/import_export.md`.
+- CSV/JSON for products, categories, manufacturers, attribute groups and attributes. Not the SQL dump (`tool/backup`).
+- Upsert by **id** first (`product_id`, `category_id`, …), then SKU / name. Products link with `category_ids` and `attribute_id`. Preview, then write through admin `add*` / `edit*` models.
+- JSON bundle import order: manufacturers → attribute groups → attributes → categories → products.
+- CLI: `cli/import_export.php`. Table (`DB_PREFIX`): `import_export_job`. Uninstall does not drop history unless **Delete job history on uninstall** is on.
+
 ## AUTO BACKUP
 
 - Module: Admin → Extensions → Extensions → Modules → Auto Backup. Full notes: `docs/backup.md`.

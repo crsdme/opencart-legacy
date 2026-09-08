@@ -1,0 +1,114 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				{% if can_modify %}
+					<button type="submit" form="form-import-export" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				{% endif %}
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% include 'extension/import_export/tabs.twig' %}
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title"><i class="fa fa-cog"></i> {{ text_edit }}</h3></div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-import-export" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<select name="module_import_export_status" class="form-control">
+								<option value="1"{% if module_import_export_status %} selected="selected"{% endif %}>{{ text_enabled }}</option>
+								<option value="0"{% if not module_import_export_status %} selected="selected"{% endif %}>{{ text_disabled }}</option>
+							</select>
+							<p class="help-block">{{ help_status }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_product_key }}</label>
+						<div class="col-sm-10">
+							<select name="module_import_export_product_key" class="form-control">
+								<option value="sku"{% if module_import_export_product_key == 'sku' %} selected="selected"{% endif %}>{{ text_key_sku }}</option>
+								<option value="model"{% if module_import_export_product_key == 'model' %} selected="selected"{% endif %}>{{ text_key_model }}</option>
+							</select>
+							<p class="help-block">{{ help_product_key }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_on_missing }}</label>
+						<div class="col-sm-10">
+							<select name="module_import_export_on_missing_ref" class="form-control">
+								<option value="create"{% if module_import_export_on_missing_ref == 'create' %} selected="selected"{% endif %}>{{ text_missing_create }}</option>
+								<option value="error"{% if module_import_export_on_missing_ref == 'error' %} selected="selected"{% endif %}>{{ text_missing_error }}</option>
+								<option value="skip"{% if module_import_export_on_missing_ref == 'skip' %} selected="selected"{% endif %}>{{ text_missing_skip }}</option>
+							</select>
+							<p class="help-block">{{ help_on_missing }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_delete_data }}</label>
+						<div class="col-sm-10">
+							<select name="module_import_export_delete_data_on_uninstall" class="form-control">
+								<option value="0"{% if not module_import_export_delete_data_on_uninstall %} selected="selected"{% endif %}>{{ text_no }}</option>
+								<option value="1"{% if module_import_export_delete_data_on_uninstall %} selected="selected"{% endif %}>{{ text_yes }}</option>
+							</select>
+							<p class="help-block">{{ help_delete_data }}</p>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title"><i class="fa fa-history"></i> {{ text_recent }}</h3></div>
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<td>{{ column_date }}</td>
+								<td>{{ column_action }}</td>
+								<td>{{ column_entity }}</td>
+								<td>{{ column_status }}</td>
+								<td>{{ column_created }}</td>
+								<td>{{ column_updated }}</td>
+								<td>{{ column_errors }}</td>
+							</tr>
+						</thead>
+						<tbody>
+							{% if jobs %}
+								{% for job in jobs %}
+									<tr>
+										<td>{{ job.date_added }}</td>
+										<td>{{ job.action }}</td>
+										<td>{{ job.entity }}</td>
+										<td>{{ job.status }}</td>
+										<td>{{ job.created }}</td>
+										<td>{{ job.updated }}</td>
+										<td>{{ job.errors }}</td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr><td class="text-center" colspan="7">{{ text_no_results }}</td></tr>
+							{% endif %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}

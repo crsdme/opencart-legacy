@@ -1,0 +1,86 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% include 'extension/import_export/tabs.twig' %}
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title"><i class="fa fa-history"></i> {{ text_tab_job }}</h3></div>
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<td>{{ column_id }}</td>
+								<td>{{ column_date }}</td>
+								<td>{{ column_action }}</td>
+								<td>{{ column_entity }}</td>
+								<td>{{ column_format }}</td>
+								<td>{{ column_file }}</td>
+								<td>{{ column_status }}</td>
+								<td>{{ column_created }}</td>
+								<td>{{ column_updated }}</td>
+								<td>{{ column_skipped }}</td>
+								<td>{{ column_errors }}</td>
+								<td>{{ column_message }}</td>
+								<td class="text-right"></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% if jobs %}
+								{% for job in jobs %}
+									<tr>
+										<td>{{ job.job_id }}</td>
+										<td>{{ job.date_added }}</td>
+										<td>{{ job.action }}</td>
+										<td>{{ job.entity }}</td>
+										<td>{{ job.format }}</td>
+										<td>{{ job.filename }}</td>
+										<td>
+											{% if job.status_code == 'success' %}
+												<span class="label label-success">{{ job.status }}</span>
+											{% else %}
+												<span class="label label-danger">{{ job.status }}</span>
+											{% endif %}
+										</td>
+										<td>{{ job.created }}</td>
+										<td>{{ job.updated }}</td>
+										<td>{{ job.skipped }}</td>
+										<td>{{ job.errors }}</td>
+										<td><small>{{ job.message|nl2br }}</small></td>
+										<td class="text-right">
+											{% if can_modify %}
+												<a href="{{ job.delete }}" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger btn-sm" onclick="return confirm('{{ text_confirm }}');"><i class="fa fa-trash"></i></a>
+											{% endif %}
+										</td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr><td class="text-center" colspan="13">{{ text_no_results }}</td></tr>
+							{% endif %}
+						</tbody>
+					</table>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 text-left">{{ pagination }}</div>
+					<div class="col-sm-6 text-right">{{ results }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}

@@ -89,6 +89,7 @@ What the kit adds on top of ocStore. Not a dated release log: git is one bulk co
 - Docker Compose (PHP 7.4, MySQL 5.7, phpMyAdmin)
 - Secured admin URL
 - Auto Backup (DB + `image/catalog`, cron, Drive / FTP) — `backup.md`
+- Import / Export (CSV/JSON catalog, templates, preview, CLI) — `import_export.md`
 - Markdown docs site (`/index.php?route=docs`)
 - Prettier (Twig + PHP)
 - `dev_dump` debug helper
