@@ -6,6 +6,10 @@
 	@apply relative w-full;
 }
 
+.live-search[data-open] {
+	@apply z-50;
+}
+
 .live-search-input {
 	@apply relative z-10;
 }

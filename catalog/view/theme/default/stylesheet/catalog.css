@@ -75,7 +75,7 @@
 }
 
 .product-card-image {
-	@apply flex aspect-square w-full items-center justify-center overflow-hidden p-4;
+	@apply flex aspect-square w-full items-center justify-center overflow-hidden p-2 md:p-4;
 }
 
 .product-card-image img {
@@ -83,7 +83,7 @@
 }
 
 .product-card-badges {
-	@apply absolute left-3 top-3 z-10 flex items-center gap-1;
+	@apply absolute left-2 top-2 z-10 flex items-center gap-1 md:left-3 md:top-3;
 }
 
 .product-card-favorite {
@@ -102,7 +102,7 @@
 }
 
 .product-card-content {
-	@apply flex flex-1 flex-col px-4 pb-4 pt-1;
+	@apply flex flex-1 flex-col px-2 pb-2 pt-1 md:px-4 md:pb-4;
 }
 
 .product-card-title {
@@ -114,11 +114,11 @@
 }
 
 .product-card-footer {
-	@apply mt-auto flex items-center justify-between gap-3 pt-3;
+	@apply mt-auto flex flex-col items-start gap-2 pt-2 md:flex-row md:items-center md:justify-between md:gap-3 md:pt-3;
 }
 
 .product-card-price {
-	@apply flex min-w-0 items-center gap-2 text-lg font-bold text-neutral-900 dark:text-white;
+	@apply flex min-w-0 flex-col items-start gap-0 text-base font-bold text-neutral-900 dark:text-white md:flex-row md:items-baseline md:gap-2 md:text-lg;
 }
 
 .product-card-special {
@@ -126,7 +126,7 @@
 }
 
 .product-card-buy {
-	@apply shrink-0;
+	@apply w-full shrink-0 md:w-auto;
 }
 
 .article-card .product-card-image {
