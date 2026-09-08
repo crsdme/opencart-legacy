@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd zip mysqli
 
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers expires deflate
 
 RUN docker-php-ext-install opcache
 

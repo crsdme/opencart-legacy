@@ -2,13 +2,15 @@
 // *	@source		See SOURCE.txt for source and other copyright.
 // *	@license	GNU General Public License version 3; see LICENSE.txt
 
-class ControllerBlogMenu extends Controller {
-	public function index() {
+class ControllerBlogMenu extends Controller
+{
+	public function index()
+	{
 
 		$this->load->language('blog/menu');
-		
+
 		$configblog_name = $this->config->get('configblog_name');
-		
+
 		if (!empty($configblog_name)) {
 			$data['text_blog'] = $this->config->get('configblog_name');
 		} else {
@@ -49,9 +51,9 @@ class ControllerBlogMenu extends Controller {
 
 				// Level 1
 				$filter_data = array(
-						'filter_blog_category_id'  => $category['blog_category_id']
-					);
-				
+					'filter_blog_category_id'  => $category['blog_category_id']
+				);
+
 				$data['categories'][] = array(
 					'name'     => $category['name'] . ($this->config->get('configblog_article_count') ? ' (' . $this->model_blog_article->getTotalArticles($filter_data) . ')' : ''),
 					'children' => $children_data,
@@ -60,7 +62,7 @@ class ControllerBlogMenu extends Controller {
 				);
 			}
 		}
-		
+
 		return $this->load->view('blog/menu', $data);
 	}
 }

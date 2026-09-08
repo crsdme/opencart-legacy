@@ -1,130 +1,198 @@
-{{ header }}
-<div id="product-compare" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  {% if success %}
-  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-  </div>
-  {% endif %}
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h1>{{ heading_title }}</h1>
-      {% if products %}
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <td colspan="{{ products|length + 1 }}"><strong>{{ text_product }}</strong></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ text_name }}</td>
-            {% for product in products %}
-            <td><a href="{{ product.href }}"><strong>{{ product.name }}</strong></a></td>
-            {% endfor %} </tr>
-          <tr>
-            <td>{{ text_image }}</td>
-            {% for product in products %}
-            <td class="text-center">{% if product.thumb %} <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" /> {% endif %}</td>
-            {% endfor %} </tr>
-          <tr>
-            <td>{{ text_price }}</td>
-            {% for product in products %}
-            <td>{% if product.price %}
-              {% if not product.special %}
-              {{ product.price }}
-              {% else %} <strike>{{ product.price }}</strike> {{ product.special }}
-              {% endif %}
-              {% endif %}</td>
-            {% endfor %} </tr>
-          <tr>
-            <td>{{ text_model }}</td>
-            {% for product in products %}
-            <td>{{ product.model }}</td>
-            {% endfor %} </tr>
-          <tr>
-            <td>{{ text_manufacturer }}</td>
-            {% for product in products %}
-            <td>{{ product.manufacturer }}</td>
-            {% endfor %} </tr>
-          <tr>
-            <td>{{ text_availability }}</td>
-            {% for product in products %}
-            <td>{{ product.availability }}</td>
-            {% endfor %} </tr>
-        {% if review_status %}
-        <tr>
-          <td>{{ text_rating }}</td>
-          {% for product in products %}
-          <td class="rating"> {% for i in 1..5 %}
-            {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
-            {% endfor %} <br />
-            {{ product.reviews }}</td>
-          {% endfor %} </tr>
-        {% endif %}
-        <tr>
-          <td>{{ text_summary }}</td>
-          {% for product in products %}
-          <td class="description">{{ product.description }}</td>
-          {% endfor %} </tr>
-        <tr>
-          <td>{{ text_weight }}</td>
-          {% for product in products %}
-          <td>{{ product.weight }}</td>
-          {% endfor %} </tr>
-        <tr>
-          <td>{{ text_dimension }}</td>
-          {% for product in products %}
-          <td>{{ product.length }} x {{ product.width }} x {{ product.height }}</td>
-          {% endfor %} </tr>
-          </tbody>
-        
-        {% for attribute_group in attribute_groups %}
-        <thead>
-          <tr>
-            <td colspan="{{ products|length + 1 }}"><strong>{{ attribute_group.name }}</strong></td>
-          </tr>
-        </thead>
-        {% for key, attribute in attribute_group.attribute %}
-        <tbody>
-          <tr>
-            <td>{{ attribute.name }}</td>
-            {% for product in products %}
-            {% if product.attribute[key] %}
-            <td> {{ product.attribute[key] }}</td>
-            {% else %}
-            <td></td>
-            {% endif %}
-            {% endfor %}
-          </tr>
-        </tbody>
-        {% endfor %}
-        {% endfor %}
-        <tr>
-          <td></td>
-          {% for product in products %}
-          <td><input type="button" value="{{ button_cart }}" class="btn btn-primary btn-block" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" />
-            <a href="{{ product.remove }}" class="btn btn-danger btn-block">{{ button_remove }}</a></td>
-          {% endfor %} </tr>
-      </table>
-      {% else %}
-      <p>{{ text_empty }}</p>
-      <div class="buttons">
-        <div class="pull-right"><a href="{{ continue }}" class="btn btn-default">{{ button_continue }}</a></div>
-      </div>
-      {% endif %}
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
+{% set class = "col-span-12 " %}
+{% if column_left and column_right %}
+	{% set class = class ~ "lg:col-span-6" %}
+{% elseif column_left or column_right %}
+	{% set class = class ~ "lg:col-span-9" %}
+{% else %}
+	{% set class = class ~ "lg:col-span-12" %}
+{% endif %}
+
+<div id="product-compare" class="container mx-auto px-2">
+	{% include "default/components/breadcrumbs.twig" %}
 </div>
-{{ footer }} 
+
+<div class="container mx-auto grid grid-cols-1 gap-6 px-2 pb-10 lg:grid-cols-12">
+	{{ column_left }}
+	<main class="{{ class }}">
+		<div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+			<h1 class="heading mb-0">{{ heading_title }}</h1>
+		</div>
+
+		{{ content_top }}
+
+		{% if success %}
+			<div class="relative mb-4 rounded border border-green-200 bg-green-100 px-4 py-3 text-green-600" role="alert">
+				<span class="block sm:inline">{{ success }}</span>
+			</div>
+		{% endif %}
+
+		{% if products %}
+			{% set compare_cell = "border-b border-neutral-200 px-4 py-3 align-top dark:border-neutral-800" %}
+			{% set compare_label = "sticky left-0 z-10 w-40 min-w-40 bg-white font-medium text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400 " ~ compare_cell %}
+			{% set compare_value = "max-w-52 text-neutral-800 dark:text-neutral-200 " ~ compare_cell %}
+
+			<section
+				class="overflow-x-auto rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+				aria-label="{{ heading_title }}"
+			>
+				<table class="w-full min-w-max border-collapse text-left text-sm [&_tr:last-child_td]:border-b-0 [&_tr:last-child_th]:border-b-0">
+					<thead>
+						<tr>
+							<th class="{{ compare_label }}" scope="col">{{ text_product }}</th>
+							{% for product in products %}
+								<th class="{{ compare_cell }}" scope="col">
+									<div class="flex w-52 min-w-52 flex-col gap-3">
+										<a
+											href="{{ product.href }}"
+											class="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-neutral-50 p-3 dark:bg-neutral-950"
+										>
+											{% if product.thumb %}
+												<img
+													src="{{ product.thumb }}"
+													alt="{{ product.name }}"
+													width="270"
+													height="270"
+													class="h-full w-full object-contain"
+												/>
+											{% endif %}
+										</a>
+										<a
+											href="{{ product.href }}"
+											class="line-clamp-2 text-base font-semibold text-neutral-900 hover:underline dark:text-white"
+										>
+											{{ product.name }}
+										</a>
+										{% if product.price %}
+											<p class="product-card-price">
+												{% if product.special %}
+													{{ product.special }}
+													<span class="product-card-special">{{ product.price }}</span>
+												{% else %}
+													{{ product.price }}
+												{% endif %}
+											</p>
+										{% endif %}
+										<div class="flex items-center gap-2">
+											<button
+												type="button"
+												class="button-primary flex-1"
+												data-size="small"
+												onclick="addToCart({{ product.product_id }}, {{ product.minimum }}, this)"
+												{{ product.quantity < 1 ? "disabled" : "" }}
+											>
+												<svg aria-hidden="true" viewBox="0 0 24 24">
+													<use href="/assets/icons/sprite.svg#icon-cart"></use>
+												</svg>
+												<span>{{ text_add_to_cart }}</span>
+											</button>
+											<a
+												href="{{ product.remove }}"
+												class="button-secondary"
+												data-type="icon"
+												data-size="small"
+												title="{{ button_remove }}"
+												aria-label="{{ button_remove }}"
+											>
+												<svg aria-hidden="true" viewBox="0 0 24 24">
+													<use href="/assets/icons/sprite.svg#icon-trash"></use>
+												</svg>
+											</a>
+										</div>
+									</div>
+								</th>
+							{% endfor %}
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th class="{{ compare_label }}" scope="row">{{ text_model }}</th>
+							{% for product in products %}
+								<td class="{{ compare_value }}">{{ product.model ? : "—" }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<th class="{{ compare_label }}" scope="row">{{ text_manufacturer }}</th>
+							{% for product in products %}
+								<td class="{{ compare_value }}">{{ product.manufacturer ? : "—" }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<th class="{{ compare_label }}" scope="row">{{ text_availability }}</th>
+							{% for product in products %}
+								<td class="{{ compare_value }}">{{ product.availability ? : "—" }}</td>
+							{% endfor %}
+						</tr>
+						{% if review_status %}
+							<tr>
+								<th class="{{ compare_label }}" scope="row">{{ text_rating }}</th>
+								{% for product in products %}
+									<td class="{{ compare_value }}">
+										{% include "default/components/rating.twig" with {
+											rating: product.rating
+										} %}
+										<p class="text-muted mt-1">
+											{{ product.reviews }}
+										</p>
+									</td>
+								{% endfor %}
+							</tr>
+						{% endif %}
+						<tr>
+							<th class="{{ compare_label }}" scope="row">{{ text_summary }}</th>
+							{% for product in products %}
+								<td class="{{ compare_value }}">{{ product.description ? : "—" }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<th class="{{ compare_label }}" scope="row">{{ text_weight }}</th>
+							{% for product in products %}
+								<td class="{{ compare_value }}">{{ product.weight ? : "—" }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<th class="{{ compare_label }}" scope="row">{{ text_dimension }}</th>
+							{% for product in products %}
+								<td class="{{ compare_value }}">{{ product.length }} × {{ product.width }} × {{ product.height }}</td>
+							{% endfor %}
+						</tr>
+						{% for attribute_group in attribute_groups %}
+							<tr class="bg-neutral-50 dark:bg-neutral-800">
+								<th
+									class="{{ compare_cell }} bg-neutral-50 text-sm font-semibold text-neutral-900 dark:bg-neutral-800 dark:text-white"
+									scope="colgroup"
+									colspan="{{ (products | length) + 1 }}"
+								>
+									{{ attribute_group.name }}
+								</th>
+							</tr>
+							{% for key, attribute in attribute_group.attribute %}
+								<tr>
+									<th class="{{ compare_label }}" scope="row">{{ attribute.name }}</th>
+									{% for product in products %}
+										<td class="{{ compare_value }}">
+											{% if product.attribute[key] %}
+												{{ product.attribute[key] }}
+											{% else %}
+												<span class="text-neutral-400 dark:text-neutral-500">—</span>
+											{% endif %}
+										</td>
+									{% endfor %}
+								</tr>
+							{% endfor %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</section>
+		{% else %}
+			<section class="mx-auto my-8 w-full md:w-1/2" aria-label="{{ text_empty }}">
+				<p class="text">
+					{{ text_empty }}
+				</p>
+				<a href="{{ continue }}" class="button-primary mt-4">{{ button_continue }}</a>
+			</section>
+		{% endif %}
+
+		{{ content_bottom }}
+	</main>
+	{{ column_right }}
+</div>

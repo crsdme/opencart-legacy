@@ -1,0 +1,141 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">{% for breadcrumb in breadcrumbs %}<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>{% endfor %}</ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}<div class="alert alert-danger">{{ error_warning }}</div>{% endif %}
+    {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+    {% include 'extension/redirect_manager/tabs.twig' %}
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title">{% if is_product %}{{ text_tab_product }}{% else %}{{ text_tab_category }}{% endif %}</h3></div>
+      <div class="panel-body">
+        <form method="post" action="{{ action }}" class="form-horizontal" id="form-mass">
+          {% if not is_product %}
+          <div class="form-group"><label class="col-sm-2 control-label">{{ entry_category }}</label><div class="col-sm-10"><input type="text" name="category_name" class="form-control" /><input type="hidden" name="category_id" value="" /></div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ text_include }}</label><div class="col-sm-10">
+            <label class="checkbox-inline"><input type="checkbox" name="include_category" value="1" /> {{ text_include_category }}</label>
+            <label class="checkbox-inline"><input type="checkbox" name="include_products" value="1" /> {{ text_include_products }}</label>
+            <label class="checkbox-inline"><input type="checkbox" name="include_subcategories" value="1" /> {{ text_include_subcategories }}</label>
+            <label class="checkbox-inline"><input type="checkbox" name="include_sub_products" value="1" /> {{ text_include_sub_products }}</label>
+          </div></div>
+          {% else %}
+          <div class="form-group"><label class="col-sm-2 control-label">{{ entry_category }}</label><div class="col-sm-10"><input type="text" name="category_name" class="form-control" /><input type="hidden" name="category_id" value="" /><label class="checkbox-inline"><input type="checkbox" name="sub_category" value="1" /> {{ text_include_subcategories }}</label></div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ text_manufacturer }}</label><div class="col-sm-10"><input type="text" name="manufacturer_name" class="form-control" /><input type="hidden" name="manufacturer_id" value="" /></div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ text_product }}</label><div class="col-sm-10"><input type="text" name="product_name" class="form-control" /><input type="hidden" name="product_ids" value="" /></div></div>
+          <div class="form-group"><label class="col-sm-2 control-label"></label><div class="col-sm-10">
+            <label class="checkbox-inline"><input type="checkbox" name="disabled" value="1" /> {{ text_disabled }}</label>
+            <label class="checkbox-inline"><input type="checkbox" name="out_of_stock" value="1" /> {{ text_out_of_stock }}</label>
+          </div></div>
+          {% endif %}
+          <div class="form-group"><label class="col-sm-2 control-label">{{ entry_action }}</label><div class="col-sm-10">
+            <select name="action" id="mass-action" class="form-control">
+              <option value="redirect">{{ text_action_redirect }}</option>
+              <option value="status">{{ text_action_status }}</option>
+            </select>
+          </div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ entry_http_code }}</label><div class="col-sm-10">
+            <select name="http_code" class="form-control">
+              <option value="301">301</option><option value="302">302</option><option value="307">307</option><option value="308">308</option>
+              <option value="404">404</option><option value="410">410</option><option value="451">451</option>
+            </select>
+          </div></div>
+          <div class="form-group" id="mass-target"><label class="col-sm-2 control-label">{{ entry_target_type }}</label><div class="col-sm-10">
+            <select name="target_type" id="mass-target-type" class="form-control">
+              <option value="custom">{{ text_custom_url }}</option>
+              <option value="product">{{ text_product }}</option>
+              <option value="category">{{ text_category }}</option>
+              <option value="information">{{ text_information }}</option>
+              <option value="home">{{ text_home_page }}</option>
+            </select>
+            <input type="text" name="target_entity_name" class="form-control" style="margin-top:8px" />
+            <input type="hidden" name="target_entity_id" value="" />
+            <input type="text" name="target_url" placeholder="{{ entry_target }}" class="form-control" style="margin-top:8px" />
+          </div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ entry_store }}</label><div class="col-sm-10"><select name="store_id" class="form-control">{% for store in stores %}<option value="{{ store.store_id }}">{{ store.name }}</option>{% endfor %}</select></div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ entry_language }}</label><div class="col-sm-10"><select name="language_id" class="form-control">{% for language in languages %}<option value="{{ language.language_id }}">{{ language.name }}</option>{% endfor %}</select></div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ entry_title }}</label><div class="col-sm-10"><input type="text" name="title" class="form-control" /></div></div>
+          <div class="form-group"><div class="col-sm-offset-2 col-sm-10">
+            <button type="button" id="button-preview" class="btn btn-default">{{ button_preview }}</button>
+            {% if can_modify %}<button type="submit" name="create" value="1" class="btn btn-primary" id="button-create" disabled="disabled">{{ button_create_rules }}</button>{% endif %}
+          </div></div>
+        </form>
+        <div id="preview-box" style="display:none">
+          <h4>{{ text_preview }}</h4>
+          <p id="preview-summary"></p>
+          <table class="table table-bordered" id="preview-table"><thead><tr><td>{{ column_source }}</td><td>{{ column_source_type }}</td></tr></thead><tbody></tbody></table>
+        </div>
+        {% if groups %}
+        <h4>{{ text_groups }}</h4>
+        <table class="table table-bordered">
+          {% for batch in groups %}
+          <tr><td>{{ batch.title }}</td><td>{{ batch.rules_count }}</td><td>{{ batch.date_added }}</td>
+            <td>{% if can_modify %}<a href="index.php?route=extension/redirect_manager/mass/undo&user_token={{ user_token }}&batch_id={{ batch.batch_id }}" onclick="return confirm('{{ text_confirm }}');">{{ button_undo }}</a>{% endif %}</td></tr>
+          {% endfor %}
+        </table>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$('input[name="category_name"]').autocomplete({
+  source: function(request, response) {
+    $.getJSON('index.php?route=extension/redirect_manager/rule/autocomplete&user_token={{ user_token }}&type=category&filter_name=' + encodeURIComponent(request), function(json) {
+      response($.map(json, function(item) { return { label: item.name, value: item.id }; }));
+    });
+  },
+  select: function(item) { $('input[name="category_name"]').val(item.label); $('input[name="category_id"]').val(item.value); }
+});
+$('input[name="manufacturer_name"]').autocomplete({
+  source: function(request, response) {
+    $.getJSON('index.php?route=extension/redirect_manager/rule/autocomplete&user_token={{ user_token }}&type=manufacturer&filter_name=' + encodeURIComponent(request), function(json) {
+      response($.map(json, function(item) { return { label: item.name, value: item.id }; }));
+    });
+  },
+  select: function(item) { $('input[name="manufacturer_name"]').val(item.label); $('input[name="manufacturer_id"]').val(item.value); }
+});
+$('input[name="product_name"]').autocomplete({
+  source: function(request, response) {
+    $.getJSON('index.php?route=extension/redirect_manager/rule/autocomplete&user_token={{ user_token }}&type=product&filter_name=' + encodeURIComponent(request), function(json) {
+      response($.map(json, function(item) { return { label: item.name, value: item.id }; }));
+    });
+  },
+  select: function(item) {
+    var ids = $('input[name="product_ids"]').val();
+    ids = ids ? ids.split(',') : [];
+    ids.push(item.value);
+    $('input[name="product_ids"]').val(ids.join(','));
+    $('input[name="product_name"]').val('');
+  }
+});
+$('input[name="target_entity_name"]').autocomplete({
+  source: function(request, response) {
+    $.getJSON('index.php?route=extension/redirect_manager/rule/autocomplete&user_token={{ user_token }}&type=' + $('#mass-target-type').val() + '&filter_name=' + encodeURIComponent(request), function(json) {
+      response($.map(json, function(item) { return { label: item.name, value: item.id, url: item.url }; }));
+    });
+  },
+  select: function(item) {
+    $('input[name="target_entity_name"]').val(item.label);
+    $('input[name="target_entity_id"]').val(item.value);
+    $('input[name="target_url"]').val(item.url);
+  }
+});
+$('#button-preview').on('click', function() {
+  var params = $('#form-mass').serialize();
+  var url = {% if is_product %}'{{ preview_url }}'{% else %}'{{ preview_url }}'{% endif %} + '&' + params;
+  $.getJSON(url, function(json) {
+    $('#preview-box').show();
+    $('#preview-summary').text('{{ text_total_rules }}: ' + json.total + (json.direct_products !== undefined ? ' | {{ text_include_products }}: ' + json.direct_products + ' | {{ text_include_subcategories }}: ' + json.subcategories + ' | {{ text_also_other }}: ' + json.also_other : ''));
+    var $tb = $('#preview-table tbody').empty();
+    $.each(json.sample || json.urls || [], function(i, row) {
+      $tb.append('<tr><td>'+row.url+'</td><td>'+row.type+'</td></tr>');
+    });
+    $('#button-create').prop('disabled', !json.total);
+  });
+});
+</script>
+{{ footer }}

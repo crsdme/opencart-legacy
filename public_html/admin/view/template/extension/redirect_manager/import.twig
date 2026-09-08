@@ -1,0 +1,35 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header"><div class="container-fluid"><h1>{{ heading_title }}</h1>
+    <ul class="breadcrumb">{% for breadcrumb in breadcrumbs %}<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>{% endfor %}</ul></div></div>
+  <div class="container-fluid">
+    {% if error_warning %}<div class="alert alert-danger">{{ error_warning }}</div>{% endif %}
+    {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+    {% include 'extension/redirect_manager/tabs.twig' %}
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title">{{ text_tab_import }}</h3></div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+          <div class="form-group"><label class="col-sm-2 control-label">CSV</label><div class="col-sm-10"><input type="file" name="import" /></div></div>
+          <div class="form-group"><label class="col-sm-2 control-label">{{ text_or }}</label><div class="col-sm-10"><textarea name="csv_text" rows="8" class="form-control" placeholder="source_url,target_url,http_code"></textarea></div></div>
+          <div class="form-group"><div class="col-sm-offset-2 col-sm-10"><button type="submit" class="btn btn-default">{{ button_preview }}</button></div></div>
+          {% if preview %}
+          <div class="alert alert-info">
+            {{ text_valid }}: {{ preview.valid }} |
+            {{ text_duplicates }}: {{ preview.duplicates }} |
+            {{ text_invalid }}: {{ preview.invalid }} |
+            {{ text_conflicts }}: {{ preview.conflicts }}
+          </div>
+          {% if preview.preview %}
+          <table class="table table-bordered"><thead><tr><td>{{ column_source }}</td><td>{{ column_target }}</td><td>{{ column_code }}</td></tr></thead>
+            <tbody>{% for row in preview.preview %}<tr><td>{{ row.source_url }}</td><td>{{ row.target_url }}</td><td>{{ row.http_code }}</td></tr>{% endfor %}</tbody>
+          </table>
+          {% endif %}
+          {% if can_modify and preview.valid %}<button type="submit" name="confirm" value="1" class="btn btn-primary">{{ button_import }}</button>{% endif %}
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

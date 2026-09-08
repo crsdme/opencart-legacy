@@ -1,2 +1,16 @@
 <?php
-$_['text_powered'] = 'Powered by <a href="https://ocstore.com/?utm_source=ocstore3_install">ocStore</a> &copy; %s %s';
+$_['text_information'] = 'Information';
+$_['text_service'] = 'Customer Service';
+$_['text_extra'] = 'Extras';
+$_['text_contact'] = 'Contact Us';
+$_['text_return'] = 'Returns';
+$_['text_sitemap'] = 'Sitemap';
+$_['text_manufacturer'] = 'Brands';
+$_['text_voucher'] = 'Gift Certificates';
+$_['text_special'] = 'Specials';
+$_['text_blog'] = 'Blog';
+$_['text_account'] = 'My Account';
+$_['text_order'] = 'Order History';
+$_['text_wishlist'] = 'Wish List';
+$_['text_newsletter'] = 'Newsletter';
+$_['text_powered'] = '%s © %s';

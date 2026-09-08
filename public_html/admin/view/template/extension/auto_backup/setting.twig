@@ -1,0 +1,267 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				{% if can_modify %}
+					<button type="button" id="button-test" data-url="{{ test }}" data-toggle="tooltip" title="{{ button_test }}" class="btn btn-default"><i class="fa fa-plug"></i></button>
+					<button type="submit" form="form-auto-backup" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				{% endif %}
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		<div id="test-alert"></div>
+		{% include 'extension/auto_backup/tabs.twig' %}
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title"><i class="fa fa-cog"></i> {{ text_edit }}</h3></div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-auto-backup" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_status" class="form-control">
+								<option value="1"{% if module_auto_backup_status %} selected="selected"{% endif %}>{{ text_enabled }}</option>
+								<option value="0"{% if not module_auto_backup_status %} selected="selected"{% endif %}>{{ text_disabled }}</option>
+							</select>
+							<p class="help-block">{{ help_status }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ text_last_success }}</label>
+						<div class="col-sm-10">
+							<p class="form-control-static">{{ last_success }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_interval }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_interval" class="form-control">
+								<option value="6"{% if module_auto_backup_interval == 6 %} selected="selected"{% endif %}>{{ text_interval_6 }}</option>
+								<option value="12"{% if module_auto_backup_interval == 12 %} selected="selected"{% endif %}>{{ text_interval_12 }}</option>
+								<option value="24"{% if module_auto_backup_interval == 24 %} selected="selected"{% endif %}>{{ text_interval_24 }}</option>
+								<option value="48"{% if module_auto_backup_interval == 48 %} selected="selected"{% endif %}>{{ text_interval_48 }}</option>
+								<option value="168"{% if module_auto_backup_interval == 168 %} selected="selected"{% endif %}>{{ text_interval_168 }}</option>
+							</select>
+							<p class="help-block">{{ help_interval }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ text_cron }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="module_auto_backup_cron_token" value="{{ module_auto_backup_cron_token }}" class="form-control" />
+							<p class="help-block">{{ help_cron_token }}</p>
+							<pre style="white-space:pre-wrap;margin-top:8px;">{{ cron_command_cli }}</pre>
+							<pre style="white-space:pre-wrap;">{{ cron_command }}</pre>
+							<p class="help-block">{{ text_cron_help }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_include_database }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_include_database" class="form-control">
+								<option value="1"{% if module_auto_backup_include_database %} selected="selected"{% endif %}>{{ text_yes }}</option>
+								<option value="0"{% if not module_auto_backup_include_database %} selected="selected"{% endif %}>{{ text_no }}</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_include_images }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_include_images" class="form-control">
+								<option value="1"{% if module_auto_backup_include_images %} selected="selected"{% endif %}>{{ text_yes }}</option>
+								<option value="0"{% if not module_auto_backup_include_images %} selected="selected"{% endif %}>{{ text_no }}</option>
+							</select>
+							<p class="help-block">{{ help_images }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_include_downloads }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_include_downloads" class="form-control">
+								<option value="1"{% if module_auto_backup_include_downloads %} selected="selected"{% endif %}>{{ text_yes }}</option>
+								<option value="0"{% if not module_auto_backup_include_downloads %} selected="selected"{% endif %}>{{ text_no }}</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_include_config }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_include_config" class="form-control">
+								<option value="1"{% if module_auto_backup_include_config %} selected="selected"{% endif %}>{{ text_yes }}</option>
+								<option value="0"{% if not module_auto_backup_include_config %} selected="selected"{% endif %}>{{ text_no }}</option>
+							</select>
+							<p class="help-block">{{ help_config }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_exclude_tables }}</label>
+						<div class="col-sm-10">
+							<textarea name="module_auto_backup_exclude_tables" rows="4" class="form-control">{{ module_auto_backup_exclude_tables }}</textarea>
+							<p class="help-block">{{ help_exclude_tables }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_exclude_paths }}</label>
+						<div class="col-sm-10">
+							<textarea name="module_auto_backup_exclude_paths" rows="3" class="form-control">{{ module_auto_backup_exclude_paths }}</textarea>
+							<p class="help-block">{{ help_exclude_paths }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_keep }}</label>
+						<div class="col-sm-10">
+							<input type="number" name="module_auto_backup_keep" value="{{ module_auto_backup_keep }}" min="1" max="90" class="form-control" />
+							<p class="help-block">{{ help_keep }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_destination }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_destination" id="input-destination" class="form-control">
+								<option value="local"{% if module_auto_backup_destination == 'local' %} selected="selected"{% endif %}>{{ text_destination_local }}</option>
+								<option value="google_drive"{% if module_auto_backup_destination == 'google_drive' %} selected="selected"{% endif %}>{{ text_destination_google }}</option>
+								<option value="ftp"{% if module_auto_backup_destination == 'ftp' %} selected="selected"{% endif %}>{{ text_destination_ftp }}</option>
+							</select>
+							<p class="help-block">{{ help_destination }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_keep_local }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_keep_local" class="form-control">
+								<option value="1"{% if module_auto_backup_keep_local %} selected="selected"{% endif %}>{{ text_yes }}</option>
+								<option value="0"{% if not module_auto_backup_keep_local %} selected="selected"{% endif %}>{{ text_no }}</option>
+							</select>
+							<p class="help-block">{{ help_keep_local }}</p>
+						</div>
+					</div>
+					<div class="destination-box" data-destination="ftp">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_ftp_host }}</label>
+							<div class="col-sm-10"><input type="text" name="module_auto_backup_ftp_host" value="{{ module_auto_backup_ftp_host }}" class="form-control" /></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_ftp_port }}</label>
+							<div class="col-sm-10"><input type="number" name="module_auto_backup_ftp_port" value="{{ module_auto_backup_ftp_port }}" class="form-control" /></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_ftp_user }}</label>
+							<div class="col-sm-10"><input type="text" name="module_auto_backup_ftp_user" value="{{ module_auto_backup_ftp_user }}" class="form-control" /></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_ftp_password }}</label>
+							<div class="col-sm-10"><input type="password" name="module_auto_backup_ftp_password" value="{{ module_auto_backup_ftp_password }}" class="form-control" autocomplete="new-password" /></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_ftp_path }}</label>
+							<div class="col-sm-10"><input type="text" name="module_auto_backup_ftp_path" value="{{ module_auto_backup_ftp_path }}" class="form-control" /></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_ftp_ssl }}</label>
+							<div class="col-sm-10">
+								<select name="module_auto_backup_ftp_ssl" class="form-control">
+									<option value="1"{% if module_auto_backup_ftp_ssl %} selected="selected"{% endif %}>{{ text_yes }}</option>
+									<option value="0"{% if not module_auto_backup_ftp_ssl %} selected="selected"{% endif %}>{{ text_no }}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="destination-box" data-destination="google_drive">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">&nbsp;</label>
+							<div class="col-sm-10">
+								<p class="help-block">{{ help_google }}</p>
+								{% if google_connected %}
+									<div class="alert alert-success">{{ text_google_connected }}</div>
+									{% if can_modify %}<a href="{{ disconnect }}" class="btn btn-default">{{ button_disconnect }}</a>{% endif %}
+								{% else %}
+									<div class="alert alert-info">{{ text_google_disconnected }}</div>
+									{% if can_modify %}<a href="{{ connect }}" class="btn btn-primary">{{ button_connect }}</a>{% endif %}
+								{% endif %}
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ text_google_redirect }}</label>
+							<div class="col-sm-10"><pre style="white-space:pre-wrap;">{{ oauth_redirect }}</pre></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_google_client_id }}</label>
+							<div class="col-sm-10"><input type="text" name="module_auto_backup_google_client_id" value="{{ module_auto_backup_google_client_id }}" class="form-control" /></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_google_client_secret }}</label>
+							<div class="col-sm-10"><input type="password" name="module_auto_backup_google_client_secret" value="{{ module_auto_backup_google_client_secret }}" class="form-control" autocomplete="new-password" /></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{ entry_google_folder_id }}</label>
+							<div class="col-sm-10">
+								<input type="text" name="module_auto_backup_google_folder_id" value="{{ module_auto_backup_google_folder_id }}" class="form-control" />
+								<p class="help-block">{{ help_folder }}</p>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_email_status }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_email_status" class="form-control">
+								<option value="1"{% if module_auto_backup_email_status %} selected="selected"{% endif %}>{{ text_yes }}</option>
+								<option value="0"{% if not module_auto_backup_email_status %} selected="selected"{% endif %}>{{ text_no }}</option>
+							</select>
+							<p class="help-block">{{ help_email }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_email }}</label>
+						<div class="col-sm-10"><input type="text" name="module_auto_backup_email" value="{{ module_auto_backup_email }}" class="form-control" /></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_delete_data }}</label>
+						<div class="col-sm-10">
+							<select name="module_auto_backup_delete_data_on_uninstall" class="form-control">
+								<option value="1"{% if module_auto_backup_delete_data_on_uninstall %} selected="selected"{% endif %}>{{ text_yes }}</option>
+								<option value="0"{% if not module_auto_backup_delete_data_on_uninstall %} selected="selected"{% endif %}>{{ text_no }}</option>
+							</select>
+							<p class="help-block">{{ help_delete_data }}</p>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+(function() {
+	function toggleDestination() {
+		var value = $('#input-destination').val();
+		$('.destination-box').hide();
+		$('.destination-box[data-destination="' + value + '"]').show();
+	}
+	$('#input-destination').on('change', toggleDestination);
+	toggleDestination();
+	$('#button-test').on('click', function() {
+		$('#test-alert').html('');
+		$.get($('#button-test').data('url'), function(json) {
+			if (json.success) {
+				$('#test-alert').html('<div class="alert alert-success">' + json.success + '</div>');
+			} else if (json.error) {
+				$('#test-alert').html('<div class="alert alert-danger">' + json.error + '</div>');
+			}
+		}, 'json');
+	});
+})();
+</script>
+{{ footer }}

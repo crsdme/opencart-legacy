@@ -1,0 +1,70 @@
+{% set class = "col-span-12 " %}
+{% if column_left and column_right %}
+	{% set class = class ~ "lg:col-span-6" %}
+{% elseif column_left or column_right %}
+	{% set class = class ~ "lg:col-span-9" %}
+{% else %}
+	{% set class = class ~ "lg:col-span-12" %}
+{% endif %}
+
+<div class="container mx-auto px-2">
+	{% include "default/components/breadcrumbs.twig" %}
+</div>
+<div class="container mx-auto grid grid-cols-1 gap-6 px-2 lg:grid-cols-12">
+	{{ column_left }}
+	<main class="{{ class }} pb-10">
+		{{ content_top }}
+
+		<section class="product-panel" aria-labelledby="author-heading">
+			<div class="article-author">
+				{% if author.thumb or author.image %}
+					<img class="article-author-photo-lg" src="{{ author.thumb ? : author.image }}" alt="{{ author.name }}" width="160" height="160" />
+				{% endif %}
+				<div>
+					<h1 id="author-heading" class="heading mb-0">{{ heading_title }}</h1>
+				</div>
+			</div>
+		</section>
+
+		{% if author.description %}
+			<section class="mt-10" aria-label="{{ heading_title }}">
+				<div class="product-panel">
+					<div class="content-block">
+						{{ author.description }}
+					</div>
+				</div>
+			</section>
+		{% endif %}
+
+		{% if articles %}
+			<section class="mt-10" aria-labelledby="author-articles-heading">
+				<div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+					<h2 id="author-articles-heading" class="heading mb-0">{{ text_articles }}</h2>
+				</div>
+
+				<div class="grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-3">
+					{% for article in articles %}
+						{% include "default/components/article-card.twig" with {
+							article: article,
+							button_more: button_more
+						} %}
+					{% endfor %}
+				</div>
+
+				<section class="my-2 flex justify-between" aria-label="Pagination">
+					{{
+						include(
+							"default/components/pagination.twig",
+							{
+								pagination: pagination_data
+							}
+						)
+					}}
+				</section>
+			</section>
+		{% endif %}
+
+		{{ content_bottom }}
+	</main>
+	{{ column_right }}
+</div>

@@ -1,0 +1,9 @@
+<section class="docs-section" id="{{ section.id }}" data-docs-section data-title="{{ section.title }}">
+	<header class="docs-section-head">
+		<h2>{{ section.title }}</h2>
+		{% if section.description %}
+			<p>{{ section.description }}</p>
+		{% endif %}
+	</header>
+	<div class="docs-card">
+		<div class="docs-card-preview">

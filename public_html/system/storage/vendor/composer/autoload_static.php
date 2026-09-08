@@ -13,10 +13,6 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
     );
 
     public static $prefixLengthsPsr4 = array (
-        'W' => 
-        array (
-            'Wechat\\' => 7,
-        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -45,17 +41,9 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
             'GuzzleHttp\\Ring\\' => 16,
             'GuzzleHttp\\' => 11,
         ),
-        'C' => 
-        array (
-            'Cardinity\\' => 10,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Wechat\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/zoujingli/wechat-php-sdk/Wechat',
-        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
@@ -108,14 +96,9 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
-        'Cardinity\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/cardinity/cardinity-sdk-php/src',
-        ),
     );
 
     public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/..' . '/klarna/kco_rest/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -126,20 +109,6 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
                 0 => __DIR__ . '/..' . '/twig/twig/lib',
             ),
         ),
-        'D' => 
-        array (
-            'Divido' => 
-            array (
-                0 => __DIR__ . '/..' . '/divido/divido-php/lib',
-            ),
-        ),
-        'B' => 
-        array (
-            'Braintree' => 
-            array (
-                0 => __DIR__ . '/..' . '/braintree/braintree_php/lib',
-            ),
-        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -147,7 +116,6 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$prefixesPsr0;
 
         }, null, ClassLoader::class);

@@ -1,0 +1,8 @@
+{% if faq and faq.items %}
+	<section class="faq my-8" id="faq" aria-labelledby="faq-heading">
+		<h2 id="faq-heading" class="heading mb-4">{{ faq.title }}</h2>
+		{% include "default/components/accordion.twig" with {
+			items: faq.items
+		} %}
+	</section>
+{% endif %}

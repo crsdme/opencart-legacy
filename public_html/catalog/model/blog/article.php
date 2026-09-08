@@ -35,7 +35,8 @@ class ModelBlogArticle extends Model {
 				'gstatus'           => $query->row['gstatus'],
 				'date_added'       => $query->row['date_added'],
 				'date_modified'    => $query->row['date_modified'],
-				'viewed'           => $query->row['viewed']
+				'viewed'           => $query->row['viewed'],
+				'author_id'        => isset($query->row['author_id']) ? (int)$query->row['author_id'] : 0
 			);
 		} else {
 			return false;
@@ -61,6 +62,10 @@ class ModelBlogArticle extends Model {
 			}
 			
 			$sql .= " WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'"; 
+
+			if (!empty($data['filter_author_id'])) {
+				$sql .= " AND p.author_id = '" . (int)$data['filter_author_id'] . "'";
+			} 
 			
 			if (!empty($data['filter_name']) || !empty($data['filter_tag'])) {
 				$sql .= " AND (";
@@ -352,6 +357,10 @@ class ModelBlogArticle extends Model {
 			}
 						
 			$sql .= " WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+
+			if (!empty($data['filter_author_id'])) {
+				$sql .= " AND p.author_id = '" . (int)$data['filter_author_id'] . "'";
+			}
 			
 			if (!empty($data['filter_name']) || !empty($data['filter_tag'])) {
 				$sql .= " AND (";

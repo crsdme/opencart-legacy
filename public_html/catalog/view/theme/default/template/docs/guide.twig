@@ -1,0 +1,16 @@
+<div class="docs-intro">
+	<h1>{{ current ? current.title : 'Docs' }}</h1>
+	{% if source %}
+		<p><span class="docs-file">{{ source }}</span></p>
+	{% else %}
+		<p>No markdown in <code>README.md</code> or <code>docs/</code>.</p>
+	{% endif %}
+</div>
+
+{% if not current %}
+	<div class="docs-empty">Add <code>README.md</code> at the repo root or markdown files under <code>docs/</code>.</div>
+{% else %}
+	<article class="docs-body">
+		{{ html }}
+	</article>
+{% endif %}

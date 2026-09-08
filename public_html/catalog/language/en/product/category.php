@@ -11,3 +11,4 @@ $_['text_product_count_5'] = '%s products';
 
 $_['text_sort'] = 'Sort by';
 $_['text_limit'] = 'Show';
+$_['text_empty'] = 'There are no products in this category';

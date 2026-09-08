@@ -6,6 +6,11 @@ public_html/system/storage/cache/
 public_html/system/storage/download/
 public_html/system/storage/modification/
 public_html/system/storage/session/
+public_html/system/storage/redirect_manager/
+public_html/system/storage/backup/*
+!public_html/system/storage/backup/.gitkeep
+!public_html/system/storage/backup/.htaccess
+!public_html/system/storage/backup/index.html
 public_html/image/cache/
 public_html/image/cachewebp/
 public_html/admin/config.php
@@ -30,3 +35,5 @@ docker/mysql/data/
 *.tar.gz
 *.env
 .env.*
+
+dump/

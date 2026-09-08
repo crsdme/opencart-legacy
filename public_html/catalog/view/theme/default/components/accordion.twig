@@ -1,0 +1,17 @@
+{% if items %}
+	<div class="accordion">
+		{% for item in items %}
+			<details class="accordion-item"{% if item.open %} open{% endif %}>
+				<summary class="accordion-trigger">
+					<span>{{ item.title }}</span>
+					<svg aria-hidden="true" viewBox="0 0 24 24">
+						<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+					</svg>
+				</summary>
+				<div class="accordion-content text-block">
+					{{ item.content }}
+				</div>
+			</details>
+		{% endfor %}
+	</div>
+{% endif %}

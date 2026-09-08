@@ -1,0 +1,44 @@
+<section class="checkout-block">
+	<h2 class="checkout-block-title">{{ text_checkout_shipping_method }}</h2>
+	<p class="checkout-block-hint">{{ text_checkout_shipping_method_description }}</p>
+	<div class="checkout-block-body">
+		{% if shipping_error %}
+			<p class="checkout-cart-warning">{{ shipping_error|raw }}</p>
+		{% endif %}
+
+		{% if shipping_methods %}
+			<div class="checkout-methods">
+				{% for shipping_method in shipping_methods %}
+					{% if shipping_method.error %}
+						<p class="checkout-cart-warning">{{ shipping_method.error }}</p>
+					{% else %}
+						{% for quote in shipping_method.quote %}
+							<label class="checkout-method">
+								<input
+									class="radio"
+									type="radio"
+									name="shipping_method"
+									value="{{ quote.code }}"
+									{% if quote.code == shipping_code %}checked{% endif %}
+									data-checkout-shipping
+									data-hide-address="{{ quote.hide_address ? 1 : 0 }}"
+									{% if quote.extra %}data-shipping-extra="{{ quote.extra }}"{% endif %}
+									required
+								/>
+								<span class="checkout-method-body">
+									<span class="checkout-method-title">{{ quote.title }}</span>
+									{% if quote.description %}
+										<span class="checkout-method-note">{{ quote.description }}</span>
+									{% endif %}
+								</span>
+								{% if quote.show_price %}
+									<span class="checkout-method-price">{{ quote.text }}</span>
+								{% endif %}
+							</label>
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+</section>

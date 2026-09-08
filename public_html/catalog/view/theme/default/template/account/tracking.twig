@@ -1,67 +1,88 @@
-{{ header }}
-<div id="account-tracking" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h1>{{ heading_title }}</h1>
-      <p>{{ text_description }}</p>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="input-code">{{ entry_code }}</label>
-          <div class="col-sm-10">
-            <textarea cols="40" rows="5" placeholder="{{ entry_code }}" id="input-code" class="form-control">{{ code }}</textarea>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="input-generator"><span data-toggle="tooltip" title="{{ help_generator }}">{{ entry_generator }}</span></label>
-          <div class="col-sm-10">
-            <input type="text" name="product" value="" placeholder="{{ entry_generator }}" id="input-generator" class="form-control" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="input-link">{{ entry_link }}</label>
-          <div class="col-sm-10">
-            <textarea name="link" cols="40" rows="5" placeholder="{{ entry_link }}" id="input-link" class="form-control"></textarea>
-          </div>
-        </div>
-      </form>
-      <div class="buttons clearfix">
-        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
-      </div>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
+<div id="account-tracking" class="container mx-auto pb-4">
+	<div class="mx-auto px-2">
+		{% include "default/components/breadcrumbs.twig" %}
+	</div>
+
+	<div class="mx-auto max-w-2xl px-2 pb-8">
+		<section class="flex flex-col rounded-lg bg-white p-6 shadow">
+			<h1 class="mb-2 text-xl font-bold">{{ heading_title }}</h1>
+			<p class="mb-6 text-neutral-500">{{ text_description }}</p>
+
+			<div class="flex flex-col gap-4">
+				<div>
+					<label for="input-code" class="mb-1 block text-sm font-medium text-gray-700">{{ entry_code }}</label>
+					<textarea id="input-code" rows="3" class="input min-h-20 w-full resize-y" readonly>{{ code }}</textarea>
+				</div>
+				<div class="relative">
+					<label for="input-generator" class="mb-1 block text-sm font-medium text-gray-700">{{ entry_generator }}</label>
+					<p class="mb-2 text-sm text-neutral-500">{{ help_generator }}</p>
+					<input type="text" name="product" value="" placeholder="{{ entry_generator }}" id="input-generator" class="input w-full" autocomplete="off" />
+					<ul id="tracking-suggestions" class="absolute z-10 mt-1 hidden max-h-56 w-full overflow-auto rounded-md border border-neutral-200 bg-white py-1 shadow"></ul>
+				</div>
+				<div>
+					<label for="input-link" class="mb-1 block text-sm font-medium text-gray-700">{{ entry_link }}</label>
+					<textarea name="link" id="input-link" rows="4" placeholder="{{ entry_link }}" class="input min-h-24 w-full resize-y"></textarea>
+				</div>
+				<div class="flex justify-end">
+					<a href="{{ continue }}" class="button-primary w-full sm:w-auto">{{ button_continue }}</a>
+				</div>
+			</div>
+		</section>
+	</div>
 </div>
-<script type="text/javascript"><!--
-$('input[name=\'product\']').autocomplete({
-	'source': function(request, response) {
-		$.ajax({
-			url: 'index.php?route=account/tracking/autocomplete&filter_name=' +  encodeURIComponent(request) + '&tracking=' + encodeURIComponent($('#input-code').val()),
-			dataType: 'json',
-			success: function(json) {
-				response($.map(json, function(item) {
-					return {
-						label: item['name'],
-						value: item['link']
-					}
-				}));
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+(function () {
+	var $input = $('#input-generator');
+	var $list = $('#tracking-suggestions');
+	var request;
+
+	$input.on('input', function () {
+		var query = $.trim(this.value);
+
+		if (request) {
+			request.abort();
+		}
+
+		if (query.length < 1) {
+			$list.addClass('hidden').empty();
+			return;
+		}
+
+		request = $.getJSON('index.php?route=account/tracking/autocomplete', {
+			filter_name: query,
+			tracking: $('#input-code').val()
+		}, function (json) {
+			$list.empty();
+
+			if (!json.length) {
+				$list.addClass('hidden');
+				return;
 			}
+
+			$.each(json, function (i, item) {
+				$list.append(
+					$('<li/>').append(
+						$('<button type="button" class="block w-full px-3 py-2 text-left text-sm hover:bg-neutral-50"/>')
+							.text(item.name)
+							.on('click', function () {
+								$input.val(item.name);
+								$('#input-link').val(item.link);
+								$list.addClass('hidden').empty();
+							})
+					)
+				);
+			});
+
+			$list.removeClass('hidden');
 		});
-	},
-	'select': function(item) {
-		$('input[name=\'product\']').val(item['label']);
-		$('textarea[name=\'link\']').val(item['value']);
-	}
+	});
+
+	$(document).on('click', function (event) {
+		if (!$(event.target).closest('#input-generator, #tracking-suggestions').length) {
+			$list.addClass('hidden');
+		}
+	});
+})();
 });
-//--></script>
-{{ footer }}
+</script>

@@ -1,16 +1,31 @@
 <?php
-class ControllerErrorNotFound extends Controller {
-	public function index() {
+class ControllerErrorNotFound extends Controller
+{
+	public function index()
+	{
+		$this->request->get['route'] = 'error/not_found';
+
 		$this->load->language('error/not_found');
+		$this->load->model('seo/meta');
 
-		$this->document->setTitle($this->language->get('heading_title'));
+		$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 404 Not Found');
 
-		$data['breadcrumbs'] = array();
+		$seo = $this->model_seo_meta->build([
+			'meta_title' => $this->language->get('meta_title'),
+			'meta_description' => $this->language->get('meta_description'),
+			'meta_h1' => $this->language->get('meta_title'),
+			'robots' => 'noindex,follow',
+		]);
 
-		$data['breadcrumbs'][] = array(
+		$this->model_seo_meta->apply($seo);
+		$data['heading_title'] = $seo['h1'];
+
+		$data['breadcrumbs'] = [];
+
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/home')
-		);
+			'href' => $this->url->link('common/home'),
+		];
 
 		if (isset($this->request->get['route'])) {
 			$url_data = $this->request->get;
@@ -27,24 +42,15 @@ class ControllerErrorNotFound extends Controller {
 				$url = '&' . urldecode(http_build_query($url_data, '', '&'));
 			}
 
-			$data['breadcrumbs'][] = array(
-				'text' => $this->language->get('heading_title'),
-				'href' => $this->url->link($route, $url, $this->request->server['HTTPS'])
-			);
+			$data['breadcrumbs'][] = [
+				'text' => $data['heading_title'],
+				'href' => $this->url->link($route, $url, $this->request->server['HTTPS']),
+			];
 		}
 
 		$data['continue'] = $this->url->link('common/home');
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-		$data['head'] = $this->load->controller('common/head');
-
-		$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 404 Not Found');
-
-		$this->response->setOutput($this->load->view('error/not_found', $data));
+		$data['view'] = 'error/not_found';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 }

@@ -5,6 +5,7 @@ $_['text_checkout'] = 'Оформить заказ';
 $_['text_empty'] = 'Ваша корзина пуста';
 $_['text_items'] = '%s';
 $_['text_success'] = 'Товар %s добавлен в корзину';
+$_['button_remove'] = 'Удалить';
 
 // $_['heading_title'] = 'Корзина товаров';
 // $_['button_go_checkout'] = 'Перейти к оформлению';

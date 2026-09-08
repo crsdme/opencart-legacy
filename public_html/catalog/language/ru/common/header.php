@@ -7,6 +7,8 @@ $_['text_announcement'] = 'Скидки до −30% на выбранные то
 
 // Menu Sheet
 $_['text_menu'] = 'Меню';
+$_['text_account'] = 'Кабинет';
+$_['text_wishlist'] = 'Закладки';
 $_['text_contacts_header'] = 'Контакты';
 $_['text_about'] = 'О нас';
 $_['text_delivery_payment'] = 'Доставка и оплата';

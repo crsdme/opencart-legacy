@@ -37,6 +37,8 @@ $_['action_pre_action']  = array(
   'startup/maintenance',
   'startup/multilang',
   'startup/seo_url',
+  'startup/redirect_manager',
+  'startup/pages',
   'startup/multilang_rewrite',
 );
 

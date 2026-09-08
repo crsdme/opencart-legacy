@@ -1,0 +1,30 @@
+<section class="checkout-block">
+	<div class="checkout-block-body">
+		{% include "default/template/checkout/totals.twig" %}
+
+		{% if coupon_status %}
+			<div class="checkout-coupon">
+				<label class="form-label" for="input-coupon">{{ entry_coupon }}</label>
+				<div class="input-button-group">
+					<input
+						class="input"
+						type="text"
+						name="coupon"
+						value="{{ coupon }}"
+						id="input-coupon"
+						placeholder="{{ entry_coupon }}"
+						autocomplete="off"
+						data-checkout-coupon
+					/>
+					<button type="button" class="button-secondary" data-checkout-coupon-apply>{{ button_coupon }}</button>
+				</div>
+				{% if coupon_error %}
+					<p class="checkout-cart-warning">{{ coupon_error }}</p>
+				{% endif %}
+				{% if coupon_success %}
+					<p class="checkout-coupon-success">{{ coupon_success }}</p>
+				{% endif %}
+			</div>
+		{% endif %}
+	</div>
+</section>

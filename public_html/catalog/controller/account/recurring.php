@@ -10,7 +10,8 @@ class ControllerAccountRecurring extends Controller {
 			$this->response->redirect($this->url->link('account/login', '', true));
 		}
 
-		$this->load->language('account/recurring');
+		$this->language->set('_account_page', 'recurring');
+		$this->load->language('account/account');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->setRobots('noindex,follow');
@@ -68,29 +69,24 @@ class ControllerAccountRecurring extends Controller {
 			);
 		}
 
-		$pagination = new Pagination();
-		$pagination->total = $recurring_total;
-		$pagination->page = $page;
-		$pagination->limit = 10;
-		$pagination->text = $this->language->get('text_pagination');
-		$pagination->url = $this->url->link('account/recurring', 'page={page}', true);
-
-		$data['pagination'] = $pagination->render();
+		$data['pagination_data'] = [
+			'total' => $recurring_total,
+			'page' => $page,
+			'limit' => 10,
+			'text_prev' => $this->language->get('text_prev'),
+			'text_next' => $this->language->get('text_next'),
+			'url' => $this->url->link('account/recurring', 'page={page}', true),
+		];
 
 		$data['continue'] = $this->url->link('account/account', '', true);
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('account/recurring_list', $data));
+		$data['view'] = 'account/recurring_list';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 
 	public function info() {
-		$this->load->language('account/recurring');
+		$this->language->set('_account_page', 'recurring');
+		$this->load->language('account/account');
 
 		if (isset($this->request->get['order_recurring_id'])) {
 			$order_recurring_id = $this->request->get['order_recurring_id'];
@@ -174,14 +170,8 @@ class ControllerAccountRecurring extends Controller {
 
 			$data['recurring'] = $this->load->controller('extension/recurring/' . $recurring_info['payment_code']);
 
-			$data['column_left'] = $this->load->controller('common/column_left');
-			$data['column_right'] = $this->load->controller('common/column_right');
-			$data['content_top'] = $this->load->controller('common/content_top');
-			$data['content_bottom'] = $this->load->controller('common/content_bottom');
-			$data['footer'] = $this->load->controller('common/footer');
-			$data['header'] = $this->load->controller('common/header');
-
-			$this->response->setOutput($this->load->view('account/recurring_info', $data));
+			$data['view'] = 'account/recurring_info';
+			$this->response->setOutput($this->load->controller('common/layout', $data));
 		} else {
 			$this->document->setTitle($this->language->get('text_recurring'));
 
@@ -209,14 +199,8 @@ class ControllerAccountRecurring extends Controller {
 
 			$data['continue'] = $this->url->link('account/recurring', '', true);
 
-			$data['column_left'] = $this->load->controller('common/column_left');
-			$data['column_right'] = $this->load->controller('common/column_right');
-			$data['content_top'] = $this->load->controller('common/content_top');
-			$data['content_bottom'] = $this->load->controller('common/content_bottom');
-			$data['footer'] = $this->load->controller('common/footer');
-			$data['header'] = $this->load->controller('common/header');
-
-			$this->response->setOutput($this->load->view('error/not_found', $data));
+			$data['view'] = 'error/not_found';
+			$this->response->setOutput($this->load->controller('common/layout', $data));
 		}
 	}
 }

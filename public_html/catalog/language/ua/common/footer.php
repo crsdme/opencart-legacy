@@ -1,2 +1,16 @@
 <?php
-$_['text_powered'] = 'Працює на <a href="https://ocstore.com/?utm_source=ocstore3_install">ocStore</a> &copy; %s %s';
+$_['text_information'] = 'Інформація';
+$_['text_service'] = 'Служба підтримки';
+$_['text_extra'] = 'Додатково';
+$_['text_contact'] = 'Зворотний зв\'язок';
+$_['text_return'] = 'Повернення товару';
+$_['text_sitemap'] = 'Карта сайту';
+$_['text_manufacturer'] = 'Виробники';
+$_['text_voucher'] = 'Подарункові сертифікати';
+$_['text_special'] = 'Акції';
+$_['text_blog'] = 'Блог';
+$_['text_account'] = 'Особистий кабінет';
+$_['text_order'] = 'Історія замовлень';
+$_['text_wishlist'] = 'Закладки';
+$_['text_newsletter'] = 'Розсилка';
+$_['text_powered'] = '%s © %s';

@@ -15,7 +15,8 @@ class ControllerAccountTracking extends Controller {
 		$affiliate_info = $this->model_account_customer->getAffiliate($this->customer->getId());
 			
 		if ($affiliate_info) {
-			$this->load->language('account/tracking');
+			$this->language->set('_account_page', 'tracking');
+			$this->load->language('account/account');
 	
 			$this->document->setTitle($this->language->get('heading_title'));
 			$this->document->setRobots('noindex,follow');
@@ -43,14 +44,8 @@ class ControllerAccountTracking extends Controller {
 	
 			$data['continue'] = $this->url->link('account/account', '', true);
 	
-			$data['column_left'] = $this->load->controller('common/column_left');
-			$data['column_right'] = $this->load->controller('common/column_right');
-			$data['content_top'] = $this->load->controller('common/content_top');
-			$data['content_bottom'] = $this->load->controller('common/content_bottom');
-			$data['footer'] = $this->load->controller('common/footer');
-			$data['header'] = $this->load->controller('common/header');
-	
-			$this->response->setOutput($this->load->view('account/tracking', $data));
+			$data['view'] = 'account/tracking';
+			$this->response->setOutput($this->load->controller('common/layout', $data));
 		} else {
 			return new Action('error/not_found');
 		}

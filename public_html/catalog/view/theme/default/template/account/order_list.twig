@@ -1,60 +1,56 @@
-{{ header }}
-<div id="account-order" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h1>{{ heading_title }}</h1>
-      {% if orders %}
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <td class="text-right">{{ column_order_id }}</td>
-              <td class="text-left">{{ column_customer }}</td>
-              <td class="text-right">{{ column_product }}</td>
-              <td class="text-left">{{ column_status }}</td>
-              <td class="text-right">{{ column_total }}</td>
-              <td class="text-left">{{ column_date_added }}</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-           {% for order in orders %}
-            <tr>
-              <td class="text-right">#{{ order.order_id }}</td>
-              <td class="text-left">{{ order.name }}</td>
-              <td class="text-right">{{ order.products }}</td>
-              <td class="text-left">{{ order.status }}</td>
-              <td class="text-right">{{ order.total }}</td>
-              <td class="text-left">{{ order.date_added }}</td>
-              <td class="text-right"><a href="{{ order.view }}" data-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 text-left">{{ pagination }}</div>
-        <div class="col-sm-6 text-right">{{ results }}</div>
-      </div>
-      {% else %}
-      <p>{{ text_empty }}</p>
-      {% endif %}
-      <div class="buttons clearfix">
-        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
-      </div>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
+<div id="account-order" class="container mx-auto pb-4">
+	<div class="mx-auto px-2">
+		{% include "default/components/breadcrumbs.twig" %}
+	</div>
+
+	<div class="mx-auto max-w-5xl px-2 pb-8">
+		<section class="flex flex-col rounded-lg bg-white p-6 shadow">
+			<h1 class="mb-4 text-xl font-bold">{{ heading_title }}</h1>
+
+			{% if orders %}
+				<div class="overflow-x-auto">
+					<table class="w-full min-w-[40rem] text-left text-sm">
+						<thead>
+							<tr class="border-b border-neutral-200 text-neutral-500">
+								<th class="py-2 pr-4 font-medium">{{ column_order_id }}</th>
+								<th class="py-2 pr-4 font-medium">{{ column_customer }}</th>
+								<th class="py-2 pr-4 font-medium">{{ column_product }}</th>
+								<th class="py-2 pr-4 font-medium">{{ column_status }}</th>
+								<th class="py-2 pr-4 font-medium">{{ column_total }}</th>
+								<th class="py-2 pr-4 font-medium">{{ column_date_added }}</th>
+								<th class="py-2 font-medium"></th>
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-neutral-100">
+							{% for order in orders %}
+								<tr>
+									<td class="py-3 pr-4 font-medium text-gray-800">#{{ order.order_id }}</td>
+									<td class="py-3 pr-4 text-gray-700">{{ order.name }}</td>
+									<td class="py-3 pr-4 text-gray-700">{{ order.products }}</td>
+									<td class="py-3 pr-4 text-gray-700">{{ order.status }}</td>
+									<td class="py-3 pr-4 text-gray-700">{{ order.total }}</td>
+									<td class="py-3 pr-4 text-gray-700">{{ order.date_added }}</td>
+									<td class="py-3 text-right">
+										<a href="{{ order.view }}" class="button-secondary">{{ button_view }}</a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					{% if results %}
+						<p class="text-sm text-neutral-500">{{ results }}</p>
+					{% endif %}
+					{% include "default/components/pagination.twig" with { pagination: pagination_data } %}
+				</div>
+			{% else %}
+				<p class="text-neutral-500">{{ text_empty }}</p>
+			{% endif %}
+
+			<div class="mt-6">
+				<a href="{{ continue }}" class="button-secondary">{{ button_continue }}</a>
+			</div>
+		</section>
+	</div>
 </div>
-{{ footer }}

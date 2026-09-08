@@ -1,0 +1,88 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				{% if can_modify %}
+					<a href="{{ run }}" data-toggle="tooltip" title="{{ button_run }}" class="btn btn-primary"><i class="fa fa-play"></i></a>
+				{% endif %}
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% include 'extension/auto_backup/tabs.twig' %}
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title"><i class="fa fa-history"></i> {{ text_tab_history }}</h3></div>
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<td>{{ column_id }}</td>
+								<td>{{ column_date }}</td>
+								<td>{{ column_trigger }}</td>
+								<td>{{ column_destination }}</td>
+								<td>{{ column_file }}</td>
+								<td>{{ column_size }}</td>
+								<td>{{ column_status }}</td>
+								<td>{{ column_error }}</td>
+								<td class="text-right">{{ column_action }}</td>
+							</tr>
+						</thead>
+						<tbody>
+							{% if backups %}
+								{% for backup in backups %}
+									<tr>
+										<td>{{ backup.backup_id }}</td>
+										<td>{{ backup.date_start }}</td>
+										<td>{{ backup.trigger }}</td>
+										<td>{{ backup.destination }}</td>
+										<td>{{ backup.filename }}</td>
+										<td>{{ backup.size }}</td>
+										<td>
+											{% if backup.status_code == 'success' %}
+												<span class="label label-success">{{ backup.status }}</span>
+											{% elseif backup.status_code == 'error' %}
+												<span class="label label-danger">{{ backup.status }}</span>
+											{% else %}
+												<span class="label label-warning">{{ backup.status }}</span>
+											{% endif %}
+										</td>
+										<td>{{ backup.error }}</td>
+										<td class="text-right">
+											{% if backup.download %}
+												<a href="{{ backup.download }}" data-toggle="tooltip" title="{{ button_download }}" class="btn btn-default btn-sm"><i class="fa fa-download"></i></a>
+											{% endif %}
+											{% if can_modify %}
+												<a href="{{ backup.delete }}" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger btn-sm" onclick="return confirm('{{ text_confirm }}');"><i class="fa fa-trash"></i></a>
+											{% endif %}
+										</td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr><td class="text-center" colspan="9">{{ text_no_results }}</td></tr>
+							{% endif %}
+						</tbody>
+					</table>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 text-left">{{ pagination }}</div>
+					<div class="col-sm-6 text-right">{{ results }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}

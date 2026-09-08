@@ -1,0 +1,18 @@
+<?php
+$_['heading_title'] = 'Блог';
+$_['text_empty'] = 'Статей пока нет';
+$_['text_sort'] = 'Сортировать по';
+$_['text_limit'] = 'Показать';
+$_['text_default'] = 'По умолчанию';
+$_['text_name_asc'] = 'Название (А - Я)';
+$_['text_name_desc'] = 'Название (Я - А)';
+$_['text_date_asc'] = 'Дата (сначала старые)';
+$_['text_date_desc'] = 'Дата (сначала новые)';
+$_['text_rating_asc'] = 'Рейтинг (по возрастанию)';
+$_['text_rating_desc'] = 'Рейтинг (по убыванию)';
+$_['text_viewed_asc'] = 'Просмотры (по возрастанию)';
+$_['text_viewed_desc'] = 'Просмотры (по убыванию)';
+$_['text_article_count_1'] = '%s статья';
+$_['text_article_count_2'] = '%s статьи';
+$_['text_article_count_5'] = '%s статей';
+$_['button_more'] = 'Читать';

@@ -1,0 +1,139 @@
+{% if articles %}
+	{% set config = slider_config | default({}) %}
+	{% set show_controls = slider and (config.use_controls or config.use_controls_mobile) %}
+	{% set controls_visibility = config.use_controls and config.use_controls_mobile ? '' : (config.use_controls ? 'carousel-desktop-only' : 'carousel-mobile-only') %}
+	{% set breakpoint = config.breakpoint | default(1024) %}
+	{% set breakpoint_desktop = breakpoint + 1 %}
+	<section class="my-8" aria-labelledby="{{ heading_id }}">
+		{% if slider %}
+			<style>
+				[data-slider="{{ heading_id }}"] {
+					--slide-gap: {{ config.gap }}px;
+				}
+
+				@media (max-width: {{ breakpoint }}px) {
+					[data-slider="{{ heading_id }}"] {
+						--slide-gap: {{ config.gap_mobile }}px;
+					}
+
+					[data-slider="{{ heading_id }}"] .carousel-slide {
+						flex-basis: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+						width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+						max-width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+					}
+
+					[data-slider-controls="{{ heading_id }}"].carousel-desktop-only {
+						display: none !important;
+					}
+				}
+
+				@media (min-width: {{ breakpoint_desktop }}px) {
+					[data-slider-controls="{{ heading_id }}"].carousel-mobile-only {
+						display: none !important;
+					}
+				}
+			</style>
+		{% endif %}
+		<div class="carousel-header">
+			<h2 id="{{ heading_id }}" class="heading mb-0">{{ heading_title }}</h2>
+			{% if show_controls %}
+				<div class="carousel-controls {{ controls_visibility }}" data-slider-controls="{{ heading_id }}">
+					<button type="button" class="button-secondary" data-type="icon" data-slider-prev="{{ heading_id }}">
+						<svg aria-hidden="true" viewBox="0 0 24 24">
+							<use href="/assets/icons/sprite.svg#icon-chevron-left"></use>
+						</svg>
+					</button>
+					<button type="button" class="button-secondary" data-type="icon" data-slider-next="{{ heading_id }}">
+						<svg aria-hidden="true" viewBox="0 0 24 24">
+							<use href="/assets/icons/sprite.svg#icon-chevron-right"></use>
+						</svg>
+					</button>
+				</div>
+			{% endif %}
+		</div>
+		{% if slider %}
+			<div class="carousel product-slider{% if config.use_loop %} is-loop{% endif %}" data-slider="{{ heading_id }}">
+				<div class="carousel-track">
+					{% for article in articles %}
+						<div class="carousel-slide">
+							{% include "default/components/article-card.twig" with {
+								article: article,
+								button_more: button_more
+							} %}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			<script>
+				(() => {
+					const config = {{ config | json_encode | raw }};
+					const root = document.querySelector(`[data-slider="${config.id}"]`);
+
+					if (!root || typeof EmblaCarousel === 'undefined') return;
+
+					const breakpoint = Number(config.breakpoint) || 1024;
+					const mobileQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
+					const isMobile = () => mobileQuery.matches;
+					const bool = (value) => value === true || value === 1 || value === '1';
+					const option = (desktopKey, mobileKey) => (isMobile() ? bool(config[mobileKey]) : bool(config[desktopKey]));
+
+					const syncLoopClass = () => {
+						root.classList.toggle('is-loop', option('use_loop', 'use_loop_mobile'));
+					};
+
+					syncLoopClass();
+
+					const plugins = [];
+					let autoplay = null;
+
+					if (bool(config.use_autoplay) || bool(config.use_autoplay_mobile)) {
+						const Autoplay = window.EmblaCarouselAutoplay?.default || window.EmblaCarouselAutoplay;
+
+						if (Autoplay) {
+							autoplay = Autoplay({
+								delay: Math.max(1, Number(config.autoplay_delay) || 3) * 1000,
+								playOnInit: option('use_autoplay', 'use_autoplay_mobile'),
+								stopOnInteraction: false,
+								stopOnMouseEnter: true,
+							});
+							plugins.push(autoplay);
+						}
+					}
+
+					const embla = EmblaCarousel(root, { loop: option('use_loop', 'use_loop_mobile'), align: 'start' }, plugins);
+
+					document.querySelector(`[data-slider-prev="${config.id}"]`)?.addEventListener('click', () => embla.scrollPrev());
+					document.querySelector(`[data-slider-next="${config.id}"]`)?.addEventListener('click', () => embla.scrollNext());
+
+					const syncBreakpoint = () => {
+						syncLoopClass();
+						embla.reInit({ loop: option('use_loop', 'use_loop_mobile'), align: 'start' });
+
+						if (!autoplay) return;
+
+						if (option('use_autoplay', 'use_autoplay_mobile')) {
+							autoplay.play();
+						} else {
+							autoplay.stop();
+						}
+					};
+
+					if (mobileQuery.addEventListener) {
+						mobileQuery.addEventListener('change', syncBreakpoint);
+					} else {
+						mobileQuery.addListener(syncBreakpoint);
+					}
+				})();
+			</script>
+		{% else %}
+			<div class="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4">
+				{% for article in articles %}
+					{% include "default/components/article-card.twig" with {
+						article: article,
+						button_more: button_more
+					} %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	</section>
+{% endif %}

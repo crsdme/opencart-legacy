@@ -7,6 +7,8 @@ $_['text_announcement'] = 'Sale: up to −30% on selected products. Free shippin
 
 // Menu Sheet
 $_['text_menu'] = 'Menu';
+$_['text_account'] = 'Account';
+$_['text_wishlist'] = 'Wishlist';
 $_['text_contacts_header'] = 'Contacts';
 $_['text_about'] = 'About';
 $_['text_delivery_payment'] = 'Delivery & Payment';

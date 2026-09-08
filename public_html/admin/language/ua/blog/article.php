@@ -28,6 +28,7 @@ $_['entry_keyword']          = 'SEO URL';
 $_['entry_store']            = 'Магазини';
 $_['entry_image']            = 'Зображення статті';
 $_['entry_status']           = 'Статус';
+$_['entry_author']           = 'Автор';
 $_['entry_noindex']          = 'Індексація';
 $_['entry_sort_order']       = 'Порядок сортування';
 $_['entry_category']         = 'Показувати в категоріях';

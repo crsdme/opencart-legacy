@@ -1,0 +1,40 @@
+<div class="tab-pane" id="tab-faq">
+	<input type="hidden" name="faq_form" value="1" />
+	<div class="form-group">
+		<label class="col-sm-2 control-label">{{ text_page_status }}</label>
+		<div class="col-sm-10">
+			<select name="faq_page_status" class="form-control" style="max-width:240px;">
+				{% if faq_page_status %}
+					<option value="1" selected="selected">{{ text_enabled }}</option>
+					<option value="0">{{ text_disabled }}</option>
+				{% else %}
+					<option value="1">{{ text_enabled }}</option>
+					<option value="0" selected="selected">{{ text_disabled }}</option>
+				{% endif %}
+			</select>
+			<p class="help-block">{{ help_page_status }}</p>
+		</div>
+	</div>
+	{{ include('extension/faq/placeholders.twig', {
+		placeholders: placeholders,
+		help_placeholders: help_placeholders,
+		help_placeholder_copy: help_placeholder_copy,
+		text_copied: text_copied
+	}) }}
+	<legend>{{ text_entity_faq }}</legend>
+	<p class="help-block">{{ help_entity_faq }}</p>
+	{{ include('extension/faq/rows.twig', {
+		table_id: 'faq-page',
+		field_name: 'faq',
+		items: faq_items,
+		languages: languages,
+		text_enabled: text_enabled,
+		text_disabled: text_disabled,
+		column_question: column_question,
+		column_answer: column_answer,
+		column_sort_order: column_sort_order,
+		column_status: column_status,
+		button_add: button_add,
+		button_remove: button_remove
+	}) }}
+</div>

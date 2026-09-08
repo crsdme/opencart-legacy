@@ -111,7 +111,7 @@
 - Контроллеры и шаблоны используют:
   - `$this->config->get('config_language')` — текущий язык страницы (уже согласован с URL в multilang).
   - `$this->session->data['language']` — после описанной цепочки должен совпадать с config_language.
-- Переключатель языков в `controller_tw/common/language` берёт текущий язык как `config_language ?: session`, чтобы активная вкладка всегда соответствовала отображаемой версии (ru/ua/en).
+- Переключатель языков в `catalog/controller/common/language` берёт текущий язык как `config_language ?: session`, чтобы активная вкладка всегда соответствовала отображаемой версии (ru/ua/en).
 
 ---
 

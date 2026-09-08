@@ -1,30 +1,65 @@
-{% if categories %}
-<div class="container">
-  <nav id="menu" class="navbar">
-    <div class="navbar-header"><span id="category" class="visible-xs">{{ text_category }}</span>
-      <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
-    </div>
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-      <ul class="nav navbar-nav">
-        {% for category in categories %}
-        {% if category.children %}
-        <li class="dropdown"><a href="{{ category.href }}" class="dropdown-toggle" data-toggle="dropdown">{{ category.name }}</a>
-          <div class="dropdown-menu">
-            <div class="dropdown-inner"> {% for children in category.children|batch(category.children|length / category.column|round(1, 'ceil')) %}
-              <ul class="list-unstyled">
-                {% for child in children %}
-                <li><a href="{{ child.href }}">{{ child.name }}</a></li>
-                {% endfor %}
-              </ul>
-              {% endfor %}</div>
-            <a href="{{ category.href }}" class="see-all">{{ text_all }} {{ category.name }}</a> </div>
-        </li>
-        {% else %}
-        <li><a href="{{ category.href }}">{{ category.name }}</a></li>
-        {% endif %}
-        {% endfor %}
-      </ul>
-    </div>
-  </nav>
+<div class="sheet p-4" data-sheet="left-sheet" data-side="left">
+	<div class="sheet-header mb-2">
+		<p>
+			{{ text_menu }}
+		</p>
+		<button class="button-ghost" type="button" data-type="icon" data-sheet-close>
+			<svg aria-hidden="true" viewbox="0 0 24 24">
+				<use href="/assets/icons/sprite.svg#icon-close"></use>
+			</svg>
+		</button>
+	</div>
+	<hr class="divider" />
+	<div class="sheet-content">
+		<nav class="sheet-nav">
+			{% for category in categories %}
+				<div class="sheet-nav-item" data-nav-item>
+					<div class="sheet-nav-row">
+						<a href="{{ category.href }}" class="sheet-nav-link">{{ category.name }}</a>
+						{% if category.children %}
+							<button class="sheet-nav-toggle" type="button" data-nav-toggle aria-expanded="false">
+								<svg class="sheet-nav-chevron" aria-hidden="true" viewbox="0 0 24 24">
+									<use href="/assets/icons/sprite.svg#icon-chevron-down"></use>
+								</svg>
+							</button>
+						{% endif %}
+					</div>
+					{% if category.children %}
+						<div class="sheet-nav-children">
+							{% for child in category.children %}
+								<a href="{{ child.href }}" class="sheet-nav-link">{{ child.name }}</a>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+			{% endfor %}
+		</nav>
+
+		{{ blog_menu }}
+
+		<hr class="divider" />
+
+		<nav class="sheet-nav">
+			<a href="{{ wishlist }}" class="sheet-nav-link flex items-center gap-2">
+				<svg class="h-5 w-5 shrink-0" aria-hidden="true" viewbox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-heart"></use>
+				</svg>
+				{{ text_wishlist }}
+			</a>
+			<a href="{{ account }}" class="sheet-nav-link flex items-center gap-2">
+				<svg class="h-5 w-5 shrink-0" aria-hidden="true" viewbox="0 0 24 24">
+					<use href="/assets/icons/sprite.svg#icon-user"></use>
+				</svg>
+				{{ text_account }}
+			</a>
+		</nav>
+
+		<hr class="divider" />
+
+		<div class="sheet-switchers">
+			{{ language }}
+			{{ currency }}
+		</div>
+	</div>
 </div>
-{% endif %} 
+<div class="sheet-overlay" data-sheet-overlay></div>

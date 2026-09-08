@@ -525,6 +525,7 @@ class SeoPro
     if (isset($this->request->get['route'])) {
       $break_routes = [
         'error/not_found',
+        'error/gone',
         'extension/feed/google_sitemap',
         'extension/feed/google_base',
         'extension/feed/sitemap_pro',

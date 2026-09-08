@@ -12,6 +12,7 @@ $_['text_added_to_cart'] = 'Added to cart';
 
 // Text
 $_['text_home'] = 'Home';
+$_['date_format_short'] = 'd.m.Y';
 $_['text_yes'] = 'Yes';
 $_['text_no'] = 'No';
 $_['text_select'] = ' --- Please Select --- ';

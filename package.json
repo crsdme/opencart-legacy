@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prettier": "prettier --write \"public_html/catalog/view/theme/tailwind/**/*.twig\" \"public_html/catalog/view/theme/tailwind/**/*.css\" \"public_html/catalog/view/theme/tailwind/**/*.js\" \"public_html/catalog/controller_tw/**/*.php\" \"public_html/catalog/model_tw/**/*.php\"",
-    "dev": "npx tailwindcss -i ./public_html/catalog/view/theme/tailwind/stylesheet/stylesheet.css -o ./public_html/catalog/view/theme/tailwind/stylesheet/tailwind.css --watch --minify"
+    "prettier": "prettier --write \"public_html/catalog/view/theme/default/**/*.twig\" \"public_html/catalog/view/theme/default/**/*.css\" \"public_html/catalog/view/theme/default/**/*.js\" \"public_html/catalog/controller/**/*.php\" \"public_html/catalog/model/**/*.php\"",
+    "dev": "npx tailwindcss -i ./public_html/catalog/view/theme/default/stylesheet/stylesheet.css -o ./public_html/catalog/view/theme/default/stylesheet/tailwind.css --watch --minify"
   },
   "keywords": [],
   "author": "",

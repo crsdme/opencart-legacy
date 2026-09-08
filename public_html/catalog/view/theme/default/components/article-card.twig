@@ -1,0 +1,27 @@
+<div class="product-card article-card">
+	<div class="product-card-media">
+		<a href="{{ article.href }}" class="product-card-image">
+			<img src="{{ article.thumb }}" alt="{{ article.name }}" width="370" height="370" />
+		</a>
+	</div>
+
+	<div class="product-card-content">
+		<a href="{{ article.href }}" class="product-card-title">{{ article.name }}</a>
+
+		{% if article.description %}
+			<p class="product-card-description">
+				{{ article.description }}
+			</p>
+		{% endif %}
+
+		<div class="product-card-footer">
+			{% if article.date_added %}
+				<p class="article-card-date">{{ article.date_added }}</p>
+			{% endif %}
+
+			<a href="{{ article.href }}" class="product-card-buy button-primary">
+				<span>{{ button_more }}</span>
+			</a>
+		</div>
+	</div>
+</div>

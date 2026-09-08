@@ -1,0 +1,23 @@
+{% if gallery %}
+	<div class="product-gallery">
+		<div class="product-gallery-main">
+			<img id="product-image" src="{{ gallery[0].preview }}" alt="{{ heading_title }}" width="500" height="500" />
+		</div>
+
+		{% if (gallery | length) > 1 %}
+			<div class="product-gallery-thumbs">
+				{% for image in gallery %}
+					<button
+						type="button"
+						class="product-gallery-thumb"
+						data-product-image="{{ image.preview }}"
+						{{ loop.first ? 'data-active="true"' : "" }}
+						aria-label="{{ heading_title }}"
+					>
+						<img src="{{ image.thumb }}" alt="{{ heading_title }}" width="80" height="80" />
+					</button>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+{% endif %}

@@ -1,0 +1,14 @@
+---
+description: OpenTail theme map — which skill to follow for UI, CSS/JS, and docs
+alwaysApply: true
+---
+
+# OpenTail
+
+Theme is `public_html/catalog/view/theme/default` (not `tailwind`).
+
+- New or changed UI kit piece → skill `add-component` (Twig + CSS + JS + Components gallery).
+- Where a style or script belongs → skill `theme-assets`.
+- Markdown guide on `/docs` → skill `add-docs-page` (`docs/*.md`, not the UI kit).
+
+Do not put component CSS in `stylesheet.css` or `docs.css`. Do not put docs CSS in the store bundle.

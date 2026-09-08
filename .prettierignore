@@ -27,3 +27,5 @@ htaccess
 controller/
 model/
 view/theme/default/
+
+dump/

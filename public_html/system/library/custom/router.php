@@ -70,6 +70,7 @@ class Router
       'manufacturer_id',
       'information_id',
       'article_id',
+      'author_id',
       'blog_category_id',
     ];
 
@@ -251,6 +252,8 @@ class Router
       }
 
       $this->request->get['route'] = 'blog/article';
+    } elseif (isset($this->request->get['author_id'])) {
+      $this->request->get['route'] = 'blog/author';
     } elseif (isset($this->request->get['blog_category_id'])) {
       $this->request->get['route'] = 'blog/category';
     }
@@ -350,6 +353,15 @@ class Router
         }
         break;
 
+      case 'blog/author':
+        if (isset($data['author_id'])) {
+          $author_id = $data['author_id'];
+          unset($data);
+          $data['route'] = 'blog/author';
+          $data['author_id'] = $author_id;
+        }
+        break;
+
       //blog
       case 'product/category':
         if (isset($data['path'])) {
@@ -414,6 +426,12 @@ class Router
         case 'article_id':
           $article_id = (int) $value;
           $queries[] = 'article_id=' . $article_id;
+          $postfix = true;
+          unset($data[$key]);
+          break;
+        case 'author_id':
+          $author_id = (int) $value;
+          $queries[] = 'author_id=' . $author_id;
           $postfix = true;
           unset($data[$key]);
           break;
@@ -744,6 +762,7 @@ class Router
     if (isset($this->request->get['route'])) {
       $break_routes = [
         'error/not_found',
+        'error/gone',
         'extension/feed/google_sitemap',
         'extension/feed/google_base',
         'extension/feed/sitemap_pro',

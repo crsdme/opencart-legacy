@@ -5,3 +5,4 @@ $_['text_checkout'] = 'Checkout';
 $_['text_empty'] = 'Your cart is empty';
 $_['text_items'] = '%s';
 $_['text_success'] = 'Product %s added to cart';
+$_['button_remove'] = 'Remove';

@@ -1,0 +1,218 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-checkout" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+					<i class="fa fa-save"></i>
+				</button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+					<i class="fa fa-reply"></i>
+				</a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible">
+				<i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success alert-dismissible">
+				<i class="fa fa-check-circle"></i> {{ success }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-checkout">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab-fields" data-toggle="tab">{{ tab_fields }}</a></li>
+						<li><a href="#tab-shipping" data-toggle="tab">{{ tab_shipping }}</a></li>
+						<li><a href="#tab-payment" data-toggle="tab">{{ tab_payment }}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-fields">
+							<legend>{{ entry_min_total }}</legend>
+							<input
+								type="number"
+								name="module_checkout_min_total"
+								value="{{ min_total }}"
+								placeholder="0"
+								id="input-min-total"
+								class="form-control"
+								style="max-width: 280px; margin-bottom: 8px;"
+								min="0"
+								step="0.01"
+							/>
+							<p class="help-block">{{ text_help_min_total }}</p>
+							<p>{{ text_help }}</p>
+							{% for group in field_groups %}
+								<legend>{{ group.name }}</legend>
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>{{ column_field }}</th>
+												<th class="text-center" style="width: 140px;">{{ column_show }}</th>
+												<th class="text-center" style="width: 140px;">{{ column_required }}</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for field in group.fields %}
+												<tr>
+													<td>{{ field.label }}</td>
+													<td class="text-center">
+														<input type="hidden" name="module_checkout_fields[{{ field.code }}][show]" value="0" />
+														<input type="checkbox" name="module_checkout_fields[{{ field.code }}][show]" value="1"{% if field.show %} checked="checked"{% endif %} class="checkout-field-show" />
+													</td>
+													<td class="text-center">
+														<input type="hidden" name="module_checkout_fields[{{ field.code }}][required]" value="0" />
+														<input type="checkbox" name="module_checkout_fields[{{ field.code }}][required]" value="1"{% if field.required %} checked="checked"{% endif %} class="checkout-field-required" />
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							{% endfor %}
+						</div>
+						<div class="tab-pane" id="tab-shipping">
+							<p>{{ text_help_shipping }}</p>
+							{% if shipping_methods %}
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>{{ column_method }}</th>
+												<th class="text-center" style="width: 120px;">{{ column_status }}</th>
+												<th>{{ column_title }}</th>
+												<th class="text-center" style="width: 140px;">{{ column_hide_address }}</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for method in shipping_methods %}
+												<tr>
+													<td>{{ method.name }}</td>
+													<td class="text-center">{{ method.status ? text_enabled : text_disabled }}</td>
+													<td>
+														{% for language in languages %}
+															<div class="input-group" style="margin-bottom: 5px;">
+																<span class="input-group-addon">
+																	<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+																</span>
+																<input type="text" name="module_checkout_shipping[{{ method.code }}][title][{{ language.language_id }}]" value="{{ method.title[language.language_id] is defined ? method.title[language.language_id] }}" placeholder="{{ text_help_title }}" class="form-control" />
+															</div>
+														{% endfor %}
+														<p class="help-block" style="margin: 8px 0 5px;">{{ column_description }}</p>
+														{% for language in languages %}
+															<div class="input-group" style="margin-bottom: 5px;">
+																<span class="input-group-addon">
+																	<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+																</span>
+																<textarea name="module_checkout_shipping[{{ method.code }}][description][{{ language.language_id }}]" rows="2" placeholder="{{ text_help_description }}" class="form-control">{{ method.description[language.language_id] is defined ? method.description[language.language_id] }}</textarea>
+															</div>
+														{% endfor %}
+													</td>
+													<td class="text-center">
+														<input type="checkbox" name="module_checkout_shipping[{{ method.code }}][hide_address]" value="1"{% if method.hide_address %} checked="checked"{% endif %} />
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							{% else %}
+								<p>{{ text_no_shipping }}</p>
+							{% endif %}
+						</div>
+						<div class="tab-pane" id="tab-payment">
+							<p>{{ text_help_payment }}</p>
+							{% if payment_methods %}
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>{{ column_method }}</th>
+												<th class="text-center" style="width: 120px;">{{ column_status }}</th>
+												<th>{{ column_title }}</th>
+												<th>{{ column_for_shipping }}</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for method in payment_methods %}
+												<tr>
+													<td>{{ method.name }}</td>
+													<td class="text-center">{{ method.status ? text_enabled : text_disabled }}</td>
+													<td>
+														{% for language in languages %}
+															<div class="input-group" style="margin-bottom: 5px;">
+																<span class="input-group-addon">
+																	<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+																</span>
+																<input type="text" name="module_checkout_payment[{{ method.code }}][title][{{ language.language_id }}]" value="{{ method.title[language.language_id] is defined ? method.title[language.language_id] }}" placeholder="{{ text_help_title }}" class="form-control" />
+															</div>
+														{% endfor %}
+														<p class="help-block" style="margin: 8px 0 5px;">{{ column_description }}</p>
+														{% for language in languages %}
+															<div class="input-group" style="margin-bottom: 5px;">
+																<span class="input-group-addon">
+																	<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+																</span>
+																<textarea name="module_checkout_payment[{{ method.code }}][description][{{ language.language_id }}]" rows="2" placeholder="{{ text_help_description }}" class="form-control">{{ method.description[language.language_id] is defined ? method.description[language.language_id] }}</textarea>
+															</div>
+														{% endfor %}
+													</td>
+													<td>
+														{% if method.shipping %}
+															{% for item in method.shipping %}
+																<div class="checkbox">
+																	<label>
+																		<input type="checkbox" name="module_checkout_payment[{{ method.code }}][shipping][]" value="{{ item.code }}"{% if item.checked %} checked="checked"{% endif %} />
+																		{{ item.name }}
+																	</label>
+																</div>
+															{% endfor %}
+														{% else %}
+															{{ text_all_shipping }}
+														{% endif %}
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							{% else %}
+								<p>{{ text_no_payment }}</p>
+							{% endif %}
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#form-checkout').on('change', '.checkout-field-show', function () {
+	if (!this.checked) {
+		$(this).closest('tr').find('.checkout-field-required').prop('checked', false);
+	}
+});
+$('#form-checkout').on('change', '.checkout-field-required', function () {
+	if (this.checked) {
+		$(this).closest('tr').find('.checkout-field-show').prop('checked', true);
+	}
+});
+</script>
+{{ footer }}

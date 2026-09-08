@@ -1,0 +1,274 @@
+<div class="docs-intro">
+	<h1>Components</h1>
+	<p>Theme Twig in <code>catalog/view/theme/default/components/</code>. Copy the include under each preview.</p>
+</div>
+
+{% include "default/template/docs/section.twig" with { section: sections.button } %}
+	{% include "default/components/button.twig" %}
+{% include "default/template/docs/copy.twig" with { section: sections.button } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.badge } %}
+	<div class="flex flex-wrap gap-4">
+		{% include "default/components/badge.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.badge } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.typography } %}
+	{% include "default/components/typography.twig" %}
+{% include "default/template/docs/copy.twig" with { section: sections.typography } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.icons } %}
+	<div class="flex flex-wrap items-center gap-4">
+		{% include "default/components/icons.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.icons } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.divider } %}
+	{% include "default/components/divider.twig" %}
+{% include "default/template/docs/copy.twig" with { section: sections.divider } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.skeleton } %}
+	<div class="flex flex-col gap-4">
+		{% include "default/components/skeleton.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.skeleton } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['theme-button'] } %}
+	{% include "default/components/theme-button.twig" %}
+{% include "default/template/docs/copy.twig" with { section: sections['theme-button'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.input } %}
+	<div class="grid max-w-lg gap-4">
+		{% include "default/components/input.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.input } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.form } %}
+	<div class="max-w-lg">
+		{% include "default/components/form.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.form } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.dropdown } %}
+	<div class="flex flex-wrap gap-4">
+		{% include "default/components/dropdown.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.dropdown } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.rating } %}
+	<div class="flex flex-col gap-6">
+		<div>
+			<p class="text-muted mb-2">Read-only</p>
+			{% include "default/components/rating.twig" with { rating: 4 } %}
+		</div>
+		<div>
+			<p class="text-muted mb-2">Interactive</p>
+			{% include "default/components/rating.twig" with {
+				interactive: true,
+				entry_rating: "Your rating"
+			} %}
+		</div>
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.rating } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['custom-fields'] } %}
+	<div class="max-w-lg">
+		{% include "default/components/custom-fields.twig" with {
+			custom_fields: custom_fields,
+			text_select: text_select
+		} %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections['custom-fields'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.modal } %}
+	{% include "default/components/modal.twig" %}
+{% include "default/template/docs/copy.twig" with { section: sections.modal } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.sheet } %}
+	<div class="flex flex-wrap gap-4">
+		{% include "default/components/sheet.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.sheet } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.toast } %}
+	<div class="flex flex-wrap gap-4">
+		{% include "default/components/toast.twig" %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.toast } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.breadcrumbs } %}
+	{% include "default/components/breadcrumbs.twig" with {
+		breadcrumbs: breadcrumbs
+	} %}
+{% include "default/template/docs/copy.twig" with { section: sections.breadcrumbs } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['text-block'] } %}
+	{% include "default/components/text-block.twig" %}
+{% include "default/template/docs/copy.twig" with { section: sections['text-block'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.accordion } %}
+	<div class="max-w-2xl">
+		{% include "default/components/accordion.twig" with {
+			items: [
+				{
+					title: "Is this an accordion?",
+					content: "Yes. Native details/summary, keyboard accessible, no JavaScript."
+				},
+				{
+					title: "Can more than one item stay open?",
+					content: "Yes. FAQ pages work better when users can compare answers."
+				}
+			]
+		} %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.accordion } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.pagination } %}
+	<div class="flex flex-col gap-6">
+		{% include "default/components/pagination.twig" with {
+			pagination: {
+				total: 500,
+				page: 1,
+				limit: 10,
+				text_next: "Next",
+				text_prev: "Previous",
+				url: pagination_url
+			}
+		} %}
+		{% include "default/components/pagination.twig" with {
+			pagination: {
+				total: 500,
+				page: 25,
+				limit: 10,
+				text_next: "Next",
+				text_prev: "Previous",
+				url: pagination_url
+			}
+		} %}
+		{% include "default/components/pagination.twig" with {
+			pagination: {
+				total: 500,
+				page: 50,
+				limit: 10,
+				text_next: "Next",
+				text_prev: "Previous",
+				url: pagination_url
+			}
+		} %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.pagination } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.carousel } %}
+	{% if carousel_slides %}
+		{% include "default/components/carousel.twig" with {
+			slides: carousel_slides,
+			config: {
+				id: "components-carousel",
+				use_controls: true,
+				use_controls_mobile: false,
+				use_picture: true,
+				slides: 1,
+				slides_mobile: 1
+			}
+		} %}
+	{% else %}
+		<p class="docs-muted">No banner slides. Create banner ID 8 in Design → Banners.</p>
+	{% endif %}
+{% include "default/template/docs/copy.twig" with { section: sections.carousel } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['product-card'] } %}
+	{% if products %}
+		<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+			{% for product in products %}
+				{% include "default/components/product-card.twig" with {
+					product: product
+				} %}
+			{% endfor %}
+		</div>
+	{% else %}
+		<p class="docs-muted">No products in the catalog yet.</p>
+	{% endif %}
+{% include "default/template/docs/copy.twig" with { section: sections['product-card'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['article-card'] } %}
+	{% if articles %}
+		<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+			{% for article in articles %}
+				{% include "default/components/article-card.twig" with {
+					article: article,
+					button_more: button_more
+				} %}
+			{% endfor %}
+		</div>
+	{% else %}
+		<p class="docs-muted">No blog articles yet.</p>
+	{% endif %}
+{% include "default/template/docs/copy.twig" with { section: sections['article-card'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['article-slider'] } %}
+	{% if articles %}
+		{% include "default/components/article-slider.twig" with {
+			articles: articles,
+			heading_id: "components-articles",
+			heading_title: "Latest articles",
+			slider: true,
+			button_more: button_more,
+			slider_config: {
+				id: "components-articles",
+				use_controls: true,
+				use_controls_mobile: true,
+				use_autoplay: false,
+				use_autoplay_mobile: false,
+				use_loop: true,
+				use_loop_mobile: true,
+				gap: 16,
+				gap_mobile: 8,
+				breakpoint: 1024
+			}
+		} %}
+	{% else %}
+		<p class="docs-muted">No blog articles yet.</p>
+	{% endif %}
+{% include "default/template/docs/copy.twig" with { section: sections['article-slider'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['product-gallery'] } %}
+	<div class="max-w-lg">
+		{% if gallery %}
+			{% include "default/components/product-gallery.twig" with {
+				gallery: gallery,
+				heading_title: heading_title
+			} %}
+		{% else %}
+			<p class="docs-muted">No product images to preview.</p>
+		{% endif %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections['product-gallery'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['product-options'] } %}
+	<div class="max-w-lg">
+		{% include "default/components/product-options.twig" with {
+			options: options,
+			text_option: text_option,
+			text_select: text_select,
+			button_upload: button_upload
+		} %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections['product-options'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections['product-recurrings'] } %}
+	<div class="max-w-lg">
+		{% include "default/components/product-recurrings.twig" with {
+			recurrings: recurrings,
+			text_payment_recurring: text_payment_recurring,
+			text_select: text_select
+		} %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections['product-recurrings'] } %}
+
+{% include "default/template/docs/section.twig" with { section: sections.faq } %}
+	<div class="max-w-2xl">
+		{% include "default/components/faq.twig" with {
+			faq: faq
+		} %}
+	</div>
+{% include "default/template/docs/copy.twig" with { section: sections.faq } %}

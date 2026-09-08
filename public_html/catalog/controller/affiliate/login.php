@@ -73,26 +73,11 @@ class ControllerAffiliateLogin extends Controller {
 			$data['success'] = '';
 		}
 
-		if (isset($this->request->post['email'])) {
-			$data['email'] = $this->request->post['email'];
-		} else {
-			$data['email'] = '';
-		}
+		$data['email'] = isset($this->request->post['email']) ? $this->request->post['email'] : '';
+		$data['password'] = isset($this->request->post['password']) ? $this->request->post['password'] : '';
 
-		if (isset($this->request->post['password'])) {
-			$data['password'] = $this->request->post['password'];
-		} else {
-			$data['password'] = '';
-		}
-
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('affiliate/login', $data));
+		$data['view'] = 'affiliate/login';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 
 	protected function validate() {

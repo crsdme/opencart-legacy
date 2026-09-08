@@ -1,14 +1,14 @@
 <?php
-// *	@source		See SOURCE.txt for source and other copyright.
-// *	@license	GNU General Public License version 3; see LICENSE.txt
+class ControllerAccountLogin extends Controller
+{
+	private $error = [];
 
-class ControllerAccountLogin extends Controller {
-	private $error = array();
-
-	public function index() {
+	public function index()
+	{
 		$this->load->model('account/customer');
 
-		// Login override for admin users
+		$account = new \Custom\Account($this->registry);
+
 		if (!empty($this->request->get['token'])) {
 			$this->customer->logout();
 			$this->cart->clear();
@@ -29,17 +29,7 @@ class ControllerAccountLogin extends Controller {
 			$customer_info = $this->model_account_customer->getCustomerByToken($this->request->get['token']);
 
 			if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
-				// Default Addresses
-				$this->load->model('account/address');
-
-				if ($this->config->get('config_tax_customer') == 'payment') {
-					$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-				}
-
-				if ($this->config->get('config_tax_customer') == 'shipping') {
-					$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-				}
-
+				$account->afterLogin();
 				$this->response->redirect($this->url->link('account/account', '', true));
 			}
 		}
@@ -53,56 +43,29 @@ class ControllerAccountLogin extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->setRobots('noindex,follow');
 
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			// Unset guest
-			unset($this->session->data['guest']);
+		$phone_auth = $account->isPhone();
+		$account->addCatalogAssets();
 
-			// Default Shipping Address
-			$this->load->model('account/address');
-
-			if ($this->config->get('config_tax_customer') == 'payment') {
-				$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-			}
-
-			if ($this->config->get('config_tax_customer') == 'shipping') {
-				$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-			}
-
-			// Wishlist
-			if (isset($this->session->data['wishlist']) && is_array($this->session->data['wishlist'])) {
-				$this->load->model('account/wishlist');
-
-				foreach ($this->session->data['wishlist'] as $key => $product_id) {
-					$this->model_account_wishlist->addWishlist($product_id);
-
-					unset($this->session->data['wishlist'][$key]);
-				}
-			}
-
-			// Added strpos check to pass McAfee PCI compliance test (http://forum.opencart.com/viewtopic.php?f=10&t=12043&p=151494#p151295)
-			if (isset($this->request->post['redirect']) && $this->request->post['redirect'] != $this->url->link('account/logout', '', true) && (strpos($this->request->post['redirect'], $this->config->get('config_url')) !== false || strpos($this->request->post['redirect'], $this->config->get('config_ssl')) !== false)) {
-				$this->response->redirect(str_replace('&amp;', '&', $this->request->post['redirect']));
-			} else {
-				$this->response->redirect($this->url->link('account/account', '', true));
-			}
+		if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate($account, $phone_auth)) {
+			$this->response->redirect($account->redirectAfterLogin($this->request));
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/home')
-		);
+			'href' => $this->url->link('common/home'),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_account'),
-			'href' => $this->url->link('account/account', '', true)
-		);
+			'href' => $this->url->link('account/account', '', true),
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_login'),
-			'href' => $this->url->link('account/login', '', true)
-		);
+			'href' => $this->url->link('account/login', '', true),
+		];
 
 		if (isset($this->session->data['error'])) {
 			$data['error_warning'] = $this->session->data['error'];
@@ -114,12 +77,18 @@ class ControllerAccountLogin extends Controller {
 			$data['error_warning'] = '';
 		}
 
+		$data['phone_auth'] = $phone_auth;
+		$data['phone_prefix'] = $account->prefix();
 		$data['action'] = $this->url->link('account/login', '', true);
+		$data['send_code'] = $this->url->link('account/login/sendCode', '', true);
 		$data['register'] = $this->url->link('account/register', '', true);
 		$data['forgotten'] = $this->url->link('account/forgotten', '', true);
 
-		// Added strpos check to pass McAfee PCI compliance test (http://forum.opencart.com/viewtopic.php?f=10&t=12043&p=151494#p151295)
-		if (isset($this->request->post['redirect']) && (strpos($this->request->post['redirect'], $this->config->get('config_url')) !== false || strpos($this->request->post['redirect'], $this->config->get('config_ssl')) !== false)) {
+		if (
+			isset($this->request->post['redirect']) &&
+			(strpos($this->request->post['redirect'], $this->config->get('config_url')) !== false ||
+				strpos($this->request->post['redirect'], $this->config->get('config_ssl')) !== false)
+		) {
 			$data['redirect'] = $this->request->post['redirect'];
 		} elseif (isset($this->session->data['redirect'])) {
 			$data['redirect'] = $this->session->data['redirect'];
@@ -137,53 +106,103 @@ class ControllerAccountLogin extends Controller {
 			$data['success'] = '';
 		}
 
-		if (isset($this->request->post['email'])) {
-			$data['email'] = $this->request->post['email'];
-		} else {
-			$data['email'] = '';
-		}
+		$data['email'] = isset($this->request->post['email']) ? $this->request->post['email'] : '';
+		$data['password'] = isset($this->request->post['password']) ? $this->request->post['password'] : '';
+		$data['telephone'] = isset($this->request->post['telephone']) ? $this->request->post['telephone'] : '';
+		$data['code'] = isset($this->request->post['code']) ? $this->request->post['code'] : '';
 
-		if (isset($this->request->post['password'])) {
-			$data['password'] = $this->request->post['password'];
-		} else {
-			$data['password'] = '';
-		}
-
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
-
-		$this->response->setOutput($this->load->view('account/login', $data));
+		$data['view'] = 'account/login';
+		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
 
-	protected function validate() {
-		// Check how many login attempts have been made.
-		$login_info = $this->model_account_customer->getLoginAttempts($this->request->post['email']);
+	public function sendCode()
+	{
+		$this->load->language('account/login');
 
-		if ($login_info && ($login_info['total'] >= $this->config->get('config_login_attempts')) && strtotime('-1 hour') < strtotime($login_info['date_modified'])) {
+		$json = [];
+		$account = new \Custom\Account($this->registry);
+
+		if (!$account->isPhone()) {
+			$json['error'] = $this->language->get('error_login');
+		} elseif ($this->request->server['REQUEST_METHOD'] != 'POST') {
+			$json['error'] = $this->language->get('error_login');
+		} else {
+			$telephone = isset($this->request->post['telephone']) ? $this->request->post['telephone'] : '';
+			$result = $account->sendLoginCode($telephone);
+
+			if (!empty($result['error'])) {
+				$json['error'] = $this->otpError($result);
+			} else {
+				$json['success'] = $this->language->get('text_code_sent');
+				$json['retry_after'] = isset($result['retry_after']) ? (int) $result['retry_after'] : 60;
+			}
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
+	protected function validate($account, $phone_auth)
+	{
+		if ($phone_auth) {
+			$telephone = isset($this->request->post['telephone']) ? $this->request->post['telephone'] : '';
+			$code = isset($this->request->post['code']) ? $this->request->post['code'] : '';
+			$result = $account->loginByPhone($telephone, $code);
+
+			if (!empty($result['error'])) {
+				$this->error['warning'] = $this->otpError($result);
+			}
+
+			return !$this->error;
+		}
+
+		$email = isset($this->request->post['email']) ? $this->request->post['email'] : '';
+		$password = isset($this->request->post['password']) ? $this->request->post['password'] : '';
+
+		$login_info = $this->model_account_customer->getLoginAttempts($email);
+
+		if (
+			$login_info &&
+			$login_info['total'] >= $this->config->get('config_login_attempts') &&
+			strtotime('-1 hour') < strtotime($login_info['date_modified'])
+		) {
 			$this->error['warning'] = $this->language->get('error_attempts');
 		}
 
-		// Check if customer has been approved.
-		$customer_info = $this->model_account_customer->getCustomerByEmail($this->request->post['email']);
+		$customer_info = $this->model_account_customer->getCustomerByEmail($email);
 
 		if ($customer_info && !$customer_info['status']) {
 			$this->error['warning'] = $this->language->get('error_approved');
 		}
 
 		if (!$this->error) {
-			if (!$this->customer->login($this->request->post['email'], $this->request->post['password'])) {
+			if (!$this->customer->login($email, $password)) {
 				$this->error['warning'] = $this->language->get('error_login');
 
-				$this->model_account_customer->addLoginAttempt($this->request->post['email']);
+				$this->model_account_customer->addLoginAttempt($email);
 			} else {
-				$this->model_account_customer->deleteLoginAttempts($this->request->post['email']);
+				$this->model_account_customer->deleteLoginAttempts($email);
+				$account->afterLogin();
 			}
 		}
 
 		return !$this->error;
+	}
+
+	private function otpError($result)
+	{
+		$key = 'error_' . (isset($result['error']) ? $result['error'] : 'login');
+
+		if ($this->language->get($key) && $this->language->get($key) !== $key) {
+			$text = $this->language->get($key);
+		} else {
+			$text = $this->language->get('error_login');
+		}
+
+		if (!empty($result['retry_after']) && $result['error'] === 'wait') {
+			$text = sprintf($text, (int) $result['retry_after']);
+		}
+
+		return $text;
 	}
 }

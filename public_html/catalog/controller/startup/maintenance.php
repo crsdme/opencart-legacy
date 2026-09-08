@@ -11,7 +11,9 @@ class ControllerStartupMaintenance extends Controller {
 			
 			$ignore = array(
 				'common/language/language',
-				'common/currency/currency'
+				'common/currency/currency',
+				'extension/auto_backup/cron',
+				'extension/auto_backup/oauth'
 			);
 			
 			// Show site if logged in as admin
