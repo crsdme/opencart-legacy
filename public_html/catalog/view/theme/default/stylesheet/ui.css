@@ -133,7 +133,7 @@
 /* HEADER */
 
 .header {
-	@apply sticky left-0 right-0 top-0 z-40 flex w-full flex-col border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900;
+	@apply sticky left-0 right-0 top-0 z-40 flex w-full flex-col overflow-visible border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900;
 }
 
 .header-top {
@@ -149,11 +149,23 @@
 }
 
 .header-main {
-	@apply w-full p-4;
+	@apply w-full px-0 py-4 md:px-4;
+}
+
+.header-main-inner {
+	@apply container mx-auto flex flex-wrap items-center gap-2 overflow-visible px-2 md:flex-nowrap lg:gap-4;
 }
 
 .header-logo {
 	@apply shrink-0 text-neutral-900 dark:text-white;
+}
+
+.header-search {
+	@apply order-last min-w-0 w-full basis-full overflow-visible md:order-none md:w-auto md:flex-1 md:basis-0;
+}
+
+.header-actions {
+	@apply ml-auto flex shrink-0 items-center gap-2 md:ml-0;
 }
 
 /* HEADER */

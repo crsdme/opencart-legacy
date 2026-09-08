@@ -10,7 +10,7 @@
 	{% endif %}
 
 	<div class="header-main">
-		<div class="header-main-inner container mx-auto flex items-center gap-2 px-2 lg:gap-4">
+		<div class="header-main-inner">
 			<button class="button-ghost" type="button" data-type="icon" data-sheet-open="left-sheet" aria-label="{{ text_menu }}">
 				<svg aria-hidden="true" viewbox="0 0 24 24">
 					<use href="/assets/icons/sprite.svg#icon-menu"></use>
@@ -27,10 +27,10 @@
 					</svg>
 				</a>
 			{% endif %}
-			<div class="min-w-0 flex-1">
+			<div class="header-search">
 				{{ search }}
 			</div>
-			<div class="flex shrink-0 items-center gap-2">
+			<div class="header-actions">
 				<div class="dropdown" data-dropdown data-align="right" data-type="hover">
 					<button class="button-secondary" type="button" data-type="icon" data-dropdown-button aria-label="{{ text_contacts }}">
 						<svg aria-hidden="true" viewbox="0 0 24 24">

@@ -9,9 +9,9 @@ class ControllerCommonLayout extends Controller
 		$data['column_right'] = $this->load->controller('common/column_right');
 		$data['content_top'] = $this->load->controller('common/content_top');
 		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer', $data);
 		$data['header'] = $this->load->controller('common/header', $data);
 		$data['head'] = $this->load->controller('common/head', $data);
+		$data['footer'] = $this->load->controller('common/footer', $data);
 
 		$microdata = $this->load->controller('common/microdata', $data);
 		$data['microdata'] = is_array($microdata)
