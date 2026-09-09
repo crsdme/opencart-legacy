@@ -91,7 +91,7 @@ class ControllerCommonDashboard extends Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 
 		// Run currency update
-		if ($this->config->get('config_currency_auto')) {
+		if ($this->config->get('config_currency_auto') && $this->config->get('config_currency_engine')) {
 			$this->load->model('localisation/currency');
             $this->load->controller('extension/currency/' . $this->config->get('config_currency_engine')."/currency" , $this->config->get('config_currency'));
 		}

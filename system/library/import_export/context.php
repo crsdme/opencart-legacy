@@ -133,6 +133,11 @@ class Context
 		return $languages ? (int) $languages[0]['language_id'] : 1;
 	}
 
+	public function downloadImages()
+	{
+		return (int) $this->setting('download_images', 1) === 1;
+	}
+
 	public function storeIds()
 	{
 		return [0];

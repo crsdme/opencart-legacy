@@ -19,14 +19,77 @@ class Resolver
 		$this->cache = [];
 	}
 
-	public function exists($table, $column, $id)
+	public function declareLocal($table, $id)
 	{
 		$id = (int) $id;
 
-		if ($id < 1) {
-			return false;
+		if ($id < 0) {
+			$this->cache['local:' . $table . ':' . $id] = true;
+		}
+	}
+
+	public function isLocal($table, $id)
+	{
+		$id = (int) $id;
+
+		return $id < 0 && !empty($this->cache['local:' . $table . ':' . $id]);
+	}
+
+	public function alias($table, $id)
+	{
+		$id = (int) $id;
+
+		if ($id >= 0) {
+			return 0;
 		}
 
+		$key = 'alias:' . $table . ':' . $id;
+
+		return isset($this->cache[$key]) ? (int) $this->cache[$key] : 0;
+	}
+
+	public function rememberAlias($table, $local_id, $real_id)
+	{
+		$local_id = (int) $local_id;
+		$real_id = (int) $real_id;
+
+		if ($local_id >= 0 || $real_id < 1) {
+			return;
+		}
+
+		$this->cache['alias:' . $table . ':' . $local_id] = $real_id;
+		$column = $this->idColumn($table);
+
+		if ($column) {
+			$this->cache['ex:' . $table . ':' . $real_id] = true;
+		}
+	}
+
+	public function resolveRef($table, $id, $allow_local = false)
+	{
+		$id = (int) $id;
+
+		if ($id > 0) {
+			$column = $this->idColumn($table);
+
+			return $column && $this->exists($table, $column, $id) ? $id : 0;
+		}
+
+		if ($id < 0) {
+			$real = $this->alias($table, $id);
+
+			if ($real) {
+				return $real;
+			}
+
+			return $allow_local && $this->isLocal($table, $id) ? $id : 0;
+		}
+
+		return 0;
+	}
+
+	private function idColumn($table)
+	{
 		$allowed = [
 			'product' => 'product_id',
 			'category' => 'category_id',
@@ -35,7 +98,18 @@ class Resolver
 			'attribute_group' => 'attribute_group_id',
 		];
 
-		if (!isset($allowed[$table]) || $allowed[$table] !== $column) {
+		return isset($allowed[$table]) ? $allowed[$table] : '';
+	}
+
+	public function exists($table, $column, $id)
+	{
+		$id = (int) $id;
+
+		if ($id < 1) {
+			return false;
+		}
+
+		if ($this->idColumn($table) !== $column) {
 			return false;
 		}
 

@@ -5,10 +5,12 @@ namespace import_export;
 class Mapper
 {
 	private $ctx;
+	private $remote;
 
 	public function __construct(Context $ctx)
 	{
 		$this->ctx = $ctx;
+		$this->remote = new RemoteImage($ctx);
 	}
 
 	public function has(array $row, $key)
@@ -94,6 +96,54 @@ class Mapper
 		return is_array($decoded) ? $decoded : null;
 	}
 
+	public function padLanguageMap($value)
+	{
+		$map = is_array($value) ? $value : [];
+		$out = [];
+
+		foreach ($this->ctx->languages() as $language) {
+			$short = $language['short'];
+			$code = $language['code'];
+
+			if (array_key_exists($short, $map)) {
+				$out[$short] = $map[$short];
+			} elseif (array_key_exists($code, $map)) {
+				$out[$short] = $map[$code];
+			} elseif (array_key_exists($language['language_id'], $map)) {
+				$out[$short] = $map[$language['language_id']];
+			} else {
+				$out[$short] = '';
+			}
+		}
+
+		return $out;
+	}
+
+	public function padLocalized(array $row, array $schema)
+	{
+		foreach ($schema as $field) {
+			$key = $field['key'];
+
+			if (!empty($field['localized'])) {
+				$row[$key] = $this->padLanguageMap(isset($row[$key]) ? $row[$key] : []);
+			} elseif (!empty($field['json']) && !empty($row[$key]) && is_array($row[$key])) {
+				foreach ($row[$key] as $index => $item) {
+					if (!is_array($item)) {
+						continue;
+					}
+
+					foreach (['text', 'name'] as $nested) {
+						if (isset($item[$nested]) && is_array($item[$nested])) {
+							$row[$key][$index][$nested] = $this->padLanguageMap($item[$nested]);
+						}
+					}
+				}
+			}
+		}
+
+		return $row;
+	}
+
 	public function flatten(array $row, array $schema)
 	{
 		$out = [];
@@ -168,17 +218,17 @@ class Mapper
 
 	public function idsToCodes(array $by_id)
 	{
-		$out = [];
+		$mapped = [];
 
 		foreach ($by_id as $language_id => $value) {
 			$code = $this->ctx->languageCode($language_id);
 
 			if ($code !== '') {
-				$out[$code] = $value;
+				$mapped[$code] = $value;
 			}
 		}
 
-		return $out;
+		return $this->padLanguageMap($mapped);
 	}
 
 	public function mergeDescription(array $existing, array $incoming, array $fields)
@@ -258,8 +308,8 @@ class Mapper
 			return '';
 		}
 
-		if (preg_match('#^https?://#i', $path)) {
-			return false;
+		if (preg_match('#^https?:#i', $path) || strpos($path, '//') === 0) {
+			return $this->remote->fetch($path);
 		}
 
 		return ltrim(str_replace('\\', '/', $path), '/');

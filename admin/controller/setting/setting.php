@@ -15,7 +15,7 @@ class ControllerSettingSetting extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('config', $this->request->post);
 
-			if ($this->config->get('config_currency_auto')) {
+			if ($this->config->get('config_currency_auto') && $this->config->get('config_currency_engine')) {
 				$this->load->model('localisation/currency');
                 $this->load->controller('extension/currency/' . $this->config->get('config_currency_engine')."/currency" , $this->config->get('config_currency'));
 			}
@@ -59,12 +59,6 @@ class ControllerSettingSetting extends Controller {
 			$data['error_telephone'] = $this->error['telephone'];
 		} else {
 			$data['error_telephone'] = '';
-		}
-
-		if (isset($this->error['meta_title'])) {
-			$data['error_meta_title'] = $this->error['meta_title'];
-		} else {
-			$data['error_meta_title'] = '';
 		}
 
 		if (isset($this->error['country'])) {
@@ -169,24 +163,6 @@ class ControllerSettingSetting extends Controller {
 		$data['cancel'] = $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'], true);
 
 		$data['user_token'] = $this->session->data['user_token'];
-
-		if (isset($this->request->post['config_meta_title'])) {
-			$data['config_meta_title'] = $this->request->post['config_meta_title'];
-		} else {
-			$data['config_meta_title'] = $this->config->get('config_meta_title');
-		}
-
-		if (isset($this->request->post['config_meta_description'])) {
-			$data['config_meta_description'] = $this->request->post['config_meta_description'];
-		} else {
-			$data['config_meta_description'] = $this->config->get('config_meta_description');
-		}
-
-		if (isset($this->request->post['config_meta_keyword'])) {
-			$data['config_meta_keyword'] = $this->request->post['config_meta_keyword'];
-		} else {
-			$data['config_meta_keyword'] = $this->config->get('config_meta_keyword');
-		}
 
 		if (isset($this->request->post['config_theme'])) {
 			$data['config_theme'] = $this->request->post['config_theme'];
@@ -326,9 +302,9 @@ class ControllerSettingSetting extends Controller {
 		}
 
 		if (isset($this->request->post['config_timezone'])) {
-			$data['config_timezone'] = $this->request->post['config_timezone'];
+			$data['config_timezone'] = timezone_identifier($this->request->post['config_timezone']);
 		} elseif ($this->config->has('config_timezone')) {
-			$data['config_timezone'] = $this->config->get('config_timezone');
+			$data['config_timezone'] = timezone_identifier($this->config->get('config_timezone'));
 		} else {
 			$data['config_timezone'] = 'UTC';
 		}
@@ -348,7 +324,7 @@ class ControllerSettingSetting extends Controller {
 			);
 		}
 
-		date_default_timezone_set($this->config->get('config_timezone'));
+		date_default_timezone_set(timezone_identifier($this->config->get('config_timezone')));
 
 		if (isset($this->request->post['config_language'])) {
 			$data['config_language'] = $this->request->post['config_language'];
@@ -773,34 +749,6 @@ class ControllerSettingSetting extends Controller {
 			'value' => 'contact'
 		);
 
-		if (isset($this->request->post['config_logo'])) {
-			$data['config_logo'] = $this->request->post['config_logo'];
-		} else {
-			$data['config_logo'] = $this->config->get('config_logo');
-		}
-
-		if (isset($this->request->post['config_logo']) && is_file(DIR_IMAGE . $this->request->post['config_logo'])) {
-			$data['logo'] = $this->model_tool_image->resize($this->request->post['config_logo'], 100, 100);
-		} elseif ($this->config->get('config_logo') && is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
-			$data['logo'] = $this->model_tool_image->resize($this->config->get('config_logo'), 100, 100);
-		} else {
-			$data['logo'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-		}
-
-		if (isset($this->request->post['config_icon'])) {
-			$data['config_icon'] = $this->request->post['config_icon'];
-		} else {
-			$data['config_icon'] = $this->config->get('config_icon');
-		}
-
-		if (isset($this->request->post['config_icon']) && is_file(DIR_IMAGE . $this->request->post['config_icon'])) {
-			$data['icon'] = $this->model_tool_image->resize($this->request->post['config_icon'], 100, 100);
-		} elseif ($this->config->get('config_icon') && is_file(DIR_IMAGE . $this->config->get('config_icon'))) {
-			$data['icon'] = $this->model_tool_image->resize($this->config->get('config_icon'), 100, 100);
-		} else {
-			$data['icon'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-		}
-
 		if (isset($this->request->post['config_mail_engine'])) {
 			$data['config_mail_engine'] = $this->request->post['config_mail_engine'];
 		} else {
@@ -1129,10 +1077,6 @@ class ControllerSettingSetting extends Controller {
 	protected function validate() {
 		if (!$this->user->hasPermission('modify', 'setting/setting')) {
 			$this->error['warning'] = $this->language->get('error_permission');
-		}
-
-		if (!$this->request->post['config_meta_title']) {
-			$this->error['meta_title'] = $this->language->get('error_meta_title');
 		}
 
 		if (!$this->request->post['config_name']) {

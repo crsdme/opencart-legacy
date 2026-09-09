@@ -9,13 +9,11 @@ class ControllerInformationContact extends Controller
 		$this->load->model('seo/meta');
 
 		$seo = $this->model_seo_meta->build(
-			[
-				'meta_title' => $this->language->get('text_meta_title'),
-				'meta_description' => $this->language->get('text_meta_description'),
-				'meta_h1' => $this->language->get('heading_title'),
-			],
 			[],
-			'',
+			[
+				'name' => $this->language->get('heading_title'),
+			],
+			'contact',
 			'information/contact'
 		);
 

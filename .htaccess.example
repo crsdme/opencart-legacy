@@ -29,8 +29,8 @@ RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^index\.(php|html?|htm)$ / [R=301,L]
 
 # Language prefixes without trailing slash
-RewriteCond %{REQUEST_URI} ^/(en|ru|ua|uk|pl|it|de|fr|es)$ [NC]
-RewriteRule ^(en|ru|ua|uk|pl|it|de|fr|es)$ /$1/ [R=301,L,NC]
+# RewriteCond %{REQUEST_URI} ^/(en|ru|ua|uk|pl|it|de|fr|es)$ [NC]
+# RewriteRule ^(en|ru|ua|uk|pl|it|de|fr|es)$ /$1/ [R=301,L,NC]
 
 # Strip page=1
 RewriteCond %{QUERY_STRING} ^(.+)&page=1$

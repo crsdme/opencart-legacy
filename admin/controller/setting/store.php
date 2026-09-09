@@ -168,12 +168,6 @@ class ControllerSettingStore extends Controller {
 			$data['error_url'] = '';
 		}
 
-		if (isset($this->error['meta_title'])) {
-			$data['error_meta_title'] = $this->error['meta_title'];
-		} else {
-			$data['error_meta_title'] = '';
-		}
-
 		if (isset($this->error['name'])) {
 			$data['error_name'] = $this->error['name'];
 		} else {
@@ -272,30 +266,6 @@ class ControllerSettingStore extends Controller {
 			$data['config_ssl'] = $store_info['config_ssl'];
 		} else {
 			$data['config_ssl'] = '';
-		}
-
-		if (isset($this->request->post['config_meta_title'])) {
-			$data['config_meta_title'] = $this->request->post['config_meta_title'];
-		} elseif (isset($store_info['config_meta_title'])) {
-			$data['config_meta_title'] = $store_info['config_meta_title'];
-		} else {
-			$data['config_meta_title'] = '';
-		}
-
-		if (isset($this->request->post['config_meta_description'])) {
-			$data['config_meta_description'] = $this->request->post['config_meta_description'];
-		} elseif (isset($store_info['config_meta_description'])) {
-			$data['config_meta_description'] = $store_info['config_meta_description'];
-		} else {
-			$data['config_meta_description'] = '';
-		}
-
-		if (isset($this->request->post['config_meta_keyword'])) {
-			$data['config_meta_keyword'] = $this->request->post['config_meta_keyword'];
-		} elseif (isset($store_info['config_meta_keyword'])) {
-			$data['config_meta_keyword'] = $store_info['config_meta_keyword'];
-		} else {
-			$data['config_meta_keyword'] = '';
 		}
 
 		if (isset($this->request->post['config_theme'])) {
@@ -600,39 +570,7 @@ class ControllerSettingStore extends Controller {
 			$data['config_stock_checkout'] = '';
 		}
 
-		if (isset($this->request->post['config_logo'])) {
-			$data['config_logo'] = $this->request->post['config_logo'];
-		} elseif (isset($store_info['config_logo'])) {
-			$data['config_logo'] = $store_info['config_logo'];
-		} else {
-			$data['config_logo'] = '';
-		}
-
-		if (isset($this->request->post['config_logo']) && is_file(DIR_IMAGE . $this->request->post['config_logo'])) {
-			$data['logo'] = $this->model_tool_image->resize($this->request->post['config_logo'], 100, 100);
-		} elseif (isset($store_info['config_logo']) && is_file(DIR_IMAGE . $store_info['config_logo'])) {
-			$data['logo'] = $this->model_tool_image->resize($store_info['config_logo'], 100, 100);
-		} else {
-			$data['logo'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-		}
-
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-
-		if (isset($this->request->post['config_icon'])) {
-			$data['config_icon'] = $this->request->post['config_icon'];
-		} elseif (isset($store_info['config_icon'])) {
-			$data['config_icon'] = $store_info['config_icon'];
-		} else {
-			$data['config_icon'] = '';
-		}
-
-		if (isset($this->request->post['config_icon']) && is_file(DIR_IMAGE . $this->request->post['config_icon'])) {
-			$data['icon'] = $this->model_tool_image->resize($this->request->post['config_icon'], 100, 100);
-		} elseif (isset($store_info['config_icon']) && is_file(DIR_IMAGE . $store_info['config_icon'])) {
-			$data['icon'] = $this->model_tool_image->resize($store_info['config_icon'], 100, 100);
-		} else {
-			$data['icon'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-		}
 
 		if (isset($this->request->post['config_secure'])) {
 			$data['config_secure'] = $this->request->post['config_secure'];
@@ -656,10 +594,6 @@ class ControllerSettingStore extends Controller {
 
 		if (!$this->request->post['config_url']) {
 			$this->error['url'] = $this->language->get('error_url');
-		}
-
-		if (!$this->request->post['config_meta_title']) {
-			$this->error['meta_title'] = $this->language->get('error_meta_title');
 		}
 
 		if (!$this->request->post['config_name']) {

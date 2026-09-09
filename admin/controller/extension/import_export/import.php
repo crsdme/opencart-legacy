@@ -8,16 +8,23 @@ class ControllerExtensionImportExportImport extends Controller
 		$engine = new \import_export\Engine($this->registry);
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->user->hasPermission('modify', 'extension/import_export')) {
-			if (!empty($this->request->post['confirm']) && !empty($this->session->data['ie_import'])) {
+			if (!empty($this->request->post['confirm'])) {
+				if (empty($this->session->data['ie_import'])) {
+					$this->session->data['error'] = $this->language->get('error_file');
+					$this->response->redirect($this->url->link('extension/import_export/import', 'user_token=' . $this->session->data['user_token'], true));
+					return;
+				}
+
 				$this->runImport($engine);
 				return;
 			}
 
-			$preview = $this->buildPreview($engine);
-			$data['preview'] = $preview;
-		} else {
-			$data['preview'] = isset($this->session->data['ie_import']) ? $this->session->data['ie_import']['preview'] : [];
+			$this->buildPreview($engine);
+			$this->response->redirect($this->url->link('extension/import_export/import', 'user_token=' . $this->session->data['user_token'], true));
+			return;
 		}
+
+		$data['preview'] = isset($this->session->data['ie_import']['preview']) ? $this->session->data['ie_import']['preview'] : [];
 
 		$data['entities'] = $this->entityOptions($engine);
 		$data['action'] = $this->url->link('extension/import_export/import', 'user_token=' . $data['user_token'], true);
@@ -71,16 +78,18 @@ class ControllerExtensionImportExportImport extends Controller
 		$path = $dir . '/pending-' . $this->session->data['user_token'] . '.' . $format;
 		file_put_contents($path, $content);
 
-		$payload = [
+		$this->session->data['ie_import'] = [
 			'file' => $path,
 			'format' => $format,
 			'entity' => $hint,
 			'filename' => $filename,
-			'preview' => $preview,
+			'preview' => [
+				'entity' => $preview['entity'],
+				'sample' => $preview['sample'],
+				'counts' => $preview['counts'],
+				'total' => $preview['total'],
+			],
 		];
-		$this->session->data['ie_import'] = $payload;
-
-		return $preview;
 	}
 
 	private function runImport($engine)

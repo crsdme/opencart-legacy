@@ -1,9 +1,6 @@
 <?php
 // Heading
 $_['heading_title'] = 'Зв\'язатися з нами';
-$_['text_meta_title'] = 'Контакти Raw Hair Wholesale — Преміальні нарощування волосся та перуки';
-$_['text_meta_description'] =
-  'Контактна інформація Raw Hair Wholesale 📞 Широкий вибір ✅ Офіційна гарантія 🚚 Доставка по всьому світу.';
 
 // Text
 $_['text_contact_description'] =

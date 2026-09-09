@@ -102,6 +102,10 @@ class Product extends Base
 			return 0;
 		}
 
+		if ($this->isForceCreate($row, 'product_id')) {
+			return 0;
+		}
+
 		$key = $this->ctx->productKey();
 		$value = trim((string) $this->mapper->scalar($row, $key));
 
@@ -286,7 +290,7 @@ class Product extends Base
 		}
 
 		if ($this->mapper->has($row, 'manufacturer_id')) {
-			$data['manufacturer_id'] = $this->rowId($row, 'manufacturer_id');
+			$data['manufacturer_id'] = $this->resolveFk('manufacturer', $this->rowId($row, 'manufacturer_id'));
 		} elseif ($this->mapper->has($row, 'manufacturer')) {
 			$data['manufacturer_id'] = $this->resolver->manufacturerId($row['manufacturer'], $this->createRefs());
 		}
@@ -344,13 +348,13 @@ class Product extends Base
 			$model->editProduct($id, $data);
 			$this->resolver->rememberProduct($this->ctx->productKey(), $identity, $id);
 
-			return $this->result('updated', $identity, $this->localizedName($row) ?: $identity, '', $id);
+			return $this->finishWrite($row, 'product_id', 'product', $this->result('updated', $identity, $this->localizedName($row) ?: $identity, '', $id));
 		}
 
 		$id = (int) $model->addProduct($data);
 		$this->resolver->rememberProduct($this->ctx->productKey(), $identity, $id);
 
-		return $this->result('created', $identity, $this->localizedName($row) ?: $identity, '', $id);
+		return $this->finishWrite($row, 'product_id', 'product', $this->result('created', $identity, $this->localizedName($row) ?: $identity, '', $id));
 	}
 
 	private function refsError(array $row)
@@ -358,8 +362,10 @@ class Product extends Base
 		$manufacturer_id = $this->rowId($row, 'manufacturer_id');
 
 		if ($manufacturer_id) {
-			if (!$this->resolver->exists('manufacturer', 'manufacturer_id', $manufacturer_id)) {
-				return 'Unknown manufacturer_id: ' . $manufacturer_id;
+			$error = $this->unknownRef('manufacturer_id', $manufacturer_id);
+
+			if ($error) {
+				return $error;
 			}
 		} elseif (!$this->createRefs() && $this->mapper->has($row, 'manufacturer')) {
 			if (!$this->resolver->manufacturerId($row['manufacturer'], false)) {
@@ -371,8 +377,10 @@ class Product extends Base
 
 		if ($ids) {
 			foreach ($ids as $category_id) {
-				if (!$this->resolver->exists('category', 'category_id', (int) $category_id)) {
-					return 'Unknown category_id: ' . $category_id;
+				$error = $this->unknownRef('category_id', (int) $category_id);
+
+				if ($error) {
+					return $error;
 				}
 			}
 		} elseif (!$this->createRefs()) {
@@ -381,8 +389,10 @@ class Product extends Base
 			if ($categories) {
 				foreach ($categories as $item) {
 					if (is_numeric($item)) {
-						if (!$this->resolver->exists('category', 'category_id', (int) $item)) {
-							return 'Unknown category_id: ' . $item;
+						$error = $this->unknownRef('category_id', (int) $item);
+
+						if ($error) {
+							return $error;
 						}
 					} elseif (!$this->resolver->categoryIdByPath($item, false)) {
 						return 'Unknown category: ' . $item;
@@ -398,8 +408,10 @@ class Product extends Base
 				$attribute_id = isset($attribute['attribute_id']) ? (int) $attribute['attribute_id'] : 0;
 
 				if ($attribute_id) {
-					if (!$this->resolver->exists('attribute', 'attribute_id', $attribute_id)) {
-						return 'Unknown attribute_id: ' . $attribute_id;
+					$error = $this->unknownRef('attribute_id', $attribute_id);
+
+					if ($error) {
+						return $error;
 					}
 
 					continue;
@@ -433,9 +445,9 @@ class Product extends Base
 			$out = [];
 
 			foreach ($ids as $category_id) {
-				$category_id = (int) $category_id;
+				$category_id = $this->resolveFk('category', (int) $category_id);
 
-				if ($category_id && $this->resolver->exists('category', 'category_id', $category_id)) {
+				if ($category_id) {
 					$out[] = $category_id;
 				}
 			}
@@ -453,7 +465,7 @@ class Product extends Base
 
 		foreach ($categories as $item) {
 			if (is_numeric($item)) {
-				$category_id = (int) $item;
+				$category_id = $this->resolveFk('category', (int) $item);
 			} else {
 				$category_id = $this->resolver->categoryIdByPath($item, $this->createRefs());
 			}
@@ -592,7 +604,9 @@ class Product extends Base
 			$id = isset($attribute['attribute_id']) ? (int) $attribute['attribute_id'] : 0;
 
 			if ($id) {
-				if (!$this->resolver->exists('attribute', 'attribute_id', $id)) {
+				$id = $this->resolveFk('attribute', $id);
+
+				if (!$id) {
 					continue;
 				}
 			} else {

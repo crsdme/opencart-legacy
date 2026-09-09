@@ -63,6 +63,10 @@ class Manufacturer extends Base
 			return 0;
 		}
 
+		if ($this->isForceCreate($row, 'manufacturer_id')) {
+			return 0;
+		}
+
 		return $this->resolver->manufacturerId(trim((string) $this->mapper->scalar($row, 'name')), false);
 	}
 
@@ -175,12 +179,12 @@ class Manufacturer extends Base
 		if ($id) {
 			$model->editManufacturer($id, $data);
 
-			return $this->result('updated', $this->identity($row), $data['name'], '', $id);
+			return $this->finishWrite($row, 'manufacturer_id', 'manufacturer', $this->result('updated', $this->identity($row), $data['name'], '', $id));
 		}
 
 		$id = (int) $model->addManufacturer($data);
 
-		return $this->result('created', $this->identity($row), $data['name'], '', $id);
+		return $this->finishWrite($row, 'manufacturer_id', 'manufacturer', $this->result('created', $this->identity($row), $data['name'], '', $id));
 	}
 
 	private function defaults($name)

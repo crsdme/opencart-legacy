@@ -49,3 +49,25 @@ if (!function_exists('dev_dump')) {
 		echo '</pre>';
 	}
 }
+
+if (!function_exists('timezone_identifier')) {
+	function timezone_identifier($timezone) {
+		$timezone = (string) $timezone;
+		$list = timezone_identifiers_list();
+
+		if ($timezone !== '' && in_array($timezone, $list, true)) {
+			return $timezone;
+		}
+
+		$aliases = array(
+			'Europe/Kyiv' => 'Europe/Kiev',
+			'Europe/Kiev' => 'Europe/Kyiv',
+		);
+
+		if (isset($aliases[$timezone]) && in_array($aliases[$timezone], $list, true)) {
+			return $aliases[$timezone];
+		}
+
+		return 'UTC';
+	}
+}

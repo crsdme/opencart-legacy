@@ -13,7 +13,7 @@
  */
 class Language
 {
-	private $default = 'uk-ua';
+	private $default = 'ua';
 	private $directory;
 	public $data = array();
 	private $backup = array();

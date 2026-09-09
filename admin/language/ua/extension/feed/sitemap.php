@@ -1,5 +1,5 @@
 <?php
-$_['heading_title'] = 'XML-сайтмапа';
+$_['heading_title'] = 'XML Sitemap';
 
 $_['text_extension'] = 'Доповнення';
 $_['text_success'] = 'Налаштування сайтмапи збережено';

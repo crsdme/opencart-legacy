@@ -1,9 +1,6 @@
 <?php
 // Heading
 $_['heading_title'] = 'Contact Us';
-$_['text_meta_title'] = 'Contact Raw Hair Wholesale — Premium Hair Extensions & Wigs';
-$_['text_meta_description'] =
-  'Contact information for Raw Hair Wholesale 📞 Wide selection ✅ Official warranty 🚚 Worldwide shipping.';
 
 // Text
 $_['text_contact_description'] =

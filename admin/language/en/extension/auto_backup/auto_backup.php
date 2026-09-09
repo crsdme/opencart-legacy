@@ -66,7 +66,7 @@ $_['entry_cron_token'] = 'Cron token';
 
 $_['help_status'] = 'Off skips cron. Manual run from History still works.';
 $_['help_interval'] = 'Even if crontab is more frequent, a new backup is not created until this time has passed.';
-$_['help_images'] = 'Originals only. image/cache and cachewebp are never packed.';
+$_['help_images'] = 'Originals only. image/cache (including webp) is never packed.';
 $_['help_config'] = 'Contains DB credentials. Leave off unless the Drive/FTP target is private.';
 $_['help_exclude_tables'] = 'One table per line. Prefix is optional (session or oc_session).';
 $_['help_exclude_paths'] = 'One substring per line. Matched against archive paths.';

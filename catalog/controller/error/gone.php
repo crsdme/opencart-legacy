@@ -10,12 +10,13 @@ class ControllerErrorGone extends Controller
 
 		$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 410 Gone');
 
-		$seo = $this->model_seo_meta->build([
-			'meta_title' => $this->language->get('meta_title'),
-			'meta_description' => $this->language->get('meta_description'),
-			'meta_h1' => $this->language->get('meta_title'),
-			'robots' => 'noindex,follow',
-		]);
+		$seo = $this->model_seo_meta->build(
+			[
+				'robots' => 'noindex,follow',
+			],
+			[],
+			'gone'
+		);
 
 		$this->model_seo_meta->apply($seo);
 		$data['heading_title'] = $seo['h1'];

@@ -103,10 +103,16 @@ class ControllerInstallStep3 extends Controller {
 		$data['text_step_3'] = $this->language->get('text_step_3');
 		$data['text_db_connection'] = $this->language->get('text_db_connection');
 		$data['text_db_administration'] = $this->language->get('text_db_administration');
+		$data['text_store_content'] = $this->language->get('text_store_content');
+		$data['text_sample_data_empty'] = $this->language->get('text_sample_data_empty');
+		$data['text_sample_data_empty_help'] = $this->language->get('text_sample_data_empty_help');
+		$data['text_sample_data_demo'] = $this->language->get('text_sample_data_demo');
+		$data['text_sample_data_demo_help'] = $this->language->get('text_sample_data_demo_help');
 		$data['text_mysqli'] = $this->language->get('text_mysqli');
 		$data['text_mpdo'] = $this->language->get('text_mpdo');
 		$data['text_pgsql'] = $this->language->get('text_pgsql');
 
+		$data['entry_sample_data'] = $this->language->get('entry_sample_data');
 		$data['entry_db_driver'] = $this->language->get('entry_db_driver');
 		$data['entry_db_hostname'] = $this->language->get('entry_db_hostname');
 		$data['entry_db_username'] = $this->language->get('entry_db_username');
@@ -258,6 +264,12 @@ class ControllerInstallStep3 extends Controller {
 			$data['email'] = $this->request->post['email'];
 		} else {
 			$data['email'] = 'admin@example.com';
+		}
+
+		if (isset($this->request->post['sample_data']) && $this->request->post['sample_data'] == '1') {
+			$data['sample_data'] = '1';
+		} else {
+			$data['sample_data'] = '0';
 		}
 
 		$data['back'] = $this->url->link('install/step_2');

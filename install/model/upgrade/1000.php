@@ -7,7 +7,7 @@ class ModelUpgrade1000 extends Model {
 		// Future version should have a upgrade file name that matches the version number being changed to
 
 		// Load the sql file
-		$file = DIR_APPLICATION . 'opencart.sql';
+		$file = DIR_APPLICATION . 'sql/schema.sql';
 
 		if (!file_exists($file)) {
 			exit('Could not load sql file: ' . $file);
@@ -177,7 +177,7 @@ class ModelUpgrade1000 extends Model {
 					$this->db->query("ALTER TABLE `" . $table['name'] . "` DEFAULT CHARACTER SET `" . $table['option']['CHARSET'] . "` COLLATE `" . $table['option']['COLLATE'] . "`");
 				}
 
-				// Loop through all tables and adjust based on opencart.sql file
+				// Loop through all tables and adjust based on schema.sql file
 				$i = 0;
 
 				foreach ($table['field'] as $field) {

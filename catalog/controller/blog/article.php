@@ -8,6 +8,7 @@ class ControllerBlogArticle extends Controller
 		$this->load->model('blog/category');
 		$this->load->model('blog/helper');
 		$this->load->model('product/helper');
+		$this->load->model('seo/meta');
 		$this->model_blog_helper->ensureAuthorSchema();
 
 		$article_id = isset($this->request->get['article_id']) ? (int) $this->request->get['article_id'] : 0;
@@ -52,21 +53,18 @@ class ControllerBlogArticle extends Controller
 			'href' => $this->url->link('blog/article', 'article_id=' . $article_id),
 		];
 
-		if ($article_info['meta_title']) {
-			$this->document->setTitle($article_info['meta_title']);
-		} else {
-			$this->document->setTitle($article_info['name']);
-		}
+		$seo = $this->model_seo_meta->build(
+			$article_info,
+			[
+				'name' => $article_info['name'],
+			],
+			'blog_article',
+			'blog/article',
+			'article_id=' . $article_id
+		);
 
-		if ($article_info['noindex'] <= 0 && $this->config->get('config_noindex_status')) {
-			$this->document->setRobots('noindex,follow');
-		}
-
-		$this->document->setDescription($article_info['meta_description']);
-		$this->document->setKeywords($article_info['meta_keyword']);
-		$this->document->addLink($this->url->link('blog/article', 'article_id=' . $article_id), 'canonical');
-
-		$data['heading_title'] = $article_info['meta_h1'] ?: $article_info['name'];
+		$this->model_seo_meta->apply($seo);
+		$data['heading_title'] = $seo['h1'];
 		$data['article_id'] = $article_id;
 
 		$content = $this->model_blog_helper->prepareArticleContent(

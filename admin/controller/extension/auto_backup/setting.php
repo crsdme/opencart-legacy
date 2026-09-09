@@ -37,7 +37,7 @@ class ControllerExtensionAutoBackupSetting extends Controller
 		$data['oauth_redirect'] = $store->oauthRedirectUri();
 		$data['cron_url'] = $store->cronUrl();
 		$data['cron_command'] = '0 * * * * curl -fsS ' . escapeshellarg($data['cron_url']);
-		$cli_path = defined('DIR_SYSTEM') ? rtrim(str_replace('\\', '/', dirname(DIR_SYSTEM)), '/') . '/cli/auto_backup.php' : 'cli/auto_backup.php';
+		$cli_path = defined('DIR_SYSTEM') ? rtrim(str_replace('\\', '/', DIR_SYSTEM), '/') . '/cli/auto_backup.php' : 'system/cli/auto_backup.php';
 		$data['cron_command_cli'] = '0 3 * * * php ' . $cli_path;
 		$data['last_success'] = $data['module_auto_backup_last_success'] !== '' ? $data['module_auto_backup_last_success'] : $this->language->get('text_never');
 		$data['action'] = $this->url->link('extension/auto_backup/setting', 'user_token=' . $data['user_token'], true);

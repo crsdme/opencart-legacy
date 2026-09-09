@@ -70,6 +70,10 @@ class Category extends Base
 			return 0;
 		}
 
+		if ($this->isForceCreate($row, 'category_id')) {
+			return 0;
+		}
+
 		$path = trim((string) $this->mapper->scalar($row, 'path'));
 
 		if ($path !== '') {
@@ -153,12 +157,16 @@ class Category extends Base
 
 		$parent_id = $this->rowId($row, 'parent_id');
 
-		if ($this->mapper->has($row, 'parent_id') && $parent_id > 0 && !$this->resolver->exists('category', 'category_id', $parent_id)) {
-			if ($this->missingMode() === 'skip') {
-				return $this->result('skip', $this->identity($row), $this->localizedName($row), 'Unknown parent_id: ' . $parent_id);
-			}
+		if ($this->mapper->has($row, 'parent_id') && $parent_id) {
+			$error = $this->unknownRef('parent_id', $parent_id);
 
-			return $this->unknownIdError('parent_id', $parent_id);
+			if ($error) {
+				if ($this->missingMode() === 'skip') {
+					return $this->result('skip', $this->identity($row), $this->localizedName($row), $error);
+				}
+
+				return $this->unknownIdError('parent_id', $parent_id);
+			}
 		}
 
 		if ($stated < 1 && $this->localizedName($row) === '' && trim((string) $this->mapper->scalar($row, 'path')) === '') {
@@ -186,7 +194,14 @@ class Category extends Base
 		$leaf = $this->localizedName($row);
 
 		if ($this->mapper->has($row, 'parent_id')) {
-			$parent_id = $this->rowId($row, 'parent_id');
+			$raw_parent = $this->rowId($row, 'parent_id');
+			$parent_id = $this->resolveFk('category', $raw_parent);
+
+			if ($raw_parent && !$parent_id) {
+				$action = $this->missingMode() === 'skip' ? 'skipped' : 'error';
+
+				return $this->result($action, $this->identity($row), $leaf, 'Unknown parent_id: ' . $raw_parent);
+			}
 		} elseif (strpos($path, '>') !== false) {
 			$parts = array_values(array_filter(array_map('trim', preg_split('/\s*>\s*/', $path)), 'strlen'));
 			$leaf = $leaf !== '' ? $leaf : (string) array_pop($parts);
@@ -265,7 +280,7 @@ class Category extends Base
 		if ($id) {
 			$model->editCategory($id, $data);
 
-			return $this->result('updated', $this->identity($row), $leaf, '', $id);
+			return $this->finishWrite($row, 'category_id', 'category', $this->result('updated', $this->identity($row), $leaf, '', $id));
 		}
 
 		$id = (int) $model->addCategory($data);
@@ -274,7 +289,7 @@ class Category extends Base
 			$this->resolver->categoryIdByPath($path, false);
 		}
 
-		return $this->result('created', $this->identity($row), $leaf, '', $id);
+		return $this->finishWrite($row, 'category_id', 'category', $this->result('created', $this->identity($row), $leaf, '', $id));
 	}
 
 	private function defaults($name, $parent_id)
