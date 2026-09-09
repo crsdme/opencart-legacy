@@ -74,7 +74,7 @@ class Archiver
 	{
 		$path = str_replace('\\', '/', $path);
 
-		if (strpos($path, '/image/cache/') !== false || strpos($path, '/image/cachewebp/') !== false) {
+		if (strpos($path, '/image/cache/') !== false) {
 			return true;
 		}
 

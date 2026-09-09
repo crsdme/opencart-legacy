@@ -18,12 +18,11 @@ Open work and a running changelog. How features work is in `DOCUMENTATION.md`.
 - interface admin refactor
 - route=setting/setting
 
-- check setup default theme
 - turn off auto maintaince
 - брошенные корзины
 - Refactor or remove Фільтр
 - show more products (need check with ocfilter)
-- newproduct seed
+- cookies
 
 - windows - linux bind dev speed error
 - button-group https://ui.shadcn.com/docs/components/radix/button-group

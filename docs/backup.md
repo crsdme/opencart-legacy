@@ -20,7 +20,7 @@ Uninstall does **not** drop history unless **Delete history on uninstall** is en
 | On | Default | Notes |
 | --- | --- | --- |
 | Database | yes | PHP dump of `DB_PREFIX` tables. `session` and `customer_online` skipped. |
-| Images | yes | `image/catalog` originals. `image/cache` and `cachewebp` never packed. |
+| Images | yes | `image/catalog` originals. `image/cache` (including `webp`) never packed. |
 | Downloads | no | `system/storage/download/` |
 | config.php | off | Contains DB credentials. Leave off unless the remote target is private. |
 
@@ -43,10 +43,10 @@ The shop does not schedule itself. Add crontab **on the production server**.
 **VPS (preferred, no HTTP timeout):**
 
 ```
-0 3 * * * php /var/www/html/cli/auto_backup.php
+0 3 * * * php /var/www/html/system/cli/auto_backup.php
 ```
 
-`force` ignores the interval: `php cli/auto_backup.php force`
+`force` ignores the interval: `php system/cli/auto_backup.php force`
 
 **Shared hosting (URL):**
 

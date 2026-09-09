@@ -57,6 +57,7 @@ $_['text_status_error'] = 'Error';
 $_['entry_status'] = 'Status';
 $_['entry_product_key'] = 'Product identity';
 $_['entry_on_missing'] = 'Missing categories / attributes / brands';
+$_['entry_download_images'] = 'Download remote images';
 $_['entry_delete_data'] = 'Delete job history on uninstall';
 $_['entry_entity'] = 'Entity';
 $_['entry_format'] = 'Format';
@@ -65,12 +66,13 @@ $_['entry_category'] = 'Category';
 $_['entry_manufacturer'] = 'Manufacturer';
 
 $_['help_status'] = 'Off only hides the idea of running this from cron later. Admin pages still work.';
-$_['help_product_key'] = 'When product_id is missing: match by SKU, or by model if SKU is empty.';
+$_['help_product_key'] = 'When product_id is omitted: match by SKU, or by model if SKU is empty. product_id 0 always creates. Negative ids (e.g. -1) are aliases inside this file only.';
 $_['help_on_missing'] = 'When a product points at a category, attribute or manufacturer that does not exist yet.';
+$_['help_download_images'] = 'http(s) image URLs are saved under image/catalog/import/. Local paths are unchanged. Failed downloads skip that image. JPEG, PNG, GIF, WebP, max 8 MB.';
 $_['help_delete_data'] = 'If enabled, uninstall drops the job history table. Catalog data is never deleted.';
-$_['help_template'] = 'Empty CSV/JSON from the live schema. Prefer an export so IDs are real. JSON bundle includes manufacturers, attribute groups, attributes, categories and products.';
+$_['help_template'] = 'Empty CSV/JSON from the live schema. Prefer an export so shop IDs are real. New rows use 0 or negative aliases (-1, -2) in a JSON bundle so they can link before the shop assigns ids.';
 $_['help_export'] = 'Product filters apply to products. Bundle export dumps every supported entity.';
-$_['help_import'] = 'Preview first. Match by id (product_id, category_id, …). New rows omit the id or use 0. Attach products with category_ids and attribute_id. Images must already be under image/catalog.';
+$_['help_import'] = 'Preview first. Live positive ids update that row. 0 = create. Negative ids (-1, -2) create and let other rows in this file link to them (JSON bundle for category + product). Images: local image/catalog path, or http(s) URL to download.';
 
 $_['column_id'] = 'ID';
 $_['column_date'] = 'Date';

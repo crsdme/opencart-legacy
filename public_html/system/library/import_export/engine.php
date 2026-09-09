@@ -107,6 +107,7 @@ class Engine
 			'module_import_export_status' => 1,
 			'module_import_export_product_key' => 'sku',
 			'module_import_export_on_missing_ref' => 'create',
+			'module_import_export_download_images' => 1,
 			'module_import_export_delete_data_on_uninstall' => 0,
 		];
 	}
@@ -123,7 +124,8 @@ class Engine
 			$rows = [];
 
 			foreach (self::BUCKETS as $bucket => $code) {
-				$rows[$bucket] = [$this->entities[$code]->example()];
+				$handler = $this->entities[$code];
+				$rows[$bucket] = [$this->mapper->padLocalized($handler->example(), $handler->schema())];
 			}
 
 			return [
@@ -139,7 +141,7 @@ class Engine
 			throw new \RuntimeException('Unknown entity.');
 		}
 
-		$example = $handler->example();
+		$example = $this->mapper->padLocalized($handler->example(), $handler->schema());
 
 		if ($format_name === 'csv') {
 			$rows = [$this->mapper->flatten($example, $handler->schema())];
@@ -227,19 +229,7 @@ class Engine
 			}
 
 			if ($bucket === 'categories') {
-				usort($normalized, function ($a, $b) {
-					$pa = isset($a['parent_id']) ? (int) $a['parent_id'] : 0;
-					$pb = isset($b['parent_id']) ? (int) $b['parent_id'] : 0;
-
-					if ($pa !== $pb) {
-						return $pa - $pb;
-					}
-
-					$left = isset($a['path']) ? substr_count((string) $a['path'], '>') : 0;
-					$right = isset($b['path']) ? substr_count((string) $b['path'], '>') : 0;
-
-					return $left - $right;
-				});
+				$normalized = $this->sortCategories($normalized);
 			}
 
 			$parsed['items'][$bucket] = $normalized;
@@ -255,6 +245,7 @@ class Engine
 	public function preview(array $parsed)
 	{
 		$this->resolver->reset();
+		$this->declareLocals($parsed);
 		$rows = [];
 		$counts = ['create' => 0, 'update' => 0, 'skip' => 0, 'error' => 0];
 
@@ -279,7 +270,6 @@ class Engine
 
 		return [
 			'entity' => $parsed['entity'],
-			'rows' => $rows,
 			'sample' => array_slice($rows, 0, 50),
 			'counts' => $counts,
 			'total' => count($rows),
@@ -289,6 +279,7 @@ class Engine
 	public function import(array $parsed)
 	{
 		$this->resolver->reset();
+		$this->declareLocals($parsed);
 		$created = 0;
 		$updated = 0;
 		$skipped = 0;
@@ -357,6 +348,91 @@ class Engine
 		}
 
 		return 'csv';
+	}
+
+	private function declareLocals(array $parsed)
+	{
+		$keys = [
+			'manufacturers' => ['manufacturer', 'manufacturer_id'],
+			'attribute_groups' => ['attribute_group', 'attribute_group_id'],
+			'attributes' => ['attribute', 'attribute_id'],
+			'categories' => ['category', 'category_id'],
+			'products' => ['product', 'product_id'],
+		];
+
+		foreach ($keys as $bucket => $pair) {
+			if (empty($parsed['items'][$bucket])) {
+				continue;
+			}
+
+			foreach ($parsed['items'][$bucket] as $row) {
+				if (!is_array($row) || !isset($row[$pair[1]]) || $row[$pair[1]] === '' || $row[$pair[1]] === null) {
+					continue;
+				}
+
+				$id = (int) $row[$pair[1]];
+
+				if ($id < 0) {
+					$this->resolver->declareLocal($pair[0], $id);
+				}
+			}
+		}
+	}
+
+	private function sortCategories(array $rows)
+	{
+		$count = count($rows);
+
+		if ($count < 2) {
+			return $rows;
+		}
+
+		$placed = array_fill(0, $count, false);
+		$ready = [];
+		$out = [];
+		$guard = 0;
+
+		while (count($out) < $count && $guard < $count + 1) {
+			$guard++;
+			$progress = false;
+
+			for ($i = 0; $i < $count; $i++) {
+				if ($placed[$i]) {
+					continue;
+				}
+
+				$parent = 0;
+
+				if (isset($rows[$i]['parent_id']) && $rows[$i]['parent_id'] !== '' && $rows[$i]['parent_id'] !== null) {
+					$parent = (int) $rows[$i]['parent_id'];
+				}
+
+				if ($parent < 0 && empty($ready[$parent])) {
+					continue;
+				}
+
+				$out[] = $rows[$i];
+				$placed[$i] = true;
+				$progress = true;
+				$own = isset($rows[$i]['category_id']) ? (int) $rows[$i]['category_id'] : 0;
+
+				if ($own < 0) {
+					$ready[$own] = true;
+				}
+			}
+
+			if (!$progress) {
+				break;
+			}
+		}
+
+		for ($i = 0; $i < $count; $i++) {
+			if (!$placed[$i]) {
+				$out[] = $rows[$i];
+			}
+		}
+
+		return $out;
 	}
 
 	private function isBundle(array $parsed)

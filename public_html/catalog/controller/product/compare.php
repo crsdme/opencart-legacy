@@ -25,8 +25,21 @@ class ControllerProductCompare extends Controller
 			$this->response->redirect($this->url->link('product/compare'));
 		}
 
-		$this->document->setTitle($this->language->get('heading_title'));
-		$this->document->setRobots('noindex,follow');
+		$this->load->model('seo/meta');
+
+		$seo = $this->model_seo_meta->build(
+			[
+				'robots' => 'noindex,follow',
+			],
+			[
+				'name' => $this->language->get('heading_title'),
+			],
+			'compare',
+			'product/compare'
+		);
+
+		$this->model_seo_meta->apply($seo);
+		$data['heading_title'] = $seo['h1'];
 
 		$data['breadcrumbs'] = [];
 

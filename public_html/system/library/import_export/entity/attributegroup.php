@@ -51,6 +51,10 @@ class AttributeGroup extends Base
 			return 0;
 		}
 
+		if ($this->isForceCreate($row, 'attribute_group_id')) {
+			return 0;
+		}
+
 		return $this->resolver->attributeGroupId($this->localizedName($row), false);
 	}
 
@@ -139,12 +143,12 @@ class AttributeGroup extends Base
 		if ($id) {
 			$model->editAttributeGroup($id, $data);
 
-			return $this->result('updated', $this->identity($row), $name ?: $this->identity($row), '', $id);
+			return $this->finishWrite($row, 'attribute_group_id', 'attribute_group', $this->result('updated', $this->identity($row), $name ?: $this->identity($row), '', $id));
 		}
 
 		$id = (int) $model->addAttributeGroup($data);
 
-		return $this->result('created', $this->identity($row), $name ?: $this->identity($row), '', $id);
+		return $this->finishWrite($row, 'attribute_group_id', 'attribute_group', $this->result('created', $this->identity($row), $name ?: $this->identity($row), '', $id));
 	}
 
 	private function pluck(array $descriptions, $field)

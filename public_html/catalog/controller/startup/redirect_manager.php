@@ -30,7 +30,6 @@ class ControllerStartupRedirectManager extends Controller
 				array(
 					'error/gone',
 					'extension/feed/sitemap',
-					'extension/feed/google_sitemap',
 					'extension/feed/google_base',
 					'extension/feed/sitemap_pro',
 				),

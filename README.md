@@ -47,9 +47,9 @@ clear config.php file
 
 localhost:8080/install
 
-set Semantic URL in admin panel (settings/settings)
+On step 3 pick **Empty store** (no catalog/blog/demo modules) or **Demo catalog**.
 
-set Seo Pro in admin panel (settings/settings)
+SEO URLs and SeoPro are on after install.
 ```
 
 ## Components Preview

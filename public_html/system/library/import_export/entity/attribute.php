@@ -57,7 +57,11 @@ class Attribute extends Base
 			return 0;
 		}
 
-		$group_id = $this->rowId($row, 'attribute_group_id');
+		if ($this->isForceCreate($row, 'attribute_id')) {
+			return 0;
+		}
+
+		$group_id = $this->resolveFk('attribute_group', $this->rowId($row, 'attribute_group_id'));
 		$group = trim((string) $this->mapper->scalar($row, 'group'));
 
 		if ($group_id && $this->resolver->exists('attribute_group', 'attribute_group_id', $group_id) && $group === '') {
@@ -122,19 +126,23 @@ class Attribute extends Base
 			return $this->result('error', '', '', 'attribute_id or name is required.');
 		}
 
-		if ($stated < 1 && $group_id < 1 && $group === '') {
+		if ($stated < 1 && !$group_id && $group === '') {
 			return $this->result('error', $this->identity($row), $name, 'attribute_group_id or group is required.');
 		}
 
-		if ($group_id && !$this->resolver->exists('attribute_group', 'attribute_group_id', $group_id)) {
-			if ($this->missingMode() === 'skip') {
-				return $this->result('skip', $this->identity($row), $name, 'Unknown attribute_group_id: ' . $group_id);
-			}
+		if ($group_id) {
+			$error = $this->unknownRef('attribute_group_id', $group_id);
 
-			return $this->unknownIdError('attribute_group_id', $group_id);
+			if ($error) {
+				if ($this->missingMode() === 'skip') {
+					return $this->result('skip', $this->identity($row), $name, $error);
+				}
+
+				return $this->unknownIdError('attribute_group_id', $group_id);
+			}
 		}
 
-		if ($group_id < 1 && $group !== '') {
+		if (!$group_id && $group !== '') {
 			$resolved = $this->resolver->attributeGroupId($group, false);
 
 			if (!$resolved && $this->missingMode() === 'error') {
@@ -162,11 +170,9 @@ class Attribute extends Base
 		}
 
 		$name = $this->localizedName($row);
-		$group_id = $this->rowId($row, 'attribute_group_id');
+		$group_id = $this->resolveFk('attribute_group', $this->rowId($row, 'attribute_group_id'));
 
-		if ($group_id && $this->resolver->exists('attribute_group', 'attribute_group_id', $group_id)) {
-			// keep
-		} else {
+		if (!$group_id) {
 			$group = trim((string) $this->mapper->scalar($row, 'group'));
 			$group_id = $this->resolver->attributeGroupId($group, $this->createRefs());
 		}
@@ -194,12 +200,12 @@ class Attribute extends Base
 		if ($id) {
 			$model->editAttribute($id, $data);
 
-			return $this->result('updated', $this->identity($row), $name ?: $this->identity($row), '', $id);
+			return $this->finishWrite($row, 'attribute_id', 'attribute', $this->result('updated', $this->identity($row), $name ?: $this->identity($row), '', $id));
 		}
 
 		$id = (int) $model->addAttribute($data);
 
-		return $this->result('created', $this->identity($row), $name ?: $this->identity($row), '', $id);
+		return $this->finishWrite($row, 'attribute_id', 'attribute', $this->result('created', $this->identity($row), $name ?: $this->identity($row), '', $id));
 	}
 
 	private function pluck(array $descriptions, $field)

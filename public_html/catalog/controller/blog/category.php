@@ -8,6 +8,7 @@ class ControllerBlogCategory extends Controller
 		$this->load->model('blog/article');
 		$this->load->model('blog/helper');
 		$this->load->model('product/helper');
+		$this->load->model('seo/meta');
 
 		$this->model_product_helper->applyNoindexByParams($this->request->get, ['sort', 'order', 'page', 'limit']);
 
@@ -60,20 +61,6 @@ class ControllerBlogCategory extends Controller
 			return;
 		}
 
-		if ($category_info['meta_title']) {
-			$this->document->setTitle($category_info['meta_title']);
-		} else {
-			$this->document->setTitle($category_info['name']);
-		}
-
-		if ($category_info['noindex'] <= 0 && $this->config->get('config_noindex_status')) {
-			$this->document->setRobots('noindex,follow');
-		}
-
-		$this->document->setDescription($category_info['meta_description']);
-		$this->document->setKeywords($category_info['meta_keyword']);
-
-		$data['heading_title'] = $category_info['meta_h1'] ?: $category_info['name'];
 		$data['button_more'] = $this->language->get('button_more');
 		$data['continue'] = $this->url->link('common/home');
 
@@ -173,6 +160,21 @@ class ControllerBlogCategory extends Controller
 			$this->language->get('text_article_count_2'),
 			$this->language->get('text_article_count_5'),
 		);
+
+		$seo = $this->model_seo_meta->build(
+			$category_info,
+			[
+				'name' => $category_info['name'],
+				'count' => $data['text_total_articles'],
+				'page' => $page,
+			],
+			'blog_category',
+			'blog/category',
+			'blog_category_id=' . $path_param
+		);
+
+		$this->model_seo_meta->apply($seo);
+		$data['heading_title'] = $seo['h1'];
 
 		$data['view'] = 'blog/category';
 		$this->response->setOutput($this->load->controller('common/layout', $data));

@@ -16,6 +16,7 @@ class ControllerExtensionImportExportDashboard extends Controller
 			$settings['module_import_export_product_key'] = isset($this->request->post['module_import_export_product_key']) && $this->request->post['module_import_export_product_key'] === 'model' ? 'model' : 'sku';
 			$mode = isset($this->request->post['module_import_export_on_missing_ref']) ? $this->request->post['module_import_export_on_missing_ref'] : 'create';
 			$settings['module_import_export_on_missing_ref'] = in_array($mode, ['create', 'error', 'skip'], true) ? $mode : 'create';
+			$settings['module_import_export_download_images'] = isset($this->request->post['module_import_export_download_images']) ? (int) $this->request->post['module_import_export_download_images'] : 0;
 			$settings['module_import_export_delete_data_on_uninstall'] = isset($this->request->post['module_import_export_delete_data_on_uninstall']) ? (int) $this->request->post['module_import_export_delete_data_on_uninstall'] : 0;
 			$this->model_setting_setting->editSetting('module_import_export', $settings);
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -26,6 +27,7 @@ class ControllerExtensionImportExportDashboard extends Controller
 		$data['module_import_export_status'] = $this->config->get('module_import_export_status');
 		$data['module_import_export_product_key'] = $this->config->get('module_import_export_product_key') ? $this->config->get('module_import_export_product_key') : 'sku';
 		$data['module_import_export_on_missing_ref'] = $this->config->get('module_import_export_on_missing_ref') ? $this->config->get('module_import_export_on_missing_ref') : 'create';
+		$data['module_import_export_download_images'] = $this->config->get('module_import_export_download_images') === null || $this->config->get('module_import_export_download_images') === '' ? 1 : (int) $this->config->get('module_import_export_download_images');
 		$data['module_import_export_delete_data_on_uninstall'] = (int) $this->config->get('module_import_export_delete_data_on_uninstall');
 		$data['action'] = $this->url->link('extension/import_export/dashboard', 'user_token=' . $data['user_token'], true);
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $data['user_token'] . '&type=module', true);
@@ -52,8 +54,8 @@ class ControllerExtensionImportExportDashboard extends Controller
 		foreach ([
 			'text_edit', 'text_enabled', 'text_disabled', 'text_yes', 'text_no',
 			'text_recent', 'text_no_results', 'entry_status', 'entry_product_key',
-			'entry_on_missing', 'entry_delete_data', 'help_status', 'help_product_key',
-			'help_on_missing', 'help_delete_data', 'text_key_sku', 'text_key_model',
+			'entry_on_missing', 'entry_download_images', 'entry_delete_data', 'help_status', 'help_product_key',
+			'help_on_missing', 'help_download_images', 'help_delete_data', 'text_key_sku', 'text_key_model',
 			'text_missing_create', 'text_missing_error', 'text_missing_skip',
 			'button_save', 'button_cancel', 'column_date', 'column_action',
 			'column_entity', 'column_status', 'column_created', 'column_updated', 'column_errors',

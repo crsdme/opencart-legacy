@@ -51,47 +51,51 @@
 							<button type="submit" class="btn btn-default">{{ button_preview }}</button>
 						</div>
 					</div>
-					{% if preview %}
-						<div class="alert alert-info">
-							{{ text_create }}: {{ preview.counts.create }} |
-							{{ text_update }}: {{ preview.counts.update }} |
-							{{ text_skip }}: {{ preview.counts.skip }} |
-							{{ text_error }}: {{ preview.counts.error }} |
-							{{ text_total }}: {{ preview.total }}
-						</div>
-						{% if preview.sample %}
-							<div class="table-responsive">
-								<table class="table table-bordered">
-									<thead>
-										<tr>
-											<td>{{ column_row }}</td>
-											<td>{{ column_entity }}</td>
-											<td>{{ column_identity }}</td>
-											<td>{{ column_action }}</td>
-											<td>{{ column_message }}</td>
-										</tr>
-									</thead>
-									<tbody>
-										{% for row in preview.sample %}
-											<tr class="{% if row.action == 'error' %}danger{% elseif row.action == 'skip' %}warning{% elseif row.action == 'create' %}success{% endif %}">
-												<td>{{ row.row }}</td>
-												<td>{{ row.entity }}</td>
-												<td>{{ row.identity }}</td>
-												<td>{{ row.action }}</td>
-												<td>{{ row.error }}</td>
-											</tr>
-										{% endfor %}
-									</tbody>
-								</table>
-							</div>
-						{% endif %}
-						{% if can_modify and preview.counts.error == 0 %}
-							<button type="submit" name="confirm" value="1" class="btn btn-primary">{{ button_import }}</button>
-						{% elseif can_modify and preview.total %}
-							<button type="submit" name="confirm" value="1" class="btn btn-warning">{{ button_import }}</button>
-						{% endif %}
-					{% endif %}
 				</form>
+				{% if preview %}
+					<div class="alert alert-info">
+						{{ text_create }}: {{ preview.counts.create }} |
+						{{ text_update }}: {{ preview.counts.update }} |
+						{{ text_skip }}: {{ preview.counts.skip }} |
+						{{ text_error }}: {{ preview.counts.error }} |
+						{{ text_total }}: {{ preview.total }}
+					</div>
+					{% if preview.sample %}
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<td>{{ column_row }}</td>
+										<td>{{ column_entity }}</td>
+										<td>{{ column_identity }}</td>
+										<td>{{ column_action }}</td>
+										<td>{{ column_message }}</td>
+									</tr>
+								</thead>
+								<tbody>
+									{% for row in preview.sample %}
+										<tr class="{% if row.action == 'error' %}danger{% elseif row.action == 'skip' %}warning{% elseif row.action == 'create' %}success{% endif %}">
+											<td>{{ row.row }}</td>
+											<td>{{ row.entity }}</td>
+											<td>{{ row.identity }}</td>
+											<td>{{ row.action }}</td>
+											<td>{{ row.error }}</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					{% endif %}
+					{% if can_modify and preview.total %}
+						<form action="{{ action }}" method="post">
+							{% if preview.counts.error == 0 %}
+								<button type="submit" name="confirm" value="1" class="btn btn-primary">{{ button_import }}</button>
+							{% else %}
+								<button type="submit" name="confirm" value="1" class="btn btn-warning">{{ button_import }}</button>
+							{% endif %}
+						</form>
+					{% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</div>

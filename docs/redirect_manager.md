@@ -89,7 +89,7 @@ Preview: `/index.php?route=error/gone`
 ## Cron
 
 ```
-*/5 * * * * php /var/www/html/cli/redirect_manager.php sync
+*/5 * * * * php /var/www/html/system/cli/redirect_manager.php sync
 ```
 
 Commands: `sync`, `generate`, `validate`, `cloudflare-sync`, `status`.

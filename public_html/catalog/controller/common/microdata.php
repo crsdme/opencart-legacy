@@ -95,7 +95,7 @@ class ControllerCommonMicrodata extends Controller
 		$country = $this->getCountry();
 		$zone = $this->getZone();
 		$geo = $this->parseGeocode();
-		$logo = $this->getImageUrl($this->config->get('config_logo'));
+		$logo = $this->getImageUrl('favicon/web-app-manifest-512x512.png');
 		$image = !empty($data['popup'])
 			? $data['popup']
 			: (!empty($data['thumb'])

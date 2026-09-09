@@ -8,10 +8,6 @@ class ControllerCommonHeader extends Controller
 	{
 		$this->load->language('common/header');
 
-		if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
-			$data['logo'] = HTTPS_SERVER . 'image/' . $this->config->get('config_logo');
-		}
-
 		$data['home'] = $this->url->link('common/home');
 		$data['wishlist'] = $this->url->link('account/wishlist', '', true);
 		$data['account'] = $this->url->link('account/account', '', true);

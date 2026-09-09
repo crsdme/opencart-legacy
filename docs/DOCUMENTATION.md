@@ -28,9 +28,26 @@ OpenCart (ocStore) is the engine. Tailwind and Docker are the kit around it. The
 - Runtime tuning is in `docker/php/php.ini` (upload size, memory limit, opcache behavior).
 - Apache vhost (`docker/php/000-default.conf`) has `AllowOverride All`, so project `.htaccess` rules are active.
 
+# INSTALL
+
+Step 3 of `/install` asks for starter content. Schema and system seed always run. Demo files are optional.
+
+- SQL lives in `public_html/install/sql/`:
+    - `schema.sql` — `DROP` / `CREATE` for every table (also used by upgrade `1000.php`).
+    - `system/*.sql` — locales, statuses, tax, events, core extensions, settings, layout names/routes, legal pages, system SEO keywords. Always applied.
+    - `demo/*.sql` — catalog, blog, banners, carousel/featured modules, layout module placements, demo SEO, demo coupons. Applied only when **Demo catalog** is selected.
+- **Empty store** (default): no products, categories, manufacturers, blog posts, banners or homepage modules. Layout records stay (Home, Product, 404, 410, …) with routes, but without carousel/featured placements. Account column on account layouts stays. Modifications are status `0`. Blog menu and the blog page family (`config_pages_blog`) are off. Turn blog back on in System → Settings → Option when you need it.
+- **Demo catalog**: the ocStore sample shop (products, blog, carousels).
+- CLI: `php install/cli_install.php install … --sample_data 0` (empty) or `--sample_data 1` (demo).
+- System extensions always installed: default theme, COD, flat shipping, order totals, dashboards, reports, ECB currency, XML Sitemap, account module. Google Shopping and NBU currency are not installed (still available from admin). Carousel / featured / blog modules are demo-only (still available to install later from admin).
+- Store languages: Ukrainian (main), English, Russian. `config_seo_url`, `config_seo_pro`, and `config_minifier` (CSS/JS bundling) are on by default.
+- Default API user is created and enabled (`status = 1`) with `127.0.0.1` / `::1` (and the installer IP) allowed. Admin order editing needs this.
+- Store timezone is `Europe/Kiev` (valid on PHP 7.4; `Europe/Kyiv` is not). Invalid IDs are mapped or fall back to UTC.
+
 # LANGUAGE
 
 - Multi-language flow starts in `public_html/catalog/controller/startup/startup.php`.
+- Install seeds Ukrainian (`ua`, main), English (`en`), and Russian (`ru`). Storefront folders: `catalog/language/{ua,en,ru}`. Admin UI stays Ukrainian / English.
 - `config_language_main` = main language code (no URL prefix on main language pages).
 - `config_language` = current selected language code.
 - `config_language_id` = current selected language ID (used in `seo_url` lookups).
@@ -61,6 +78,7 @@ OpenCart (ocStore) is the engine. Tailwind and Docker are the kit around it. The
 - Main DB source for SEO mapping: table `seo_url` (`query`, `keyword`, `store_id`, `language_id`).
 - Important router settings (admin -> store settings):
     - `config_seo_url`
+    - `config_seo_pro`
     - `config_seo_url_include_path`
     - `config_seo_url_cache`
     - `config_page_postfix`
@@ -71,6 +89,8 @@ OpenCart (ocStore) is the engine. Tailwind and Docker are the kit around it. The
 ## META-DATA
 
 - Runtime templates, not DB generation. Manual `meta_title` / `meta_description` / `meta_h1` on the entity always win.
+- Store settings have no global Title / Description / Keywords. Those were one string for every language. Templates live in `catalog/language/{en,ua,ru}/seo/meta.php` (`{shop}` = store name).
+- Prefixes: `home`, `product`, `category`, `manufacturer`, `manufacturer_list`, `information`, `contact`, `special`, `search`, `compare`, `sitemap`, `blog`, `blog_category`, `blog_article`, `blog_author`, `not_found`, `gone`. Each has `_title` / `_description` / `_h1`.
 - Engine: `public_html/catalog/model/seo/meta.php`.
 - `build($entity, $vars, $prefix, $route, $query)` only returns data: `title`, `description`, `h1`, `canonical`, `robots`.
 - `apply($seo)` writes title, description, canonical and robots to the document. The controller still assigns `$data['heading_title']` from `$seo['h1']`.
@@ -91,7 +111,7 @@ OpenCart (ocStore) is the engine. Tailwind and Docker are the kit around it. The
         - `{{ microdata.body }}` before `</body>`.
 - Current active output:
     - OpenGraph meta block (`microdata.head`).
-    - Organization / WebSite / WebPage / BreadcrumbList JSON-LD (`microdata.body`).
+    - Organization / WebSite / WebPage / BreadcrumbList JSON-LD (`microdata.body`). Organization `logo` is `image/favicon/web-app-manifest-512x512.png` (header logo is the theme sprite, not a settings image).
     - Product JSON-LD on product pages.
     - ItemList JSON-LD on listing pages.
     - FAQPage JSON-LD when the page has visible FAQ items (same questions as the accordion).
@@ -115,14 +135,15 @@ OpenCart (ocStore) is the engine. Tailwind and Docker are the kit around it. The
 
 - Module: Admin → Extensions → Extensions → Modules → Import / Export. Full notes: `docs/import_export.md`.
 - CSV/JSON for products, categories, manufacturers, attribute groups and attributes. Not the SQL dump (`tool/backup`).
-- Upsert by **id** first (`product_id`, `category_id`, …), then SKU / name. Products link with `category_ids` and `attribute_id`. Preview, then write through admin `add*` / `edit*` models.
+- Upsert by **id** first (`product_id`, `category_id`, …). `0` = always create; omit id = create or match SKU / name; negative ids are file-local aliases so a new category and product can link in one JSON bundle. Products link with `category_ids` and `attribute_id`. Preview, then write through admin `add*` / `edit*` models.
 - JSON bundle import order: manufacturers → attribute groups → attributes → categories → products.
-- CLI: `cli/import_export.php`. Table (`DB_PREFIX`): `import_export_job`. Uninstall does not drop history unless **Delete job history on uninstall** is on.
+- `http(s)` product/category/manufacturer images are downloaded into `image/catalog/import/` on import. Local `image/catalog/...` paths still work.
+- CLI: `system/cli/import_export.php` (not web-accessible). Table (`DB_PREFIX`): `import_export_job`. Uninstall does not drop history unless **Delete job history on uninstall** is on.
 
 ## AUTO BACKUP
 
 - Module: Admin → Extensions → Extensions → Modules → Auto Backup. Full notes: `docs/backup.md`.
-- For **production**, not Docker. Cron on the live host: `cli/auto_backup.php` (VPS) or `index.php?route=extension/auto_backup/cron&cron_token=...` (shared hosting).
+- For **production**, not Docker. Cron on the live host: `system/cli/auto_backup.php` (VPS) or `index.php?route=extension/auto_backup/cron&cron_token=...` (shared hosting).
 - Packs MySQL + `image/catalog` (not image cache) into `system/storage/backup/`, then optional Google Drive or FTP. Email is a status report only.
 - Table (`DB_PREFIX`): `auto_backup`. Uninstall does not drop history unless **Delete history on uninstall** is on.
 
@@ -136,7 +157,7 @@ H1 is the same engine as title and description: `public_html/catalog/model/seo/m
     3. Fallback: `$vars['name']` (product / category / information title).
 - `apply()` writes title, description, canonical, robots to the document. It does **not** write H1. The controller sets `$data['heading_title'] = $seo['h1']`; Twig renders `<h1>`.
 - `<title>` can differ from H1 (`meta_title` / `{prefix}_title` / `fallback_title`). That is intended.
-- Static pages (home, contact, sitemap, search, special, 404, 410) pass `meta_h1` (or language strings) into `build()`.
+- Static pages (home, contact, sitemap, search, special, compare, 404, 410, blog index) take title / description / H1 from `{prefix}_*` in `seo/meta.php`. Manual entity fields still win where they exist.
 - Pagination suffix (`title_page`) applies to `<title>` only, not H1.
 
 ## 410 PAGE
@@ -157,7 +178,7 @@ Themed response for URLs removed on purpose. Not the same as turning a page fami
 
 - There are two sitemap layers:
     - HTML page sitemap: `public_html/catalog/controller/information/sitemap.php` (`route=information/sitemap`).
-    - XML feed sitemap index/branches: `public_html/catalog/controller/extension/feed/sitemap.php` (`route=extension/feed/sitemap`).
+    - XML Sitemap feed (installed and on by default): `public_html/catalog/controller/extension/feed/sitemap.php` (`route=extension/feed/sitemap`). Admin heading is **XML Sitemap**. The old `google_sitemap` feed is removed.
 - Rewrite to human-readable XML URLs is in `public_html/.htaccess`:
     - `/(lang/)?sitemap.xml`
     - `/(lang/)?sitemap-<branch>.xml`
@@ -238,7 +259,8 @@ Facade for outbound SMS. Controllers call `$this->sms->send($phone, $message)`. 
 - Head includes:
     - meta/title/robots/keywords/description,
     - canonical/hreflang links,
-    - favicon pack,
+    - favicon pack (`image/favicon/`, not a single admin icon),
+    - header logo from the theme sprite (`assets/icons/sprite.svg#logo`),
     - analytics blocks,
     - header scripts/styles (with optional minifier output).
 - Why this structure is good:
@@ -278,7 +300,7 @@ Dev-time flags for whole route families. Off = the route does not exist (`404` /
 - JS/CSS are concatenated and minified (comments and whitespace outside strings/templates). Already `*.min.js` / `*.min.css` are concatenated as-is.
 - CSS `url()` paths are rewritten relative to `image/cache/minifier/<store_id>/`.
 - Bundles: `public_html/image/cache/minifier/<store_id>/bundle-<hash>.{css,js}`.
-- Admin: System → Settings → Server → **Об’єднання CSS/JS** (`config_minifier`). Missing key = off.
+- Admin: System → Settings → Server → **Об’єднання CSS/JS** (`config_minifier`). On by default at install. Missing key = off.
 - HTML is not minified.
 
 # WEBP IMAGES
@@ -286,7 +308,7 @@ Dev-time flags for whole route families. Off = the route does not exist (`404` /
 - Implemented in `public_html/catalog/model/tool/image.php` (`resize()`).
 - Resize flow:
     - generate classic cached image in `image/cache/...`;
-    - if supported, generate WebP in `image/cachewebp/...`.
+    - if supported, generate WebP in `image/cache/webp/...`.
 - WebP is used only when:
     - PHP GD supports `imagewebp`;
     - browser `HTTP_ACCEPT` contains `image/webp`.

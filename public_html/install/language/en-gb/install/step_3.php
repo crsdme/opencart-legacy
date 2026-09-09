@@ -6,11 +6,17 @@ $_['heading_title']          = 'Configuration';
 $_['text_step_3']            = 'Enter your database and administration details';
 $_['text_db_connection']     = '1. Please enter your database connection details.';
 $_['text_db_administration'] = '2. Please enter a username and password for the administration.';
+$_['text_store_content']     = '3. Choose starter content.';
+$_['text_sample_data_empty'] = 'Empty store';
+$_['text_sample_data_empty_help'] = 'System tables, locales, statuses, legal pages, layouts and core extensions. No products, categories, blog posts, banners or homepage modules. Blog storefront pages and modifications stay off.';
+$_['text_sample_data_demo']  = 'Demo catalog';
+$_['text_sample_data_demo_help'] = 'Sample products, categories, manufacturers, blog articles, banners and homepage carousels.';
 $_['text_mysqli']            = 'MySQLi';
 $_['text_pdo']               = 'PDO';
 $_['text_pgsql']             = 'PostgreSQL';
 
 // Entry
+$_['entry_sample_data']      = 'Starter data';
 $_['entry_db_driver']        = 'DB Driver';
 $_['entry_db_hostname']      = 'Hostname';
 $_['entry_db_username']      = 'Username';
