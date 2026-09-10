@@ -59,4 +59,4 @@ http://localhost:8080/index.php?route=docs/components
 http://localhost:8080/index.php?route=docs
 ```
 
-Technical pages (noindex). Components is the UI kit. Docs home renders `README.md`; other guides are markdown from `docs/`. Recreate the PHP container after pulling so Docker can mount the markdown files.
+Technical pages (noindex). Components is the UI kit. Guides are markdown in `docs/en` and `docs/ru` (sidebar: Guides / Technical). Screenshots live in `docs/images/`. Store setup: `http://localhost:8080/index.php?route=docs/index&doc=getting-started`. Recreate the PHP container after pulling so Docker can mount `docs/`.

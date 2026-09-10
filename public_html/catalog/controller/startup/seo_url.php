@@ -23,7 +23,7 @@ class ControllerStartupSeoUrl extends Controller
 			$this->custom_router->prepareRoute($parts);
 		}
 
-		$this->custom_router->validate();
+		// validate() runs in startup/multilang_rewrite after the language prefix rewrite is registered.
 	}
 
 	public function rewrite($link)

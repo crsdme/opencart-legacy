@@ -32,7 +32,7 @@ class Manufacturer extends Base
 			'manufacturer_id' => 0,
 			'name' => 'Acme',
 			'sort_order' => 0,
-			'noindex' => 0,
+			'noindex' => 1,
 			'image' => 'catalog/demo/acme.png',
 			'description' => ['uk' => '', 'en' => ''],
 			'keyword' => ['uk' => 'acme', 'en' => 'acme'],
@@ -204,7 +204,7 @@ class Manufacturer extends Base
 		return [
 			'name' => $name,
 			'sort_order' => 0,
-			'noindex' => 0,
+			'noindex' => 1,
 			'image' => '',
 			'manufacturer_description' => $description,
 			'manufacturer_store' => $this->ctx->storeIds(),

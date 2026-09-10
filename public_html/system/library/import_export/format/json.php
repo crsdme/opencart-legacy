@@ -19,21 +19,27 @@ class Json implements FormatInterface
 		return 'json';
 	}
 
-	public function encode($entity, array $rows, array $languages)
+	public function encode($entity, array $rows, array $languages, $help = '')
 	{
 		unset($languages);
 
 		if ($entity === 'bundle') {
 			$payload = [
 				'version' => 1,
+				'help' => (string) $help,
 				'entities' => $rows,
 			];
 		} else {
 			$payload = [
 				'version' => 1,
+				'help' => (string) $help,
 				'entity' => $entity,
 				'items' => $rows,
 			];
+		}
+
+		if ($payload['help'] === '') {
+			unset($payload['help']);
 		}
 
 		return json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

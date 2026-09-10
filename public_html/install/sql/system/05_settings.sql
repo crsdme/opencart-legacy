@@ -128,7 +128,6 @@ INSERT INTO `oc_setting` (`store_id`, `code`, `key`, `value`, `serialized`) VALU
 (0, 'total_coupon', 'total_coupon_status', '1', 0),
 (0, 'total_voucher', 'total_voucher_sort_order', '8', 0),
 (0, 'total_voucher', 'total_voucher_status', '1', 0),
-(0, 'module_account', 'module_account_status', '1', 0),
 (0, 'theme_default', 'theme_default_product_limit', '15', 0),
 (0, 'theme_default', 'theme_default_product_description_length', '100', 0),
 (0, 'theme_default', 'theme_default_image_thumb_width', '228', 0),

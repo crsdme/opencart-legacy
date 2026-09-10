@@ -1,6 +1,6 @@
 -- ---------------------------------------------------------
 -- OpenTail install SQL
--- Layout names, routes, and the account column on account layouts.
+-- Layout names and routes.
 -- ---------------------------------------------------------
 
 SET sql_mode = '';
@@ -25,10 +25,6 @@ INSERT INTO `oc_layout` (`layout_id`, `name`) VALUES
 (17, 'Сторінка виробника'),
 (18, '404'),
 (19, '410');
-
-INSERT INTO `oc_layout_module` (`layout_module_id`, `layout_id`, `code`, `position`, `sort_order`) VALUES
-(69, 10, 'account', 'column_right', 1),
-(68, 6, 'account', 'column_right', 1);
 
 INSERT INTO `oc_layout_route` (`layout_route_id`, `layout_id`, `store_id`, `route`) VALUES
 (38, 6, 0, 'account/%'),

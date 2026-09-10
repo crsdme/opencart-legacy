@@ -28,6 +28,7 @@ services:
             - ./docs:/var/www/docs:ro
             - ./README.md:/var/www/README.md:ro
             - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+            - ./docker/php/000-default.conf:/etc/apache2/sites-available/000-default.conf
         ports:
             - '8080:80'
         depends_on:

@@ -12,6 +12,7 @@ public_html/system/storage/backup/*
 !public_html/system/storage/backup/.htaccess
 !public_html/system/storage/backup/index.html
 public_html/image/cache/
+public_html/image/catalog/import/
 
 # Local secrets / env — keep config-dist.php and .htaccess.example
 public_html/config.php

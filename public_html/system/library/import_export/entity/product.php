@@ -55,7 +55,7 @@ class Product extends Base
 			'price' => 499,
 			'quantity' => 10,
 			'status' => 1,
-			'noindex' => 0,
+			'noindex' => 1,
 			'manufacturer_id' => 1,
 			'manufacturer' => 'Acme',
 			'category_ids' => [12],
@@ -295,6 +295,19 @@ class Product extends Base
 			$data['manufacturer_id'] = $this->resolver->manufacturerId($row['manufacturer'], $this->createRefs());
 		}
 
+		if (!$this->mapper->has($row, 'image')) {
+			foreach (['image_url', 'photo', 'picture'] as $alt) {
+				if ($this->mapper->has($row, $alt)) {
+					$row['image'] = $row[$alt];
+					break;
+				}
+			}
+		}
+
+		if (!$this->mapper->has($row, 'images') && $this->mapper->has($row, 'photos')) {
+			$row['images'] = $row['photos'];
+		}
+
 		if ($this->mapper->has($row, 'image')) {
 			$image = $this->mapper->imagePath($row['image']);
 
@@ -323,7 +336,6 @@ class Product extends Base
 
 		if ($category_ids !== null) {
 			$data['product_category'] = $category_ids;
-			$data['main_category_id'] = $category_ids ? $category_ids[0] : 0;
 		}
 
 		$attributes = $this->mapper->jsonField($row, 'attributes');
@@ -508,7 +520,7 @@ class Product extends Base
 			'height' => 0,
 			'length_class_id' => $this->ctx->lengthClassId(),
 			'status' => 1,
-			'noindex' => 0,
+			'noindex' => 1,
 			'tax_class_id' => 0,
 			'sort_order' => 0,
 			'image' => '',

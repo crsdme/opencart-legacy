@@ -3,12 +3,12 @@
 	{% if source %}
 		<p><span class="docs-file">{{ source }}</span></p>
 	{% else %}
-		<p>No markdown in <code>README.md</code> or <code>docs/</code>.</p>
+		<p>{% if docs_lang == 'ru' %}Нет markdown в <code>docs/ru/</code>.{% else %}No markdown in <code>docs/en/</code>.{% endif %}</p>
 	{% endif %}
 </div>
 
 {% if not current %}
-	<div class="docs-empty">Add <code>README.md</code> at the repo root or markdown files under <code>docs/</code>.</div>
+	<div class="docs-empty">{% if docs_lang == 'ru' %}Добавьте файлы в <code>docs/ru/</code> и зарегистрируйте их в <code>docs/catalog.php</code>.{% else %}Add files under <code>docs/en/</code> and register them in <code>docs/catalog.php</code>.{% endif %}</div>
 {% else %}
 	<article class="docs-body">
 		{{ html }}

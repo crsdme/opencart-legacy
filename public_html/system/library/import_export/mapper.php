@@ -197,16 +197,31 @@ class Mapper
 					$out[$key] = $this->idsToCodes($localized);
 				}
 			} elseif (!empty($field['list'])) {
-				$list = $this->listValues($row, $key);
+				if ($key === 'images') {
+					$urls = $this->allUrls(isset($row[$key]) ? $row[$key] : null);
 
-				if ($list !== null) {
-					$out[$key] = $list;
+					if ($urls || $this->has($row, $key)) {
+						$out[$key] = !empty($out[$key]) ? array_values(array_unique(array_merge($out[$key], $urls))) : $urls;
+					}
+				} else {
+					$list = $this->listValues($row, $key);
+
+					if ($list !== null) {
+						$out[$key] = $list;
+					}
 				}
 			} elseif (!empty($field['json'])) {
 				$json = $this->jsonField($row, $key);
 
 				if ($json !== null) {
 					$out[$key] = $json;
+				}
+			} elseif ($key === 'image' && array_key_exists($key, $row) && $row[$key] !== null && $row[$key] !== '') {
+				$urls = $this->allUrls($row[$key]);
+				$out[$key] = $urls ? $urls[0] : '';
+
+				if (count($urls) > 1 && empty($out['images'])) {
+					$out['images'] = array_slice($urls, 1);
 				}
 			} elseif ($this->has($row, $key)) {
 				$out[$key] = $this->cast($row[$key], isset($field['type']) ? $field['type'] : 'string');
@@ -302,17 +317,78 @@ class Mapper
 
 	public function imagePath($path)
 	{
-		$path = trim((string) $path);
+		$urls = $this->allUrls($path);
 
-		if ($path === '') {
-			return '';
+		if (!$urls) {
+			return is_array($path) ? false : (trim((string) $path) === '' ? '' : false);
 		}
+
+		$path = $urls[0];
 
 		if (preg_match('#^https?:#i', $path) || strpos($path, '//') === 0) {
 			return $this->remote->fetch($path);
 		}
 
 		return ltrim(str_replace('\\', '/', $path), '/');
+	}
+
+	public function allUrls($value)
+	{
+		$out = [];
+
+		foreach ($this->walkImageValues($value) as $item) {
+			if ($item !== '' && !in_array($item, $out, true)) {
+				$out[] = $item;
+			}
+		}
+
+		return $out;
+	}
+
+	private function walkImageValues($value)
+	{
+		if ($value === null || $value === '' || $value === false) {
+			return [];
+		}
+
+		if (is_array($value)) {
+			$found = [];
+
+			foreach (['url', 'src', 'image', 'href', 'link', 'path'] as $key) {
+				if (!empty($value[$key]) && !is_array($value[$key])) {
+					$found = array_merge($found, $this->walkImageValues($value[$key]));
+				}
+			}
+
+			if ($found) {
+				return $found;
+			}
+
+			foreach ($value as $item) {
+				$found = array_merge($found, $this->walkImageValues($item));
+			}
+
+			return $found;
+		}
+
+		$text = html_entity_decode(trim((string) $value), ENT_QUOTES, 'UTF-8');
+		$text = preg_replace('/^=\"(.*)\"$/', '$1', $text);
+
+		if (preg_match_all('#https?://[^\s"\'<>]+#i', $text, $matches)) {
+			$urls = [];
+
+			foreach ($matches[0] as $url) {
+				$urls[] = rtrim($url, '.,);');
+			}
+
+			return $urls;
+		}
+
+		if (preg_match('#^//[^\s"\'<>]+#', $text, $match)) {
+			return ['https:' . rtrim($match[0], '.,);')];
+		}
+
+		return [$text];
 	}
 
 	private function localizedFromDotKeys(array $row, $key)

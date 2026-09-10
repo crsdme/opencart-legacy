@@ -112,6 +112,60 @@ class Engine
 		];
 	}
 
+	private function fileHelp()
+	{
+		$language = $this->registry->get('language');
+
+		if ($language && method_exists($language, 'get')) {
+			$text = $language->get('help_import');
+
+			if ($text !== '' && $text !== 'help_import') {
+				return $text;
+			}
+		}
+
+		$path = $this->languageFile();
+
+		if ($path) {
+			$_ = [];
+			include $path;
+
+			if (!empty($_['help_import'])) {
+				return $_['help_import'];
+			}
+		}
+
+		return 'Preview first. Live positive ids update that row. 0 = create. Negative ids (-1, -2) create and let other rows in this file link to them (JSON bundle for category + product). Images: local image/catalog path, or http(s) URL to download.';
+	}
+
+	private function languageFile()
+	{
+		$config = $this->ctx->config();
+		$code = $config ? (string) $config->get('config_admin_language') : '';
+
+		if ($code === '' && $config) {
+			$code = (string) $config->get('config_language');
+		}
+
+		$code = strtolower($code !== '' ? $code : 'en');
+		$short = substr($code, 0, 2);
+		$base = defined('DIR_LANGUAGE') ? rtrim(DIR_LANGUAGE, '/\\') : '';
+
+		if ($base === '') {
+			return '';
+		}
+
+		foreach (array_unique([$code, $short, 'en', 'ua']) as $dir) {
+			$path = $base . '/' . $dir . '/extension/import_export/import_export.php';
+
+			if (is_file($path)) {
+				return $path;
+			}
+		}
+
+		return '';
+	}
+
 	public function template($entity, $format_name)
 	{
 		if ($entity === 'bundle' && $format_name === 'csv') {
@@ -131,7 +185,7 @@ class Engine
 			return [
 				'filename' => 'catalog.' . $format->extension(),
 				'mime' => $format->mime(),
-				'content' => $format->encode('bundle', $rows, $this->ctx->languages()),
+				'content' => $format->encode('bundle', $rows, $this->ctx->languages(), $this->fileHelp()),
 			];
 		}
 
@@ -152,7 +206,7 @@ class Engine
 		return [
 			'filename' => $handler->code() . '.' . $format->extension(),
 			'mime' => $format->mime(),
-			'content' => $format->encode($handler->code(), $rows, $this->ctx->languages()),
+			'content' => $format->encode($handler->code(), $rows, $this->ctx->languages(), $this->fileHelp()),
 		];
 	}
 
@@ -278,6 +332,8 @@ class Engine
 
 	public function import(array $parsed)
 	{
+		@set_time_limit(0);
+		@ignore_user_abort(true);
 		$this->resolver->reset();
 		$this->declareLocals($parsed);
 		$created = 0;
@@ -324,6 +380,8 @@ class Engine
 			}
 		}
 
+		$this->clearSitemapCache();
+
 		return [
 			'created' => $created,
 			'updated' => $updated,
@@ -348,6 +406,21 @@ class Engine
 		}
 
 		return 'csv';
+	}
+
+	private function clearSitemapCache()
+	{
+		$files = glob(DIR_CACHE . 'sitemap_*.xml');
+
+		if (!$files) {
+			return;
+		}
+
+		foreach ($files as $file) {
+			if (is_file($file)) {
+				@unlink($file);
+			}
+		}
 	}
 
 	private function declareLocals(array $parsed)

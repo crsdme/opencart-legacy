@@ -19,7 +19,7 @@ class Csv implements FormatInterface
 		return 'csv';
 	}
 
-	public function encode($entity, array $rows, array $languages)
+	public function encode($entity, array $rows, array $languages, $help = '')
 	{
 		unset($entity, $languages);
 
@@ -30,6 +30,11 @@ class Csv implements FormatInterface
 		$headers = array_keys($rows[0]);
 		$handle = fopen('php://temp', 'r+');
 		fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+		if ($help !== '') {
+			fwrite($handle, '# ' . str_replace(["\r", "\n"], ' ', (string) $help) . "\n");
+		}
+
 		fputcsv($handle, $headers, ',', '"');
 
 		foreach ($rows as $row) {
@@ -56,8 +61,8 @@ class Csv implements FormatInterface
 		$rows = [];
 		$headers = [];
 
-		foreach ($lines as $index => $line) {
-			if (trim($line) === '') {
+		foreach ($lines as $line) {
+			if (trim($line) === '' || strpos(ltrim($line), '#') === 0) {
 				continue;
 			}
 

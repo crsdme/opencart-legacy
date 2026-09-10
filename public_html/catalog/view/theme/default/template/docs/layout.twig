@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" class="{{ theme }}">
+<html lang="{{ docs_lang ? docs_lang : 'en' }}" class="{{ theme }}">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="robots" content="noindex,nofollow" />
 		<title>{{ title }}</title>
 		<link rel="stylesheet" href="/catalog/view/theme/default/stylesheet/tailwind.css" />
-		<link rel="stylesheet" href="/catalog/view/theme/default/stylesheet/docs.css?v=6" />
+		<link rel="stylesheet" href="/catalog/view/theme/default/stylesheet/docs.css?v=10" />
 		<script src="/catalog/view/theme/default/javascript/jquery.min.js"></script>
 		<script src="/catalog/view/theme/default/javascript/embla-carousel.js"></script>
 		<script src="/catalog/view/theme/default/javascript/ui.js"></script>
-		<script src="/catalog/view/theme/default/javascript/docs.js?v=5"></script>
+		<script src="/catalog/view/theme/default/javascript/docs.js?v=6"></script>
 	</head>
 	<body>
 		<div id="viewport" class="docs-root">
@@ -26,6 +26,13 @@
 						</svg>
 					</button>
 				</div>
+				{% if languages %}
+					<nav class="docs-langs" aria-label="Language">
+						{% for item in languages %}
+							<a class="docs-lang{% if item.active %} is-active{% endif %}" href="{{ item.href }}">{{ item.label }}</a>
+						{% endfor %}
+					</nav>
+				{% endif %}
 				{% if page == 'components' %}
 					<div class="docs-search">
 						<input class="input" type="search" data-docs-filter placeholder="Search" />
@@ -64,8 +71,8 @@
 						{{ content }}
 					</main>
 					{% if toc|length %}
-						<nav class="docs-toc" aria-label="On this page">
-							<p class="docs-toc-title">On this page</p>
+						<nav class="docs-toc" aria-label="{{ toc_title }}">
+							<p class="docs-toc-title">{{ toc_title }}</p>
 							{% for item in toc %}
 								<a class="docs-toc-link is-h{{ item.level }}" href="#{{ item.id }}" data-docs-link>{{ item.text }}</a>
 							{% endfor %}

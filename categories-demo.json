@@ -1,0 +1,4044 @@
+{
+    "version": 1,
+    "help": "Спочатку превʼю. Живий додатний id оновлює рядок. 0 = створити. Відʼємні id (-1, -2) створюють і дають іншим рядкам цього файлу на них посилатись (JSON-бандл для категорії + товару). Зображення: локальний шлях image/catalog або http(s) URL.",
+    "entities": {
+        "manufacturers": [],
+        "attribute_groups": [],
+        "attributes": [],
+        "categories": [
+            {
+                "category_id": -1,
+                "parent_id": 0,
+                "path": "Men",
+                "name": {
+                    "ua": "Чоловіки",
+                    "en": "Men",
+                    "ru": "Мужчины"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men",
+                    "en": "men",
+                    "ru": "men"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Чоловіки",
+                    "en": "Men",
+                    "ru": "Мужчины"
+                },
+                "meta_h1": {
+                    "ua": "Чоловіки",
+                    "en": "Men",
+                    "ru": "Мужчины"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -2,
+                "parent_id": -1,
+                "path": "Men > Sneakers",
+                "name": {
+                    "ua": "Кросівки",
+                    "en": "Sneakers",
+                    "ru": "Кроссовки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sneakers",
+                    "en": "men-sneakers",
+                    "ru": "men-sneakers"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Кросівки",
+                    "en": "Sneakers",
+                    "ru": "Кроссовки"
+                },
+                "meta_h1": {
+                    "ua": "Кросівки",
+                    "en": "Sneakers",
+                    "ru": "Кроссовки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -3,
+                "parent_id": -2,
+                "path": "Men > Sneakers > Lifestyle",
+                "name": {
+                    "ua": "Lifestyle",
+                    "en": "Lifestyle",
+                    "ru": "Lifestyle"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sneakers-lifestyle",
+                    "en": "men-sneakers-lifestyle",
+                    "ru": "men-sneakers-lifestyle"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Lifestyle",
+                    "en": "Lifestyle",
+                    "ru": "Lifestyle"
+                },
+                "meta_h1": {
+                    "ua": "Lifestyle",
+                    "en": "Lifestyle",
+                    "ru": "Lifestyle"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -4,
+                "parent_id": -2,
+                "path": "Men > Sneakers > Running",
+                "name": {
+                    "ua": "Running",
+                    "en": "Running",
+                    "ru": "Running"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sneakers-running",
+                    "en": "men-sneakers-running",
+                    "ru": "men-sneakers-running"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Running",
+                    "en": "Running",
+                    "ru": "Running"
+                },
+                "meta_h1": {
+                    "ua": "Running",
+                    "en": "Running",
+                    "ru": "Running"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -5,
+                "parent_id": -2,
+                "path": "Men > Sneakers > Basketball",
+                "name": {
+                    "ua": "Баскетбольні",
+                    "en": "Basketball",
+                    "ru": "Баскетбольные"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sneakers-basketball",
+                    "en": "men-sneakers-basketball",
+                    "ru": "men-sneakers-basketball"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Баскетбольні",
+                    "en": "Basketball",
+                    "ru": "Баскетбольные"
+                },
+                "meta_h1": {
+                    "ua": "Баскетбольні",
+                    "en": "Basketball",
+                    "ru": "Баскетбольные"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -6,
+                "parent_id": -2,
+                "path": "Men > Sneakers > Skateboarding",
+                "name": {
+                    "ua": "Скейтбординг",
+                    "en": "Skateboarding",
+                    "ru": "Скейтбординг"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sneakers-skateboarding",
+                    "en": "men-sneakers-skateboarding",
+                    "ru": "men-sneakers-skateboarding"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Скейтбординг",
+                    "en": "Skateboarding",
+                    "ru": "Скейтбординг"
+                },
+                "meta_h1": {
+                    "ua": "Скейтбординг",
+                    "en": "Skateboarding",
+                    "ru": "Скейтбординг"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -7,
+                "parent_id": -2,
+                "path": "Men > Sneakers > Luxury",
+                "name": {
+                    "ua": "Преміум",
+                    "en": "Luxury",
+                    "ru": "Премиум"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sneakers-luxury",
+                    "en": "men-sneakers-luxury",
+                    "ru": "men-sneakers-luxury"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Преміум",
+                    "en": "Luxury",
+                    "ru": "Премиум"
+                },
+                "meta_h1": {
+                    "ua": "Преміум",
+                    "en": "Luxury",
+                    "ru": "Премиум"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -8,
+                "parent_id": -1,
+                "path": "Men > Shoes",
+                "name": {
+                    "ua": "Взуття",
+                    "en": "Shoes",
+                    "ru": "Обувь"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-shoes",
+                    "en": "men-shoes",
+                    "ru": "men-shoes"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Взуття",
+                    "en": "Shoes",
+                    "ru": "Обувь"
+                },
+                "meta_h1": {
+                    "ua": "Взуття",
+                    "en": "Shoes",
+                    "ru": "Обувь"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -9,
+                "parent_id": -8,
+                "path": "Men > Shoes > Slides & Sandals",
+                "name": {
+                    "ua": "Слайди та сандалі",
+                    "en": "Slides & Sandals",
+                    "ru": "Слайды и сандалии"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-slides-sandals",
+                    "en": "men-slides-sandals",
+                    "ru": "men-slides-sandals"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Слайди та сандалі",
+                    "en": "Slides & Sandals",
+                    "ru": "Слайды и сандалии"
+                },
+                "meta_h1": {
+                    "ua": "Слайди та сандалі",
+                    "en": "Slides & Sandals",
+                    "ru": "Слайды и сандалии"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -10,
+                "parent_id": -8,
+                "path": "Men > Shoes > Clogs",
+                "name": {
+                    "ua": "Клоги",
+                    "en": "Clogs",
+                    "ru": "Клоги"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-clogs",
+                    "en": "men-clogs",
+                    "ru": "men-clogs"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Клоги",
+                    "en": "Clogs",
+                    "ru": "Клоги"
+                },
+                "meta_h1": {
+                    "ua": "Клоги",
+                    "en": "Clogs",
+                    "ru": "Клоги"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -11,
+                "parent_id": -8,
+                "path": "Men > Shoes > Boots",
+                "name": {
+                    "ua": "Черевики",
+                    "en": "Boots",
+                    "ru": "Ботинки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-boots",
+                    "en": "men-boots",
+                    "ru": "men-boots"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Черевики",
+                    "en": "Boots",
+                    "ru": "Ботинки"
+                },
+                "meta_h1": {
+                    "ua": "Черевики",
+                    "en": "Boots",
+                    "ru": "Ботинки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -12,
+                "parent_id": -8,
+                "path": "Men > Shoes > Loafers",
+                "name": {
+                    "ua": "Лофери",
+                    "en": "Loafers",
+                    "ru": "Лоферы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-loafers",
+                    "en": "men-loafers",
+                    "ru": "men-loafers"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Лофери",
+                    "en": "Loafers",
+                    "ru": "Лоферы"
+                },
+                "meta_h1": {
+                    "ua": "Лофери",
+                    "en": "Loafers",
+                    "ru": "Лоферы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -13,
+                "parent_id": -8,
+                "path": "Men > Shoes > Slippers",
+                "name": {
+                    "ua": "Капці",
+                    "en": "Slippers",
+                    "ru": "Тапочки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-slippers",
+                    "en": "men-slippers",
+                    "ru": "men-slippers"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Капці",
+                    "en": "Slippers",
+                    "ru": "Тапочки"
+                },
+                "meta_h1": {
+                    "ua": "Капці",
+                    "en": "Slippers",
+                    "ru": "Тапочки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -14,
+                "parent_id": -1,
+                "path": "Men > Clothing",
+                "name": {
+                    "ua": "Одяг",
+                    "en": "Clothing",
+                    "ru": "Одежда"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-clothing",
+                    "en": "men-clothing",
+                    "ru": "men-clothing"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Одяг",
+                    "en": "Clothing",
+                    "ru": "Одежда"
+                },
+                "meta_h1": {
+                    "ua": "Одяг",
+                    "en": "Clothing",
+                    "ru": "Одежда"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -15,
+                "parent_id": -14,
+                "path": "Men > Clothing > Tops",
+                "name": {
+                    "ua": "Верх",
+                    "en": "Tops",
+                    "ru": "Верх"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-clothing-tops",
+                    "en": "men-clothing-tops",
+                    "ru": "men-clothing-tops"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Верх",
+                    "en": "Tops",
+                    "ru": "Верх"
+                },
+                "meta_h1": {
+                    "ua": "Верх",
+                    "en": "Tops",
+                    "ru": "Верх"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -16,
+                "parent_id": -15,
+                "path": "Men > Clothing > Tops > T-Shirts",
+                "name": {
+                    "ua": "Футболки",
+                    "en": "T-Shirts",
+                    "ru": "Футболки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-t-shirts",
+                    "en": "men-t-shirts",
+                    "ru": "men-t-shirts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Футболки",
+                    "en": "T-Shirts",
+                    "ru": "Футболки"
+                },
+                "meta_h1": {
+                    "ua": "Футболки",
+                    "en": "T-Shirts",
+                    "ru": "Футболки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -17,
+                "parent_id": -15,
+                "path": "Men > Clothing > Tops > Hoodies",
+                "name": {
+                    "ua": "Худі",
+                    "en": "Hoodies",
+                    "ru": "Худи"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-hoodies",
+                    "en": "men-hoodies",
+                    "ru": "men-hoodies"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Худі",
+                    "en": "Hoodies",
+                    "ru": "Худи"
+                },
+                "meta_h1": {
+                    "ua": "Худі",
+                    "en": "Hoodies",
+                    "ru": "Худи"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -18,
+                "parent_id": -15,
+                "path": "Men > Clothing > Tops > Sweatshirts",
+                "name": {
+                    "ua": "Світшоти",
+                    "en": "Sweatshirts",
+                    "ru": "Свитшоты"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sweatshirts",
+                    "en": "men-sweatshirts",
+                    "ru": "men-sweatshirts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Світшоти",
+                    "en": "Sweatshirts",
+                    "ru": "Свитшоты"
+                },
+                "meta_h1": {
+                    "ua": "Світшоти",
+                    "en": "Sweatshirts",
+                    "ru": "Свитшоты"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -19,
+                "parent_id": -15,
+                "path": "Men > Clothing > Tops > Shirts",
+                "name": {
+                    "ua": "Сорочки",
+                    "en": "Shirts",
+                    "ru": "Рубашки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-shirts",
+                    "en": "men-shirts",
+                    "ru": "men-shirts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Сорочки",
+                    "en": "Shirts",
+                    "ru": "Рубашки"
+                },
+                "meta_h1": {
+                    "ua": "Сорочки",
+                    "en": "Shirts",
+                    "ru": "Рубашки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -20,
+                "parent_id": -15,
+                "path": "Men > Clothing > Tops > Polos",
+                "name": {
+                    "ua": "Поло",
+                    "en": "Polos",
+                    "ru": "Поло"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-polos",
+                    "en": "men-polos",
+                    "ru": "men-polos"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Поло",
+                    "en": "Polos",
+                    "ru": "Поло"
+                },
+                "meta_h1": {
+                    "ua": "Поло",
+                    "en": "Polos",
+                    "ru": "Поло"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -21,
+                "parent_id": -15,
+                "path": "Men > Clothing > Tops > Jerseys",
+                "name": {
+                    "ua": "Джерсі",
+                    "en": "Jerseys",
+                    "ru": "Джерси"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-jerseys",
+                    "en": "men-jerseys",
+                    "ru": "men-jerseys"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Джерсі",
+                    "en": "Jerseys",
+                    "ru": "Джерси"
+                },
+                "meta_h1": {
+                    "ua": "Джерсі",
+                    "en": "Jerseys",
+                    "ru": "Джерси"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -22,
+                "parent_id": -14,
+                "path": "Men > Clothing > Bottoms",
+                "name": {
+                    "ua": "Низ",
+                    "en": "Bottoms",
+                    "ru": "Низ"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-bottoms",
+                    "en": "men-bottoms",
+                    "ru": "men-bottoms"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Низ",
+                    "en": "Bottoms",
+                    "ru": "Низ"
+                },
+                "meta_h1": {
+                    "ua": "Низ",
+                    "en": "Bottoms",
+                    "ru": "Низ"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -23,
+                "parent_id": -22,
+                "path": "Men > Clothing > Bottoms > Pants",
+                "name": {
+                    "ua": "Штани",
+                    "en": "Pants",
+                    "ru": "Брюки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-pants",
+                    "en": "men-pants",
+                    "ru": "men-pants"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Штани",
+                    "en": "Pants",
+                    "ru": "Брюки"
+                },
+                "meta_h1": {
+                    "ua": "Штани",
+                    "en": "Pants",
+                    "ru": "Брюки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -24,
+                "parent_id": -22,
+                "path": "Men > Clothing > Bottoms > Jeans",
+                "name": {
+                    "ua": "Джинси",
+                    "en": "Jeans",
+                    "ru": "Джинсы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-jeans",
+                    "en": "men-jeans",
+                    "ru": "men-jeans"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Джинси",
+                    "en": "Jeans",
+                    "ru": "Джинсы"
+                },
+                "meta_h1": {
+                    "ua": "Джинси",
+                    "en": "Jeans",
+                    "ru": "Джинсы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -25,
+                "parent_id": -22,
+                "path": "Men > Clothing > Bottoms > Sweatpants",
+                "name": {
+                    "ua": "Спортивні штани",
+                    "en": "Sweatpants",
+                    "ru": "Спортивные штаны"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-sweatpants",
+                    "en": "men-sweatpants",
+                    "ru": "men-sweatpants"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Спортивні штани",
+                    "en": "Sweatpants",
+                    "ru": "Спортивные штаны"
+                },
+                "meta_h1": {
+                    "ua": "Спортивні штани",
+                    "en": "Sweatpants",
+                    "ru": "Спортивные штаны"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -26,
+                "parent_id": -22,
+                "path": "Men > Clothing > Bottoms > Shorts",
+                "name": {
+                    "ua": "Шорти",
+                    "en": "Shorts",
+                    "ru": "Шорты"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-shorts",
+                    "en": "men-shorts",
+                    "ru": "men-shorts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Шорти",
+                    "en": "Shorts",
+                    "ru": "Шорты"
+                },
+                "meta_h1": {
+                    "ua": "Шорти",
+                    "en": "Shorts",
+                    "ru": "Шорты"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -27,
+                "parent_id": -14,
+                "path": "Men > Clothing > Outerwear",
+                "name": {
+                    "ua": "Верхній одяг",
+                    "en": "Outerwear",
+                    "ru": "Верхняя одежда"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-outerwear",
+                    "en": "men-outerwear",
+                    "ru": "men-outerwear"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Верхній одяг",
+                    "en": "Outerwear",
+                    "ru": "Верхняя одежда"
+                },
+                "meta_h1": {
+                    "ua": "Верхній одяг",
+                    "en": "Outerwear",
+                    "ru": "Верхняя одежда"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -28,
+                "parent_id": -27,
+                "path": "Men > Clothing > Outerwear > Jackets",
+                "name": {
+                    "ua": "Куртки",
+                    "en": "Jackets",
+                    "ru": "Куртки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-jackets",
+                    "en": "men-jackets",
+                    "ru": "men-jackets"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Куртки",
+                    "en": "Jackets",
+                    "ru": "Куртки"
+                },
+                "meta_h1": {
+                    "ua": "Куртки",
+                    "en": "Jackets",
+                    "ru": "Куртки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -29,
+                "parent_id": -27,
+                "path": "Men > Clothing > Outerwear > Puffer Jackets",
+                "name": {
+                    "ua": "Пуховики",
+                    "en": "Puffer Jackets",
+                    "ru": "Пуховики"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-puffer-jackets",
+                    "en": "men-puffer-jackets",
+                    "ru": "men-puffer-jackets"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Пуховики",
+                    "en": "Puffer Jackets",
+                    "ru": "Пуховики"
+                },
+                "meta_h1": {
+                    "ua": "Пуховики",
+                    "en": "Puffer Jackets",
+                    "ru": "Пуховики"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -30,
+                "parent_id": -27,
+                "path": "Men > Clothing > Outerwear > Vests",
+                "name": {
+                    "ua": "Жилети",
+                    "en": "Vests",
+                    "ru": "Жилеты"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-vests",
+                    "en": "men-vests",
+                    "ru": "men-vests"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Жилети",
+                    "en": "Vests",
+                    "ru": "Жилеты"
+                },
+                "meta_h1": {
+                    "ua": "Жилети",
+                    "en": "Vests",
+                    "ru": "Жилеты"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -31,
+                "parent_id": -27,
+                "path": "Men > Clothing > Outerwear > Coats",
+                "name": {
+                    "ua": "Пальта",
+                    "en": "Coats",
+                    "ru": "Пальто"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-coats",
+                    "en": "men-coats",
+                    "ru": "men-coats"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Пальта",
+                    "en": "Coats",
+                    "ru": "Пальто"
+                },
+                "meta_h1": {
+                    "ua": "Пальта",
+                    "en": "Coats",
+                    "ru": "Пальто"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -32,
+                "parent_id": -1,
+                "path": "Men > Accessories",
+                "name": {
+                    "ua": "Аксесуари",
+                    "en": "Accessories",
+                    "ru": "Аксессуары"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-accessories",
+                    "en": "men-accessories",
+                    "ru": "men-accessories"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Аксесуари",
+                    "en": "Accessories",
+                    "ru": "Аксессуары"
+                },
+                "meta_h1": {
+                    "ua": "Аксесуари",
+                    "en": "Accessories",
+                    "ru": "Аксессуары"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -33,
+                "parent_id": -32,
+                "path": "Men > Accessories > Bags",
+                "name": {
+                    "ua": "Сумки",
+                    "en": "Bags",
+                    "ru": "Сумки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-bags",
+                    "en": "men-bags",
+                    "ru": "men-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Сумки",
+                    "en": "Bags",
+                    "ru": "Сумки"
+                },
+                "meta_h1": {
+                    "ua": "Сумки",
+                    "en": "Bags",
+                    "ru": "Сумки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -34,
+                "parent_id": -33,
+                "path": "Men > Accessories > Bags > Backpacks",
+                "name": {
+                    "ua": "Рюкзаки",
+                    "en": "Backpacks",
+                    "ru": "Рюкзаки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-backpacks",
+                    "en": "men-backpacks",
+                    "ru": "men-backpacks"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Рюкзаки",
+                    "en": "Backpacks",
+                    "ru": "Рюкзаки"
+                },
+                "meta_h1": {
+                    "ua": "Рюкзаки",
+                    "en": "Backpacks",
+                    "ru": "Рюкзаки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -35,
+                "parent_id": -33,
+                "path": "Men > Accessories > Bags > Crossbody Bags",
+                "name": {
+                    "ua": "Кросбоді",
+                    "en": "Crossbody Bags",
+                    "ru": "Кроссбоди"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-crossbody-bags",
+                    "en": "men-crossbody-bags",
+                    "ru": "men-crossbody-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Кросбоді",
+                    "en": "Crossbody Bags",
+                    "ru": "Кроссбоди"
+                },
+                "meta_h1": {
+                    "ua": "Кросбоді",
+                    "en": "Crossbody Bags",
+                    "ru": "Кроссбоди"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -36,
+                "parent_id": -33,
+                "path": "Men > Accessories > Bags > Shoulder Bags",
+                "name": {
+                    "ua": "Плечові сумки",
+                    "en": "Shoulder Bags",
+                    "ru": "Плечевые сумки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-shoulder-bags",
+                    "en": "men-shoulder-bags",
+                    "ru": "men-shoulder-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Плечові сумки",
+                    "en": "Shoulder Bags",
+                    "ru": "Плечевые сумки"
+                },
+                "meta_h1": {
+                    "ua": "Плечові сумки",
+                    "en": "Shoulder Bags",
+                    "ru": "Плечевые сумки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -37,
+                "parent_id": -33,
+                "path": "Men > Accessories > Bags > Tote Bags",
+                "name": {
+                    "ua": "Сумки-тоут",
+                    "en": "Tote Bags",
+                    "ru": "Сумки-тоут"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-tote-bags",
+                    "en": "men-tote-bags",
+                    "ru": "men-tote-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Сумки-тоут",
+                    "en": "Tote Bags",
+                    "ru": "Сумки-тоут"
+                },
+                "meta_h1": {
+                    "ua": "Сумки-тоут",
+                    "en": "Tote Bags",
+                    "ru": "Сумки-тоут"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -38,
+                "parent_id": -32,
+                "path": "Men > Accessories > Headwear",
+                "name": {
+                    "ua": "Головні убори",
+                    "en": "Headwear",
+                    "ru": "Головные уборы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-headwear",
+                    "en": "men-headwear",
+                    "ru": "men-headwear"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Головні убори",
+                    "en": "Headwear",
+                    "ru": "Головные уборы"
+                },
+                "meta_h1": {
+                    "ua": "Головні убори",
+                    "en": "Headwear",
+                    "ru": "Головные уборы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -39,
+                "parent_id": -38,
+                "path": "Men > Accessories > Headwear > Caps",
+                "name": {
+                    "ua": "Кепки",
+                    "en": "Caps",
+                    "ru": "Кепки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-caps",
+                    "en": "men-caps",
+                    "ru": "men-caps"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Кепки",
+                    "en": "Caps",
+                    "ru": "Кепки"
+                },
+                "meta_h1": {
+                    "ua": "Кепки",
+                    "en": "Caps",
+                    "ru": "Кепки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -40,
+                "parent_id": -38,
+                "path": "Men > Accessories > Headwear > Bucket Hats",
+                "name": {
+                    "ua": "Панами",
+                    "en": "Bucket Hats",
+                    "ru": "Панамы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-bucket-hats",
+                    "en": "men-bucket-hats",
+                    "ru": "men-bucket-hats"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Панами",
+                    "en": "Bucket Hats",
+                    "ru": "Панамы"
+                },
+                "meta_h1": {
+                    "ua": "Панами",
+                    "en": "Bucket Hats",
+                    "ru": "Панамы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -41,
+                "parent_id": -38,
+                "path": "Men > Accessories > Headwear > Beanies",
+                "name": {
+                    "ua": "Шапки",
+                    "en": "Beanies",
+                    "ru": "Шапки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-beanies",
+                    "en": "men-beanies",
+                    "ru": "men-beanies"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Шапки",
+                    "en": "Beanies",
+                    "ru": "Шапки"
+                },
+                "meta_h1": {
+                    "ua": "Шапки",
+                    "en": "Beanies",
+                    "ru": "Шапки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -42,
+                "parent_id": -32,
+                "path": "Men > Accessories > Eyewear",
+                "name": {
+                    "ua": "Окуляри",
+                    "en": "Eyewear",
+                    "ru": "Очки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-eyewear",
+                    "en": "men-eyewear",
+                    "ru": "men-eyewear"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Окуляри",
+                    "en": "Eyewear",
+                    "ru": "Очки"
+                },
+                "meta_h1": {
+                    "ua": "Окуляри",
+                    "en": "Eyewear",
+                    "ru": "Очки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -43,
+                "parent_id": -32,
+                "path": "Men > Accessories > Wallets",
+                "name": {
+                    "ua": "Гаманці",
+                    "en": "Wallets",
+                    "ru": "Кошельки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-wallets",
+                    "en": "men-wallets",
+                    "ru": "men-wallets"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Гаманці",
+                    "en": "Wallets",
+                    "ru": "Кошельки"
+                },
+                "meta_h1": {
+                    "ua": "Гаманці",
+                    "en": "Wallets",
+                    "ru": "Кошельки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -44,
+                "parent_id": -32,
+                "path": "Men > Accessories > Belts",
+                "name": {
+                    "ua": "Ремені",
+                    "en": "Belts",
+                    "ru": "Ремни"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-belts",
+                    "en": "men-belts",
+                    "ru": "men-belts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Ремені",
+                    "en": "Belts",
+                    "ru": "Ремни"
+                },
+                "meta_h1": {
+                    "ua": "Ремені",
+                    "en": "Belts",
+                    "ru": "Ремни"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -45,
+                "parent_id": -32,
+                "path": "Men > Accessories > Jewelry",
+                "name": {
+                    "ua": "Прикраси",
+                    "en": "Jewelry",
+                    "ru": "Украшения"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-jewelry",
+                    "en": "men-jewelry",
+                    "ru": "men-jewelry"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Прикраси",
+                    "en": "Jewelry",
+                    "ru": "Украшения"
+                },
+                "meta_h1": {
+                    "ua": "Прикраси",
+                    "en": "Jewelry",
+                    "ru": "Украшения"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -46,
+                "parent_id": -32,
+                "path": "Men > Accessories > Watches",
+                "name": {
+                    "ua": "Годинники",
+                    "en": "Watches",
+                    "ru": "Часы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "men-watches",
+                    "en": "men-watches",
+                    "ru": "men-watches"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Годинники",
+                    "en": "Watches",
+                    "ru": "Часы"
+                },
+                "meta_h1": {
+                    "ua": "Годинники",
+                    "en": "Watches",
+                    "ru": "Часы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -47,
+                "parent_id": 0,
+                "path": "Women",
+                "name": {
+                    "ua": "Жінки",
+                    "en": "Women",
+                    "ru": "Женщины"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women",
+                    "en": "women",
+                    "ru": "women"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Жінки",
+                    "en": "Women",
+                    "ru": "Женщины"
+                },
+                "meta_h1": {
+                    "ua": "Жінки",
+                    "en": "Women",
+                    "ru": "Женщины"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -48,
+                "parent_id": -47,
+                "path": "Women > Sneakers",
+                "name": {
+                    "ua": "Кросівки",
+                    "en": "Sneakers",
+                    "ru": "Кроссовки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-sneakers",
+                    "en": "women-sneakers",
+                    "ru": "women-sneakers"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Кросівки",
+                    "en": "Sneakers",
+                    "ru": "Кроссовки"
+                },
+                "meta_h1": {
+                    "ua": "Кросівки",
+                    "en": "Sneakers",
+                    "ru": "Кроссовки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -49,
+                "parent_id": -48,
+                "path": "Women > Sneakers > Lifestyle",
+                "name": {
+                    "ua": "Lifestyle",
+                    "en": "Lifestyle",
+                    "ru": "Lifestyle"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-sneakers-lifestyle",
+                    "en": "women-sneakers-lifestyle",
+                    "ru": "women-sneakers-lifestyle"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Lifestyle",
+                    "en": "Lifestyle",
+                    "ru": "Lifestyle"
+                },
+                "meta_h1": {
+                    "ua": "Lifestyle",
+                    "en": "Lifestyle",
+                    "ru": "Lifestyle"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -50,
+                "parent_id": -48,
+                "path": "Women > Sneakers > Running",
+                "name": {
+                    "ua": "Running",
+                    "en": "Running",
+                    "ru": "Running"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-sneakers-running",
+                    "en": "women-sneakers-running",
+                    "ru": "women-sneakers-running"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Running",
+                    "en": "Running",
+                    "ru": "Running"
+                },
+                "meta_h1": {
+                    "ua": "Running",
+                    "en": "Running",
+                    "ru": "Running"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -51,
+                "parent_id": -48,
+                "path": "Women > Sneakers > Basketball",
+                "name": {
+                    "ua": "Баскетбольні",
+                    "en": "Basketball",
+                    "ru": "Баскетбольные"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-sneakers-basketball",
+                    "en": "women-sneakers-basketball",
+                    "ru": "women-sneakers-basketball"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Баскетбольні",
+                    "en": "Basketball",
+                    "ru": "Баскетбольные"
+                },
+                "meta_h1": {
+                    "ua": "Баскетбольні",
+                    "en": "Basketball",
+                    "ru": "Баскетбольные"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -52,
+                "parent_id": -48,
+                "path": "Women > Sneakers > Retro",
+                "name": {
+                    "ua": "Retro",
+                    "en": "Retro",
+                    "ru": "Retro"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-sneakers-retro",
+                    "en": "women-sneakers-retro",
+                    "ru": "women-sneakers-retro"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Retro",
+                    "en": "Retro",
+                    "ru": "Retro"
+                },
+                "meta_h1": {
+                    "ua": "Retro",
+                    "en": "Retro",
+                    "ru": "Retro"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -53,
+                "parent_id": -48,
+                "path": "Women > Sneakers > Luxury",
+                "name": {
+                    "ua": "Преміум",
+                    "en": "Luxury",
+                    "ru": "Премиум"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-sneakers-luxury",
+                    "en": "women-sneakers-luxury",
+                    "ru": "women-sneakers-luxury"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Преміум",
+                    "en": "Luxury",
+                    "ru": "Премиум"
+                },
+                "meta_h1": {
+                    "ua": "Преміум",
+                    "en": "Luxury",
+                    "ru": "Премиум"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -54,
+                "parent_id": -47,
+                "path": "Women > Shoes",
+                "name": {
+                    "ua": "Взуття",
+                    "en": "Shoes",
+                    "ru": "Обувь"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-shoes",
+                    "en": "women-shoes",
+                    "ru": "women-shoes"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Взуття",
+                    "en": "Shoes",
+                    "ru": "Обувь"
+                },
+                "meta_h1": {
+                    "ua": "Взуття",
+                    "en": "Shoes",
+                    "ru": "Обувь"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -55,
+                "parent_id": -54,
+                "path": "Women > Shoes > Slides & Sandals",
+                "name": {
+                    "ua": "Слайди та сандалі",
+                    "en": "Slides & Sandals",
+                    "ru": "Слайды и сандалии"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-slides-sandals",
+                    "en": "women-slides-sandals",
+                    "ru": "women-slides-sandals"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Слайди та сандалі",
+                    "en": "Slides & Sandals",
+                    "ru": "Слайды и сандалии"
+                },
+                "meta_h1": {
+                    "ua": "Слайди та сандалі",
+                    "en": "Slides & Sandals",
+                    "ru": "Слайды и сандалии"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -56,
+                "parent_id": -54,
+                "path": "Women > Shoes > Clogs",
+                "name": {
+                    "ua": "Клоги",
+                    "en": "Clogs",
+                    "ru": "Клоги"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-clogs",
+                    "en": "women-clogs",
+                    "ru": "women-clogs"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Клоги",
+                    "en": "Clogs",
+                    "ru": "Клоги"
+                },
+                "meta_h1": {
+                    "ua": "Клоги",
+                    "en": "Clogs",
+                    "ru": "Клоги"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -57,
+                "parent_id": -54,
+                "path": "Women > Shoes > Mules",
+                "name": {
+                    "ua": "Мюлі",
+                    "en": "Mules",
+                    "ru": "Мюли"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-mules",
+                    "en": "women-mules",
+                    "ru": "women-mules"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Мюлі",
+                    "en": "Mules",
+                    "ru": "Мюли"
+                },
+                "meta_h1": {
+                    "ua": "Мюлі",
+                    "en": "Mules",
+                    "ru": "Мюли"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -58,
+                "parent_id": -54,
+                "path": "Women > Shoes > Boots",
+                "name": {
+                    "ua": "Черевики",
+                    "en": "Boots",
+                    "ru": "Ботинки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-boots",
+                    "en": "women-boots",
+                    "ru": "women-boots"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Черевики",
+                    "en": "Boots",
+                    "ru": "Ботинки"
+                },
+                "meta_h1": {
+                    "ua": "Черевики",
+                    "en": "Boots",
+                    "ru": "Ботинки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -59,
+                "parent_id": -54,
+                "path": "Women > Shoes > Loafers",
+                "name": {
+                    "ua": "Лофери",
+                    "en": "Loafers",
+                    "ru": "Лоферы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-loafers",
+                    "en": "women-loafers",
+                    "ru": "women-loafers"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Лофери",
+                    "en": "Loafers",
+                    "ru": "Лоферы"
+                },
+                "meta_h1": {
+                    "ua": "Лофери",
+                    "en": "Loafers",
+                    "ru": "Лоферы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -60,
+                "parent_id": -54,
+                "path": "Women > Shoes > Ballet Flats",
+                "name": {
+                    "ua": "Балетки",
+                    "en": "Ballet Flats",
+                    "ru": "Балетки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-ballet-flats",
+                    "en": "women-ballet-flats",
+                    "ru": "women-ballet-flats"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Балетки",
+                    "en": "Ballet Flats",
+                    "ru": "Балетки"
+                },
+                "meta_h1": {
+                    "ua": "Балетки",
+                    "en": "Ballet Flats",
+                    "ru": "Балетки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -61,
+                "parent_id": -54,
+                "path": "Women > Shoes > Heels",
+                "name": {
+                    "ua": "Туфлі на підборах",
+                    "en": "Heels",
+                    "ru": "Каблуки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-heels",
+                    "en": "women-heels",
+                    "ru": "women-heels"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Туфлі на підборах",
+                    "en": "Heels",
+                    "ru": "Каблуки"
+                },
+                "meta_h1": {
+                    "ua": "Туфлі на підборах",
+                    "en": "Heels",
+                    "ru": "Каблуки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -62,
+                "parent_id": -47,
+                "path": "Women > Clothing",
+                "name": {
+                    "ua": "Одяг",
+                    "en": "Clothing",
+                    "ru": "Одежда"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-clothing",
+                    "en": "women-clothing",
+                    "ru": "women-clothing"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Одяг",
+                    "en": "Clothing",
+                    "ru": "Одежда"
+                },
+                "meta_h1": {
+                    "ua": "Одяг",
+                    "en": "Clothing",
+                    "ru": "Одежда"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -63,
+                "parent_id": -62,
+                "path": "Women > Clothing > Tops",
+                "name": {
+                    "ua": "Верх",
+                    "en": "Tops",
+                    "ru": "Верх"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-clothing-tops",
+                    "en": "women-clothing-tops",
+                    "ru": "women-clothing-tops"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Верх",
+                    "en": "Tops",
+                    "ru": "Верх"
+                },
+                "meta_h1": {
+                    "ua": "Верх",
+                    "en": "Tops",
+                    "ru": "Верх"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -64,
+                "parent_id": -63,
+                "path": "Women > Clothing > Tops > T-Shirts",
+                "name": {
+                    "ua": "Футболки",
+                    "en": "T-Shirts",
+                    "ru": "Футболки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-t-shirts",
+                    "en": "women-t-shirts",
+                    "ru": "women-t-shirts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Футболки",
+                    "en": "T-Shirts",
+                    "ru": "Футболки"
+                },
+                "meta_h1": {
+                    "ua": "Футболки",
+                    "en": "T-Shirts",
+                    "ru": "Футболки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -65,
+                "parent_id": -63,
+                "path": "Women > Clothing > Tops > Tops",
+                "name": {
+                    "ua": "Топи",
+                    "en": "Tops",
+                    "ru": "Топы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-tops",
+                    "en": "women-tops",
+                    "ru": "women-tops"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Топи",
+                    "en": "Tops",
+                    "ru": "Топы"
+                },
+                "meta_h1": {
+                    "ua": "Топи",
+                    "en": "Tops",
+                    "ru": "Топы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -66,
+                "parent_id": -63,
+                "path": "Women > Clothing > Tops > Hoodies",
+                "name": {
+                    "ua": "Худі",
+                    "en": "Hoodies",
+                    "ru": "Худи"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-hoodies",
+                    "en": "women-hoodies",
+                    "ru": "women-hoodies"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Худі",
+                    "en": "Hoodies",
+                    "ru": "Худи"
+                },
+                "meta_h1": {
+                    "ua": "Худі",
+                    "en": "Hoodies",
+                    "ru": "Худи"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -67,
+                "parent_id": -63,
+                "path": "Women > Clothing > Tops > Sweatshirts",
+                "name": {
+                    "ua": "Світшоти",
+                    "en": "Sweatshirts",
+                    "ru": "Свитшоты"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-sweatshirts",
+                    "en": "women-sweatshirts",
+                    "ru": "women-sweatshirts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Світшоти",
+                    "en": "Sweatshirts",
+                    "ru": "Свитшоты"
+                },
+                "meta_h1": {
+                    "ua": "Світшоти",
+                    "en": "Sweatshirts",
+                    "ru": "Свитшоты"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -68,
+                "parent_id": -63,
+                "path": "Women > Clothing > Tops > Shirts",
+                "name": {
+                    "ua": "Сорочки",
+                    "en": "Shirts",
+                    "ru": "Рубашки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-shirts",
+                    "en": "women-shirts",
+                    "ru": "women-shirts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Сорочки",
+                    "en": "Shirts",
+                    "ru": "Рубашки"
+                },
+                "meta_h1": {
+                    "ua": "Сорочки",
+                    "en": "Shirts",
+                    "ru": "Рубашки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -69,
+                "parent_id": -63,
+                "path": "Women > Clothing > Tops > Polos",
+                "name": {
+                    "ua": "Поло",
+                    "en": "Polos",
+                    "ru": "Поло"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-polos",
+                    "en": "women-polos",
+                    "ru": "women-polos"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Поло",
+                    "en": "Polos",
+                    "ru": "Поло"
+                },
+                "meta_h1": {
+                    "ua": "Поло",
+                    "en": "Polos",
+                    "ru": "Поло"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -70,
+                "parent_id": -62,
+                "path": "Women > Clothing > Bottoms",
+                "name": {
+                    "ua": "Низ",
+                    "en": "Bottoms",
+                    "ru": "Низ"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-bottoms",
+                    "en": "women-bottoms",
+                    "ru": "women-bottoms"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Низ",
+                    "en": "Bottoms",
+                    "ru": "Низ"
+                },
+                "meta_h1": {
+                    "ua": "Низ",
+                    "en": "Bottoms",
+                    "ru": "Низ"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -71,
+                "parent_id": -70,
+                "path": "Women > Clothing > Bottoms > Pants",
+                "name": {
+                    "ua": "Штани",
+                    "en": "Pants",
+                    "ru": "Брюки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-pants",
+                    "en": "women-pants",
+                    "ru": "women-pants"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Штани",
+                    "en": "Pants",
+                    "ru": "Брюки"
+                },
+                "meta_h1": {
+                    "ua": "Штани",
+                    "en": "Pants",
+                    "ru": "Брюки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -72,
+                "parent_id": -70,
+                "path": "Women > Clothing > Bottoms > Jeans",
+                "name": {
+                    "ua": "Джинси",
+                    "en": "Jeans",
+                    "ru": "Джинсы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-jeans",
+                    "en": "women-jeans",
+                    "ru": "women-jeans"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Джинси",
+                    "en": "Jeans",
+                    "ru": "Джинсы"
+                },
+                "meta_h1": {
+                    "ua": "Джинси",
+                    "en": "Jeans",
+                    "ru": "Джинсы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -73,
+                "parent_id": -70,
+                "path": "Women > Clothing > Bottoms > Leggings",
+                "name": {
+                    "ua": "Легінси",
+                    "en": "Leggings",
+                    "ru": "Леггинсы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-leggings",
+                    "en": "women-leggings",
+                    "ru": "women-leggings"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Легінси",
+                    "en": "Leggings",
+                    "ru": "Леггинсы"
+                },
+                "meta_h1": {
+                    "ua": "Легінси",
+                    "en": "Leggings",
+                    "ru": "Леггинсы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -74,
+                "parent_id": -70,
+                "path": "Women > Clothing > Bottoms > Skirts",
+                "name": {
+                    "ua": "Спідниці",
+                    "en": "Skirts",
+                    "ru": "Юбки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-skirts",
+                    "en": "women-skirts",
+                    "ru": "women-skirts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Спідниці",
+                    "en": "Skirts",
+                    "ru": "Юбки"
+                },
+                "meta_h1": {
+                    "ua": "Спідниці",
+                    "en": "Skirts",
+                    "ru": "Юбки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -75,
+                "parent_id": -70,
+                "path": "Women > Clothing > Bottoms > Shorts",
+                "name": {
+                    "ua": "Шорти",
+                    "en": "Shorts",
+                    "ru": "Шорты"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-shorts",
+                    "en": "women-shorts",
+                    "ru": "women-shorts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Шорти",
+                    "en": "Shorts",
+                    "ru": "Шорты"
+                },
+                "meta_h1": {
+                    "ua": "Шорти",
+                    "en": "Shorts",
+                    "ru": "Шорты"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -76,
+                "parent_id": -62,
+                "path": "Women > Clothing > Outerwear",
+                "name": {
+                    "ua": "Верхній одяг",
+                    "en": "Outerwear",
+                    "ru": "Верхняя одежда"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-outerwear",
+                    "en": "women-outerwear",
+                    "ru": "women-outerwear"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Верхній одяг",
+                    "en": "Outerwear",
+                    "ru": "Верхняя одежда"
+                },
+                "meta_h1": {
+                    "ua": "Верхній одяг",
+                    "en": "Outerwear",
+                    "ru": "Верхняя одежда"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -77,
+                "parent_id": -76,
+                "path": "Women > Clothing > Outerwear > Jackets",
+                "name": {
+                    "ua": "Куртки",
+                    "en": "Jackets",
+                    "ru": "Куртки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-jackets",
+                    "en": "women-jackets",
+                    "ru": "women-jackets"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Куртки",
+                    "en": "Jackets",
+                    "ru": "Куртки"
+                },
+                "meta_h1": {
+                    "ua": "Куртки",
+                    "en": "Jackets",
+                    "ru": "Куртки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -78,
+                "parent_id": -76,
+                "path": "Women > Clothing > Outerwear > Puffer Jackets",
+                "name": {
+                    "ua": "Пуховики",
+                    "en": "Puffer Jackets",
+                    "ru": "Пуховики"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-puffer-jackets",
+                    "en": "women-puffer-jackets",
+                    "ru": "women-puffer-jackets"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Пуховики",
+                    "en": "Puffer Jackets",
+                    "ru": "Пуховики"
+                },
+                "meta_h1": {
+                    "ua": "Пуховики",
+                    "en": "Puffer Jackets",
+                    "ru": "Пуховики"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -79,
+                "parent_id": -76,
+                "path": "Women > Clothing > Outerwear > Vests",
+                "name": {
+                    "ua": "Жилети",
+                    "en": "Vests",
+                    "ru": "Жилеты"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-vests",
+                    "en": "women-vests",
+                    "ru": "women-vests"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Жилети",
+                    "en": "Vests",
+                    "ru": "Жилеты"
+                },
+                "meta_h1": {
+                    "ua": "Жилети",
+                    "en": "Vests",
+                    "ru": "Жилеты"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -80,
+                "parent_id": -76,
+                "path": "Women > Clothing > Outerwear > Coats",
+                "name": {
+                    "ua": "Пальта",
+                    "en": "Coats",
+                    "ru": "Пальто"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-coats",
+                    "en": "women-coats",
+                    "ru": "women-coats"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Пальта",
+                    "en": "Coats",
+                    "ru": "Пальто"
+                },
+                "meta_h1": {
+                    "ua": "Пальта",
+                    "en": "Coats",
+                    "ru": "Пальто"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -81,
+                "parent_id": -47,
+                "path": "Women > Accessories",
+                "name": {
+                    "ua": "Аксесуари",
+                    "en": "Accessories",
+                    "ru": "Аксессуары"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-accessories",
+                    "en": "women-accessories",
+                    "ru": "women-accessories"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Аксесуари",
+                    "en": "Accessories",
+                    "ru": "Аксессуары"
+                },
+                "meta_h1": {
+                    "ua": "Аксесуари",
+                    "en": "Accessories",
+                    "ru": "Аксессуары"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -82,
+                "parent_id": -81,
+                "path": "Women > Accessories > Bags",
+                "name": {
+                    "ua": "Сумки",
+                    "en": "Bags",
+                    "ru": "Сумки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-bags",
+                    "en": "women-bags",
+                    "ru": "women-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Сумки",
+                    "en": "Bags",
+                    "ru": "Сумки"
+                },
+                "meta_h1": {
+                    "ua": "Сумки",
+                    "en": "Bags",
+                    "ru": "Сумки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -83,
+                "parent_id": -82,
+                "path": "Women > Accessories > Bags > Tote Bags",
+                "name": {
+                    "ua": "Сумки-тоут",
+                    "en": "Tote Bags",
+                    "ru": "Сумки-тоут"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-tote-bags",
+                    "en": "women-tote-bags",
+                    "ru": "women-tote-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Сумки-тоут",
+                    "en": "Tote Bags",
+                    "ru": "Сумки-тоут"
+                },
+                "meta_h1": {
+                    "ua": "Сумки-тоут",
+                    "en": "Tote Bags",
+                    "ru": "Сумки-тоут"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -84,
+                "parent_id": -82,
+                "path": "Women > Accessories > Bags > Shoulder Bags",
+                "name": {
+                    "ua": "Плечові сумки",
+                    "en": "Shoulder Bags",
+                    "ru": "Плечевые сумки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-shoulder-bags",
+                    "en": "women-shoulder-bags",
+                    "ru": "women-shoulder-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Плечові сумки",
+                    "en": "Shoulder Bags",
+                    "ru": "Плечевые сумки"
+                },
+                "meta_h1": {
+                    "ua": "Плечові сумки",
+                    "en": "Shoulder Bags",
+                    "ru": "Плечевые сумки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -85,
+                "parent_id": -82,
+                "path": "Women > Accessories > Bags > Crossbody Bags",
+                "name": {
+                    "ua": "Кросбоді",
+                    "en": "Crossbody Bags",
+                    "ru": "Кроссбоди"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-crossbody-bags",
+                    "en": "women-crossbody-bags",
+                    "ru": "women-crossbody-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Кросбоді",
+                    "en": "Crossbody Bags",
+                    "ru": "Кроссбоди"
+                },
+                "meta_h1": {
+                    "ua": "Кросбоді",
+                    "en": "Crossbody Bags",
+                    "ru": "Кроссбоди"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -86,
+                "parent_id": -82,
+                "path": "Women > Accessories > Bags > Mini Bags",
+                "name": {
+                    "ua": "Міні-сумки",
+                    "en": "Mini Bags",
+                    "ru": "Мини-сумки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-mini-bags",
+                    "en": "women-mini-bags",
+                    "ru": "women-mini-bags"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Міні-сумки",
+                    "en": "Mini Bags",
+                    "ru": "Мини-сумки"
+                },
+                "meta_h1": {
+                    "ua": "Міні-сумки",
+                    "en": "Mini Bags",
+                    "ru": "Мини-сумки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -87,
+                "parent_id": -82,
+                "path": "Women > Accessories > Bags > Backpacks",
+                "name": {
+                    "ua": "Рюкзаки",
+                    "en": "Backpacks",
+                    "ru": "Рюкзаки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-backpacks",
+                    "en": "women-backpacks",
+                    "ru": "women-backpacks"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Рюкзаки",
+                    "en": "Backpacks",
+                    "ru": "Рюкзаки"
+                },
+                "meta_h1": {
+                    "ua": "Рюкзаки",
+                    "en": "Backpacks",
+                    "ru": "Рюкзаки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -88,
+                "parent_id": -81,
+                "path": "Women > Accessories > Headwear",
+                "name": {
+                    "ua": "Головні убори",
+                    "en": "Headwear",
+                    "ru": "Головные уборы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-headwear",
+                    "en": "women-headwear",
+                    "ru": "women-headwear"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Головні убори",
+                    "en": "Headwear",
+                    "ru": "Головные уборы"
+                },
+                "meta_h1": {
+                    "ua": "Головні убори",
+                    "en": "Headwear",
+                    "ru": "Головные уборы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -89,
+                "parent_id": -88,
+                "path": "Women > Accessories > Headwear > Caps",
+                "name": {
+                    "ua": "Кепки",
+                    "en": "Caps",
+                    "ru": "Кепки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-caps",
+                    "en": "women-caps",
+                    "ru": "women-caps"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Кепки",
+                    "en": "Caps",
+                    "ru": "Кепки"
+                },
+                "meta_h1": {
+                    "ua": "Кепки",
+                    "en": "Caps",
+                    "ru": "Кепки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -90,
+                "parent_id": -88,
+                "path": "Women > Accessories > Headwear > Bucket Hats",
+                "name": {
+                    "ua": "Панами",
+                    "en": "Bucket Hats",
+                    "ru": "Панамы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-bucket-hats",
+                    "en": "women-bucket-hats",
+                    "ru": "women-bucket-hats"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Панами",
+                    "en": "Bucket Hats",
+                    "ru": "Панамы"
+                },
+                "meta_h1": {
+                    "ua": "Панами",
+                    "en": "Bucket Hats",
+                    "ru": "Панамы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -91,
+                "parent_id": -88,
+                "path": "Women > Accessories > Headwear > Beanies",
+                "name": {
+                    "ua": "Шапки",
+                    "en": "Beanies",
+                    "ru": "Шапки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-beanies",
+                    "en": "women-beanies",
+                    "ru": "women-beanies"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Шапки",
+                    "en": "Beanies",
+                    "ru": "Шапки"
+                },
+                "meta_h1": {
+                    "ua": "Шапки",
+                    "en": "Beanies",
+                    "ru": "Шапки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -92,
+                "parent_id": -81,
+                "path": "Women > Accessories > Eyewear",
+                "name": {
+                    "ua": "Окуляри",
+                    "en": "Eyewear",
+                    "ru": "Очки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-eyewear",
+                    "en": "women-eyewear",
+                    "ru": "women-eyewear"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Окуляри",
+                    "en": "Eyewear",
+                    "ru": "Очки"
+                },
+                "meta_h1": {
+                    "ua": "Окуляри",
+                    "en": "Eyewear",
+                    "ru": "Очки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -93,
+                "parent_id": -81,
+                "path": "Women > Accessories > Wallets",
+                "name": {
+                    "ua": "Гаманці",
+                    "en": "Wallets",
+                    "ru": "Кошельки"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-wallets",
+                    "en": "women-wallets",
+                    "ru": "women-wallets"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Гаманці",
+                    "en": "Wallets",
+                    "ru": "Кошельки"
+                },
+                "meta_h1": {
+                    "ua": "Гаманці",
+                    "en": "Wallets",
+                    "ru": "Кошельки"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -94,
+                "parent_id": -81,
+                "path": "Women > Accessories > Belts",
+                "name": {
+                    "ua": "Ремені",
+                    "en": "Belts",
+                    "ru": "Ремни"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-belts",
+                    "en": "women-belts",
+                    "ru": "women-belts"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Ремені",
+                    "en": "Belts",
+                    "ru": "Ремни"
+                },
+                "meta_h1": {
+                    "ua": "Ремені",
+                    "en": "Belts",
+                    "ru": "Ремни"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -95,
+                "parent_id": -81,
+                "path": "Women > Accessories > Jewelry",
+                "name": {
+                    "ua": "Прикраси",
+                    "en": "Jewelry",
+                    "ru": "Украшения"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-jewelry",
+                    "en": "women-jewelry",
+                    "ru": "women-jewelry"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Прикраси",
+                    "en": "Jewelry",
+                    "ru": "Украшения"
+                },
+                "meta_h1": {
+                    "ua": "Прикраси",
+                    "en": "Jewelry",
+                    "ru": "Украшения"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            },
+            {
+                "category_id": -96,
+                "parent_id": -81,
+                "path": "Women > Accessories > Watches",
+                "name": {
+                    "ua": "Годинники",
+                    "en": "Watches",
+                    "ru": "Часы"
+                },
+                "status": 1,
+                "noindex": 0,
+                "keyword": {
+                    "ua": "women-watches",
+                    "en": "women-watches",
+                    "ru": "women-watches"
+                },
+                "description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_title": {
+                    "ua": "Годинники",
+                    "en": "Watches",
+                    "ru": "Часы"
+                },
+                "meta_h1": {
+                    "ua": "Годинники",
+                    "en": "Watches",
+                    "ru": "Часы"
+                },
+                "meta_description": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                },
+                "meta_keyword": {
+                    "ua": "",
+                    "en": "",
+                    "ru": ""
+                }
+            }
+        ],
+        "products": []
+    }
+}
