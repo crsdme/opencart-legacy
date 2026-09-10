@@ -7,6 +7,7 @@ public_html/system/storage/download/
 public_html/system/storage/modification/
 public_html/system/storage/session/
 public_html/system/storage/redirect_manager/
+public_html/system/storage/import_export/
 public_html/system/storage/backup/*
 !public_html/system/storage/backup/.gitkeep
 !public_html/system/storage/backup/.htaccess
