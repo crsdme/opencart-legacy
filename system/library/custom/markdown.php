@@ -5,10 +5,12 @@ namespace Custom;
 class Markdown
 {
 	private $slugs = [];
+	private $mediaResolver;
 
-	public function parse($text, $linkResolver = null)
+	public function parse($text, $linkResolver = null, $mediaResolver = null)
 	{
 		$this->slugs = [];
+		$this->mediaResolver = $mediaResolver;
 		$text = str_replace(["\r\n", "\r"], "\n", (string) $text);
 		$text = str_replace("\t", '    ', $text);
 		$text = str_replace(["\xC2\xA0", "\xE2\x80\x94"], [' ', '-'], $text);
@@ -70,6 +72,11 @@ class Markdown
 
 			if ($this->isTable($block)) {
 				$html[] = $this->table($block, $linkResolver);
+				continue;
+			}
+
+			if (preg_match('/^!\[([^\]]*)\]\(([^)]*)\)\s*$/', $block, $match)) {
+				$html[] = $this->figure($match[1], $match[2]);
 				continue;
 			}
 
@@ -261,6 +268,13 @@ class Markdown
 			return '<code>' . $match[1] . '</code>';
 		}, $text);
 
+		$text = preg_replace_callback('/!\[([^\]]*)\]\(([^)]*)\)/', function ($match) {
+			return $this->figure(
+				html_entity_decode($match[1], ENT_QUOTES, 'UTF-8'),
+				html_entity_decode($match[2], ENT_QUOTES, 'UTF-8')
+			);
+		}, $text);
+
 		$text = preg_replace_callback('/\[([^\]]+)\]\(([^)]+)\)/', function ($match) use ($linkResolver) {
 			$href = html_entity_decode($match[2], ENT_QUOTES, 'UTF-8');
 
@@ -275,6 +289,40 @@ class Markdown
 		$text = preg_replace('/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/', '<em>$1</em>', $text);
 
 		return $text;
+	}
+
+	private function figure($alt, $src)
+	{
+		$alt = trim((string) $alt);
+		$src = trim((string) $src);
+
+		if ($src !== '' && is_callable($this->mediaResolver)) {
+			$src = (string) call_user_func($this->mediaResolver, $src);
+		}
+
+		$path = $src !== '' ? (string) parse_url($src, PHP_URL_PATH) : '';
+		$file = $path !== '' ? basename($path) : ($src !== '' ? basename($src) : '');
+		$classes = 'docs-figure' . ($src === '' ? ' is-placeholder' : '');
+		$html = '<figure class="' . $classes . '"';
+
+		if ($file !== '') {
+			$html .= ' data-file="' . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . '"';
+		}
+
+		$html .= '>';
+
+		if ($src !== '') {
+			$html .=
+				'<img src="' .
+				htmlspecialchars($src, ENT_QUOTES, 'UTF-8') .
+				'" alt="' .
+				htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') .
+				'" loading="lazy" />';
+		}
+
+		$html .= '<figcaption>' . htmlspecialchars($alt !== '' ? $alt : 'Screenshot', ENT_QUOTES, 'UTF-8') . '</figcaption>';
+
+		return $html . '</figure>';
 	}
 
 	private function slug($text)

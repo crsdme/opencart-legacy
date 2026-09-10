@@ -16,7 +16,6 @@ INSERT INTO `oc_extension` (`extension_id`, `type`, `code`) VALUES
 (10, 'total', 'handling'),
 (11, 'total', 'low_order_fee'),
 (12, 'total', 'coupon'),
-(14, 'module', 'account'),
 (15, 'total', 'reward'),
 (16, 'total', 'voucher'),
 (17, 'payment', 'free_checkout'),

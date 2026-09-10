@@ -4,26 +4,37 @@ namespace import_export;
 
 class RemoteImage
 {
-	const MAX_BYTES = 8388608;
+	const MAX_BYTES = 16777216;
 	const MAX_REDIRECTS = 5;
+	const MAX_ATTEMPTS = 3;
 
 	private $ctx;
 	private $cache = [];
+	private $hostCache = [];
+	private $curl;
 
 	public function __construct(Context $ctx)
 	{
 		$this->ctx = $ctx;
 	}
 
+	public function __destruct()
+	{
+		if (is_resource($this->curl)) {
+			curl_close($this->curl);
+			$this->curl = null;
+		}
+	}
+
 	public function fetch($url)
 	{
-		$url = $this->normalize($url);
+		$candidates = $this->candidates($url);
 
-		if ($url === '') {
+		if (!$candidates) {
 			return false;
 		}
 
-		$key = sha1($url);
+		$key = sha1($candidates[0]);
 
 		if (array_key_exists($key, $this->cache)) {
 			return $this->cache[$key];
@@ -36,20 +47,61 @@ class RemoteImage
 		}
 
 		if (!$this->ctx->downloadImages()) {
-			return $this->cache[$key] = false;
+			return $this->cache[$key] = $this->fail('download disabled', $candidates[0]);
 		}
 
+		foreach ($candidates as $candidate) {
+			$path = $this->download($candidate, $key);
+
+			if ($path) {
+				return $this->cache[$key] = $path;
+			}
+		}
+
+		return $this->cache[$key] = false;
+	}
+
+	private function candidates($url)
+	{
+		$plain = $this->normalize($url, false);
+
+		if ($plain === '') {
+			return [];
+		}
+
+		$origin = $this->unwrap($plain);
+		$out = [];
+
+		if ($origin !== '') {
+			$out[] = $origin;
+		}
+
+		if (!in_array($plain, $out, true)) {
+			$out[] = $plain;
+		}
+
+		return $out;
+	}
+
+	private function download($url, $key)
+	{
 		$current = $url;
 
-		for ($i = 0; $i < self::MAX_REDIRECTS; $i++) {
+		for ($redirect = 0; $redirect < self::MAX_REDIRECTS; $redirect++) {
 			if (!$this->assertPublicUrl($current)) {
-				return $this->cache[$key] = false;
+				return $this->fail('blocked host', $current);
 			}
 
-			$result = $this->request($current);
+			$result = $this->requestWithRetry($current);
 
 			if (!$result) {
-				return $this->cache[$key] = false;
+				return $this->fail('request failed', $current);
+			}
+
+			if (!empty($result['error']) && (int) $result['code'] !== 200) {
+				$reason = $result['error'] === 'too large' ? 'too large' : ('curl ' . $result['error']);
+
+				return $this->fail($reason, $current);
 			}
 
 			$code = (int) $result['code'];
@@ -60,31 +112,42 @@ class RemoteImage
 			}
 
 			if ($code !== 200 || $result['body'] === '') {
-				return $this->cache[$key] = false;
+				return $this->fail('http ' . $code, $current);
 			}
 
 			$ext = $this->extension($result['body']);
 
 			if ($ext === '') {
-				return $this->cache[$key] = false;
+				return $this->fail('not an image', $current);
 			}
 
 			$dir = rtrim(DIR_IMAGE, '/\\') . '/catalog/import';
 
 			if (!is_dir($dir) && !@mkdir($dir, 0755, true)) {
-				return $this->cache[$key] = false;
+				return $this->fail('cannot write directory', $url);
 			}
 
 			$file = $dir . '/' . $key . '.' . $ext;
 
 			if (@file_put_contents($file, $result['body'], LOCK_EX) === false) {
-				return $this->cache[$key] = false;
+				return $this->fail('cannot write file', $url);
 			}
 
-			return $this->cache[$key] = 'catalog/import/' . $key . '.' . $ext;
+			return 'catalog/import/' . $key . '.' . $ext;
 		}
 
-		return $this->cache[$key] = false;
+		return $this->fail('too many redirects', $url);
+	}
+
+	private function fail($reason, $url)
+	{
+		$log = $this->ctx->registry()->get('log');
+
+		if ($log) {
+			$log->write('import_export image skipped (' . $reason . '): ' . $url);
+		}
+
+		return false;
 	}
 
 	private function existing($key)
@@ -100,12 +163,42 @@ class RemoteImage
 		return '';
 	}
 
-	private function normalize($url)
+	private function unwrap($url)
+	{
+		$path = parse_url($url, PHP_URL_PATH);
+
+		if (!$path || stripos($path, '/cdn-cgi/image/') === false) {
+			return '';
+		}
+
+		if (!preg_match('#/cdn-cgi/image/[^/]+/(.+)$#i', $path, $match)) {
+			return '';
+		}
+
+		$inner = rawurldecode($match[1]);
+		$inner = html_entity_decode(trim($inner), ENT_QUOTES, 'UTF-8');
+
+		if (strpos($inner, '//') === 0) {
+			$inner = 'https:' . $inner;
+		}
+
+		return $this->normalize($inner, false);
+	}
+
+	private function normalize($url, $unwrap = true)
 	{
 		$url = html_entity_decode(trim((string) $url), ENT_QUOTES, 'UTF-8');
 
 		if (strpos($url, '//') === 0) {
 			$url = 'https:' . $url;
+		}
+
+		if ($unwrap) {
+			$origin = $this->unwrap($url);
+
+			if ($origin !== '') {
+				$url = $origin;
+			}
 		}
 
 		$parts = parse_url($url);
@@ -156,18 +249,24 @@ class RemoteImage
 		}
 
 		foreach ($ips as $ip) {
-			if (!$this->isPublicIp($ip)) {
-				return false;
+			if ($this->isPublicIp($ip)) {
+				return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	private function hostIps($host)
 	{
+		$host = strtolower(trim((string) $host, '[]'));
+
+		if (isset($this->hostCache[$host])) {
+			return $this->hostCache[$host];
+		}
+
 		if (filter_var($host, FILTER_VALIDATE_IP)) {
-			return [$host];
+			return $this->hostCache[$host] = [$host];
 		}
 
 		$ips = [];
@@ -196,7 +295,43 @@ class RemoteImage
 			$ips = $fallback ? $fallback : [];
 		}
 
-		return array_values(array_unique($ips));
+		return $this->hostCache[$host] = array_values(array_unique($ips));
+	}
+
+	private function publicIpv4($url)
+	{
+		$host = parse_url($url, PHP_URL_HOST);
+
+		if (!$host) {
+			return '';
+		}
+
+		$host = strtolower(trim($host, '[]'));
+
+		if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) && $this->isPublicIp($host)) {
+			return $host;
+		}
+
+		foreach ($this->hostIps($host) as $ip) {
+			if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) && $this->isPublicIp($ip)) {
+				return $ip;
+			}
+		}
+
+		return '';
+	}
+
+	private function origin($url)
+	{
+		$parts = parse_url($url);
+
+		if (!$parts || empty($parts['scheme']) || empty($parts['host'])) {
+			return '';
+		}
+
+		$port = !empty($parts['port']) ? ':' . $parts['port'] : '';
+
+		return strtolower($parts['scheme']) . '://' . $parts['host'] . $port . '/';
 	}
 
 	private function isPublicIp($ip)
@@ -207,9 +342,40 @@ class RemoteImage
 			return false;
 		}
 
+		$long = ip2long($ip);
+
+		if ($long !== false && ($long & 0xFFC00000) === 0x64400000) {
+			return false;
+		}
+
 		$flags = FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
 
 		return (bool) filter_var($ip, FILTER_VALIDATE_IP, $flags);
+	}
+
+	private function requestWithRetry($url)
+	{
+		$delay = 250000;
+
+		for ($attempt = 1; $attempt <= self::MAX_ATTEMPTS; $attempt++) {
+			$result = $this->request($url);
+
+			if ($result && (int) $result['code'] === 200 && $result['body'] !== '') {
+				return $result;
+			}
+
+			$code = $result ? (int) $result['code'] : 0;
+			$retry = !$result || $code === 0 || $code === 429 || $code === 502 || $code === 503;
+
+			if (!$retry || $attempt === self::MAX_ATTEMPTS) {
+				return $result;
+			}
+
+			usleep($delay);
+			$delay *= 2;
+		}
+
+		return null;
 	}
 
 	private function request($url)
@@ -221,49 +387,82 @@ class RemoteImage
 		return $this->requestStream($url);
 	}
 
+	private function curlHandle()
+	{
+		if (is_resource($this->curl)) {
+			curl_reset($this->curl);
+		} else {
+			$this->curl = curl_init();
+		}
+
+		return $this->curl;
+	}
+
 	private function requestCurl($url)
 	{
-		$handle = curl_init($url);
+		$handle = $this->curlHandle();
 
 		if (!$handle) {
 			return null;
 		}
 
-		$body = '';
-		$headers = '';
-
+		curl_setopt($handle, CURLOPT_URL, $url);
 		curl_setopt_array($handle, [
-			CURLOPT_RETURNTRANSFER => false,
+			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_FOLLOWLOCATION => false,
-			CURLOPT_HEADER => false,
+			CURLOPT_HEADER => true,
 			CURLOPT_CONNECTTIMEOUT => 10,
-			CURLOPT_TIMEOUT => 20,
+			CURLOPT_TIMEOUT => 25,
 			CURLOPT_PROTOCOLS => defined('CURLPROTO_HTTP') ? (CURLPROTO_HTTP | CURLPROTO_HTTPS) : 3,
 			CURLOPT_SSL_VERIFYPEER => true,
 			CURLOPT_SSL_VERIFYHOST => 2,
-			CURLOPT_USERAGENT => 'OpenTail-ImportExport',
-			CURLOPT_HEADERFUNCTION => function ($ch, $line) use (&$headers) {
-				$headers .= $line;
-
-				return strlen($line);
-			},
-			CURLOPT_WRITEFUNCTION => function ($ch, $chunk) use (&$body) {
-				$body .= $chunk;
-
-				if (strlen($body) > self::MAX_BYTES) {
-					return 0;
-				}
-
-				return strlen($chunk);
-			},
+			CURLOPT_ENCODING => '',
+			CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+			CURLOPT_HTTPHEADER => [
+				'Accept: image/jpeg,image/png,image/gif,image/webp,*/*;q=0.8',
+				'Accept-Language: en-US,en;q=0.9',
+			],
+			CURLOPT_REFERER => $this->origin($url),
 		]);
 
-		$ok = curl_exec($handle);
-		$code = (int) curl_getinfo($handle, CURLINFO_HTTP_CODE);
-		curl_close($handle);
+		$pinned = $this->publicIpv4($url);
 
-		if ($ok === false) {
-			return null;
+		if ($pinned) {
+			$host = parse_url($url, PHP_URL_HOST);
+			$port = (int) parse_url($url, PHP_URL_PORT);
+			$scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+
+			if (!$port) {
+				$port = $scheme === 'http' ? 80 : 443;
+			}
+
+			curl_setopt($handle, CURLOPT_RESOLVE, [$host . ':' . $port . ':' . $pinned]);
+		}
+
+		$raw = curl_exec($handle);
+		$error = curl_error($handle);
+		$code = (int) curl_getinfo($handle, CURLINFO_HTTP_CODE);
+		$header_size = (int) curl_getinfo($handle, CURLINFO_HEADER_SIZE);
+
+		if ($raw === false) {
+			return [
+				'code' => 0,
+				'location' => '',
+				'body' => '',
+				'error' => $error,
+			];
+		}
+
+		$headers = substr($raw, 0, $header_size);
+		$body = substr($raw, $header_size);
+
+		if (strlen($body) > self::MAX_BYTES) {
+			return [
+				'code' => 413,
+				'location' => '',
+				'body' => '',
+				'error' => 'too large',
+			];
 		}
 
 		$location = '';
@@ -287,7 +486,7 @@ class RemoteImage
 				'timeout' => 20,
 				'follow_location' => 0,
 				'ignore_errors' => true,
-				'header' => "User-Agent: OpenTail-ImportExport\r\n",
+				'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\r\nAccept: image/jpeg,image/png,image/gif,image/webp,*/*;q=0.8\r\n",
 			],
 			'ssl' => [
 				'verify_peer' => true,
@@ -334,7 +533,12 @@ class RemoteImage
 			if (strlen($body) > self::MAX_BYTES) {
 				fclose($handle);
 
-				return null;
+				return [
+					'code' => 413,
+					'location' => '',
+					'body' => '',
+					'error' => 'too large',
+				];
 			}
 		}
 

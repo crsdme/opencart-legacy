@@ -39,7 +39,7 @@ class Category extends Base
 			'path' => 'Clothes > T-shirts',
 			'name' => ['uk' => 'Футболки', 'en' => 'T-shirts'],
 			'status' => 1,
-			'noindex' => 0,
+			'noindex' => 1,
 			'keyword' => ['uk' => 'futbolky', 'en' => 't-shirts'],
 		];
 	}
@@ -300,7 +300,7 @@ class Category extends Base
 			'column' => 1,
 			'sort_order' => 0,
 			'status' => 1,
-			'noindex' => 0,
+			'noindex' => 1,
 			'image' => '',
 			'category_description' => $this->ctx->emptyDescription($name),
 			'category_store' => $this->ctx->storeIds(),

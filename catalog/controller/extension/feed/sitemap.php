@@ -10,7 +10,7 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 			return $this->load->controller('error/not_found');
 		}
 
-		$language = isset($this->request->get['language']) ? (string) $this->request->get['language'] : '';
+		$language = $this->requestLanguage();
 
 		if (!$this->validation($language)) {
 			return $this->load->controller('error/not_found');
@@ -27,7 +27,7 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 	{
 		$this->load->model('extension/feed/sitemap');
 
-		$type = isset($this->request->get['type']) ? (string) $this->request->get['type'] : 'sitemap';
+		$type = $this->requestType();
 		$branch = $this->typeBranch($type);
 
 		if ($branch !== '' && !$this->branchEnabled($branch)) {
@@ -67,6 +67,7 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 		}
 
 		$this->response->addHeader('Content-Type: text/xml; charset=UTF-8');
+		$this->response->addHeader('Cache-Control: private, no-cache, must-revalidate');
 		$this->response->setOutput($xml);
 	}
 
@@ -170,12 +171,12 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 
 	private function sitemapCategories()
 	{
-		$categories = $this->model_extension_feed_sitemap->getCategories();
-
 		$cacheKey = $this->cacheFile('categories');
 		if (($cached = $this->cacheRead($cacheKey)) !== false) {
 			return $cached;
 		}
+
+		$categories = $this->model_extension_feed_sitemap->getCategories();
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 		$xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
@@ -203,12 +204,12 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 
 	private function sitemapProducts()
 	{
-		$products = $this->model_extension_feed_sitemap->getProducts();
-
 		$cacheKey = $this->cacheFile('products');
 		if (($cached = $this->cacheRead($cacheKey)) !== false) {
 			return $cached;
 		}
+
+		$products = $this->model_extension_feed_sitemap->getProducts();
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 		$xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
@@ -239,12 +240,12 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 
 	private function sitemapInformation()
 	{
-		$information = $this->model_extension_feed_sitemap->getInformation();
-
 		$cacheKey = $this->cacheFile('information');
 		if (($cached = $this->cacheRead($cacheKey)) !== false) {
 			return $cached;
 		}
+
+		$information = $this->model_extension_feed_sitemap->getInformation();
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 		$xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
@@ -269,12 +270,12 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 
 	private function sitemapManufacturers()
 	{
-		$manufacturers = $this->model_extension_feed_sitemap->getManufacturers();
-
 		$cacheKey = $this->cacheFile('manufacturers');
 		if (($cached = $this->cacheRead($cacheKey)) !== false) {
 			return $cached;
 		}
+
+		$manufacturers = $this->model_extension_feed_sitemap->getManufacturers();
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 		$xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
@@ -299,12 +300,12 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 
 	private function sitemapBlogCategories()
 	{
-		$blogCategories = $this->model_extension_feed_sitemap->getBlogCategories();
-
 		$cacheKey = $this->cacheFile('blog-categories');
 		if (($cached = $this->cacheRead($cacheKey)) !== false) {
 			return $cached;
 		}
+
+		$blogCategories = $this->model_extension_feed_sitemap->getBlogCategories();
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 		$xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
@@ -329,12 +330,12 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 
 	private function sitemapBlogArticles()
 	{
-		$blogArticles = $this->model_extension_feed_sitemap->getBlogArticles();
-
 		$cacheKey = $this->cacheFile('blog-articles');
 		if (($cached = $this->cacheRead($cacheKey)) !== false) {
 			return $cached;
 		}
+
+		$blogArticles = $this->model_extension_feed_sitemap->getBlogArticles();
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 		$xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
@@ -362,12 +363,12 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 		$this->load->model('blog/helper');
 		$this->model_blog_helper->ensureAuthorSchema();
 
-		$blogAuthors = $this->model_extension_feed_sitemap->getBlogAuthors();
-
 		$cacheKey = $this->cacheFile('blog-authors');
 		if (($cached = $this->cacheRead($cacheKey)) !== false) {
 			return $cached;
 		}
+
+		$blogAuthors = $this->model_extension_feed_sitemap->getBlogAuthors();
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 		$xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
@@ -426,6 +427,52 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 	{
 		//htmlentities($product['name'], ENT_QUOTES, "UTF-8"); // &laquo; - not valid char - see protocol...
 		return str_replace(['&', '\'', '"', '>', '<'], ['&amp;', '&apos;', '&quot;', '&gt;', '&lt;'], $str);
+	}
+
+	private function requestLanguage()
+	{
+		if (isset($this->request->get['language']) && $this->request->get['language'] !== '') {
+			$code = strtolower((string) $this->request->get['language']);
+			$this->request->get['language'] = $code;
+
+			return $code;
+		}
+
+		$path = $this->requestPath();
+
+		if (preg_match('~^([a-z]{2}(?:-[a-z]{2})?)/sitemap~i', $path, $match)) {
+			$code = strtolower($match[1]);
+			$this->request->get['language'] = $code;
+
+			return $code;
+		}
+
+		return '';
+	}
+
+	private function requestType()
+	{
+		if (isset($this->request->get['type']) && $this->request->get['type'] !== '') {
+			return (string) $this->request->get['type'];
+		}
+
+		$path = $this->requestPath();
+
+		if (preg_match('~(?:^|/)(sitemap(?:-[A-Za-z0-9_-]+)?)\.xml$~i', $path, $match)) {
+			$type = strtolower($match[1]);
+			$this->request->get['type'] = $type;
+
+			return $type;
+		}
+
+		return 'sitemap';
+	}
+
+	private function requestPath()
+	{
+		$uri = isset($this->request->server['REQUEST_URI']) ? (string) $this->request->server['REQUEST_URI'] : '';
+
+		return trim((string) parse_url($uri, PHP_URL_PATH), '/');
 	}
 
 	private function validation($language)

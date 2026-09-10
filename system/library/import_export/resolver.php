@@ -172,7 +172,7 @@ class Resolver
 		$id = (int) $model->addManufacturer([
 			'name' => $name,
 			'sort_order' => 0,
-			'noindex' => 0,
+			'noindex' => 1,
 			'image' => '',
 			'manufacturer_description' => $description,
 			'manufacturer_store' => $this->ctx->storeIds(),
@@ -419,7 +419,7 @@ class Resolver
 			'column' => 1,
 			'sort_order' => 0,
 			'status' => 1,
-			'noindex' => 0,
+			'noindex' => 1,
 			'image' => '',
 			'category_description' => $description,
 			'category_store' => $this->ctx->storeIds(),

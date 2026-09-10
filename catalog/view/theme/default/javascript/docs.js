@@ -59,10 +59,26 @@
 		}
 	});
 
+	function markMissingFigure(img) {
+		const $fig = $(img).closest('.docs-figure');
+
+		if (!$fig.length) return;
+
+		$fig.addClass('is-placeholder');
+	}
+
 	$(function () {
 		if (window.location.hash) {
 			scrollToHash(window.location.hash);
 		}
+
+		$('.docs-figure img').on('error', function () {
+			markMissingFigure(this);
+		}).each(function () {
+			if (this.complete && this.naturalWidth === 0) {
+				markMissingFigure(this);
+			}
+		});
 	});
 
 	$(document).on('click', '[data-docs-copy]', function () {

@@ -42,29 +42,38 @@ class ControllerStartupMultilangRewrite extends Controller
 			return $link;
 		}
 
-		if (!isset($parsed['path'])) {
-			return $link;
-		}
-
 		$this->load->model('localisation/language');
 
 		$codes = array_keys($this->model_localisation_language->getLanguages());
-		$segments = explode('/', $path);
+		$segments = $path === '' ? [] : explode('/', $path);
 
+		$path_raw = isset($parsed['path']) ? $parsed['path'] : '';
+		$query_suffix = $query !== '' ? '?' . $query : '';
+		$frag = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
+
+		// SeoPro stores common/home as the language code (en, ru). That URL is already the prefix.
 		if (isset($segments[0]) && in_array(strtolower($segments[0]), $codes, true)) {
+			if (count($segments) === 1 && substr($path_raw, -1) !== '/') {
+				return $base . '/' . $segments[0] . '/' . $query_suffix . $frag;
+			}
+
 			return $link;
 		}
 
+		$is_home = ($path === '' || $path === 'index.php') && ($query === '' || $query === 'route=common/home');
+
+		if ($is_home) {
+			$path = '';
+			$query_suffix = '';
+		}
+
 		$new_path = '/' . $code . ($path !== '' ? '/' . $path : '');
-		$query = isset($parsed['query']) ? '?' . $parsed['query'] : '';
-		$frag = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
 
-		// var_dump($new_path);
-		// var_dump($query);
-		// var_dump($frag);
-		// var_dump($base . $new_path . $query . $frag);
-		// die;
+		// Language home must keep a trailing slash: .htaccess redirects /en → /en/.
+		if ($path === '' || substr($path_raw, -1) === '/') {
+			$new_path .= '/';
+		}
 
-		return $base . $new_path . $query . $frag;
+		return $base . $new_path . $query_suffix . $frag;
 	}
 }

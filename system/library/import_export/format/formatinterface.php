@@ -10,7 +10,7 @@ interface FormatInterface
 
 	public function extension();
 
-	public function encode($entity, array $rows, array $languages);
+	public function encode($entity, array $rows, array $languages, $help = '');
 
 	public function decode($content, $entity_hint = '');
 }

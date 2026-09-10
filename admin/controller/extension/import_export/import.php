@@ -103,6 +103,7 @@ class ControllerExtensionImportExportImport extends Controller
 		}
 
 		@set_time_limit(0);
+		@ignore_user_abort(true);
 		$content = file_get_contents($state['file']);
 		$parsed = $engine->parse($content, $state['format'], $state['entity']);
 		$result = $engine->import($parsed);
