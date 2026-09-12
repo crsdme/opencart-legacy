@@ -19,6 +19,7 @@ public_html/image/catalog/import/
 public_html/config.php
 public_html/admin/config.php
 public_html/.htaccess
+docker-compose.yml
 
 # Node
 node_modules/
