@@ -1,24 +1,10 @@
 # Composer / PHP
 composer.lock
 
-# OpenCart
-public_html/system/storage/cache/
-public_html/system/storage/download/
-public_html/system/storage/modification/
-public_html/system/storage/session/
-public_html/system/storage/redirect_manager/
-public_html/system/storage/import_export/
-public_html/system/storage/backup/*
-!public_html/system/storage/backup/.gitkeep
-!public_html/system/storage/backup/.htaccess
-!public_html/system/storage/backup/index.html
-public_html/image/cache/
-public_html/image/catalog/import/
+# OpenCart ignore rules live in public_html/.gitignore
+# (deploy subtree uses public_html/ as the repo root)
 
-# Local secrets / env — keep config-dist.php and .htaccess.example
-public_html/config.php
-public_html/admin/config.php
-public_html/.htaccess
+# Local secrets / env
 docker-compose.yml
 
 # Node
@@ -40,5 +26,3 @@ docker/mysql/data/
 *.tar.gz
 *.env
 .env.*
-
-dump/
