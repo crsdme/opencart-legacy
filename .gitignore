@@ -1,0 +1,18 @@
+# OpenCart runtime
+system/storage/cache/
+system/storage/download/
+system/storage/modification/
+system/storage/session/
+system/storage/redirect_manager/
+system/storage/import_export/
+system/storage/backup/*
+!system/storage/backup/.gitkeep
+!system/storage/backup/.htaccess
+!system/storage/backup/index.html
+image/cache/
+image/catalog/import/
+
+# Local secrets — keep config-dist.php and .htaccess.example
+config.php
+admin/config.php
+.htaccess
