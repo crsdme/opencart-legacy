@@ -5,7 +5,7 @@ Open work and a running changelog. How features work is in `DOCUMENTATION.md`.
 ## To do
 
 - legacy-cart.com buy domain
-- create addons for languages like
+- create addons for languages (main language, prefixes etc)
 - taxes
 - rework mail opencart
 - variant products

@@ -143,7 +143,7 @@ class ControllerExtensionFeedSitemap extends Controller // CHECK VALIDATION AND 
 			$items[] = ['route' => 'information/sitemap', 'priority' => '0.3'];
 		}
 
-		if ($pages->enabled('product')) {
+		if ($pages->enabled('special')) {
 			$items[] = ['route' => 'product/special', 'priority' => '0.6'];
 		}
 

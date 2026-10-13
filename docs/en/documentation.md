@@ -285,11 +285,14 @@ Dev-time flags for whole route families. Off = the route does not exist (`404` /
     2. Redirect Manager may 301/410 the URL.
     3. If the family is off, `route` is set to `error/not_found`. The browser URL stays the same (no redirect to `/not-found`).
 - Matching is prefix-based: `product/product` also blocks `product/product/review`. `except` keeps a method alive (`information/information/agree` for checkout/register terms).
-- Bundles:
-    - **product** also turns off compare, search, special, and live search (`common/search`).
+- Bundles / extras:
+    - **product** covers the product card and compare. With products off, **search** and **special** are also unreachable at runtime.
+    - **search** is `product/search` + live search (`common/search`).
+    - **special** is `product/special`.
+    - **checkout** is the one-page checkout flow (`checkout/checkout` and related AJAX). Cart stays on.
     - **blog** turns off every `blog/*` route (article, category, latest, menu).
     - **manufacturer** is list + info (`product/manufacturer` prefix).
-- Account flags are per page (`account/edit`, `account/order`, …). Always on: login, logout, forgotten/reset, dashboard `account/account`, cart, checkout.
+- Account flags are per page (`account/login`, `account/edit`, `account/order`, …). Always on: logout, forgotten/reset, dashboard `account/account`, cart.
 - XML/HTML sitemaps, footer, header search, category menu, blog menu, and account dashboard links follow the same flags (`$pages->flags()` / `$pages->enabled(...)`).
 - Layout widgets (column modules) are not a kill-switch. Dead module links can remain if the module is still assigned to a layout.
 - Adding a family: entry in `families()`, language keys `entry_pages_*` / `help_pages_*` in admin `setting/setting.php`. Account items use `'group' => 'account'`. Optional `'sitemap'` string or list of XML branch names.

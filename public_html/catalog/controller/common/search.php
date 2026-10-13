@@ -7,9 +7,11 @@ class ControllerCommonSearch extends Controller
 
 		$pages = new \Custom\Pages($this->config);
 
-		if ($pages->enabled('product')) {
-			$this->document->addScript('catalog/view/theme/default/javascript/live-search.js', 'footer');
+		if (!$pages->enabled('search')) {
+			return '';
 		}
+
+		$this->document->addScript('catalog/view/theme/default/javascript/live-search.js', 'footer');
 
 		$data['text_search'] = $this->language->get('text_search');
 		$data['text_live_search_loading'] = $this->language->get('text_live_search_loading');

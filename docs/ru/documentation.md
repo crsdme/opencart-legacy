@@ -287,11 +287,14 @@ H1 — тот же движок, что title и description: `public_html/catal
     2. Redirect Manager может 301/410.
     3. Если семейство выкл, `route` = `error/not_found`. URL в браузере не меняется (нет редиректа на `/not-found`).
 - Совпадение по префиксу: `product/product` закрывает и `product/product/review`. `except` оставляет метод живым (`information/information/agree` для оферты на чекауте/регистрации).
-- Связки:
-    - **product** гасит сравнение, поиск, акции и live search (`common/search`).
+- Связки / отдельные флаги:
+    - **product** — карточка товара и сравнение. Без товаров **search** и **special** тоже недоступны в runtime.
+    - **search** — `product/search` и live search (`common/search`).
+    - **special** — `product/special`.
+    - **checkout** — одностраничный чекаут (`checkout/checkout` и связанные AJAX). Корзина остаётся.
     - **blog** гасит все `blog/*` (статья, категория, лента, меню).
     - **manufacturer** — список + карточка (`product/manufacturer`).
-- Флаги кабинета — по страницам (`account/edit`, `account/order`, …). Всегда вкл: вход, выход, забытый/сброс пароля, дашборд `account/account`, корзина, чекаут.
+- Флаги кабинета — по страницам (`account/login`, `account/edit`, `account/order`, …). Всегда вкл: выход, забытый/сброс пароля, дашборд `account/account`, корзина.
 - XML/HTML sitemap, футер, поиск в шапке, меню категорий, меню блога и ссылки кабинета следуют тем же флагам (`$pages->flags()` / `$pages->enabled(...)`).
 - Виджеты макета — не выключатель. Мёртвые ссылки модуля могут остаться, если модуль всё ещё на макете.
 - Новое семейство: запись в `families()`, ключи `entry_pages_*` / `help_pages_*` в админском `setting/setting.php`. Пункты кабинета — `'group' => 'account'`. Опционально `'sitemap'` — имя или список веток XML.

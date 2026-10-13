@@ -419,15 +419,15 @@ class ControllerSettingSetting extends Controller {
 		$data['page_families'] = array();
 		$data['page_account_families'] = array();
 
-		$pages = new \Custom\Pages($this->config);
-
 		foreach (\Custom\Pages::families() as $code => $def) {
 			$key = $def['config'];
 
 			if (isset($this->request->post[$key])) {
 				$value = $this->request->post[$key];
+			} elseif ($this->config->get($key) !== null && $this->config->get($key) !== '') {
+				$value = (int) $this->config->get($key);
 			} else {
-				$value = $pages->enabled($code) ? 1 : 0;
+				$value = 1;
 			}
 
 			$item = array(

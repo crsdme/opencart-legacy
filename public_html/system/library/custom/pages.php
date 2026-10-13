@@ -28,9 +28,6 @@ class Pages
 				'routes' => [
 					'product/product',
 					'product/compare',
-					'product/search',
-					'product/special',
-					'common/search',
 				],
 				'except' => [],
 				'sitemap' => 'products',
@@ -50,6 +47,23 @@ class Pages
 				],
 				'except' => [],
 				'sitemap' => 'manufacturers',
+			],
+			'search' => [
+				'config' => 'config_pages_search',
+				'routes' => [
+					'product/search',
+					'common/search',
+				],
+				'except' => [],
+				'sitemap' => '',
+			],
+			'special' => [
+				'config' => 'config_pages_special',
+				'routes' => [
+					'product/special',
+				],
+				'except' => [],
+				'sitemap' => '',
 			],
 			'information' => [
 				'config' => 'config_pages_information',
@@ -84,6 +98,25 @@ class Pages
 				],
 				'except' => [],
 				'sitemap' => ['blog-categories', 'blog-articles', 'blog-authors'],
+			],
+			'checkout' => [
+				'config' => 'config_pages_checkout',
+				'routes' => [
+					'checkout/checkout',
+					'checkout/confirm',
+					'checkout/shipping',
+					'checkout/payment',
+					'checkout/address',
+				],
+				'except' => [],
+				'sitemap' => '',
+			],
+			'account_login' => [
+				'config' => 'config_pages_account_login',
+				'group' => 'account',
+				'routes' => [
+					'account/login',
+				],
 			],
 			'account_register' => [
 				'config' => 'config_pages_account_register',
@@ -205,6 +238,26 @@ class Pages
 	}
 
 	public function enabled($family)
+	{
+		$families = self::families();
+
+		if (!isset($families[$family])) {
+			return true;
+		}
+
+		if (!$this->configEnabled($family)) {
+			return false;
+		}
+
+		// Search / specials need product cards; product kill-switch still covers them.
+		if (in_array($family, ['search', 'special'], true) && !$this->configEnabled('product')) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function configEnabled($family)
 	{
 		$families = self::families();
 

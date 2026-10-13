@@ -73,7 +73,7 @@ class ControllerCommonFooter extends Controller
 			];
 		}
 
-		if ($pages->enabled('product')) {
+		if ($pages->enabled('special')) {
 			$extra_links[] = [
 				'name' => $this->language->get('text_special'),
 				'href' => $this->url->link('product/special'),

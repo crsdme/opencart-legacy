@@ -134,13 +134,16 @@ Checkout field layout is **not** here — it is the Checkout module (below).
 
 | Family | Keep on when | Turn off when |
 | --- | --- | --- |
-| Products | You sell SKUs. Also kills compare, search, specials, live search. | Content-only / blog site. |
+| Products | You sell SKUs. Also kills compare; search/specials become unreachable too. | Content-only / blog site. |
 | Categories | Normal catalog. | Single landing + search only (rare). |
 | Manufacturers | You have brands worth their own URL. | No brands, or brand is only an attribute. |
+| Search | Catalog search / live search in the header. | No search UI; browse by category only. |
+| Specials | A dedicated sale listing. | No promo landing; discounts only on product cards. |
 | Information | About, delivery, terms. Checkout terms popup still works if you turn this off. | You replaced CMS pages with one contact form. |
 | Contact | You want the form. | Phone/messengers only. |
 | HTML sitemap | Extra crawl path. XML sitemap stays. | You do not need a human sitemap. |
 | Blog | You will publish. Empty-store install already leaves this off. | No editorial content. |
+| Checkout | You take orders on the site. Cart stays. | Catalog / lead-gen without online orders. |
 
 Do not use layout widgets as a kill-switch. A featured module on Home still links to products if the product family is on.
 
@@ -148,9 +151,9 @@ Do not use layout widgets as a kill-switch. A featured module on Home still link
 
 ### Option — account pages
 
-Login, logout, forgotten password, dashboard, cart, checkout **cannot** be turned off.
+Logout, forgotten password, dashboard, and cart **cannot** be turned off.
 
-Turn off what you will not operate: affiliate, tracking, vouchers, recurring, rewards, downloads, returns, newsletter. Wishlist off if you disabled it in the theme. Register off only if checkout is guest-only **and** you do not need accounts (phone login still creates accounts).
+Turn off what you will not operate: login (no password/phone login page), register, affiliate, tracking, vouchers, recurring, rewards, downloads, returns, newsletter. Wishlist off if you disabled it in the theme. Register off only if checkout is guest-only **and** you do not need accounts (phone login still creates accounts when login is on).
 
 ![Settings → Option: account page flags](images/getting-started/11-settings-account-pages.png)
 
