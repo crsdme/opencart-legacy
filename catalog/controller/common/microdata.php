@@ -472,10 +472,7 @@ class ControllerCommonMicrodata extends Controller
 
 	private function websiteSchema($context)
 	{
-		$search_url = $this->url->link('product/search');
-		$separator = strpos($search_url, '?') !== false ? '&' : '?';
-
-		return $this->jsonLdBlock('Website JSON-LD', [
+		$schema = [
 			'@context' => 'https://schema.org',
 			'@type' => 'WebSite',
 			'@id' => $context['store_url'] . '#website',
@@ -484,15 +481,25 @@ class ControllerCommonMicrodata extends Controller
 			'publisher' => [
 				'@id' => $context['store_url'] . '#organization',
 			],
-			'potentialAction' => [
+		];
+
+		$pages = new \Custom\Pages($this->config);
+
+		if ($pages->enabled('search')) {
+			$search_url = $this->url->link('product/search');
+			$separator = strpos($search_url, '?') !== false ? '&' : '?';
+
+			$schema['potentialAction'] = [
 				'@type' => 'SearchAction',
 				'target' => [
 					'@type' => 'EntryPoint',
 					'urlTemplate' => $search_url . $separator . 'search={search_term_string}',
 				],
 				'query-input' => 'required name=search_term_string',
-			],
-		]);
+			];
+		}
+
+		return $this->jsonLdBlock('Website JSON-LD', $schema);
 	}
 
 	private function webPageSchema($context)

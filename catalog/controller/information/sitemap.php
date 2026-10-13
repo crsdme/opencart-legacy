@@ -94,16 +94,17 @@ class ControllerInformationSitemap extends Controller
 
 		$data['informations'] = [];
 
-		foreach ($this->model_catalog_information->getInformations() as $result) {
-			$data['informations'][] = [
-				'title' => $result['title'],
-				'href' => $this->url->link('information/information', 'information_id=' . $result['information_id']),
-			];
+		if ($pages->enabled('information')) {
+			foreach ($this->model_catalog_information->getInformations() as $result) {
+				$data['informations'][] = [
+					'title' => $result['title'],
+					'href' => $this->url->link('information/information', 'information_id=' . $result['information_id']),
+				];
+			}
 		}
 
 		$data['blog'] = '';
 		$data['blog_authors'] = [];
-		$pages = new \Custom\Pages($this->config);
 
 		if ($pages->enabled('blog')) {
 			$this->load->model('blog/helper');

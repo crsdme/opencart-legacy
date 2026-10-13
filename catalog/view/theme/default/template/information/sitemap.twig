@@ -42,29 +42,39 @@
 				{% endfor %}
 			</ul>
 			<ul>
-				<li><a href="{{ special }}">{{ text_special }}</a></li>
+				{% if special %}
+					<li><a href="{{ special }}">{{ text_special }}</a></li>
+				{% endif %}
 				<li>
 					<a href="{{ account }}">{{ text_account }}</a>
 					<ul>
-						<li><a href="{{ edit }}">{{ text_edit }}</a></li>
-						<li><a href="{{ password }}">{{ text_password }}</a></li>
-						<li><a href="{{ address }}">{{ text_address }}</a></li>
-						<li><a href="{{ history }}">{{ text_history }}</a></li>
-						<li><a href="{{ download }}">{{ text_download }}</a></li>
+						{% if edit %}<li><a href="{{ edit }}">{{ text_edit }}</a></li>{% endif %}
+						{% if password %}<li><a href="{{ password }}">{{ text_password }}</a></li>{% endif %}
+						{% if address %}<li><a href="{{ address }}">{{ text_address }}</a></li>{% endif %}
+						{% if history %}<li><a href="{{ history }}">{{ text_history }}</a></li>{% endif %}
+						{% if download %}<li><a href="{{ download }}">{{ text_download }}</a></li>{% endif %}
 					</ul>
 				</li>
-				<li><a href="{{ history }}">{{ text_cart }}</a></li>
-				<li><a href="{{ checkout }}">{{ text_checkout }}</a></li>
-				<li><a href="{{ search }}">{{ text_search }}</a></li>
-				<li>
-					{{ text_information }}
-					<ul>
-						{% for information in informations %}
-							<li><a href="{{ information.href }}">{{ information.title }}</a></li>
-						{% endfor %}
-						<li><a href="{{ contact }}">{{ text_contact }}</a></li>
-					</ul>
-				</li>
+				<li><a href="{{ cart }}">{{ text_cart }}</a></li>
+				{% if checkout %}
+					<li><a href="{{ checkout }}">{{ text_checkout }}</a></li>
+				{% endif %}
+				{% if search %}
+					<li><a href="{{ search }}">{{ text_search }}</a></li>
+				{% endif %}
+				{% if informations or contact %}
+					<li>
+						{{ text_information }}
+						<ul>
+							{% for information in informations %}
+								<li><a href="{{ information.href }}">{{ information.title }}</a></li>
+							{% endfor %}
+							{% if contact %}
+								<li><a href="{{ contact }}">{{ text_contact }}</a></li>
+							{% endif %}
+						</ul>
+					</li>
+				{% endif %}
 				{% if blog %}
 					<li>
 						<a href="{{ blog }}">{{ text_blog }}</a>
