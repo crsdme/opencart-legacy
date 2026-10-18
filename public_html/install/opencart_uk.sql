@@ -1506,6 +1506,7 @@ CREATE TABLE `oc_language` (
   `name` varchar(32) NOT NULL,
   `code` varchar(5) NOT NULL,
   `locale` varchar(255) NOT NULL,
+  `hreflang` varchar(16) NOT NULL DEFAULT '',
   `image` varchar(64) NOT NULL,
   `directory` varchar(32) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
@@ -1518,8 +1519,8 @@ CREATE TABLE `oc_language` (
 -- Dumping data for table `oc_language`
 --
 
-INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `image`, `directory`, `sort_order`, `status`) VALUES
-(1, 'Українська', 'uk-ua', 'uk_UA.UTF-8,uk_UA,uk-ua,uk,ukrainian', 'uk-ua.png', 'uk-ua', 1, 1);
+INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `hreflang`, `image`, `directory`, `sort_order`, `status`) VALUES
+(1, 'Українська', 'uk-ua', 'uk_UA.UTF-8,uk_UA,uk-ua,uk,ukrainian', 'uk-UA', 'uk-ua.png', 'uk-ua', 1, 1);
 
 -----------------------------------------------------------
 

@@ -50,7 +50,10 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
 
 - Multi-language flow starts in `public_html/catalog/controller/startup/startup.php`.
 - Install seeds Ukrainian (`ua`, main), English (`en`), and Russian (`ru`). Storefront folders: `catalog/language/{ua,en,ru}`. Admin UI stays Ukrainian / English.
-- `config_language_main` = main language code (no URL prefix on main language pages).
+- Internal `code` (`ua` / `ru` / `en`) is the URL prefix and language folder name. It is **not** used as the SEO language tag.
+- Each language has a `hreflang` field (System → Localisation → Languages): BCP 47, e.g. `uk-UA`, `ru-UA`. Resolution in `multilang::hreflangCode()`: `hreflang` → first token of `locale` → `code` (no per-language map).
+- Seeded locales already use ISO forms (`uk_UA…`, `ru_UA…`), so empty `hreflang` still yields correct tags. Set `hreflang` explicitly when the folder code differs from ISO (e.g. `ua`).
+- `config_language_main` = main language code (no URL prefix on main language pages). Also used as `hreflang="x-default"`.
 - `config_language` = current selected language code.
 - `config_language_id` = current selected language ID (used in `seo_url` lookups).
 - URL prefix parsing happens in `public_html/catalog/controller/startup/multilang.php`:
@@ -60,7 +63,8 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
 - URL prefix generation for links happens in `public_html/catalog/controller/startup/multilang_rewrite.php`:
     - main language keeps clean URLs,
     - non-main language gets `/{code}/...`.
-- Hreflang links are built in `public_html/catalog/controller/event/hreflang.php` through `system/library/multilang.php`.
+- Hreflang links: `public_html/catalog/controller/event/hreflang.php`. Column added by install / upgrade `1011` (not at runtime).
+- `<html lang>` uses the primary subtag from the resolved hreflang value.
 
 # ROUTER
 
@@ -98,7 +102,7 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
 - `apply($seo)` writes title, description, canonical and robots to the document. The controller still assigns `$data['heading_title']` from `$seo['h1']`.
 - Canonical: pass `$route` / `$query`. Listing pages omit them and keep `addPaginationLinks()`.
 - Robots: entity `noindex` (with `config_noindex_status`) or explicit `robots` (search, 404).
-- Listing canonical + prev/next stay in `catalog/model/product/helper.php::addPaginationLinks()`.
+- Listing canonical + prev/next: `catalog/model/product/helper.php::addPaginationLinks()` — self-referencing canonical (page 1 without `page`, page N with `page=N`); sort/filter/limit stay out of canonical.
 - Page suffix (`title_page`) is appended when `page > 1`.
 - Description is stripped of HTML and trimmed to 160 characters.
 - `common/microdata` reads the same `document` title/description, so OpenGraph follows automatically.
@@ -114,9 +118,10 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
 - Current active output:
     - OpenGraph meta block (`microdata.head`).
     - Organization / WebSite / WebPage / BreadcrumbList JSON-LD (`microdata.body`). Organization `logo` is `image/favicon/web-app-manifest-512x512.png` (header logo is the theme sprite, not a settings image).
-    - Product JSON-LD on product pages.
+    - Product JSON-LD on product pages: `description`, brand / GTIN (`ean`/`upc`/`jan`/`isbn`), `aggregateRating` + `review` when reviews exist, and in `offers` — `hasMerchantReturnPolicy` + `shippingDetails` (store country + Microdata tab defaults).
     - ItemList JSON-LD on listing pages.
     - FAQPage JSON-LD when the page has visible FAQ items (same questions as the accordion).
+- Merchant listing defaults (return days/fees, shipping rate, handling/transit days): **Settings → Microdata**. Return page link uses **Option → Return → Return Terms**. Fill product manufacturer and/or EAN/UPC in the catalog for the global identifier warning.
 - FAQ is JSON-LD only. Do not add FAQ microdata attributes on the HTML accordion (duplicate FAQPage).
 - `common/footer` also calls `common/microdata`, but footer template does not render it directly; canonical rendering happens in `common/layout.twig`.
 

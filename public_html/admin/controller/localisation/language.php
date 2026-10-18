@@ -273,6 +273,12 @@ class ControllerLocalisationLanguage extends Controller {
 		} else {
 			$data['error_locale'] = '';
 		}
+
+		if (isset($this->error['hreflang'])) {
+			$data['error_hreflang'] = $this->error['hreflang'];
+		} else {
+			$data['error_hreflang'] = '';
+		}
 		
 		$url = '';
 
@@ -343,6 +349,15 @@ class ControllerLocalisationLanguage extends Controller {
 		} else {
 			$data['locale'] = '';
 		}
+
+		if (isset($this->request->post['hreflang'])) {
+			$data['hreflang'] = $this->request->post['hreflang'];
+		} elseif (!empty($language_info)) {
+			$this->load->library('multilang');
+			$data['hreflang'] = $this->multilang->hreflangCode($language_info);
+		} else {
+			$data['hreflang'] = '';
+		}
 		
 		if (isset($this->request->post['sort_order'])) {
 			$data['sort_order'] = $this->request->post['sort_order'];
@@ -382,6 +397,16 @@ class ControllerLocalisationLanguage extends Controller {
 		
 		if (!$this->request->post['locale']) {
 			$this->error['locale'] = $this->language->get('error_locale');
+		}
+
+		$hreflang = isset($this->request->post['hreflang']) ? trim($this->request->post['hreflang']) : '';
+
+		if (!preg_match('/^[a-zA-Z]{2,3}(-[a-zA-Z]{2,4})?$/', $hreflang)) {
+			$this->error['hreflang'] = $this->language->get('error_hreflang');
+		} else {
+			// Normalize to language-REGION (uk-UA)
+			$parts = explode('-', $hreflang, 2);
+			$this->request->post['hreflang'] = strtolower($parts[0]) . (isset($parts[1]) ? '-' . strtoupper($parts[1]) : '');
 		}
 		
 		$language_info = $this->model_localisation_language->getLanguageByCode($this->request->post['code']);
