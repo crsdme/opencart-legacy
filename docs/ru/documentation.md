@@ -50,7 +50,10 @@ OpenCart (ocStore) — движок. Tailwind и Docker — обвязка. Пл
 
 - Мультиязык стартует в `public_html/catalog/controller/startup/startup.php`.
 - Инсталл сеет украинский (`ua`, основной), английский (`en`), русский (`ru`). Папки витрины: `catalog/language/{ua,en,ru}`. Админка — украинский / английский.
-- `config_language_main` = код основного языка (без префикса в URL).
+- Внутренний `code` (`ua` / `ru` / `en`) — префикс URL и имя папки языка. Это **не** SEO-код языка.
+- У каждого языка есть поле `hreflang` (Система → Локализация → Языки): BCP 47, например `uk-UA`, `ru-UA`. Разрешение в `multilang::hreflangCode()`: `hreflang` → первый токен `locale` → `code` (без словаря по языкам).
+- В сидах locale уже в ISO (`uk_UA…`, `ru_UA…`), поэтому пустой `hreflang` всё равно даёт верный тег. Явно задавайте `hreflang`, если код папки ≠ ISO (как `ua`).
+- `config_language_main` = код основного языка (без префикса в URL). Также для `hreflang="x-default"`.
 - `config_language` = текущий выбранный код.
 - `config_language_id` = текущий id (для `seo_url`).
 - Разбор префикса: `public_html/catalog/controller/startup/multilang.php`:
@@ -60,7 +63,8 @@ OpenCart (ocStore) — движок. Tailwind и Docker — обвязка. Пл
 - Сборка ссылок: `public_html/catalog/controller/startup/multilang_rewrite.php`:
     - основной язык — чистые URL,
     - остальные — `/{code}/...`.
-- Hreflang: `public_html/catalog/controller/event/hreflang.php` через `system/library/multilang.php`.
+- Hreflang: `public_html/catalog/controller/event/hreflang.php`. Колонка — из install / upgrade `1011` (не в runtime).
+- `<html lang>` — primary subtag из вычисленного hreflang.
 
 По шагам запроса: `language-flow-session-config.md`.
 
@@ -100,7 +104,7 @@ OpenCart (ocStore) — движок. Tailwind и Docker — обвязка. Пл
 - `apply($seo)` пишет title, description, canonical и robots в document. Контроллер сам ставит `$data['heading_title']` из `$seo['h1']`.
 - Canonical: передайте `$route` / `$query`. Листинги их не передают и оставляют `addPaginationLinks()`.
 - Robots: `noindex` сущности (при `config_noindex_status`) или явный `robots` (поиск, 404).
-- Canonical + prev/next листингов: `catalog/model/product/helper.php::addPaginationLinks()`.
+- Canonical + prev/next листингов: `catalog/model/product/helper.php::addPaginationLinks()` — self-referencing canonical (стр. 1 без `page`, стр. N с `page=N`); sort/filter/limit в canonical не входят.
 - Суффикс страницы (`title_page`) при `page > 1`.
 - Description чистится от HTML и режется до 160 символов.
 - `common/microdata` читает те же title/description document, OpenGraph следует сам.
@@ -116,9 +120,10 @@ OpenCart (ocStore) — движок. Tailwind и Docker — обвязка. Пл
 - Сейчас отдаётся:
     - блок OpenGraph (`microdata.head`);
     - Organization / WebSite / WebPage / BreadcrumbList JSON-LD (`microdata.body`). Логотип Organization — `image/favicon/web-app-manifest-512x512.png` (логотип шапки — спрайт темы);
-    - Product JSON-LD на товаре;
+    - Product JSON-LD на товаре: `description`, brand / GTIN (`ean`/`upc`/`jan`/`isbn`), `aggregateRating` + `review` при наличии отзывов, в `offers` — `hasMerchantReturnPolicy` + `shippingDetails` (страна магазина + дефолты вкладки Microdata);
     - ItemList JSON-LD на листингах;
     - FAQPage JSON-LD, если на странице видны вопросы FAQ (те же, что в аккордеоне).
+- Дефолты merchant listing (дни/оплата возврата, цена доставки, handling/transit): **Настройки → Microdata**. Ссылка на возврат — из **Опции → Повернення → Умови повернення**. Для предупреждения про глобальный идентификатор заполните производителя и/или EAN/UPC у товара.
 - FAQ только JSON-LD. Не ставьте FAQ-микродату на HTML-аккордеон (дубль FAQPage).
 - `common/footer` тоже зовёт `common/microdata`, но футер его не рисует; канонический вывод в `common/layout.twig`.
 

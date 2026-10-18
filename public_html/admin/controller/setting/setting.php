@@ -1066,6 +1066,61 @@ class ControllerSettingSetting extends Controller {
 			$data['config_microdata_same_as'] = $this->config->get('config_microdata_same_as');
 		}
 
+		if (isset($this->request->post['config_microdata_return_days'])) {
+			$data['config_microdata_return_days'] = $this->request->post['config_microdata_return_days'];
+		} elseif ($this->config->has('config_microdata_return_days')) {
+			$data['config_microdata_return_days'] = $this->config->get('config_microdata_return_days');
+		} else {
+			$data['config_microdata_return_days'] = 14;
+		}
+
+		if (isset($this->request->post['config_microdata_return_fees'])) {
+			$data['config_microdata_return_fees'] = $this->request->post['config_microdata_return_fees'];
+		} elseif ($this->config->has('config_microdata_return_fees')) {
+			$data['config_microdata_return_fees'] = $this->config->get('config_microdata_return_fees');
+		} else {
+			$data['config_microdata_return_fees'] = 'ReturnFeesCustomerResponsibility';
+		}
+
+		if (isset($this->request->post['config_microdata_shipping_rate'])) {
+			$data['config_microdata_shipping_rate'] = $this->request->post['config_microdata_shipping_rate'];
+		} elseif ($this->config->has('config_microdata_shipping_rate')) {
+			$data['config_microdata_shipping_rate'] = $this->config->get('config_microdata_shipping_rate');
+		} else {
+			$data['config_microdata_shipping_rate'] = '0';
+		}
+
+		if (isset($this->request->post['config_microdata_handling_min'])) {
+			$data['config_microdata_handling_min'] = $this->request->post['config_microdata_handling_min'];
+		} elseif ($this->config->has('config_microdata_handling_min')) {
+			$data['config_microdata_handling_min'] = $this->config->get('config_microdata_handling_min');
+		} else {
+			$data['config_microdata_handling_min'] = 0;
+		}
+
+		if (isset($this->request->post['config_microdata_handling_max'])) {
+			$data['config_microdata_handling_max'] = $this->request->post['config_microdata_handling_max'];
+		} elseif ($this->config->has('config_microdata_handling_max')) {
+			$data['config_microdata_handling_max'] = $this->config->get('config_microdata_handling_max');
+		} else {
+			$data['config_microdata_handling_max'] = 1;
+		}
+
+		if (isset($this->request->post['config_microdata_transit_min'])) {
+			$data['config_microdata_transit_min'] = $this->request->post['config_microdata_transit_min'];
+		} elseif ($this->config->has('config_microdata_transit_min')) {
+			$data['config_microdata_transit_min'] = $this->config->get('config_microdata_transit_min');
+		} else {
+			$data['config_microdata_transit_min'] = 1;
+		}
+
+		if (isset($this->request->post['config_microdata_transit_max'])) {
+			$data['config_microdata_transit_max'] = $this->request->post['config_microdata_transit_max'];
+		} elseif ($this->config->has('config_microdata_transit_max')) {
+			$data['config_microdata_transit_max'] = $this->config->get('config_microdata_transit_max');
+		} else {
+			$data['config_microdata_transit_max'] = 5;
+		}
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
