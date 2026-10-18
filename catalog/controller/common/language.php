@@ -28,6 +28,7 @@ class ControllerCommonLanguage extends Controller
 				$data['languages'][] = [
 					'name' => $language['name'],
 					'code' => $language['code'],
+					'hreflang' => $this->multilang->hreflangCode($language),
 					'url' => $this->multilang->linkForLanguage($language['code'], $route, $args, false, $languages),
 					'active' => $language['code'] === $data['code'],
 				];

@@ -67,4 +67,82 @@ class multilang
     }
     return $out;
   }
+
+  /**
+   * BCP 47 / hreflang for a language row.
+   * Order: language.hreflang → first token of locale → code.
+   *
+   * @param array|string $language Language row or raw tag/code
+   * @return string
+   */
+  public function hreflangCode($language)
+  {
+    if (is_string($language)) {
+      return $this->normalizeLanguageTag($language);
+    }
+
+    if (!empty($language['hreflang'])) {
+      return $this->normalizeLanguageTag($language['hreflang']);
+    }
+
+    if (!empty($language['locale'])) {
+      $first = trim(explode(',', (string) $language['locale'])[0]);
+      $from_locale = $this->normalizeLanguageTag($first);
+
+      if ($from_locale !== '') {
+        return $from_locale;
+      }
+    }
+
+    if (!empty($language['code'])) {
+      return $this->normalizeLanguageTag($language['code']);
+    }
+
+    return '';
+  }
+
+  /**
+   * ISO 639-1 primary subtag for html lang.
+   *
+   * @param array|string $language Language row or code
+   * @return string
+   */
+  public function htmlLang($language)
+  {
+    $hreflang = $this->hreflangCode($language);
+    $parts = preg_split('/[-_]/', $hreflang, 2);
+
+    return strtolower($parts[0] ?? '');
+  }
+
+  /**
+   * Normalize any locale-like token to BCP 47 (uk_UA.UTF-8 → uk-UA, en → en).
+   *
+   * @param string $value
+   * @return string
+   */
+  public function normalizeLanguageTag($value)
+  {
+    $value = trim((string) $value);
+
+    if ($value === '') {
+      return '';
+    }
+
+    // Drop charset suffix: uk_UA.UTF-8 → uk_UA
+    $value = preg_replace('/\..*$/', '', $value);
+    $parts = preg_split('/[-_]/', $value);
+
+    if (!$parts || $parts[0] === '') {
+      return '';
+    }
+
+    $language = strtolower($parts[0]);
+
+    if (isset($parts[1]) && $parts[1] !== '' && preg_match('/^[A-Za-z]{2,4}$/', $parts[1])) {
+      return $language . '-' . strtoupper($parts[1]);
+    }
+
+    return $language;
+  }
 }

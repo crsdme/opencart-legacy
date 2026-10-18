@@ -155,11 +155,11 @@ class ModelProductHelper extends Model
 			'thumb' => $this->themeImage($product['image'] ?? '', $image_type),
 			'name' => $product['name'],
 			'description' =>
-				utf8_substr(
-					trim(strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8'))),
-					0,
-					$description_length,
-				) . '..',
+			utf8_substr(
+				trim(strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8'))),
+				0,
+				$description_length,
+			) . '..',
 			'price' => $this->formatPrice($product['price'], $product['tax_class_id']),
 			'special' => $special,
 			'tax' => $this->formatTax($tax_price),
@@ -367,36 +367,12 @@ class ModelProductHelper extends Model
 
 	public function addPaginationLinks(string $route, string $base_query, int $page, int $limit, int $total): void
 	{
-		if (!$this->config->get('config_canonical_method')) {
-			if ($page == 1) {
-				$this->document->addLink($this->url->link($route, $base_query), 'canonical');
-			} elseif ($page == 2) {
-				$this->document->addLink($this->url->link($route, $base_query), 'prev');
-			} else {
-				$this->document->addLink($this->url->link($route, $base_query . '&page=' . ($page - 1)), 'prev');
-			}
+		// Self-referencing canonical: page 1 without page=, page N with page=N.
+		// Sort/filter/limit stay out of $base_query so those variants collapse here.
+		$canonical_query = $page > 1 ? $base_query . '&page=' . $page : $base_query;
+		$this->document->addLink($this->url->link($route, $canonical_query), 'canonical');
 
-			if ($limit && ceil($total / $limit) > $page) {
-				$this->document->addLink($this->url->link($route, $base_query . '&page=' . ($page + 1)), 'next');
-			}
-
-			return;
-		}
-
-		$server =
-			isset($this->request->server['HTTPS']) &&
-			($this->request->server['HTTPS'] == 'on' || $this->request->server['HTTPS'] == '1')
-				? $this->config->get('config_ssl')
-				: $this->config->get('config_url');
-
-		$request_url = rtrim($server, '/') . $this->request->server['REQUEST_URI'];
-		$canonical_url = $this->url->link($route, $base_query);
-
-		if ($request_url != $canonical_url || $this->config->get('config_canonical_self')) {
-			$this->document->addLink($canonical_url, 'canonical');
-		}
-
-		if (!$this->config->get('config_add_prevnext')) {
+		if ($this->config->get('config_canonical_method') && !$this->config->get('config_add_prevnext')) {
 			return;
 		}
 

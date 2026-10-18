@@ -1120,6 +1120,7 @@ CREATE TABLE `oc_language` (
   `name` varchar(32) NOT NULL,
   `code` varchar(5) NOT NULL,
   `locale` varchar(255) NOT NULL,
+  `hreflang` varchar(16) NOT NULL DEFAULT '',
   `image` varchar(64) NOT NULL,
   `directory` varchar(32) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',

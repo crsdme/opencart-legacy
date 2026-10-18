@@ -1,7 +1,9 @@
 <?php
 class ModelLocalisationLanguage extends Model {
 	public function addLanguage($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "language SET name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', locale = '" . $this->db->escape($data['locale']) . "', sort_order = '" . (int)$data['sort_order'] . "', status = '" . (int)$data['status'] . "'");
+		$hreflang = isset($data['hreflang']) ? $data['hreflang'] : '';
+
+		$this->db->query("INSERT INTO " . DB_PREFIX . "language SET name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', locale = '" . $this->db->escape($data['locale']) . "', hreflang = '" . $this->db->escape($hreflang) . "', sort_order = '" . (int)$data['sort_order'] . "', status = '" . (int)$data['status'] . "'");
 
 		$this->cache->delete('catalog.language');
 		$this->cache->delete('admin.language');
@@ -201,8 +203,10 @@ class ModelLocalisationLanguage extends Model {
 
 	public function editLanguage($language_id, $data) {
 		$language_query = $this->db->query("SELECT `code` FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
+
+		$hreflang = isset($data['hreflang']) ? $data['hreflang'] : '';
 		
-		$this->db->query("UPDATE " . DB_PREFIX . "language SET name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', locale = '" . $this->db->escape($data['locale']) . "', sort_order = '" . (int)$data['sort_order'] . "', status = '" . (int)$data['status'] . "' WHERE language_id = '" . (int)$language_id . "'");
+		$this->db->query("UPDATE " . DB_PREFIX . "language SET name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', locale = '" . $this->db->escape($data['locale']) . "', hreflang = '" . $this->db->escape($hreflang) . "', sort_order = '" . (int)$data['sort_order'] . "', status = '" . (int)$data['status'] . "' WHERE language_id = '" . (int)$language_id . "'");
 
 		if ($language_query->row['code'] != $data['code']) {
 			$this->db->query("UPDATE " . DB_PREFIX . "setting SET value = '" . $this->db->escape($data['code']) . "' WHERE `key` = 'config_language' AND value = '" . $this->db->escape($language_query->row['code']) . "'");
@@ -279,6 +283,7 @@ class ModelLocalisationLanguage extends Model {
 						'name'        => $result['name'],
 						'code'        => $result['code'],
 						'locale'      => $result['locale'],
+						'hreflang'    => isset($result['hreflang']) ? $result['hreflang'] : '',
 						'image'       => $result['image'],
 						'directory'   => $result['directory'],
 						'sort_order'  => $result['sort_order'],

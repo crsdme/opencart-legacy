@@ -4,7 +4,7 @@
 			{% if language.active %}
 				<span class="button-secondary" data-size="small" data-active="true">{{ language.name }}</span>
 			{% else %}
-				<a class="button-secondary" data-size="small" href="{{ language.url }}" hreflang="{{ language.code }}">{{ language.name }}</a>
+				<a class="button-secondary" data-size="small" href="{{ language.url }}" hreflang="{{ language.hreflang }}">{{ language.name }}</a>
 			{% endif %}
 		{% endfor %}
 	</div>

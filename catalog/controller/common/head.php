@@ -60,7 +60,12 @@ class ControllerCommonHead extends Controller
     $data['scripts'] = $this->document->getScripts('header');
     $data['rendered_styles'] = '';
     $data['rendered_scripts'] = '';
-    $data['lang'] = $this->language->get('code');
+    $this->load->model('localisation/language');
+    $this->load->library('multilang');
+    $languages = $this->model_localisation_language->getLanguages();
+    $current_code = $this->config->get('config_language');
+    $current_language = isset($languages[$current_code]) ? $languages[$current_code] : ['code' => $current_code];
+    $data['lang'] = $this->multilang->htmlLang($current_language);
     $data['direction'] = $this->language->get('direction');
 
     $data['name'] = $this->config->get('config_name');
