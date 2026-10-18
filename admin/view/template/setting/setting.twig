@@ -1791,6 +1791,69 @@
 				  </div>
 				</div>
 			  </fieldset>
+			  <fieldset>
+				<legend>{{ text_microdata_product }}</legend>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label" for="input-microdata-return-days"><span data-toggle="tooltip" title="{{ help_microdata_return_days }}">{{ entry_microdata_return_days }}</span></label>
+				  <div class="col-sm-10">
+					<input type="number" name="config_microdata_return_days" value="{{ config_microdata_return_days }}" min="0" id="input-microdata-return-days" class="form-control" />
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label" for="input-microdata-return-fees"><span data-toggle="tooltip" title="{{ help_microdata_return_fees }}">{{ entry_microdata_return_fees }}</span></label>
+				  <div class="col-sm-10">
+					<select name="config_microdata_return_fees" id="input-microdata-return-fees" class="form-control">
+					  {% if config_microdata_return_fees == 'FreeReturn' %}
+					  <option value="FreeReturn" selected="selected">{{ text_microdata_return_free }}</option>
+					  {% else %}
+					  <option value="FreeReturn">{{ text_microdata_return_free }}</option>
+					  {% endif %}
+					  {% if config_microdata_return_fees == 'ReturnFeesCustomerResponsibility' %}
+					  <option value="ReturnFeesCustomerResponsibility" selected="selected">{{ text_microdata_return_customer }}</option>
+					  {% else %}
+					  <option value="ReturnFeesCustomerResponsibility">{{ text_microdata_return_customer }}</option>
+					  {% endif %}
+					  {% if config_microdata_return_fees == 'ReturnShippingFees' %}
+					  <option value="ReturnShippingFees" selected="selected">{{ text_microdata_return_shipping }}</option>
+					  {% else %}
+					  <option value="ReturnShippingFees">{{ text_microdata_return_shipping }}</option>
+					  {% endif %}
+					</select>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label" for="input-microdata-shipping-rate"><span data-toggle="tooltip" title="{{ help_microdata_shipping_rate }}">{{ entry_microdata_shipping_rate }}</span></label>
+				  <div class="col-sm-10">
+					<input type="text" name="config_microdata_shipping_rate" value="{{ config_microdata_shipping_rate }}" placeholder="0" id="input-microdata-shipping-rate" class="form-control" />
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_microdata_handling }}">{{ entry_microdata_handling }}</span></label>
+				  <div class="col-sm-10">
+					<div class="row">
+					  <div class="col-sm-6">
+						<input type="number" name="config_microdata_handling_min" value="{{ config_microdata_handling_min }}" min="0" placeholder="{{ entry_microdata_days_min }}" class="form-control" />
+					  </div>
+					  <div class="col-sm-6">
+						<input type="number" name="config_microdata_handling_max" value="{{ config_microdata_handling_max }}" min="0" placeholder="{{ entry_microdata_days_max }}" class="form-control" />
+					  </div>
+					</div>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_microdata_transit }}">{{ entry_microdata_transit }}</span></label>
+				  <div class="col-sm-10">
+					<div class="row">
+					  <div class="col-sm-6">
+						<input type="number" name="config_microdata_transit_min" value="{{ config_microdata_transit_min }}" min="0" placeholder="{{ entry_microdata_days_min }}" class="form-control" />
+					  </div>
+					  <div class="col-sm-6">
+						<input type="number" name="config_microdata_transit_max" value="{{ config_microdata_transit_max }}" min="0" placeholder="{{ entry_microdata_days_max }}" class="form-control" />
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </fieldset>
 			</div>
 			
 			

@@ -91,7 +91,13 @@ class ControllerCommonMicrodata extends Controller
 	private function getContext($data)
 	{
 		$store_url = $this->getStoreUrl();
-		$locale_code = $this->language->get('code');
+		$this->load->model('localisation/language');
+		$this->load->library('multilang');
+		$languages = $this->model_localisation_language->getLanguages();
+		$current_code = $this->config->get('config_language');
+		$current_language = isset($languages[$current_code]) ? $languages[$current_code] : ['code' => $current_code];
+		$hreflang = $this->multilang->hreflangCode($current_language);
+		$html_lang = $this->multilang->htmlLang($current_language);
 		$country = $this->getCountry();
 		$zone = $this->getZone();
 		$geo = $this->parseGeocode();
@@ -110,8 +116,8 @@ class ControllerCommonMicrodata extends Controller
 		}
 
 		return [
-			'locale' => $this->getOgLocale($locale_code),
-			'language' => $locale_code,
+			'locale' => $this->getOgLocale($hreflang),
+			'language' => $html_lang,
 			'title' => $title,
 			'description' => $description,
 			'url' => $this->getPageUrl($data),
@@ -368,7 +374,7 @@ class ControllerCommonMicrodata extends Controller
 		}
 
 		$name = html_entity_decode($product_info['name'], ENT_QUOTES, 'UTF-8');
-		$description = $this->plainText($product_info['meta_description'] ?: $product_info['description']);
+		$description = $this->productDescription($product_info, $name, $context);
 		$url = $this->url->link('product/product', 'product_id=' . $product_id);
 		$image = !empty($data['popup']) ? $data['popup'] : $context['image'];
 		$sku = $product_info['sku'] ?: $product_info['model'];
@@ -378,12 +384,16 @@ class ControllerCommonMicrodata extends Controller
 			'@type' => 'Product',
 			'name' => $name,
 			'url' => $url,
-			'description' => $description ?: null,
+			'description' => $description,
 			'sku' => $sku ?: null,
 			'mpn' => !empty($product_info['mpn']) ? $product_info['mpn'] : null,
 			'image' => $image ?: null,
 			'itemCondition' => 'https://schema.org/NewCondition',
 		];
+
+		foreach ($this->productIdentifiers($product_info) as $key => $value) {
+			$schema[$key] = $value;
+		}
 
 		if (!empty($product_info['manufacturer'])) {
 			$schema['brand'] = [
@@ -403,6 +413,12 @@ class ControllerCommonMicrodata extends Controller
 				'bestRating' => 5,
 				'worstRating' => 1,
 			];
+
+			$reviews = $this->productReviews($product_id);
+
+			if ($reviews) {
+				$schema['review'] = $reviews;
+			}
 		}
 
 		if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
@@ -427,9 +443,222 @@ class ControllerCommonMicrodata extends Controller
 					'@id' => $context['store_url'] . '#organization',
 				],
 			];
+
+			$return_policy = $this->merchantReturnPolicy($context);
+
+			if ($return_policy) {
+				$schema['offers']['hasMerchantReturnPolicy'] = $return_policy;
+			}
+
+			$shipping_details = $this->offerShippingDetails($context);
+
+			if ($shipping_details) {
+				$schema['offers']['shippingDetails'] = $shipping_details;
+			}
 		}
 
 		return $this->jsonLdBlock('Product JSON-LD', $schema);
+	}
+
+	private function productDescription(array $product_info, string $name, array $context): string
+	{
+		$candidates = [
+			$product_info['meta_description'] ?? '',
+			$product_info['description'] ?? '',
+			$context['description'] ?? '',
+			$name,
+		];
+
+		foreach ($candidates as $candidate) {
+			$text = $this->plainText($candidate);
+
+			if ($text !== '') {
+				return $text;
+			}
+		}
+
+		return $name;
+	}
+
+	private function productIdentifiers(array $product_info): array
+	{
+		$identifiers = [];
+
+		$map = [
+			'ean' => $product_info['ean'] ?? '',
+			'upc' => $product_info['upc'] ?? '',
+			'jan' => $product_info['jan'] ?? '',
+			'isbn' => $product_info['isbn'] ?? '',
+		];
+
+		foreach ($map as $source => $raw) {
+			$value = preg_replace('/\D+/', '', (string) $raw);
+
+			if ($value === '') {
+				continue;
+			}
+
+			if ($source === 'isbn') {
+				$identifiers['isbn'] = $value;
+
+				if (strlen($value) === 13) {
+					$identifiers['gtin13'] = $value;
+				}
+
+				continue;
+			}
+
+			$length = strlen($value);
+
+			if ($length === 8) {
+				$identifiers['gtin8'] = $value;
+			} elseif ($length === 12) {
+				$identifiers['gtin12'] = $value;
+			} elseif ($length === 13) {
+				$identifiers['gtin13'] = $value;
+			} elseif ($length === 14) {
+				$identifiers['gtin14'] = $value;
+			} else {
+				$identifiers['gtin'] = $value;
+			}
+		}
+
+		return $identifiers;
+	}
+
+	private function productReviews(int $product_id): array
+	{
+		$this->load->model('catalog/review');
+
+		$results = $this->model_catalog_review->getReviewsByProductId($product_id, 0, 10);
+		$reviews = [];
+
+		foreach ($results as $result) {
+			$text = $this->plainText($result['text'] ?? '');
+			$author = $this->plainText($result['author'] ?? '');
+			$rating = (int) ($result['rating'] ?? 0);
+
+			if ($text === '' || $author === '' || $rating < 1) {
+				continue;
+			}
+
+			$review = [
+				'@type' => 'Review',
+				'reviewRating' => [
+					'@type' => 'Rating',
+					'ratingValue' => $rating,
+					'bestRating' => 5,
+					'worstRating' => 1,
+				],
+				'author' => [
+					'@type' => 'Person',
+					'name' => $author,
+				],
+				'reviewBody' => $text,
+			];
+
+			if (!empty($result['date_added'])) {
+				$review['datePublished'] = date('Y-m-d', strtotime($result['date_added']));
+			}
+
+			$reviews[] = $review;
+		}
+
+		return $reviews;
+	}
+
+	private function merchantReturnPolicy(array $context): ?array
+	{
+		$country = $context['country_code'] ?? '';
+
+		if ($country === '') {
+			return null;
+		}
+
+		$days = $this->configInt('config_microdata_return_days', 14);
+		$fees = (string) $this->config->get('config_microdata_return_fees');
+
+		$allowed_fees = [
+			'FreeReturn',
+			'ReturnFeesCustomerResponsibility',
+			'ReturnShippingFees',
+		];
+
+		if (!in_array($fees, $allowed_fees, true)) {
+			$fees = 'ReturnFeesCustomerResponsibility';
+		}
+
+		$policy = [
+			'@type' => 'MerchantReturnPolicy',
+			'applicableCountry' => $country,
+			'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
+			'merchantReturnDays' => $days,
+			'returnMethod' => 'https://schema.org/ReturnByMail',
+			'returnFees' => 'https://schema.org/' . $fees,
+		];
+
+		$return_id = (int) $this->config->get('config_return_id');
+
+		if ($return_id > 0) {
+			$policy['merchantReturnLink'] = $this->url->link('information/information', 'information_id=' . $return_id);
+		}
+
+		return $policy;
+	}
+
+	private function offerShippingDetails(array $context): ?array
+	{
+		$country = $context['country_code'] ?? '';
+
+		if ($country === '') {
+			return null;
+		}
+
+		$rate = $this->config->has('config_microdata_shipping_rate')
+			? (float) $this->config->get('config_microdata_shipping_rate')
+			: 0.0;
+
+		$handling_min = $this->configInt('config_microdata_handling_min', 0);
+		$handling_max = max($handling_min, $this->configInt('config_microdata_handling_max', 1));
+		$transit_min = $this->configInt('config_microdata_transit_min', 1);
+		$transit_max = max($transit_min, $this->configInt('config_microdata_transit_max', 5));
+
+		return [
+			'@type' => 'OfferShippingDetails',
+			'shippingRate' => [
+				'@type' => 'MonetaryAmount',
+				'value' => number_format($rate, 2, '.', ''),
+				'currency' => $context['currency'],
+			],
+			'shippingDestination' => [
+				'@type' => 'DefinedRegion',
+				'addressCountry' => $country,
+			],
+			'deliveryTime' => [
+				'@type' => 'ShippingDeliveryTime',
+				'handlingTime' => [
+					'@type' => 'QuantitativeValue',
+					'minValue' => $handling_min,
+					'maxValue' => $handling_max,
+					'unitCode' => 'DAY',
+				],
+				'transitTime' => [
+					'@type' => 'QuantitativeValue',
+					'minValue' => $transit_min,
+					'maxValue' => $transit_max,
+					'unitCode' => 'DAY',
+				],
+			],
+		];
+	}
+
+	private function configInt(string $key, int $default): int
+	{
+		if (!$this->config->has($key) || $this->config->get($key) === '') {
+			return $default;
+		}
+
+		return max(0, (int) $this->config->get($key));
 	}
 
 	private function productListSchema($data)
@@ -837,11 +1066,13 @@ class ControllerCommonMicrodata extends Controller
 			'ua' => 'uk_UA',
 			'uk' => 'uk_UA',
 			'uk-ua' => 'uk_UA',
-			'ru' => 'ru_RU',
-			'ru-ru' => 'ru_RU',
+			'ru' => 'ru_UA',
+			'ru-ru' => 'ru_UA',
+			'ru-ua' => 'ru_UA',
 			'en' => 'en_US',
 			'en-gb' => 'en_GB',
 			'en-us' => 'en_US',
+			'en-ua' => 'en_UA',
 		];
 
 		$code = strtolower((string) $code);
