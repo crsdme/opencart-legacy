@@ -377,23 +377,6 @@
 		}, 50);
 	}
 
-	function openAgreeModal(link) {
-		if (typeof openModal !== 'function') {
-			return;
-		}
-
-		$.ajax({
-			url: link.href,
-			type: 'get',
-			dataType: 'html',
-			success: function (html) {
-				$('[data-checkout-agree-title]').text($(link).text());
-				$('[data-checkout-agree-body]').html(html);
-				openModal('#checkout-agree-modal');
-			},
-		});
-	}
-
 	function clearErrors() {
 		root.querySelectorAll('.form-message, .checkout-field-error').forEach(function (el) {
 			el.remove();
@@ -743,11 +726,6 @@
 		if (e.key === 'Enter') {
 			e.preventDefault();
 		}
-	});
-
-	$(root).on('click', 'a.agree', function (e) {
-		e.preventDefault();
-		openAgreeModal(this);
 	});
 
 	$(root).on('submit', function (e) {

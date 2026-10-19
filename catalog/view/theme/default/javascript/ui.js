@@ -207,6 +207,30 @@
 		closeModal();
 	});
 
+	// Information agree links (register, checkout, affiliate, return)
+
+	$(document).on('click', 'a.agree', function (e) {
+		e.preventDefault();
+
+		const link = this;
+		const modal = $('#agree-modal');
+
+		if (!modal.length) {
+			return;
+		}
+
+		$.ajax({
+			url: link.href,
+			type: 'get',
+			dataType: 'html',
+			success: function (html) {
+				modal.find('[data-agree-title]').text($(link).text());
+				modal.find('[data-agree-body]').html(html);
+				openModal('#agree-modal');
+			},
+		});
+	});
+
 	// Search
 
 	$('#search-button').on('click', function () {
