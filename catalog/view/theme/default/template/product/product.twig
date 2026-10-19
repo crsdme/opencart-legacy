@@ -166,7 +166,7 @@
 				{% if description %}
 					<section class="w-full {{ attribute_groups ? "lg:w-1/2" : "" }}" aria-labelledby="product-description-heading">
 						<div class="product-panel text-collapse" data-collapse>
-							<h2 id="product-description-heading" class="heading">{{ tab_description }}</h2>
+							<p id="product-description-heading" class="heading">{{ tab_description }}</p>
 							<div class="text-collapse-wrapper">
 								<div class="content-block text-collapse-content">
 									{{ description }}
@@ -189,10 +189,10 @@
 				{% if attribute_groups %}
 					<section class="w-full {{ description ? "lg:w-1/2" : "" }}" aria-labelledby="product-attributes-heading">
 						<div class="product-panel">
-							<h2 id="product-attributes-heading" class="heading">{{ tab_attribute }}</h2>
+							<p id="product-attributes-heading" class="heading">{{ tab_attribute }}</p>
 							{% for attribute_group in attribute_groups %}
 								<div class="product-attributes">
-									<h3 class="heading-6">{{ attribute_group.name }}</h3>
+									<p class="heading-6">{{ attribute_group.name }}</p>
 									<dl>
 										{% for attribute in attribute_group.attribute %}
 											<div class="product-attributes-row">
@@ -217,12 +217,12 @@
 			<section class="mb-10 mt-10" id="reviews" aria-labelledby="product-reviews-heading">
 				<div class="flex flex-col gap-8 lg:flex-row lg:items-start">
 					<div class="w-full lg:w-1/2">
-						<h2 id="product-reviews-heading" class="heading">{{ tab_review }}</h2>
+						<p id="product-reviews-heading" class="heading">{{ tab_review }}</p>
 						<div id="review" data-review-url="{{ review_url }}">{{ review|raw }}</div>
 					</div>
 
 					<form id="form-review" class="product-panel grid w-full gap-4 lg:w-1/2" data-write-url="{{ write_url }}">
-						<h3 class="heading-5 mb-0">{{ text_write }}</h3>
+						<p class="heading-5 mb-0">{{ text_write }}</p>
 
 						{% if review_guest %}
 							<div class="form-item">
@@ -257,7 +257,7 @@
 
 		{% if products %}
 			<section class="mt-10" aria-labelledby="product-related-heading">
-				<h2 id="product-related-heading" class="heading">{{ text_related }}</h2>
+				<p id="product-related-heading" class="heading">{{ text_related }}</p>
 				<div class="grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-3">
 					{% for product in products %}
 						{% include "default/components/product-card.twig" with {
