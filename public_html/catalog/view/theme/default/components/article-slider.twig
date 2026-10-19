@@ -7,29 +7,31 @@
 	<section class="my-8" aria-labelledby="{{ heading_id }}">
 		{% if slider %}
 			<style>
-				[data-slider="{{ heading_id }}"] {
-					--slide-gap: {{ config.gap }}px;
-				}
-
-				@media (max-width: {{ breakpoint }}px) {
+				@scope {
 					[data-slider="{{ heading_id }}"] {
-						--slide-gap: {{ config.gap_mobile }}px;
+						--slide-gap: {{ config.gap }}px;
 					}
 
-					[data-slider="{{ heading_id }}"] .carousel-slide {
-						flex-basis: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
-						width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
-						max-width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+					@media (max-width: {{ breakpoint }}px) {
+						[data-slider="{{ heading_id }}"] {
+							--slide-gap: {{ config.gap_mobile }}px;
+						}
+
+						[data-slider="{{ heading_id }}"] .carousel-slide {
+							flex-basis: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+							width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+							max-width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+						}
+
+						[data-slider-controls="{{ heading_id }}"].carousel-desktop-only {
+							display: none !important;
+						}
 					}
 
-					[data-slider-controls="{{ heading_id }}"].carousel-desktop-only {
-						display: none !important;
-					}
-				}
-
-				@media (min-width: {{ breakpoint_desktop }}px) {
-					[data-slider-controls="{{ heading_id }}"].carousel-mobile-only {
-						display: none !important;
+					@media (min-width: {{ breakpoint_desktop }}px) {
+						[data-slider-controls="{{ heading_id }}"].carousel-mobile-only {
+							display: none !important;
+						}
 					}
 				}
 			</style>
