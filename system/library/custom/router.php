@@ -372,15 +372,16 @@ class Router
         }
         break;
 
+      // AJAX / action methods: keep index.php?route=… (do not SEO-map product_id → product URL)
       case 'blog/article/review':
+      case 'blog/article/write':
       case 'product/product/review':
-        return [$url, $data, $postfix];
-        break;
-      case 'information/information/info':
-      case 'product/manufacturer/info':
-        break;
+      case 'product/product/write':
+      case 'common/search/searchProducts':
       case 'information/information/agree':
         return [$url, $data, $postfix];
+      case 'information/information/info':
+      case 'product/manufacturer/info':
         break;
       default:
         break;

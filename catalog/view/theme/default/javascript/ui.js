@@ -1,4 +1,4 @@
-// UI primitives — every page. Page scripts: catalog.js, product.js, live-search.js, phone-login.js, checkout.js
+// UI primitives — every page. Page scripts: catalog.js, product.js, review.js, live-search.js, phone-login.js, checkout.js
 (function ($) {
 	function debounce(fn, wait) {
 		let timeout;

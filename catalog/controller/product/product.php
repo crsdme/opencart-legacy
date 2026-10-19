@@ -36,6 +36,10 @@ class ControllerProductProduct extends Controller
 
 		$this->document->addScript('catalog/view/theme/default/javascript/product.js', 'footer');
 
+		if ($this->config->get('config_review_status')) {
+			$this->document->addScript('catalog/view/theme/default/javascript/review.js', 'footer');
+		}
+
 		$category_info = $this->getPathCategory();
 		$category_name = $this->getCategoryName($product_id, $category_info);
 		$minimum = $product_info['minimum'] > 0 ? (int) $product_info['minimum'] : 1;
@@ -98,7 +102,8 @@ class ControllerProductProduct extends Controller
 		$data['rating'] = (int) $product_info['rating'];
 		$data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);
 		$data['review_url'] = $this->url->link('product/product/review', 'product_id=' . $product_id);
-		$data['write_url'] = 'index.php?route=product/product/write&product_id=' . $product_id;
+		$data['write_url'] = $this->url->link('product/product/write', 'product_id=' . $product_id);
+		$data['review'] = $data['review_status'] ? $this->renderReviews($product_id) : '';
 		$data['captcha'] = $this->getReviewCaptcha();
 
 		$meta_price = $data['special'] ?: $data['price'] ?: '';
@@ -136,37 +141,10 @@ class ControllerProductProduct extends Controller
 
 	public function review()
 	{
-		$this->load->language('product/product');
-		$this->load->model('catalog/review');
-
 		$product_id = isset($this->request->get['product_id']) ? (int) $this->request->get['product_id'] : 0;
 		$page = isset($this->request->get['page']) ? (int) $this->request->get['page'] : 1;
-		$limit = 5;
 
-		$review_total = $this->model_catalog_review->getTotalReviewsByProductId($product_id);
-		$results = $this->model_catalog_review->getReviewsByProductId($product_id, ($page - 1) * $limit, $limit);
-
-		$data['reviews'] = [];
-
-		foreach ($results as $result) {
-			$data['reviews'][] = [
-				'author' => $result['author'],
-				'text' => nl2br($result['text']),
-				'rating' => (int) $result['rating'],
-				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
-			];
-		}
-
-		$data['pagination_data'] = [
-			'total' => $review_total,
-			'page' => $page,
-			'limit' => $limit,
-			'text_prev' => $this->language->get('text_prev'),
-			'text_next' => $this->language->get('text_next'),
-			'url' => $this->url->link('product/product/review', 'product_id=' . $product_id . '&page={page}'),
-		];
-
-		$this->response->setOutput($this->load->view('product/review', $data));
+		$this->response->setOutput($this->renderReviews($product_id, $page));
 	}
 
 	public function write()
@@ -562,6 +540,42 @@ class ControllerProductProduct extends Controller
 		}
 
 		return '';
+	}
+
+	private function renderReviews(int $product_id, int $page = 1): string
+	{
+		$this->load->language('product/product');
+		$this->load->model('catalog/review');
+
+		if ($page < 1) {
+			$page = 1;
+		}
+
+		$limit = 5;
+		$review_total = $this->model_catalog_review->getTotalReviewsByProductId($product_id);
+		$results = $this->model_catalog_review->getReviewsByProductId($product_id, ($page - 1) * $limit, $limit);
+
+		$data['reviews'] = [];
+
+		foreach ($results as $result) {
+			$data['reviews'][] = [
+				'author' => $result['author'],
+				'text' => nl2br($result['text']),
+				'rating' => (int) $result['rating'],
+				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+			];
+		}
+
+		$data['pagination_data'] = [
+			'total' => $review_total,
+			'page' => $page,
+			'limit' => $limit,
+			'text_prev' => $this->language->get('text_prev'),
+			'text_next' => $this->language->get('text_next'),
+			'url' => $this->url->link('product/product/review', 'product_id=' . $product_id . '&page={page}'),
+		];
+
+		return $this->load->view('product/review', $data);
 	}
 
 	private function queryUrl(array $keys): string

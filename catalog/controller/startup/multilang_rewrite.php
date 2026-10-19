@@ -42,14 +42,21 @@ class ControllerStartupMultilangRewrite extends Controller
 			return $link;
 		}
 
+		$path_raw = isset($parsed['path']) ? $parsed['path'] : '';
+		$query_suffix = $query !== '' ? '?' . $query : '';
+		$frag = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
+
+		// Keep unre-written index.php?route=… flat. Language is session/cookie; a /{code}/index.php
+		// prefix makes SEO treat the request as a path and can overwrite the route (e.g. reviews).
+		$is_index_php = $path === 'index.php' || substr($path, -10) === '/index.php';
+		if ($is_index_php && $query !== '' && preg_match('/(?:^|&)route=/', $query)) {
+			return $link;
+		}
+
 		$this->load->model('localisation/language');
 
 		$codes = array_keys($this->model_localisation_language->getLanguages());
 		$segments = $path === '' ? [] : explode('/', $path);
-
-		$path_raw = isset($parsed['path']) ? $parsed['path'] : '';
-		$query_suffix = $query !== '' ? '?' . $query : '';
-		$frag = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
 
 		// SeoPro stores common/home as the language code (en, ru). That URL is already the prefix.
 		if (isset($segments[0]) && in_array(strtolower($segments[0]), $codes, true)) {

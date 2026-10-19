@@ -101,8 +101,13 @@ class ControllerBlogArticle extends Controller
 		$data['rating'] = (int) $article_info['rating'];
 		$data['tab_review'] = sprintf($this->language->get('tab_review'), (int) $article_info['reviews']);
 		$data['review_url'] = $this->url->link('blog/article/review', 'article_id=' . $article_id);
-		$data['write_url'] = 'index.php?route=blog/article/write&article_id=' . $article_id;
+		$data['write_url'] = $this->url->link('blog/article/write', 'article_id=' . $article_id);
+		$data['review'] = $data['review_status'] ? $this->renderReviews($article_id) : '';
 		$data['captcha'] = $this->getReviewCaptcha();
+
+		if ($data['review_status']) {
+			$this->document->addScript('catalog/view/theme/default/javascript/review.js', 'footer');
+		}
 
 		$data['articles'] = [];
 
@@ -196,37 +201,10 @@ class ControllerBlogArticle extends Controller
 
 	public function review()
 	{
-		$this->load->language('blog/article');
-		$this->load->model('blog/review');
-		$this->load->model('blog/helper');
-
 		$article_id = isset($this->request->get['article_id']) ? (int) $this->request->get['article_id'] : 0;
 		$page = isset($this->request->get['page']) ? (int) $this->request->get['page'] : 1;
-		$limit = 5;
 
-		$review_total = $this->model_blog_review->getTotalReviewsByArticleId($article_id);
-		$results = $this->model_blog_review->getReviewsByArticleId($article_id, ($page - 1) * $limit, $limit);
-
-		$data['reviews'] = [];
-
-		foreach ($results as $result) {
-			$data['reviews'][] = [
-				'author' => $result['author'],
-				'text' => nl2br($result['text']),
-				'rating' => (int) $result['rating'],
-				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
-			];
-		}
-
-		$data['pagination_data'] = $this->model_blog_helper->getPaginationData(
-			'blog/article/review',
-			'article_id=' . $article_id,
-			$review_total,
-			$page,
-			$limit,
-		);
-
-		$this->response->setOutput($this->load->view('blog/review', $data));
+		$this->response->setOutput($this->renderReviews($article_id, $page));
 	}
 
 	public function write()
@@ -286,6 +264,42 @@ class ControllerBlogArticle extends Controller
 		}
 
 		return '';
+	}
+
+	private function renderReviews(int $article_id, int $page = 1): string
+	{
+		$this->load->language('blog/article');
+		$this->load->model('blog/review');
+
+		if ($page < 1) {
+			$page = 1;
+		}
+
+		$limit = 5;
+		$review_total = $this->model_blog_review->getTotalReviewsByArticleId($article_id);
+		$results = $this->model_blog_review->getReviewsByArticleId($article_id, ($page - 1) * $limit, $limit);
+
+		$data['reviews'] = [];
+
+		foreach ($results as $result) {
+			$data['reviews'][] = [
+				'author' => $result['author'],
+				'text' => nl2br($result['text']),
+				'rating' => (int) $result['rating'],
+				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+			];
+		}
+
+		$data['pagination_data'] = [
+			'total' => $review_total,
+			'page' => $page,
+			'limit' => $limit,
+			'text_prev' => $this->language->get('text_prev'),
+			'text_next' => $this->language->get('text_next'),
+			'url' => $this->url->link('blog/article/review', 'article_id=' . $article_id . '&page={page}'),
+		];
+
+		return $this->load->view('blog/review', $data);
 	}
 
 	private function notFound(int $article_id): void
