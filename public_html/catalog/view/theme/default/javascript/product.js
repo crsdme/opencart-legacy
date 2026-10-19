@@ -1,4 +1,4 @@
-// Product page — gallery, sticky columns, reviews, options
+// Product page — gallery, sticky columns, options (reviews: review.js)
 (function ($) {
 	const hero = document.querySelector('.product-hero');
 
@@ -64,59 +64,6 @@
 		$('#product-image').attr('src', src);
 		$('[data-product-image]').removeAttr('data-active');
 		$(this).attr('data-active', 'true');
-	});
-
-	const $review = $('#review');
-	const reviewUrl = $review.data('review-url');
-
-	if ($review.length && reviewUrl) {
-		$review.load(reviewUrl);
-
-		$review.on('click', '.pagination a', function (e) {
-			e.preventDefault();
-			$review.load(this.href);
-		});
-	}
-
-	$('#form-review').on('submit', function (e) {
-		e.preventDefault();
-	});
-
-	$('#button-review').on('click', function () {
-		const writeUrl =
-			$('#form-review').attr('data-write-url') ||
-			'index.php?route=product/product/write&product_id=' + $('input[name="product_id"]').val();
-
-		$.ajax({
-			url: writeUrl,
-			type: 'post',
-			dataType: 'json',
-			data: $('#form-review').serialize(),
-			success: function (json) {
-				if (json.error) {
-					sendToast({
-						title: json.error,
-						type: 'error',
-						align: 'right-bottom',
-						timeout: 4000,
-					});
-					return;
-				}
-
-				if (json.success) {
-					sendToast({
-						title: json.success,
-						type: 'success',
-						align: 'right-bottom',
-						timeout: 4000,
-					});
-
-					$('#form-review textarea').val('');
-					$('#form-review input[name="rating"]').prop('checked', false);
-					$('#review').load($('#review').data('review-url'));
-				}
-			},
-		});
 	});
 
 	$('select[name="recurring_id"], #input-quantity').on('change', function () {

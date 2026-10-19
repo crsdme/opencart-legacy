@@ -17,11 +17,7 @@ class ControllerCommonSearch extends Controller
 		$data['text_live_search_loading'] = $this->language->get('text_live_search_loading');
 		$data['text_live_search_error'] = $this->language->get('text_live_search_error');
 		$data['language'] = $this->config->get('config_language');
-		// Avoid language-prefixed url->link(): /en/index.php gets SEO-rewritten and redirected to home
-		$base = (!empty($this->request->server['HTTPS']) && $this->request->server['HTTPS'] !== 'off')
-			? $this->config->get('config_ssl')
-			: $this->config->get('config_url');
-		$data['live_search_url'] = rtrim($base, '/') . '/index.php?route=common/search/searchProducts';
+		$data['live_search_url'] = $this->url->link('common/search/searchProducts');
 
 		if (isset($this->request->get['search'])) {
 			$data['search'] = $this->request->get['search'];

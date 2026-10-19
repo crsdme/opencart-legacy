@@ -102,6 +102,7 @@ On each `$this->url->link(...)`:
 - Reads **config_language** only.
 - If language = main → home becomes `/`, other links stay.
 - If language ≠ main → prefix `/$code/...` is added when missing.
+- Exception: unre-written `index.php?route=…` stays flat (no `/$code/index.php`) — language from session; prefixing breaks AJAX actions.
 - **session is not read or written** — links use **config_language** only.
 
 ---

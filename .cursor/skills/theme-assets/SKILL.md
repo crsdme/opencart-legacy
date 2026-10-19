@@ -23,6 +23,7 @@ Theme root: `public_html/catalog/view/theme/default`.
 | Every store page, UI primitive | `stylesheet/ui.css` | `javascript/ui.js` | Imported / footer.php |
 | Catalog chrome (header, footer, listings, cards) | `stylesheet/catalog.css` | `javascript/catalog.js` | Imported / footer.php |
 | Product page | `stylesheet/product.css` | `javascript/product.js` | CSS imported; JS `addScript` in `controller/product/product.php` |
+| Reviews (product + blog article) | — | `javascript/review.js` | `addScript` when review_status is on |
 | Live search | `stylesheet/live-search.css` | `javascript/live-search.js` | CSS imported; JS `addScript` in `controller/common/search.php` |
 | Phone login | `stylesheet/phone-login.css` | `javascript/phone-login.js` | CSS imported; JS via `system/library/custom/account.php` |
 | Checkout | `stylesheet/checkout.css` | `javascript/checkout.js` | Both `addStyle` / `addScript` in `controller/checkout/checkout.php` |
