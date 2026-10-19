@@ -74,7 +74,9 @@ function usage() {
 		'--password', 'admin',
 		'--email', 'youremail@example.com',
 		'--http_server', 'http://localhost/opencart/',
-		'--sample_data', '0'
+		'--sample_data', '0',
+		'--languages', 'ua,ru',
+		'--language_main', 'ua'
 	));
 	echo 'php cli_install.php install ' . $options . "\n\n";
 }
@@ -89,6 +91,8 @@ function get_options($argv) {
 		'db_port' => '3306',
 		'username' => 'admin',
 		'sample_data' => '0',
+		'languages' => 'ua,ru',
+		'language_main' => 'ua',
 	);
 
 	$options = array();
@@ -238,11 +242,35 @@ function setup_db($data) {
 		apply_sql_file($db, $file, $prefix);
 	}
 
+	require_once DIR_APPLICATION . 'model/install/language_copy.php';
+
+	$extra = array();
+
+	if (!empty($data['languages'])) {
+		$extra = is_array($data['languages']) ? $data['languages'] : preg_split('/\s*,\s*/', (string)$data['languages']);
+	} else {
+		$extra = array('ua', 'ru');
+	}
+
+	$main = !empty($data['language_main']) ? $data['language_main'] : 'ua';
+
+	list($installed, $main_code) = install_apply_languages($db, $prefix, 'apply_sql_file', $sql_dir, $extra, $main);
+
 	$sample_data = !empty($data['sample_data']);
 
 	if ($sample_data) {
 		foreach (sql_files($sql_dir . 'demo') as $file) {
 			apply_sql_file($db, $file, $prefix);
+		}
+
+		install_remap_demo_languages($db, $prefix, isset($installed['ua']));
+
+		foreach ($installed as $code => $language_id) {
+			if ($code === 'en' || !(int)$language_id) {
+				continue;
+			}
+
+			install_copy_language($db, $prefix, 1, (int)$language_id, $code);
 		}
 	} else {
 		$db->query("UPDATE `" . $prefix . "setting` SET `value` = '0' WHERE `key` = 'configblog_blog_menu'");
@@ -250,6 +278,8 @@ function setup_db($data) {
 		$db->query("INSERT INTO `" . $prefix . "setting` SET `store_id` = '0', `code` = 'config', `key` = 'config_pages_blog', `value` = '0', `serialized` = '0'");
 		$db->query("UPDATE `" . $prefix . "modification` SET `status` = '0'");
 	}
+
+	install_set_main_language($db, $prefix, $installed, $main_code);
 
 	$db->query("SET CHARACTER SET utf8");
 
@@ -274,10 +304,7 @@ function setup_db($data) {
 	$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_api_id'");
 	$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `code` = 'config', `key` = 'config_api_id', value = '" . (int)$api_id . "'");
 
-	require_once DIR_APPLICATION . 'model/install/language_copy.php';
-
 	install_api_ips($db, $data['db_prefix'], $api_id, array('127.0.0.1', '::1'));
-	install_copy_language($db, $data['db_prefix'], 1, 3, 'ru');
 }
 
 

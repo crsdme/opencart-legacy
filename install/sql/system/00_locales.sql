@@ -270,9 +270,7 @@ INSERT INTO `oc_geo_zone` (`geo_zone_id`, `name`, `description`, `date_modified`
 (4, 'UK Shipping', 'UK Shipping Zones', '2010-12-15 15:18:13', '2009-06-23 01:14:53');
 
 INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `hreflang`, `image`, `directory`, `sort_order`, `status`) VALUES
-(1, 'Українська', 'ua', 'uk_UA.UTF-8,uk_UA,uk-ua,uk,ukrainian', 'uk-UA', 'uk-ua.png', 'ua', 1, 1),
-(2, 'English', 'en', 'en-US,en_US.UTF-8,en_US,en-gb,english', 'en', 'en.png', 'en', 2, 1),
-(3, 'Русский', 'ru', 'ru_UA.UTF-8,ru_UA,ru-ua,ru,russian', 'ru-UA', 'ru.png', 'ru', 3, 1);
+(1, 'English', 'en', 'en-US,en_US.UTF-8,en_US,en-gb,english', 'en', 'en.png', 'en', 1, 1);
 
 INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1, 1, 'Badakhshan', 'BDS', 1),

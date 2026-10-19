@@ -6,16 +6,24 @@ $_['heading_title']          = 'Configuration';
 $_['text_step_3']            = 'Enter your database and administration details';
 $_['text_db_connection']     = '1. Please enter your database connection details.';
 $_['text_db_administration'] = '2. Please enter a username and password for the administration.';
-$_['text_store_content']     = '3. Choose starter content.';
+$_['text_store_content']     = '3. Choose languages and starter content.';
 $_['text_sample_data_empty'] = 'Empty store';
 $_['text_sample_data_empty_help'] = 'System tables, locales, statuses, legal pages, layouts and core extensions. No products, categories, blog posts, banners or homepage modules. Blog storefront pages and modifications stay off.';
 $_['text_sample_data_demo']  = 'Demo catalog';
 $_['text_sample_data_demo_help'] = 'Sample products, categories, manufacturers, blog articles, banners and homepage carousels.';
+$_['text_languages_help']    = 'English is always installed. Optional languages load a translation pack when available, otherwise English texts are copied.';
+$_['text_language_en']       = 'English';
+$_['text_language_required'] = 'required';
+$_['text_language_pack']     = 'translation pack';
+$_['text_language_copy']     = 'copied from English';
+$_['text_language_main_help']= 'Storefront URLs for this language have no /code/ prefix.';
 $_['text_mysqli']            = 'MySQLi';
 $_['text_pdo']               = 'PDO';
 $_['text_pgsql']             = 'PostgreSQL';
 
 // Entry
+$_['entry_languages']        = 'Extra languages';
+$_['entry_language_main']    = 'Main language';
 $_['entry_sample_data']      = 'Starter data';
 $_['entry_db_driver']        = 'DB Driver';
 $_['entry_db_hostname']      = 'Hostname';

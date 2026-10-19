@@ -145,11 +145,11 @@ class ControllerCommonCart extends Controller
 		$quantity = (int) ($this->request->post['quantity'] ?? 1);
 		$this->cart->add($this->request->post['product_id'], $quantity);
 
+		$json['title'] = $this->language->get('text_added');
+		$json['description'] = $this->language->get('text_cart_updated');
 		$json['success'] = sprintf(
 			$this->language->get('text_success'),
-			$this->url->link('product/product', 'product_id=' . $this->request->post['product_id']),
-			$product_info['name'],
-			$this->url->link('checkout/cart'),
+			$product_info ? $product_info['name'] : '',
 		);
 
 		$json['total'] = $this->cart->countProducts();

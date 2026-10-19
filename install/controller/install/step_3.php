@@ -108,10 +108,18 @@ class ControllerInstallStep3 extends Controller {
 		$data['text_sample_data_empty_help'] = $this->language->get('text_sample_data_empty_help');
 		$data['text_sample_data_demo'] = $this->language->get('text_sample_data_demo');
 		$data['text_sample_data_demo_help'] = $this->language->get('text_sample_data_demo_help');
+		$data['text_languages_help'] = $this->language->get('text_languages_help');
+		$data['text_language_en'] = $this->language->get('text_language_en');
+		$data['text_language_required'] = $this->language->get('text_language_required');
+		$data['text_language_pack'] = $this->language->get('text_language_pack');
+		$data['text_language_copy'] = $this->language->get('text_language_copy');
+		$data['text_language_main_help'] = $this->language->get('text_language_main_help');
 		$data['text_mysqli'] = $this->language->get('text_mysqli');
 		$data['text_mpdo'] = $this->language->get('text_mpdo');
 		$data['text_pgsql'] = $this->language->get('text_pgsql');
 
+		$data['entry_languages'] = $this->language->get('entry_languages');
+		$data['entry_language_main'] = $this->language->get('entry_language_main');
 		$data['entry_sample_data'] = $this->language->get('entry_sample_data');
 		$data['entry_db_driver'] = $this->language->get('entry_db_driver');
 		$data['entry_db_hostname'] = $this->language->get('entry_db_hostname');
@@ -270,6 +278,33 @@ class ControllerInstallStep3 extends Controller {
 			$data['sample_data'] = '1';
 		} else {
 			$data['sample_data'] = '0';
+		}
+
+		$pack_dir = DIR_APPLICATION . 'sql/languages/';
+		$known = array(
+			'ua' => 'Українська',
+			'ru' => 'Русский',
+		);
+		$data['install_languages'] = array();
+
+		foreach ($known as $code => $name) {
+			$data['install_languages'][] = array(
+				'code' => $code,
+				'name' => $name,
+				'has_pack' => is_file($pack_dir . $code . '.sql'),
+			);
+		}
+
+		if (isset($this->request->post['languages']) && is_array($this->request->post['languages'])) {
+			$data['languages'] = $this->request->post['languages'];
+		} else {
+			$data['languages'] = array('ua', 'ru');
+		}
+
+		if (isset($this->request->post['language_main'])) {
+			$data['language_main'] = $this->request->post['language_main'];
+		} else {
+			$data['language_main'] = 'ua';
 		}
 
 		$data['back'] = $this->url->link('install/step_2');
