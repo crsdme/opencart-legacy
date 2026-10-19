@@ -62,7 +62,8 @@ OpenCart (ocStore) — движок. Tailwind и Docker — обвязка. Пл
     - снимает префикс с `_route_` до SEO.
 - Сборка ссылок: `public_html/catalog/controller/startup/multilang_rewrite.php`:
     - основной язык — чистые URL,
-    - остальные — `/{code}/...`.
+    - остальные — `/{code}/...`,
+    - непереписанные `index.php?route=…` остаются без префикса (язык из session; `/{code}/index.php` ломает AJAX — отзывы, live search).
 - Hreflang: `public_html/catalog/controller/event/hreflang.php`. Колонка — из install / upgrade `1011` (не в runtime).
 - `<html lang>` — primary subtag из вычисленного hreflang.
 
@@ -106,6 +107,7 @@ OpenCart (ocStore) — движок. Tailwind и Docker — обвязка. Пл
 - Robots: `noindex` сущности (при `config_noindex_status`) или явный `robots` (поиск, 404).
 - Canonical + prev/next листингов: `catalog/model/product/helper.php::addPaginationLinks()` — self-referencing canonical (стр. 1 без `page`, стр. N с `page=N`); sort/filter/limit в canonical не входят.
 - Суффикс страницы (`title_page`) при `page > 1`.
+- SEO-текст листинга (`description` категории / производителя / категории блога) выводится только на первой странице; на страницах пагинации 2+ он скрыт, чтобы не дублировать контент.
 - Description чистится от HTML и режется до 160 символов.
 - `common/microdata` читает те же title/description document, OpenGraph следует сам.
 

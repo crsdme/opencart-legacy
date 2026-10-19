@@ -102,7 +102,9 @@ class ControllerProductManufacturer extends Controller
       'href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer_id),
     ];
 
-    $data['description'] = html_entity_decode($manufacturer_info['description'], ENT_QUOTES, 'UTF-8');
+    $data['description'] = $params['page'] > 1
+      ? ''
+      : html_entity_decode($manufacturer_info['description'], ENT_QUOTES, 'UTF-8');
     $data['thumb'] = $this->getManufacturerThumb($manufacturer_info);
     $data['compare'] = $this->url->link('product/compare');
     $data['continue'] = $this->url->link('common/home');

@@ -62,7 +62,8 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
     - strips prefix from `_route_` before SEO route resolving.
 - URL prefix generation for links happens in `public_html/catalog/controller/startup/multilang_rewrite.php`:
     - main language keeps clean URLs,
-    - non-main language gets `/{code}/...`.
+    - non-main language gets `/{code}/...`,
+    - unre-written `index.php?route=…` links stay flat (no `/{code}/index.php`) — language from session; prefixing breaks AJAX actions (reviews, live search).
 - Hreflang links: `public_html/catalog/controller/event/hreflang.php`. Column added by install / upgrade `1011` (not at runtime).
 - `<html lang>` uses the primary subtag from the resolved hreflang value.
 
@@ -104,6 +105,7 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
 - Robots: entity `noindex` (with `config_noindex_status`) or explicit `robots` (search, 404).
 - Listing canonical + prev/next: `catalog/model/product/helper.php::addPaginationLinks()` — self-referencing canonical (page 1 without `page`, page N with `page=N`); sort/filter/limit stay out of canonical.
 - Page suffix (`title_page`) is appended when `page > 1`.
+- Listing SEO body text (category / manufacturer / blog category `description`) is output on page 1 only; pagination pages 2+ omit it to avoid duplicate content.
 - Description is stripped of HTML and trimmed to 160 characters.
 - `common/microdata` reads the same `document` title/description, so OpenGraph follows automatically.
 

@@ -99,9 +99,11 @@
 			</section>
 		{% endif %}
 
-		<div class="content-block mb-4">
-			{{ description }}
-		</div>
+		{% if description %}
+			<div class="content-block mb-4">
+				{{ description }}
+			</div>
+		{% endif %}
 
 		{% include "default/components/faq.twig" %}
 

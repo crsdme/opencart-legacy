@@ -75,7 +75,9 @@ class ControllerBlogCategory extends Controller
 			$data['thumb'] = '';
 		}
 
-		$data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
+		$data['description'] = $page > 1
+			? ''
+			: html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
 
 		$url = $this->model_product_helper->buildUrl($this->request->get, ['sort', 'order', 'limit']);
 
