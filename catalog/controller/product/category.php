@@ -71,7 +71,9 @@ class ControllerProductCategory extends Controller
     $data['limit'] = $params['limit'];
 
     $data['thumb'] = $this->getCategoryThumb($category_info);
-    $data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
+    $data['description'] = $params['page'] > 1
+      ? ''
+      : html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
     $data['compare'] = $this->url->link('product/compare');
     $data['categories'] = $this->getChildCategories($category_id, $path_param, $product_url);
 
