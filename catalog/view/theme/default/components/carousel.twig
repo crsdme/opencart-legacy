@@ -27,23 +27,25 @@
 {% set breakpoint_desktop = breakpoint + 1 %}
 
 <style>
-	@media (max-width: {{ breakpoint }}px) {
-		[data-carousel="{{ config.id }}"] .carousel-slide {
-			flex-basis: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
-			width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
-			max-width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+	@scope {
+		@media (max-width: {{ breakpoint }}px) {
+			[data-carousel="{{ config.id }}"] .carousel-slide {
+				flex-basis: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+				width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+				max-width: calc((100% - (var(--slides-mobile, 1) - 1) * var(--slide-gap, 0px)) / var(--slides-mobile, 1));
+			}
+
+			[data-carousel-dots="{{ config.id }}"].carousel-desktop-only,
+			[data-carousel-controls="{{ config.id }}"].carousel-desktop-only {
+				display: none !important;
+			}
 		}
 
-		[data-carousel-dots="{{ config.id }}"].carousel-desktop-only,
-		[data-carousel-controls="{{ config.id }}"].carousel-desktop-only {
-			display: none !important;
-		}
-	}
-
-	@media (min-width: {{ breakpoint_desktop }}px) {
-		[data-carousel-dots="{{ config.id }}"].carousel-mobile-only,
-		[data-carousel-controls="{{ config.id }}"].carousel-mobile-only {
-			display: none !important;
+		@media (min-width: {{ breakpoint_desktop }}px) {
+			[data-carousel-dots="{{ config.id }}"].carousel-mobile-only,
+			[data-carousel-controls="{{ config.id }}"].carousel-mobile-only {
+				display: none !important;
+			}
 		}
 	}
 </style>
