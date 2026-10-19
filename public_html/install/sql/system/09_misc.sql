@@ -20,12 +20,6 @@ INSERT INTO `oc_voucher_theme` (`voucher_theme_id`, `image`) VALUES
 (6, 'catalog/demo/apple_logo.jpg');
 
 INSERT INTO `oc_voucher_theme_description` (`voucher_theme_id`, `language_id`, `name`) VALUES
-(6, 1, 'Новий Рік'),
-(7, 1, 'День народження'),
-(8, 1, 'Подарунок'),
-(6, 2, 'Christmas'),
-(7, 2, 'Birthday'),
-(8, 2, 'General'),
-(6, 3, 'Новый год'),
-(7, 3, 'День рождения'),
-(8, 3, 'Подарок');
+(6, 1, 'Christmas'),
+(7, 1, 'Birthday'),
+(8, 1, 'General');

@@ -12,11 +12,35 @@ class ModelInstallInstall extends Model {
 			$this->applySqlFile($db, $file, $prefix);
 		}
 
+		require_once DIR_APPLICATION . 'model/install/language_copy.php';
+
+		$extra = isset($data['languages']) ? (array)$data['languages'] : array('ua', 'ru');
+		$main = !empty($data['language_main']) ? $data['language_main'] : 'ua';
+
+		list($installed, $main_code) = install_apply_languages(
+			$db,
+			$prefix,
+			array($this, 'applySqlFilePublic'),
+			$sql_dir,
+			$extra,
+			$main
+		);
+
 		$sample_data = !empty($data['sample_data']);
 
 		if ($sample_data) {
 			foreach ($this->sqlFiles($sql_dir . 'demo') as $file) {
 				$this->applySqlFile($db, $file, $prefix);
+			}
+
+			install_remap_demo_languages($db, $prefix, isset($installed['ua']));
+
+			foreach ($installed as $code => $language_id) {
+				if ($code === 'en' || !(int)$language_id) {
+					continue;
+				}
+
+				install_copy_language($db, $prefix, 1, (int)$language_id, $code);
 			}
 		} else {
 			$db->query("UPDATE `" . $prefix . "setting` SET `value` = '0' WHERE `key` = 'configblog_blog_menu'");
@@ -24,6 +48,8 @@ class ModelInstallInstall extends Model {
 			$db->query("INSERT INTO `" . $prefix . "setting` SET `store_id` = '0', `code` = 'config', `key` = 'config_pages_blog', `value` = '0', `serialized` = '0'");
 			$db->query("UPDATE `" . $prefix . "modification` SET `status` = '0'");
 		}
+
+		install_set_main_language($db, $prefix, $installed, $main_code);
 
 		$db->query("SET CHARACTER SET utf8");
 
@@ -48,8 +74,6 @@ class ModelInstallInstall extends Model {
 		$db->query("DELETE FROM `" . $prefix . "setting` WHERE `key` = 'config_api_id'");
 		$db->query("INSERT INTO `" . $prefix . "setting` SET `code` = 'config', `key` = 'config_api_id', value = '" . (int)$api_id . "'");
 
-		require_once DIR_APPLICATION . 'model/install/language_copy.php';
-
 		$ips = array('127.0.0.1', '::1');
 
 		if (!empty($this->request->server['REMOTE_ADDR'])) {
@@ -57,10 +81,12 @@ class ModelInstallInstall extends Model {
 		}
 
 		install_api_ips($db, $prefix, $api_id, $ips);
-		install_copy_language($db, $prefix, 1, 3, 'ru');
 
-		// set the current years prefix
 		$db->query("UPDATE `" . $prefix . "setting` SET `value` = 'INV-" . date('Y') . "-00' WHERE `key` = 'config_invoice_prefix'");
+	}
+
+	public function applySqlFilePublic($db, $file, $prefix) {
+		$this->applySqlFile($db, $file, $prefix);
 	}
 
 	private function sqlFiles($directory) {

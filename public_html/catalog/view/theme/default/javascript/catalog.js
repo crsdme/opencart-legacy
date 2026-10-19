@@ -70,10 +70,14 @@
 		$('#cart-modal-totals').html(getHtmlPart(html, '#cart-modal-totals'));
 	}
 
+	function cartModalText(key, fallback) {
+		return $('#cart-modal').data(key) || fallback;
+	}
+
 	function handleCartModalError(xhr, status) {
 		if (status === 'abort') return;
 
-		$('#cart-modal-products').html('<p>Не удалось обновить корзину</p>');
+		$('#cart-modal-products').html('<p>' + cartModalText('text-error-update', 'Could not update the cart') + '</p>');
 		$('#cart-modal-totals').empty();
 	}
 
@@ -101,7 +105,7 @@
 			error: function (xhr, status) {
 				if (status === 'abort') return;
 
-				$('#cart-modal-products').html('<p>Не удалось загрузить корзину</p>');
+				$('#cart-modal-products').html('<p>' + cartModalText('text-error-load', 'Could not load the cart') + '</p>');
 				$('#cart-modal-totals').empty();
 			},
 		});
@@ -114,7 +118,10 @@
 			}
 
 			sendToast({
-				title: typeof json.error === 'string' ? json.error : 'Could not add to cart',
+				title:
+					typeof json.error === 'string'
+						? json.error
+						: json.title || cartModalText('text-error-add', 'Could not add to cart'),
 				type: 'error',
 				align: 'right-bottom',
 				timeout: 4000,
@@ -124,8 +131,8 @@
 		}
 
 		sendToast({
-			title: 'Product added to cart',
-			description: 'The cart has been updated',
+			title: json.title || json.success || 'Product added to cart',
+			description: json.description || '',
 			align: 'right-bottom',
 			timeout: 4000,
 		});

@@ -1,6 +1,7 @@
 -- ---------------------------------------------------------
 -- OpenTail install SQL
--- SEO keywords for system routes and information pages.
+-- SEO keywords for system routes (English, language_id = 1).
+-- Extra languages: install/sql/languages/{code}.sql or language_copy.
 -- ---------------------------------------------------------
 
 SET sql_mode = '';
@@ -43,50 +44,8 @@ INSERT INTO `oc_seo_url` (`seo_url_id`, `store_id`, `language_id`, `query`, `key
 (635, 0, 1, 'affiliate/register', 'create-affiliate-account'),
 (636, 0, 1, 'affiliate/login', 'affiliate-login'),
 (637, 0, 1, 'account/return/add', 'add-return'),
-(850, 0, 1, 'information_id=4', 'about_us'),
 (823, 0, 1, 'common/home', ''),
+(850, 0, 1, 'information_id=4', 'about-us'),
 (848, 0, 1, 'information_id=6', 'delivery'),
 (852, 0, 1, 'information_id=3', 'privacy'),
-(854, 0, 1, 'information_id=5', 'terms'),
-(845, 0, 2, 'common/home', 'en'),
-(849, 0, 2, 'information_id=6', 'en_delivery'),
-(851, 0, 2, 'information_id=4', 'en_about_us'),
-(853, 0, 2, 'information_id=3', 'en_privacy'),
-(855, 0, 2, 'information_id=5', 'en_terms'),
-(984, 0, 2, 'account/account', 'en-my-account'),
-(985, 0, 2, 'checkout/cart', 'en-cart'),
-(986, 0, 2, 'checkout/checkout', 'en-checkout'),
-(987, 0, 2, 'account/login', 'en-login'),
-(988, 0, 2, 'account/logout', 'en-logout'),
-(989, 0, 2, 'account/order', 'en-order-history'),
-(990, 0, 2, 'account/newsletter', 'en-newsletter'),
-(991, 0, 2, 'product/special', 'en-specials'),
-(992, 0, 2, 'affiliate/account', 'en-affiliates'),
-(993, 0, 2, 'checkout/voucher', 'en-gift-vouchers'),
-(994, 0, 2, 'product/manufacturer', 'en-brands'),
-(995, 0, 2, 'information/contact', 'en-contact-us'),
-(996, 0, 2, 'account/return/insert', 'en-request-return'),
-(997, 0, 2, 'information/sitemap', 'en-sitemap'),
-(998, 0, 2, 'account/forgotten', 'en-forgot-password'),
-(999, 0, 2, 'account/download', 'en-downloads'),
-(1001, 0, 2, 'account/return', 'en-returns'),
-(1002, 0, 2, 'account/transaction', 'en-transactions'),
-(1003, 0, 2, 'account/register', 'en-create-account'),
-(1004, 0, 2, 'product/compare', 'en-compare-products'),
-(1005, 0, 2, 'product/search', 'en-search'),
-(1006, 0, 2, 'account/edit', 'en-edit-account'),
-(1007, 0, 2, 'account/password', 'en-change-password'),
-(1008, 0, 2, 'account/address', 'en-address-book'),
-(1009, 0, 2, 'account/reward', 'en-reward-points'),
-(1010, 0, 2, 'affiliate/edit', 'en-edit-affiliate-account'),
-(1011, 0, 2, 'affiliate/password', 'en-change-affiliate-password'),
-(1012, 0, 2, 'affiliate/payment', 'en-affiliate-payment-options'),
-(1013, 0, 2, 'affiliate/tracking', 'en-affiliate-tracking-code'),
-(1014, 0, 2, 'affiliate/transaction', 'en-affiliate-transactions'),
-(1015, 0, 2, 'affiliate/logout', 'en-affiliate-logout'),
-(1016, 0, 2, 'affiliate/forgotten', 'en-affiliate-forgot-password'),
-(1017, 0, 2, 'affiliate/register', 'en-create-affiliate-account'),
-(1018, 0, 2, 'affiliate/login', 'en-affiliate-login'),
-(1019, 0, 2, 'account/voucher', 'en-vouchers'),
-(1020, 0, 2, 'account/wishlist', 'en-wishlist'),
-(1021, 0, 2, 'account/return/add', 'en-add-return');
+(854, 0, 1, 'information_id=5', 'terms');

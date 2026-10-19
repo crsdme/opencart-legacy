@@ -6,7 +6,13 @@
 	<span class="cart-toast" id="cart-toast"></span>
 </button>
 
-<div class="modal max-h-md flex h-full flex-col justify-between gap-4 p-4 max-md:rounded-none md:p-6 lg:max-h-[80vh]" id="cart-modal">
+<div
+	class="modal max-h-md flex h-full flex-col justify-between gap-4 p-4 max-md:rounded-none md:p-6 lg:max-h-[80vh]"
+	id="cart-modal"
+	data-text-error-load="{{ text_error_load }}"
+	data-text-error-update="{{ text_error_update }}"
+	data-text-error-add="{{ text_error_add }}"
+>
 	<div class="modal-header">
 		<p class="heading">
 			{{ text_cart }}
