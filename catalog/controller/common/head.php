@@ -65,7 +65,7 @@ class ControllerCommonHead extends Controller
     $languages = $this->model_localisation_language->getLanguages();
     $current_code = $this->config->get('config_language');
     $current_language = isset($languages[$current_code]) ? $languages[$current_code] : ['code' => $current_code];
-    $data['lang'] = $this->multilang->htmlLang($current_language);
+    $data['lang'] = $this->multilang->hreflangCode($current_language);
     $data['direction'] = $this->language->get('direction');
 
     $data['name'] = $this->config->get('config_name');
