@@ -275,6 +275,11 @@ class Category extends Base
 
 		if ($seo !== null) {
 			$data['category_seo_url'] = $seo;
+			$keyword_error = $this->keywordConflict($data, $id ? (int) $id : 0, (int) $data['parent_id']);
+
+			if ($keyword_error !== '') {
+				return $this->result('error', $this->identity($row), $leaf, $keyword_error);
+			}
 		}
 
 		if ($id) {
@@ -290,6 +295,34 @@ class Category extends Base
 		}
 
 		return $this->finishWrite($row, 'category_id', 'category', $this->result('created', $this->identity($row), $leaf, '', $id));
+	}
+
+	private function keywordConflict(array $data, $category_id, $parent_id)
+	{
+		if (empty($data['category_seo_url']) || !is_array($data['category_seo_url'])) {
+			return '';
+		}
+
+		$seo = $this->ctx->model('design/seo_url');
+		$own_query = $category_id ? 'category_id=' . (int) $category_id : '';
+
+		foreach ($data['category_seo_url'] as $store_id => $language) {
+			if (!is_array($language)) {
+				continue;
+			}
+
+			foreach ($language as $language_id => $keyword) {
+				if ($keyword === '' || $keyword === null) {
+					continue;
+				}
+
+				if ($seo->keywordConflicts($keyword, $store_id, $language_id, $own_query, 'category_id', $parent_id)) {
+					return 'SEO URL already used: ' . $keyword;
+				}
+			}
+		}
+
+		return '';
 	}
 
 	private function defaults($name, $parent_id)

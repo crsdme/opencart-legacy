@@ -517,14 +517,21 @@ class ControllerDesignSeoUrl extends Controller {
 			$this->error['query'] = $this->language->get('error_query');
 		}
 
-		$seo_urls = $this->model_design_seo_url->getSeoUrlsByKeyword($this->request->post['keyword']);
+		$scope = null;
+		$parent_id = 0;
+		$query = isset($this->request->post['query']) ? (string)$this->request->post['query'] : '';
 
-		foreach ($seo_urls as $seo_url) {
-			if ($seo_url['store_id'] == $this->request->post['store_id'] && $seo_url['language_id'] == $this->request->post['language_id'] && $seo_url['query'] != $this->request->post['query']) {
-				$this->error['keyword'] = $this->language->get('error_exists');
+		if (preg_match('/^(category_id|blog_category_id)=(\d+)$/', $query, $match)) {
+			$parent = $this->model_design_seo_url->entityParentId($match[1], (int)$match[2]);
 
-				break;
+			if ($parent !== null) {
+				$scope = $match[1];
+				$parent_id = $parent;
 			}
+		}
+
+		if ($this->model_design_seo_url->keywordConflicts($this->request->post['keyword'], $this->request->post['store_id'], $this->request->post['language_id'], $query, $scope, $parent_id)) {
+			$this->error['keyword'] = $this->language->get('error_exists');
 		}
 
 		if (!$this->request->post['keyword']) {
