@@ -32,6 +32,7 @@ class Router
   private $keywords = [];
   private $queries = [];
   private $product_categories = [];
+  private $blog_parents = null;
   private $valide_get_param;
 
   public function __construct($registry)
@@ -76,6 +77,8 @@ class Router
 
     $lastResolvedQuery = null;
     $remainingParts = [];
+    $catalogCategoryId = 0;
+    $blogCategoryId = 0;
 
     foreach ($parts as $part) {
       $keyword = strtolower((string)$part);
@@ -83,7 +86,7 @@ class Router
       if ($keyword === '')
         continue;
 
-      $resolvedQuery = $this->getQueryByKeyword($keyword);
+      $resolvedQuery = $this->pickQuery($this->queriesByKeyword($keyword), $catalogCategoryId, $blogCategoryId);
 
       if (!$resolvedQuery) {
         $remainingParts[] = $part;
@@ -115,6 +118,8 @@ class Router
 
 
       if ($queryKey === 'category_id') {
+        $catalogCategoryId = (int) $queryValue;
+
         if (!isset($this->request->get['path'])) {
           $this->request->get['path'] = $queryValue;
         } else {
@@ -124,6 +129,8 @@ class Router
       }
 
       if ($queryKey === 'blog_category_id') {
+        $blogCategoryId = (int) $queryValue;
+
         if (!isset($this->request->get['blog_category_id'])) {
           $this->request->get['blog_category_id'] = $queryValue;
         } else {
@@ -585,7 +592,8 @@ class Router
 
   /**
    * Заполняет cat_tree (для каждой category_id — путь родительских id), keywords и queries
-   * из БД seo_url (или из кэша, если config_seo_url_cache). Нужно для getQueryByKeyword/getKeywordByQuery и getPathByCategory.
+   * из БД seo_url (или из кэша, если config_seo_url_cache). Нужно для queriesByKeyword/getKeywordByQuery и getPathByCategory.
+   * queries хранит список query на keyword: один keyword может быть у категорий с разным parent_id.
    */
   private function initHelpers()
   {
@@ -638,7 +646,14 @@ class Router
         if ($query->num_rows) {
           foreach ($query->rows as $row) {
             $this->keywords[$row['query']][$row['store_id']][$row['language_id']] = $row['keyword'];
-            $this->queries[$row['keyword']][$row['store_id']][$row['language_id']] = $row['query'];
+
+            if (!isset($this->queries[$row['keyword']][$row['store_id']][$row['language_id']]) || !is_array($this->queries[$row['keyword']][$row['store_id']][$row['language_id']])) {
+              $this->queries[$row['keyword']][$row['store_id']][$row['language_id']] = [];
+            }
+
+            if (!in_array($row['query'], $this->queries[$row['keyword']][$row['store_id']][$row['language_id']], true)) {
+              $this->queries[$row['keyword']][$row['store_id']][$row['language_id']][] = $row['query'];
+            }
           }
         }
       }
@@ -672,12 +687,11 @@ class Router
   }
 
   /**
-   * По ключевому слову (slug) из URL возвращает query из seo_url (например category_id=5, product_id=12)
-   * для текущего store_id и language_id. Сначала смотрит кэш queries, иначе запрос в БД.
+   * Все query из seo_url для keyword + store + language.
+   * В кэше значение — список. Старый кэш хранил одну строку: её тоже принимаем.
    */
-  private function getQueryByKeyword($keyword, $language_id = null)
+  private function queriesByKeyword($keyword, $language_id = null)
   {
-    $query = null;
     $store_id = (int) $this->config->get('config_store_id');
 
     if (!$language_id) {
@@ -685,25 +699,238 @@ class Router
     }
 
     if ($this->config->get('config_seo_url_cache')) {
-      if (isset($this->queries[$keyword][$store_id][$language_id])) {
-        $query = $this->queries[$keyword][$store_id][$language_id];
+      if (!isset($this->queries[$keyword][$store_id][$language_id])) {
+        return [];
       }
-    } else {
-      $_query = $this->db->query(
-        'SELECT query FROM ' .
-          DB_PREFIX .
-          "seo_url WHERE keyword = '" .
-          $this->db->escape(trim($keyword)) .
-          "' AND store_id = '" .
-          $store_id .
-          "' AND language_id = '" .
-          $language_id .
-          "' LIMIT 1",
-      );
-      $query = !empty($_query->row) ? (string) $_query->row['query'] : null;
+
+      return $this->normalizeQueryList($this->queries[$keyword][$store_id][$language_id]);
     }
 
-    return $query;
+    $_query = $this->db->query(
+      'SELECT query FROM ' .
+        DB_PREFIX .
+        "seo_url WHERE keyword = '" .
+        $this->db->escape(trim($keyword)) .
+        "' AND store_id = '" .
+        $store_id .
+        "' AND language_id = '" .
+        $language_id .
+        "'",
+    );
+
+    $queries = [];
+
+    foreach ($_query->rows as $row) {
+      $queries[] = (string) $row['query'];
+    }
+
+    return $queries;
+  }
+
+  private function normalizeQueryList($value)
+  {
+    if (is_string($value) && $value !== '') {
+      return [$value];
+    }
+
+    if (!is_array($value)) {
+      return [];
+    }
+
+    $queries = [];
+
+    foreach ($value as $item) {
+      if (is_string($item) && $item !== '') {
+        $queries[] = $item;
+      }
+    }
+
+    return $queries;
+  }
+
+  /**
+   * Один keyword — как раньше. Несколько: внутри ветки берём ребёнка текущего родителя,
+   * на первом сегменте — корень (parent_id = 0) или не-категорию. Два корня или два ребёнка одного родителя не выбираются.
+   */
+  private function pickQuery(array $queries, $catalog_category_id, $blog_category_id)
+  {
+    $queries = array_values(array_unique($queries));
+
+    if (!$queries) {
+      return null;
+    }
+
+    if (count($queries) === 1) {
+      return $queries[0];
+    }
+
+    $catalog_category_id = (int) $catalog_category_id;
+    $blog_category_id = (int) $blog_category_id;
+
+    if ($catalog_category_id > 0) {
+      $child = $this->matchChildQuery($queries, 'category_id', $catalog_category_id);
+
+      if ($child !== null) {
+        return $child;
+      }
+
+      return $this->matchPlainQuery($queries);
+    }
+
+    if ($blog_category_id > 0) {
+      $child = $this->matchChildQuery($queries, 'blog_category_id', $blog_category_id);
+
+      if ($child !== null) {
+        return $child;
+      }
+
+      return $this->matchPlainQuery($queries);
+    }
+
+    $entries = [];
+    $nested = [];
+
+    foreach ($queries as $query) {
+      $parsed = $this->parseSeoQuery($query);
+
+      if ($parsed['key'] === 'category_id') {
+        $parent = $this->categoryParentId($parsed['value']);
+
+        if ($parent === 0) {
+          $entries[] = $query;
+        } else {
+          $nested[] = $query;
+        }
+        continue;
+      }
+
+      if ($parsed['key'] === 'blog_category_id') {
+        $parent = $this->blogCategoryParentId($parsed['value']);
+
+        if ($parent === 0) {
+          $entries[] = $query;
+        } else {
+          $nested[] = $query;
+        }
+        continue;
+      }
+
+      $entries[] = $query;
+    }
+
+    if (count($entries) === 1) {
+      return $entries[0];
+    }
+
+    if (!$entries && count($nested) === 1) {
+      return $nested[0];
+    }
+
+    return null;
+  }
+
+  private function matchChildQuery(array $queries, $key, $parent_id)
+  {
+    $found = null;
+
+    foreach ($queries as $query) {
+      $parsed = $this->parseSeoQuery($query);
+
+      if ($parsed['key'] !== $key) {
+        continue;
+      }
+
+      $parent = $key === 'blog_category_id'
+        ? $this->blogCategoryParentId($parsed['value'])
+        : $this->categoryParentId($parsed['value']);
+
+      if ($parent !== (int) $parent_id) {
+        continue;
+      }
+
+      if ($found !== null) {
+        return null;
+      }
+
+      $found = $query;
+    }
+
+    return $found;
+  }
+
+  private function matchPlainQuery(array $queries)
+  {
+    $found = null;
+
+    foreach ($queries as $query) {
+      $parsed = $this->parseSeoQuery($query);
+
+      if ($parsed['key'] === 'category_id' || $parsed['key'] === 'blog_category_id') {
+        continue;
+      }
+
+      if ($found !== null) {
+        return null;
+      }
+
+      $found = $query;
+    }
+
+    return $found;
+  }
+
+  private function parseSeoQuery($query)
+  {
+    $parts = explode('=', (string) $query, 2);
+
+    return [
+      'key' => $parts[0],
+      'value' => isset($parts[1]) ? $parts[1] : null,
+    ];
+  }
+
+  /**
+   * parent_id категории по дереву cat_tree. 0 — корень, null — категории нет в дереве.
+   */
+  private function categoryParentId($category_id)
+  {
+    $category_id = (int) $category_id;
+
+    if ($category_id < 1 || empty($this->cat_tree[$category_id]['path']) || !is_array($this->cat_tree[$category_id]['path'])) {
+      return null;
+    }
+
+    $path = array_map('intval', $this->cat_tree[$category_id]['path']);
+
+    if (count($path) < 2) {
+      return 0;
+    }
+
+    return (int) $path[count($path) - 2];
+  }
+
+  private function blogCategoryParentId($blog_category_id)
+  {
+    $blog_category_id = (int) $blog_category_id;
+
+    if ($blog_category_id < 1) {
+      return null;
+    }
+
+    if ($this->blog_parents === null) {
+      $this->blog_parents = [];
+      $query = $this->db->query('SELECT blog_category_id, parent_id FROM ' . DB_PREFIX . 'blog_category');
+
+      foreach ($query->rows as $row) {
+        $this->blog_parents[(int) $row['blog_category_id']] = (int) $row['parent_id'];
+      }
+    }
+
+    if (!array_key_exists($blog_category_id, $this->blog_parents)) {
+      return null;
+    }
+
+    return (int) $this->blog_parents[$blog_category_id];
   }
 
   /**

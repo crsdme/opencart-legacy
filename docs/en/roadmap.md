@@ -11,7 +11,7 @@ Open work and a running changelog. How features work is in `DOCUMENTATION.md`.
 - variant products
 - cache clear admin
 - recently viewed products
-- SEO URL має бути унікальним
+- same SEO keyword for a catalog category and a blog category (same store and language; router must tell the trees apart)
 - points
 - logs speed each controller fint start and end
 - md file in admin

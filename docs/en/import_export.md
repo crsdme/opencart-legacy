@@ -102,6 +102,8 @@ Localized keys (`name.uk`, `name.ru`, …) follow **enabled** languages in **Sys
 
 Name / path / `group` remain as fallbacks when an id is **omitted**. Missing name-based references follow the setting: **create**, **error**, or **skip**. Unknown **positive** ids and unknown **negative** aliases (not declared on any row in the file) are always an error.
 
+Category `keyword` uses the same rule as the category form: the same text is allowed on another language or under another parent, and rejected for the same parent or when that language already uses it on a product, page, or other non-category.
+
 ## Formats
 
 **JSON:** downloaded templates put a `help` string next to `version` (ids, preview, images). Import ignores it.

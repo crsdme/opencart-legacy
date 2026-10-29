@@ -83,6 +83,11 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
 - After SEO resolve, `startup/pages` may replace the route with `error/not_found` if that page family is off (see **TURN OFF USELESS PAGES**). Redirect Manager runs first, so an explicit 301/410 still wins.
 - Canonical validation (`validate()`) must run after all rewrites are registered.
 - Main DB source for SEO mapping: table `seo_url` (`query`, `keyword`, `store_id`, `language_id`).
+- The same keyword on two languages is valid. Lookup includes `language_id`, and the language prefix is stripped before the path is resolved.
+- Catalog and blog categories may reuse a keyword when `parent_id` differs: `/cat1/new/` and `/cat2/new/`.
+- A keyword must be unique among categories with the same parent. Two roots share `parent_id = 0`, so two different roots both named `cat1` are rejected: the first segment cannot choose a branch (`/cat1/new/` and `/cat1/old/`).
+- A product, information page, manufacturer, or route keyword cannot also be a category keyword in that store and language.
+- Incoming resolve (`pickQuery`): a single match is used as before. Several matches: the next segment must be a child of the previous category; the first segment must be a root or a non-category. A short `/new/` does not resolve when `new` exists only under different parents.
 - Important router settings (admin -> store settings):
     - `config_seo_url`
     - `config_seo_pro`

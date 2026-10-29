@@ -279,7 +279,7 @@ Layout **Головна**. Put carousel + one or two product rails here. Do not 
 
 ### Categories (`product/category`)
 
-Tree in **Catalog → Categories**. SEO keyword per language. Parent/child path becomes the URL when include-path is on. Listing FAQ sits under the product grid. Filters only if the Filter module is on this layout.
+Tree in **Catalog → Categories**. The URL is the keyword chain from the root. The same keyword may be used in another language or under another parent (`/shoes/new/`, `/bags/new/`). Categories with the same parent, including two roots, cannot share it. Listing FAQ sits under the product grid. Filters only if the Filter module is on this layout.
 
 Do not create empty categories “for later” — they still get indexed.
 
@@ -335,7 +335,7 @@ Fill taxonomy first, then products. Import/Export is faster than clicking once y
 
 ### Categories
 
-Name, parent, image (optional), stores, sort, status, SEO keyword unique per language. Description: a short unique intro, not a dump of child names. `meta_h1` only if H1 must differ from the name. `noindex` for faceted or duplicate trees.
+Name, parent, image (optional), stores, sort, status. A keyword may match another language or a child in another branch; it must be unique among the same parent (roots included) and must not match a product or information page in that language. Description: a short unique intro, not a dump of child names. `meta_h1` only if H1 must differ from the name. `noindex` for faceted or duplicate trees.
 
 ![Category form](images/getting-started/40-category-form.png)
 
