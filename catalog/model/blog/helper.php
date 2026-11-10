@@ -89,7 +89,7 @@ class ModelBlogHelper extends Model
 
 		return [
 			'article_id' => $article['article_id'],
-			'thumb' => $this->model_product_helper->themeImage($article['image'] ?? '', 'product'),
+			'thumb' => $this->model_product_helper->themeImage($article['image'] ?? '', 'product', true, false),
 			'name' => $article['name'],
 			'description' =>
 				utf8_substr(
@@ -125,9 +125,9 @@ class ModelBlogHelper extends Model
 	private function buildGalleryImage(string $image): array
 	{
 		return [
-			'thumb' => $this->model_product_helper->themeImage($image, 'additional'),
-			'preview' => $this->model_product_helper->themeImage($image, 'thumb'),
-			'popup' => $this->model_product_helper->themeImage($image, 'popup', false),
+			'thumb' => $this->model_product_helper->themeImage($image, 'additional', true, false),
+			'preview' => $this->model_product_helper->themeImage($image, 'thumb', true, false),
+			'popup' => $this->model_product_helper->themeImage($image, 'popup', false, false),
 		];
 	}
 

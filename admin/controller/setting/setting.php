@@ -451,6 +451,74 @@ class ControllerSettingSetting extends Controller {
 			$data['config_product_count'] = $this->config->get('config_product_count');
 		}
 
+		if (isset($this->request->post['config_watermark_status'])) {
+			$data['config_watermark_status'] = $this->request->post['config_watermark_status'];
+		} else {
+			$data['config_watermark_status'] = $this->config->get('config_watermark_status');
+		}
+
+		if (isset($this->request->post['config_watermark_image'])) {
+			$data['config_watermark_image'] = $this->request->post['config_watermark_image'];
+		} else {
+			$data['config_watermark_image'] = $this->config->get('config_watermark_image');
+		}
+
+		if (isset($this->request->post['config_watermark_image']) && is_file(DIR_IMAGE . $this->request->post['config_watermark_image'])) {
+			$data['watermark_thumb'] = $this->model_tool_image->resize($this->request->post['config_watermark_image'], 100, 100);
+		} elseif ($this->config->get('config_watermark_image') && is_file(DIR_IMAGE . $this->config->get('config_watermark_image'))) {
+			$data['watermark_thumb'] = $this->model_tool_image->resize($this->config->get('config_watermark_image'), 100, 100);
+		} else {
+			$data['watermark_thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		}
+
+		if (isset($this->request->post['config_watermark_style'])) {
+			$data['config_watermark_style'] = $this->request->post['config_watermark_style'];
+		} elseif ($this->config->get('config_watermark_style')) {
+			$data['config_watermark_style'] = $this->config->get('config_watermark_style');
+		} else {
+			$data['config_watermark_style'] = 'corner';
+		}
+
+		if (isset($this->request->post['config_watermark_position'])) {
+			$data['config_watermark_position'] = $this->request->post['config_watermark_position'];
+		} elseif ($this->config->get('config_watermark_position')) {
+			$data['config_watermark_position'] = $this->config->get('config_watermark_position');
+		} else {
+			$data['config_watermark_position'] = 'bottomright';
+		}
+
+		if (isset($this->request->post['config_watermark_scale'])) {
+			$data['config_watermark_scale'] = $this->request->post['config_watermark_scale'];
+		} elseif ($this->config->get('config_watermark_scale') !== null && $this->config->get('config_watermark_scale') !== '') {
+			$data['config_watermark_scale'] = $this->config->get('config_watermark_scale');
+		} else {
+			$data['config_watermark_scale'] = 25;
+		}
+
+		if (isset($this->request->post['config_watermark_opacity'])) {
+			$data['config_watermark_opacity'] = $this->request->post['config_watermark_opacity'];
+		} elseif ($this->config->get('config_watermark_opacity') !== null && $this->config->get('config_watermark_opacity') !== '') {
+			$data['config_watermark_opacity'] = $this->config->get('config_watermark_opacity');
+		} else {
+			$data['config_watermark_opacity'] = 70;
+		}
+
+		if (isset($this->request->post['config_watermark_angle'])) {
+			$data['config_watermark_angle'] = $this->request->post['config_watermark_angle'];
+		} elseif ($this->config->get('config_watermark_angle') !== null && $this->config->get('config_watermark_angle') !== '') {
+			$data['config_watermark_angle'] = $this->config->get('config_watermark_angle');
+		} else {
+			$data['config_watermark_angle'] = -30;
+		}
+
+		if (isset($this->request->post['config_watermark_spacing'])) {
+			$data['config_watermark_spacing'] = $this->request->post['config_watermark_spacing'];
+		} elseif ($this->config->get('config_watermark_spacing') !== null && $this->config->get('config_watermark_spacing') !== '') {
+			$data['config_watermark_spacing'] = $this->config->get('config_watermark_spacing');
+		} else {
+			$data['config_watermark_spacing'] = 50;
+		}
+
 		if (isset($this->request->post['config_review_status'])) {
 			$data['config_review_status'] = $this->request->post['config_review_status'];
 		} else {

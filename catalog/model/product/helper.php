@@ -19,6 +19,17 @@ class ModelProductHelper extends Model
 		'author_page' => [160, 160],
 	];
 
+	private const WATERMARK_TYPES = [
+		'thumb',
+		'popup',
+		'product',
+		'additional',
+		'related',
+		'compare',
+		'wishlist',
+		'cart',
+	];
+
 	public function themeLimit(): int
 	{
 		return self::PRODUCT_LIMIT;
@@ -86,7 +97,7 @@ class ModelProductHelper extends Model
 		}
 	}
 
-	public function themeImage($image, string $type, bool $placeholder = true): string
+	public function themeImage($image, string $type, bool $placeholder = true, ?bool $watermark = null): string
 	{
 		if (empty($image)) {
 			if (!$placeholder) {
@@ -100,7 +111,12 @@ class ModelProductHelper extends Model
 
 		[$width, $height] = $this->themeImageSize($type);
 
-		$resized = $this->model_tool_image->resize($image, $width, $height);
+		if ($watermark === null) {
+			$watermark = in_array($type, self::WATERMARK_TYPES, true);
+		}
+
+		$apply_watermark = $watermark && $image !== 'placeholder.png';
+		$resized = $this->model_tool_image->resize($image, $width, $height, $apply_watermark);
 
 		if ($resized) {
 			return $resized;

@@ -1,7 +1,7 @@
 <?php
 class ModelToolImage extends Model
 {
-  public function resize($filename, $width, $height)
+  public function resize($filename, $width, $height, $watermark = false)
   {
     if (!is_file(DIR_IMAGE . $filename) || substr(str_replace('\\', '/', realpath(DIR_IMAGE . $filename)), 0, strlen(DIR_IMAGE)) != str_replace('\\', '/', DIR_IMAGE)) {
       return;
@@ -10,10 +10,23 @@ class ModelToolImage extends Model
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
     $image_old = $filename;
-    $image_new = 'cache/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . '.' . $extension;
-    $image_new_webp = 'cache/webp/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . '.webp';
+    $apply_watermark = $watermark && $this->shouldApplyWatermark($filename);
+    $wm_suffix = $apply_watermark ? $this->getWatermarkCacheSuffix() : '';
 
-    if (!is_file(DIR_IMAGE . $image_new) || (filemtime(DIR_IMAGE . $image_old) > filemtime(DIR_IMAGE . $image_new))) {
+    $image_new = 'cache/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . $wm_suffix . '.' . $extension;
+    $image_new_webp = 'cache/webp/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . $wm_suffix . '.webp';
+
+    $need_rebuild = !is_file(DIR_IMAGE . $image_new) || (filemtime(DIR_IMAGE . $image_old) > filemtime(DIR_IMAGE . $image_new));
+
+    if (!$need_rebuild && $apply_watermark) {
+      $wm_file = DIR_IMAGE . $this->config->get('config_watermark_image');
+
+      if (is_file($wm_file) && filemtime($wm_file) > filemtime(DIR_IMAGE . $image_new)) {
+        $need_rebuild = true;
+      }
+    }
+
+    if ($need_rebuild) {
       list($width_orig, $height_orig, $image_type) = getimagesize(DIR_IMAGE . $image_old);
 
       if (!in_array($image_type, array(IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF, IMAGETYPE_WEBP))) {
@@ -32,9 +45,17 @@ class ModelToolImage extends Model
         }
       }
 
-      if ($width_orig != $width || $height_orig != $height) {
+      if ($width_orig != $width || $height_orig != $height || $apply_watermark) {
         $image = new Image(DIR_IMAGE . $image_old);
-        $image->resize($width, $height);
+
+        if ($width_orig != $width || $height_orig != $height) {
+          $image->resize($width, $height);
+        }
+
+        if ($apply_watermark) {
+          $this->applyWatermark($image);
+        }
+
         $image->save(DIR_IMAGE . $image_new);
       } else {
         copy(DIR_IMAGE . $image_old, DIR_IMAGE . $image_new);
@@ -78,5 +99,119 @@ class ModelToolImage extends Model
     } else {
       return $this->config->get('config_url') . 'image/' . $image_new;
     }
+  }
+
+  private function shouldApplyWatermark($filename)
+  {
+    if (!$this->config->get('config_watermark_status')) {
+      return false;
+    }
+
+    $wm_image = $this->config->get('config_watermark_image');
+
+    if (!$wm_image || !is_file(DIR_IMAGE . $wm_image)) {
+      return false;
+    }
+
+    $basename = basename($filename);
+
+    if (in_array($basename, array('placeholder.png', 'no_image.png', 'no_image.jpg'), true)) {
+      return false;
+    }
+
+    $extension = strtolower(pathinfo($wm_image, PATHINFO_EXTENSION));
+
+    return $extension === 'png';
+  }
+
+  private function getWatermarkCacheSuffix()
+  {
+    $parts = array(
+      (string)$this->config->get('config_watermark_image'),
+      (string)$this->config->get('config_watermark_style'),
+      (string)$this->config->get('config_watermark_position'),
+      (string)$this->config->get('config_watermark_scale'),
+      (string)$this->config->get('config_watermark_opacity'),
+      (string)$this->config->get('config_watermark_angle'),
+      (string)$this->config->get('config_watermark_spacing'),
+    );
+
+    return '-wm' . substr(md5(implode('|', $parts)), 0, 8);
+  }
+
+  private function applyWatermark(Image $image)
+  {
+    $wm_path = DIR_IMAGE . $this->config->get('config_watermark_image');
+
+    if (!is_file($wm_path)) {
+      return;
+    }
+
+    $stamp = new Image($wm_path);
+
+    if (!$stamp->getImage() || !$stamp->getWidth() || !$stamp->getHeight()) {
+      return;
+    }
+
+    $scale = (int)$this->config->get('config_watermark_scale');
+
+    if ($scale < 1) {
+      $scale = 25;
+    } elseif ($scale > 100) {
+      $scale = 100;
+    }
+
+    $target_w = max(1, (int)($image->getWidth() * $scale / 100));
+    $target_h = max(1, (int)($stamp->getHeight() * $target_w / $stamp->getWidth()));
+
+    if ($stamp->getWidth() != $target_w || $stamp->getHeight() != $target_h) {
+      $stamp->resize($target_w, $target_h);
+    }
+
+    $style = $this->config->get('config_watermark_style');
+
+    if (!in_array($style, array('corner', 'tile', 'diagonal'), true)) {
+      $style = 'corner';
+    }
+
+    $opacity = (int)$this->config->get('config_watermark_opacity');
+
+    if ($opacity < 1) {
+      $opacity = 70;
+    } elseif ($opacity > 100) {
+      $opacity = 100;
+    }
+
+    $angle = (int)$this->config->get('config_watermark_angle');
+
+    if ($angle === 0 && $style === 'diagonal') {
+      $angle = -30;
+    }
+
+    $spacing = (int)$this->config->get('config_watermark_spacing');
+
+    if ($spacing < 0) {
+      $spacing = 50;
+    }
+
+    if ($style === 'tile') {
+      $mode = 'tile';
+    } elseif ($style === 'diagonal') {
+      $mode = 'diagonal';
+    } else {
+      $mode = $this->config->get('config_watermark_position');
+
+      $allowed = array(
+        'topleft', 'topcenter', 'topright',
+        'middleleft', 'middlecenter', 'middleright',
+        'bottomleft', 'bottomcenter', 'bottomright',
+      );
+
+      if (!in_array($mode, $allowed, true)) {
+        $mode = 'bottomright';
+      }
+    }
+
+    $image->watermark($stamp, $mode, $opacity, $angle, $spacing);
   }
 }

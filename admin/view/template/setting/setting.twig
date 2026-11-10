@@ -435,6 +435,84 @@
                 </div>
               </fieldset>
               <fieldset>
+                <legend>{{ text_watermark }}</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_watermark_status }}">{{ entry_watermark_status }}</span></label>
+                  <div class="col-sm-10">
+                    <label class="radio-inline"> {% if config_watermark_status %}
+                      <input type="radio" name="config_watermark_status" value="1" checked="checked" />
+                      {{ text_yes }}
+                      {% else %}
+                      <input type="radio" name="config_watermark_status" value="1" />
+                      {{ text_yes }}
+                      {% endif %} </label>
+                    <label class="radio-inline"> {% if not config_watermark_status %}
+                      <input type="radio" name="config_watermark_status" value="0" checked="checked" />
+                      {{ text_no }}
+                      {% else %}
+                      <input type="radio" name="config_watermark_status" value="0" />
+                      {{ text_no }}
+                      {% endif %} </label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-watermark-image"><span data-toggle="tooltip" title="{{ help_watermark_image }}">{{ entry_watermark_image }}</span></label>
+                  <div class="col-sm-10"><a href="" id="thumb-watermark-image" data-toggle="image" class="img-thumbnail"><img src="{{ watermark_thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                    <input type="hidden" name="config_watermark_image" value="{{ config_watermark_image }}" id="input-watermark-image" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-watermark-style"><span data-toggle="tooltip" title="{{ help_watermark_style }}">{{ entry_watermark_style }}</span></label>
+                  <div class="col-sm-10">
+                    <select name="config_watermark_style" id="input-watermark-style" class="form-control">
+                      <option value="corner"{% if config_watermark_style == 'corner' %} selected="selected"{% endif %}>{{ text_watermark_corner }}</option>
+                      <option value="tile"{% if config_watermark_style == 'tile' %} selected="selected"{% endif %}>{{ text_watermark_tile }}</option>
+                      <option value="diagonal"{% if config_watermark_style == 'diagonal' %} selected="selected"{% endif %}>{{ text_watermark_diagonal }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group" id="watermark-position-group">
+                  <label class="col-sm-2 control-label" for="input-watermark-position">{{ entry_watermark_position }}</label>
+                  <div class="col-sm-10">
+                    <select name="config_watermark_position" id="input-watermark-position" class="form-control">
+                      <option value="topleft"{% if config_watermark_position == 'topleft' %} selected="selected"{% endif %}>{{ text_watermark_topleft }}</option>
+                      <option value="topcenter"{% if config_watermark_position == 'topcenter' %} selected="selected"{% endif %}>{{ text_watermark_topcenter }}</option>
+                      <option value="topright"{% if config_watermark_position == 'topright' %} selected="selected"{% endif %}>{{ text_watermark_topright }}</option>
+                      <option value="middleleft"{% if config_watermark_position == 'middleleft' %} selected="selected"{% endif %}>{{ text_watermark_middleleft }}</option>
+                      <option value="middlecenter"{% if config_watermark_position == 'middlecenter' %} selected="selected"{% endif %}>{{ text_watermark_middlecenter }}</option>
+                      <option value="middleright"{% if config_watermark_position == 'middleright' %} selected="selected"{% endif %}>{{ text_watermark_middleright }}</option>
+                      <option value="bottomleft"{% if config_watermark_position == 'bottomleft' %} selected="selected"{% endif %}>{{ text_watermark_bottomleft }}</option>
+                      <option value="bottomcenter"{% if config_watermark_position == 'bottomcenter' %} selected="selected"{% endif %}>{{ text_watermark_bottomcenter }}</option>
+                      <option value="bottomright"{% if config_watermark_position == 'bottomright' %} selected="selected"{% endif %}>{{ text_watermark_bottomright }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-watermark-scale"><span data-toggle="tooltip" title="{{ help_watermark_scale }}">{{ entry_watermark_scale }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="config_watermark_scale" value="{{ config_watermark_scale }}" placeholder="25" id="input-watermark-scale" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-watermark-opacity"><span data-toggle="tooltip" title="{{ help_watermark_opacity }}">{{ entry_watermark_opacity }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="config_watermark_opacity" value="{{ config_watermark_opacity }}" placeholder="70" id="input-watermark-opacity" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group" id="watermark-angle-group">
+                  <label class="col-sm-2 control-label" for="input-watermark-angle"><span data-toggle="tooltip" title="{{ help_watermark_angle }}">{{ entry_watermark_angle }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="config_watermark_angle" value="{{ config_watermark_angle }}" placeholder="-30" id="input-watermark-angle" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group" id="watermark-spacing-group">
+                  <label class="col-sm-2 control-label" for="input-watermark-spacing"><span data-toggle="tooltip" title="{{ help_watermark_spacing }}">{{ entry_watermark_spacing }}</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="config_watermark_spacing" value="{{ config_watermark_spacing }}" placeholder="50" id="input-watermark-spacing" class="form-control" />
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
                 <legend>{{ text_review }}</legend>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_review }}">{{ entry_review }}</span></label>
@@ -1883,7 +1961,29 @@ $('select[name=\'config_theme\']').on('change', function() {
 });
 
 $('select[name=\'config_theme\']').trigger('change');
-//--></script> 
+//--></script>
+  <script type="text/javascript"><!--
+function toggleWatermarkFields() {
+	var style = $('#input-watermark-style').val();
+
+	if (style === 'corner') {
+		$('#watermark-position-group').show();
+		$('#watermark-angle-group').hide();
+		$('#watermark-spacing-group').hide();
+	} else if (style === 'tile') {
+		$('#watermark-position-group').hide();
+		$('#watermark-angle-group').hide();
+		$('#watermark-spacing-group').show();
+	} else {
+		$('#watermark-position-group').hide();
+		$('#watermark-angle-group').show();
+		$('#watermark-spacing-group').show();
+	}
+}
+
+$('#input-watermark-style').on('change', toggleWatermarkFields);
+toggleWatermarkFields();
+//--></script>
   <script type="text/javascript"><!--
 $('select[name=\'config_country_id\']').on('change', function() {
 	$.ajax({
