@@ -37,11 +37,11 @@ Step 3 of `/install` asks for starter content. Schema and system seed always run
 - SQL lives in `public_html/install/sql/`:
     - `schema.sql` — `DROP` / `CREATE` for every table (also used by upgrade `1000.php`).
     - `system/*.sql` — locales, statuses, tax, events, core extensions, settings, layout names/routes, legal pages, system SEO keywords. Always applied.
-    - `demo/*.sql` — catalog, blog, banners, homepage modules (carousel, latest, special, blog_latest), layout placements, demo SEO. Applied only when **Demo catalog** is selected.
+    - `demo/*.sql` — catalog, blog, banners, homepage modules (carousel, latest, special, blog_latest), recently viewed on the product layout, layout placements, demo SEO. Applied only when **Demo catalog** is selected.
 - **Empty store** (default): no products, categories, manufacturers, blog posts, banners or homepage modules. Layout records stay (Home, Product, 404, 410, …) with routes, but without homepage module placements. Modifications are status `0`. Blog menu and the blog page family (`config_pages_blog`) are off. Turn blog back on in System → Settings → Option when you need it.
 - **Demo catalog**: the ocStore sample shop (products, blog, homepage banner and product/blog rails).
 - CLI: `php install/cli_install.php install … --sample_data 0` (empty) or `--sample_data 1` (demo).
-- System extensions always installed: default theme, COD, flat shipping, order totals, dashboards, reports, ECB currency, XML Sitemap. Google Shopping and NBU currency are not installed (still available from admin). Carousel / latest / special / blog_latest are demo-only (still available to install later from admin).
+- System extensions always installed: default theme, COD, flat shipping, order totals, dashboards, reports, ECB currency, XML Sitemap. Google Shopping and NBU currency are not installed (still available from admin). Carousel / latest / special / blog_latest / recently_viewed are demo-only (still available to install later from admin).
 - Store languages: Ukrainian (main), English, Russian. `config_seo_url`, `config_seo_pro`, and `config_minifier` (CSS/JS bundling) are on by default.
 - Default API user is created and enabled (`status = 1`) with `127.0.0.1` / `::1` (and the installer IP) allowed. Admin order editing needs this.
 - Store timezone is `Europe/Kiev` (valid on PHP 7.4; `Europe/Kyiv` is not). Invalid IDs are mapped or fall back to UTC.

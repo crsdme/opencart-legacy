@@ -10,7 +10,6 @@ Open work and a running changelog. How features work is in `DOCUMENTATION.md`.
 - rework mail opencart
 - variant products
 - cache clear admin
-- recently viewed products
 - same SEO keyword for a catalog category and a blog category (same store and language; router must tell the trees apart)
 - points
 - logs speed each controller fint start and end
@@ -53,7 +52,8 @@ What the kit adds on top of ocStore. Not a dated release log: git is one bulk co
 - Storefront restyle: product, listings, header sheet, footer, cart modal, account, compare, wishlist
 - Live search and header announcement bar
 - Carousel module (desktop/mobile banners, Embla)
-- Product modules (featured / latest / special / bestseller) restyle and admin options
+- Product modules (featured / latest / special / bestseller / recently viewed) restyle and admin options
+- Recently viewed products module (session history, `config_robots` skip for crawlers)
 - Blog restyle and author pages (admin entity, storefront, sitemap, microdata)
 - Guest wishlist theme setting
 - CSS split (`ui` / `catalog` / `product`) and JS split (`ui` / `catalog` / `product` / `live-search` / `phone-login` / `checkout`)

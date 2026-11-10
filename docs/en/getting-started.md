@@ -70,7 +70,7 @@ Then create the admin user.
 **Starter content** is the important choice:
 
 - **Empty store** (default for a real shop). Schema, locales, statuses, legal pages, layout *names*, core extensions. No products, categories, blog, banners, or homepage carousels. Blog storefront pages stay off.
-- **Demo catalog** — sample products, blog, banners, homepage carousel / latest / special / blog_latest. Use this to learn the admin, not as a production seed.
+- **Demo catalog** — sample products, blog, banners, homepage carousel / latest / special / blog_latest, and recently viewed on the product layout. Use this to learn the admin, not as a production seed.
 
 ![Install step 3: Empty store vs Demo catalog](images/getting-started/05-install-starter.png)
 

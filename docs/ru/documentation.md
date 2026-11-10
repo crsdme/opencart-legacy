@@ -37,11 +37,11 @@ OpenCart (ocStore) — движок. Tailwind и Docker — обвязка. Пл
 - SQL в `public_html/install/sql/`:
     - `schema.sql` — `DROP` / `CREATE` всех таблиц (ещё upgrade `1000.php`).
     - `system/*.sql` — локали, статусы, налоги, события, системные дополнения, настройки, имена/роуты макетов, юридические страницы, системные SEO keyword. Всегда.
-    - `demo/*.sql` — каталог, блог, баннеры, модули главной (carousel, latest, special, blog_latest), размещения на макетах, демо-SEO. Только если выбран **Demo catalog**.
+    - `demo/*.sql` — каталог, блог, баннеры, модули главной (carousel, latest, special, blog_latest), недавно просмотренные на макете товара, размещения на макетах, демо-SEO. Только если выбран **Demo catalog**.
 - **Empty store** (по умолчанию): нет товаров, категорий, производителей, блога, баннеров и модулей главной. Записи макетов остаются (Home, Product, 404, 410, …) с роутами, без модулей главной. Modifications со статусом `0`. Меню блога и семейство `config_pages_blog` выкл. Блог включают в Система → Настройки → Опции.
 - **Demo catalog**: демо-магазин ocStore (товары, блог, баннер и товарные/блоговые блоки на главной).
 - CLI: `php install/cli_install.php install … --sample_data 0` (пусто) или `--sample_data 1` (демо).
-- Всегда ставятся: тема default, COD, flat shipping, итоги заказа, дашборды, отчёты, валюта ECB, XML Sitemap. Google Shopping и NBU не ставятся (есть в админке). Carousel / latest / special / blog_latest — только демо (потом можно поставить из админки).
+- Всегда ставятся: тема default, COD, flat shipping, итоги заказа, дашборды, отчёты, валюта ECB, XML Sitemap. Google Shopping и NBU не ставятся (есть в админке). Carousel / latest / special / blog_latest / recently_viewed — только демо (потом можно поставить из админки).
 - Языки магазина: украинский (основной), английский, русский. `config_seo_url`, `config_seo_pro`, `config_minifier` включены с инсталла.
 - API-пользователь создаётся и включён (`status = 1`), разрешены `127.0.0.1` / `::1` (и IP установщика). Редактирование заказа в админке без этого не работает.
 - Пояс `Europe/Kiev` (на PHP 7.4; `Europe/Kyiv` нет). Невалидные ID мапятся или падают в UTC.

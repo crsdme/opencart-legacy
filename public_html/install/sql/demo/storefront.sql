@@ -20,16 +20,19 @@ INSERT INTO `oc_extension` (`extension_id`, `type`, `code`) VALUES
 (53, 'module', 'carousel'),
 (54, 'module', 'blog_latest'),
 (55, 'module', 'latest'),
-(56, 'module', 'special');
+(56, 'module', 'special'),
+(57, 'module', 'recently_viewed');
 
 INSERT INTO `oc_module` (`module_id`, `name`, `code`, `setting`) VALUES
 (1, 'Home Page Banner', 'carousel', '{"name":"Home Page Banner","banner_id":"1","width":"2160","height":"730","slides":"1","use_autoplay":"1","use_controls":"0","use_dots":"1","use_loop":"1","width_mobile":"420","height_mobile":"420","slides_mobile":"1","use_autoplay_mobile":"1","use_controls_mobile":"0","use_dots_mobile":"1","use_loop_mobile":"1","gap":"8","breakpoint":"768","autoplay_delay":"3","status":"1"}'),
 (2, 'New Products', 'latest', '{"name":"New Products","module_description":{"1":{"title":"\\u041d\\u043e\\u0432\\u0438\\u043d\\u043a\\u0438"},"2":{"title":"New Products"},"3":{"title":"\\u041d\\u043e\\u0432\\u0438\\u043d\\u043a\\u0438"}},"limit":"12","use_autoplay":"1","use_controls":"1","use_loop":"1","gap":"16","use_autoplay_mobile":"1","use_controls_mobile":"0","use_loop_mobile":"1","gap_mobile":"8","breakpoint":"1024","autoplay_delay":"3","status":"1"}'),
 (3, 'Last Articles', 'blog_latest', '{"name":"Last Articles","module_description":{"1":{"title":"\\u0411\\u043b\\u043e\\u0433"},"2":{"title":"Blog"},"3":{"title":"\\u0411\\u043b\\u043e\\u0433"}},"limit":"8","use_autoplay":"1","use_controls":"1","use_loop":"1","gap":"16","use_autoplay_mobile":"1","use_controls_mobile":"1","use_loop_mobile":"1","gap_mobile":"8","breakpoint":"1024","autoplay_delay":"3","status":"1"}'),
-(4, 'Discount Products', 'special', '{"name":"Discount Products","module_description":{"1":{"title":"\\u0410\\u043a\\u0446\\u0456\\u044f"},"2":{"title":"Discounts"},"3":{"title":"\\u0410\\u043a\\u0446\\u0438\\u044f"}},"limit":"12","use_autoplay":"1","use_controls":"1","use_loop":"1","gap":"16","use_autoplay_mobile":"1","use_controls_mobile":"0","use_loop_mobile":"1","gap_mobile":"8","breakpoint":"1024","autoplay_delay":"3","status":"1"}');
+(4, 'Discount Products', 'special', '{"name":"Discount Products","module_description":{"1":{"title":"\\u0410\\u043a\\u0446\\u0456\\u044f"},"2":{"title":"Discounts"},"3":{"title":"\\u0410\\u043a\\u0446\\u0438\\u044f"}},"limit":"12","use_autoplay":"1","use_controls":"1","use_loop":"1","gap":"16","use_autoplay_mobile":"1","use_controls_mobile":"0","use_loop_mobile":"1","gap_mobile":"8","breakpoint":"1024","autoplay_delay":"3","status":"1"}'),
+(5, 'Recently Viewed', 'recently_viewed', '{"name":"Recently Viewed","module_description":{"1":{"title":"\\u041d\\u0435\\u0449\\u043e\\u0434\\u0430\\u0432\\u043d\\u043e \\u043f\\u0435\\u0440\\u0435\\u0433\\u043b\\u044f\\u043d\\u0443\\u0442\\u0456"},"2":{"title":"Recently Viewed"},"3":{"title":"\\u041d\\u0435\\u0434\\u0430\\u0432\\u043d\\u043e \\u043f\\u0440\\u043e\\u0441\\u043c\\u043e\\u0442\\u0440\\u0435\\u043d\\u043d\\u044b\\u0435"}},"limit":"8","use_autoplay":"1","use_controls":"1","use_loop":"1","gap":"16","use_autoplay_mobile":"1","use_controls_mobile":"0","use_loop_mobile":"1","gap_mobile":"8","breakpoint":"1024","autoplay_delay":"3","status":"1"}');
 
 INSERT INTO `oc_layout_module` (`layout_module_id`, `layout_id`, `code`, `position`, `sort_order`) VALUES
 (1, 1, 'carousel.1', 'content_top', 0),
 (2, 1, 'latest.2', 'content_top', 1),
 (3, 1, 'special.4', 'content_top', 2),
-(4, 1, 'blog_latest.3', 'content_top', 3);
+(4, 1, 'blog_latest.3', 'content_top', 3),
+(5, 2, 'recently_viewed.5', 'content_bottom', 0);

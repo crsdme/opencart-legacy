@@ -135,6 +135,9 @@ class ControllerProductProduct extends Controller
 
 		$this->model_catalog_product->updateViewed($product_id);
 
+		$this->load->model('catalog/recently_viewed');
+		$this->model_catalog_recently_viewed->add($product_id);
+
 		$data['view'] = 'product/product';
 		$this->response->setOutput($this->load->controller('common/layout', $data));
 	}
