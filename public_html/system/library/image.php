@@ -201,56 +201,178 @@ class Image {
 	}
 	
 	/**
-     * 
-     *
-     * @param	string	$watermark
-	 * @param	string	$position
-     */
-	public function watermark($watermark, $position = 'bottomright') {
-		switch($position) {
+	 * Apply a PNG watermark.
+	 *
+	 * Modes:
+	 * - corner positions: topleft, topcenter, topright, middleleft, middlecenter, middleright, bottomleft, bottomcenter, bottomright
+	 * - tile: upright duplicates across the image
+	 * - diagonal: duplicates rotated at an angle across the image
+	 *
+	 * @param	Image	$watermark
+	 * @param	string	$mode
+	 * @param	int		$opacity	0-100
+	 * @param	int		$angle		degrees for diagonal (e.g. -30)
+	 * @param	int		$spacing	gap between tiles as % of watermark size
+	 */
+	public function watermark($watermark, $mode = 'bottomright', $opacity = 70, $angle = -30, $spacing = 50) {
+		if (!$this->image || !$watermark || !$watermark->getImage()) {
+			return;
+		}
+
+		$opacity = max(0, min(100, (int)$opacity));
+		$spacing = max(0, (int)$spacing);
+		$angle = (int)$angle;
+
+		$stamp = $this->cloneGdImage($watermark->getImage());
+
+		if ($opacity < 100) {
+			$this->applyOpacity($stamp, $opacity);
+		}
+
+		imagealphablending($this->image, true);
+		imagesavealpha($this->image, true);
+
+		if ($mode === 'tile' || $mode === 'diagonal') {
+			if ($mode === 'diagonal' && $angle !== 0) {
+				$rotated = $this->rotateGdTransparent($stamp, $angle);
+				imagedestroy($stamp);
+				$stamp = $rotated;
+			}
+
+			$this->tileStamp($stamp, $spacing);
+			imagedestroy($stamp);
+			return;
+		}
+
+		$wm_width = imagesx($stamp);
+		$wm_height = imagesy($stamp);
+		$margin = max(5, (int)($this->width * 0.02));
+
+		switch ($mode) {
 			case 'topleft':
-				$watermark_pos_x = 0;
-				$watermark_pos_y = 0;
+				$x = $margin;
+				$y = $margin;
 				break;
 			case 'topcenter':
-				$watermark_pos_x = intval(($this->width - $watermark->getWidth()) / 2);
-				$watermark_pos_y = 0;
+				$x = (int)(($this->width - $wm_width) / 2);
+				$y = $margin;
 				break;
 			case 'topright':
-				$watermark_pos_x = $this->width - $watermark->getWidth();
-				$watermark_pos_y = 0;
+				$x = $this->width - $wm_width - $margin;
+				$y = $margin;
 				break;
 			case 'middleleft':
-				$watermark_pos_x = 0;
-				$watermark_pos_y = intval(($this->height - $watermark->getHeight()) / 2);
+				$x = $margin;
+				$y = (int)(($this->height - $wm_height) / 2);
 				break;
 			case 'middlecenter':
-				$watermark_pos_x = intval(($this->width - $watermark->getWidth()) / 2);
-				$watermark_pos_y = intval(($this->height - $watermark->getHeight()) / 2);
+				$x = (int)(($this->width - $wm_width) / 2);
+				$y = (int)(($this->height - $wm_height) / 2);
 				break;
 			case 'middleright':
-				$watermark_pos_x = $this->width - $watermark->getWidth();
-				$watermark_pos_y = intval(($this->height - $watermark->getHeight()) / 2);
+				$x = $this->width - $wm_width - $margin;
+				$y = (int)(($this->height - $wm_height) / 2);
 				break;
 			case 'bottomleft':
-				$watermark_pos_x = 0;
-				$watermark_pos_y = $this->height - $watermark->getHeight();
+				$x = $margin;
+				$y = $this->height - $wm_height - $margin;
 				break;
 			case 'bottomcenter':
-				$watermark_pos_x = intval(($this->width - $watermark->getWidth()) / 2);
-				$watermark_pos_y = $this->height - $watermark->getHeight();
+				$x = (int)(($this->width - $wm_width) / 2);
+				$y = $this->height - $wm_height - $margin;
 				break;
 			case 'bottomright':
-				$watermark_pos_x = $this->width - $watermark->getWidth();
-				$watermark_pos_y = $this->height - $watermark->getHeight();
+			default:
+				$x = $this->width - $wm_width - $margin;
+				$y = $this->height - $wm_height - $margin;
 				break;
 		}
-		
-		imagealphablending( $this->image, true);
-		imagesavealpha( $this->image, true);
-		imagecopy($this->image, $watermark->getImage(), $watermark_pos_x, $watermark_pos_y, 0, 0, $watermark->getWidth(), $watermark->getHeight());
 
-		imagedestroy($watermark->getImage());
+		imagecopy($this->image, $stamp, $x, $y, 0, 0, $wm_width, $wm_height);
+		imagedestroy($stamp);
+	}
+
+	private function tileStamp($stamp, $spacing) {
+		$wm_width = imagesx($stamp);
+		$wm_height = imagesy($stamp);
+
+		if ($wm_width < 1 || $wm_height < 1) {
+			return;
+		}
+
+		$step_x = $wm_width + (int)($wm_width * $spacing / 100);
+		$step_y = $wm_height + (int)($wm_height * $spacing / 100);
+
+		if ($step_x < 1) {
+			$step_x = $wm_width;
+		}
+
+		if ($step_y < 1) {
+			$step_y = $wm_height;
+		}
+
+		$offset_y = 0;
+
+		for ($y = -$step_y; $y < $this->height + $step_y; $y += $step_y) {
+			$offset_x = ($offset_y % 2 === 0) ? 0 : (int)($step_x / 2);
+
+			for ($x = -$step_x + $offset_x; $x < $this->width + $step_x; $x += $step_x) {
+				imagecopy($this->image, $stamp, $x, $y, 0, 0, $wm_width, $wm_height);
+			}
+
+			$offset_y++;
+		}
+	}
+
+	private function cloneGdImage($source) {
+		$width = imagesx($source);
+		$height = imagesy($source);
+		$clone = imagecreatetruecolor($width, $height);
+
+		imagealphablending($clone, false);
+		imagesavealpha($clone, true);
+
+		$transparent = imagecolorallocatealpha($clone, 0, 0, 0, 127);
+		imagefilledrectangle($clone, 0, 0, $width, $height, $transparent);
+		imagecopy($clone, $source, 0, 0, 0, 0, $width, $height);
+
+		return $clone;
+	}
+
+	private function rotateGdTransparent($source, $angle) {
+		$transparent = imagecolorallocatealpha($source, 0, 0, 0, 127);
+		$rotated = imagerotate($source, $angle, $transparent);
+
+		imagealphablending($rotated, false);
+		imagesavealpha($rotated, true);
+
+		return $rotated;
+	}
+
+	private function applyOpacity($image, $opacity) {
+		$width = imagesx($image);
+		$height = imagesy($image);
+		$factor = $opacity / 100;
+
+		imagealphablending($image, false);
+		imagesavealpha($image, true);
+
+		for ($x = 0; $x < $width; $x++) {
+			for ($y = 0; $y < $height; $y++) {
+				$rgba = imagecolorat($image, $x, $y);
+				$alpha = ($rgba & 0x7F000000) >> 24;
+
+				if ($alpha >= 127) {
+					continue;
+				}
+
+				$r = ($rgba >> 16) & 0xFF;
+				$g = ($rgba >> 8) & 0xFF;
+				$b = $rgba & 0xFF;
+				$new_alpha = 127 - (int)((127 - $alpha) * $factor);
+				imagesetpixel($image, $x, $y, imagecolorallocatealpha($image, $r, $g, $b, $new_alpha));
+			}
+		}
 	}
 	
 	/**
